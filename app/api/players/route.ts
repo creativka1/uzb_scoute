@@ -128,12 +128,33 @@ export async function GET(req: NextRequest) {
         const avgScore = (radar.m1 + radar.m2 + radar.m3 + radar.m4 + radar.m5 + radar.m6) / 6;
         const scoutIndex = Math.min(88, Math.max(50, Math.round(48 + (avgScore * 0.4) + (p.age <= 21 ? 3 : 0))));
 
-        let actualEUR = p.marketValueCurrency;
-        if (!actualEUR || actualEUR <= 0) {
-          const kAge = p.age <= 19 ? 1.45 : p.age <= 21 ? 1.25 : p.age <= 27 ? 1.0 : p.age <= 31 ? 0.8 : 0.6;
-          const kPos = pos === 'FW' ? 1.15 : pos === 'MF' ? 1.05 : pos === 'DF' ? 0.95 : 0.85;
-          const base = (p.stats.minutesPlayed / 90) * 6500 + scoutIndex * 1200;
-          actualEUR = Math.round(base * kAge * kPos);
+        // Используем актуальную рыночную стоимость из источника.
+        // Если источник её не дал, рассчитываем оценочную стоимость по возрасту,
+        // позиции, игровому объёму и Scout Index.
+        let actualEUR = Number(p.marketValueCurrency) || 0;
+        let isEstimatedMarketValue = false;
+
+        if (actualEUR <= 0) {
+          const ageFactor =
+            p.age <= 19 ? 1.45 :
+            p.age <= 21 ? 1.25 :
+            p.age <= 27 ? 1.00 :
+            p.age <= 31 ? 0.80 : 0.60;
+
+          const positionFactor =
+            pos === 'FW' ? 1.15 :
+            pos === 'MF' ? 1.05 :
+            pos === 'DF' ? 0.95 : 0.85;
+
+          const minutesFactor = Math.max(1, p.stats.minutesPlayed / 90);
+          const performanceBase =
+            minutesFactor * 6500 +
+            scoutIndex * 1200 +
+            (p.stats.goals || 0) * 18000 +
+            (p.stats.assists || 0) * 9000;
+
+          actualEUR = Math.round(performanceBase * ageFactor * positionFactor);
+          isEstimatedMarketValue = true;
         }
 
         const marketVal = formatMarketValue(actualEUR);
@@ -141,10 +162,12 @@ export async function GET(req: NextRequest) {
         enrichedPlayers.push({
           id: `${p.league || 'UZB'}-${p.sofaId}`,
           league: p.league || 'UZB',
+          countryCode: p.countryCode || '',
           name: { uz: p.name, ru: p.name },
           age: p.age,
           isU21: p.age <= 21,
           isLegionnaire: p.isLegionnaire || false,
+          isEstimatedMarketValue,
           club: { uz: p.club, ru: p.club },
           position: pos,
           number: p.jerseyNumber || 10,
