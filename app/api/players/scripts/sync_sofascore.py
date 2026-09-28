@@ -56,6 +56,73 @@ def save_cached_json(filepath, data):
     except Exception:
         pass
 
+def format_contract_date(timestamp):
+    if not timestamp:
+        return "—"
+    try:
+        return datetime.fromtimestamp(int(timestamp)).strftime("%d/%m/%Y")
+    except Exception:
+        return "—"
+
+
+def fetch_player_profile(session, player_id):
+    """Получает актуальный профиль игрока: клуб, стоимость, контракт и гражданство."""
+    cache_file = os.path.join(CACHE_DIR, "players", f"{player_id}.json")
+    os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+
+    cached = get_cached_json(cache_file)
+    if cached:
+        cached_at = cached.get("_cachedAt", 0)
+        if time.time() - cached_at < 24 * 3600:
+            return cached.get("player", {})
+
+    try:
+        url = f"https://www.sofascore.com/api/v1/player/{player_id}"
+        response = session.get(url, timeout=10)
+        if response.status_code == 200:
+            payload = response.json()
+            player = payload.get("player", {})
+            save_cached_json(cache_file, {"_cachedAt": time.time(), "player": player})
+            return player
+    except Exception:
+        pass
+
+    return cached.get("player", {}) if cached else {}
+
+
+def refresh_current_profiles(session, players):
+    """Обновляет изменившиеся клубы, стоимость, контракт и страну."""
+    for idx, p in enumerate(players):
+        profile = fetch_player_profile(session, p["sofaId"])
+        if not profile:
+            continue
+
+        team = profile.get("team") or {}
+        if team.get("name"):
+            p["club"] = team["name"]
+
+        market_raw = (profile.get("proposedMarketValueRaw") or {}).get("value")
+        if market_raw is None:
+            market_raw = profile.get("marketValue")
+        if market_raw:
+            p["marketValueCurrency"] = market_raw
+
+        contract_ts = profile.get("contractUntilTimestamp")
+        if contract_ts:
+            p["contractUntil"] = format_contract_date(contract_ts)
+
+        country = profile.get("country") or {}
+        if country.get("alpha2"):
+            p["countryCode"] = country["alpha2"].upper()
+
+        p["preferredFoot"] = profile.get("preferredFoot") or p.get("preferredFoot", "Right")
+        p["height"] = profile.get("height") or p.get("height", 182)
+        p["jerseyNumber"] = profile.get("jerseyNumber") or p.get("jerseyNumber", 10)
+
+        if idx % 10 == 0:
+            time.sleep(0.05)
+
+
 def fetch_json(session, url, params=None, retries=2):
     for attempt in range(retries):
         try:
@@ -212,6 +279,8 @@ def sync_targeted_league():
 
     players_list = list(all_players_master.values())
     print(f"\n[ИНФО] Обработка {len(players_list)} игроков для лиги {TARGET_TOURNAMENTS[0]['league']}...")
+    print("[ИНФО] Обновление актуальных профилей игроков (клуб, стоимость, контракт)...")
+    refresh_current_profiles(session, players_list)
 
     new_league_output = []
     for p in players_list:
@@ -263,8 +332,9 @@ def sync_targeted_league():
             "jerseyNumber": p["jerseyNumber"],
             "height": p["height"],
             "preferredFoot": p["preferredFoot"],
-            "contractUntil": "12/2026",
-            "isLegionnaire": False,
+            "contractUntil": p.get("contractUntil", "—"),
+            "countryCode": p.get("countryCode", ""),
+            "isLegionnaire": p.get("countryCode", "").upper() not in ("", "KZ" if p["league"] == "KAZ" else "UZ"),
             "marketValueCurrency": p["marketValueCurrency"],
             "currentSeason": format_stats(p["current"]),
             "twoSeasons": format_stats(p["total"]),
