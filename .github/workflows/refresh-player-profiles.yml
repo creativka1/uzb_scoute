@@ -1,0 +1,44 @@
+name: Refresh player profiles
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-player-profiles
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install curl_cffi
+
+      - name: Refresh SofaScore profiles
+        run: python app/api/players/scripts/refresh_player_profiles.py
+
+      - name: Commit updated player data
+        run: |
+          if git diff --quiet -- data/superliga_stats.json; then
+            echo "No player profile changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/superliga_stats.json
+          git commit -m "chore: refresh player profiles"
+          git push
