@@ -37,13 +37,16 @@ export async function GET(req: NextRequest) {
 
     const playersByPos: Record<Position, any[]> = { FW: [], MF: [], DF: [], GK: [] };
     console.log("Запрос от фронтенда - leagueFilter:", leagueFilter, "seasonMode:", seasonMode);
-   // Приводим обе лиги к верхнему регистру для надежного сравнения
-   const playerLeague = (p.league || '').toUpperCase();
-   const filterLeague = (leagueFilter || '').toUpperCase();
 
-   if (filterLeague !== 'ALL' && playerLeague && playerLeague !== filterLeague) {
-       return;
-   }
+    // Обрабатываем каждого игрока отдельно и фильтруем по выбранной лиге.
+    rawPlayers.forEach((p: any) => {
+      const playerLeague = (p.league || '').toUpperCase();
+      const filterLeague = (leagueFilter || '').toUpperCase();
+
+      if (filterLeague !== 'ALL' && playerLeague !== filterLeague) {
+        return;
+      }
+
       const stats = p[seasonMode] || p.currentSeason || p.twoSeasons;
       if (!stats || stats.minutesPlayed === 0) return;
 
