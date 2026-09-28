@@ -6,6 +6,45 @@ export const dynamic = 'force-dynamic';
 
 export type Position = 'FW' | 'MF' | 'DF' | 'GK';
 
+
+function safeNumber(value: unknown): number | null {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+  return value;
+}
+
+function per90(value: unknown, minutes: unknown): number | null {
+  const v = safeNumber(value);
+  const m = safeNumber(minutes);
+  if (v === null || m === null || m <= 0) return null;
+  return (v / m) * 90;
+}
+
+function percentileRank(values: (number | null)[], value: number | null): number | null {
+  if (value === null || !Number.isFinite(value)) return null;
+  const valid = values.filter((v): v is number => v !== null && Number.isFinite(v));
+  if (!valid.length) return null;
+  if (valid.length === 1) return 100;
+  const lessOrEqual = valid.filter((v) => v <= value).length;
+  return Math.round(((lessOrEqual - 1) / (valid.length - 1)) * 100);
+}
+
+function roleMetrics(pos: Position, stats: any): Record<string, number | null> {
+  const minutes = stats?.minutesPlayed;
+  return {
+    savesPer90: per90(stats?.saves, minutes),
+    aerialWinPct: safeNumber(stats?.aerialWinPct),
+    passAccPct: safeNumber(stats?.passAccPct),
+    duelWinPct: safeNumber(stats?.duelWinPct),
+    tacklesPer90: per90(stats?.tackles, minutes),
+    interceptionsPer90: per90(stats?.interceptions, minutes),
+    keyPassesPer90: per90(stats?.keyPasses, minutes),
+    assistsPer90: per90(stats?.assists, minutes),
+    dribbleSuccessPct: safeNumber(stats?.dribbleSuccessRate),
+    goalsPer90: per90(stats?.goals, minutes),
+    shotsPer90: per90(stats?.shots, minutes),
+  };
+}
+
 function scaleMetric(values: number[]): number[] {
   const min = Math.min(...values);
   const max = Math.max(...values);
