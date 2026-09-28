@@ -36,128 +36,46 @@ export async function GET(req: NextRequest) {
     const rawPlayers = JSON.parse(fileContent);
 
     const playersByPos: Record<Position, any[]> = { FW: [], MF: [], DF: [], GK: [] };
-    console.log("Запрос от фронтенда - leagueFilter:", leagueFilter, "seasonMode:", seasonMode);
 
-    // Обрабатываем каждого игрока отдельно и фильтруем по выбранной лиге.
     rawPlayers.forEach((p: any) => {
       const playerLeague = (p.league || '').toUpperCase();
       const filterLeague = (leagueFilter || '').toUpperCase();
+      if (filterLeague !== 'ALL' && playerLeague !== filterLeague) return;
 
-      if (filterLeague !== 'ALL' && playerLeague !== filterLeague) {
-        return;
-      }
-
-      // Если выбранный сезон ещё не содержит сыгранных минут,
-      // используем доступную статистику другого периода.
       const selectedStats = p[seasonMode];
-      const stats =
-        selectedStats && selectedStats.minutesPlayed > 0
-          ? selectedStats
-          : (p.currentSeason?.minutesPlayed > 0
-              ? p.currentSeason
-              : p.twoSeasons);
+      const stats = selectedStats && selectedStats.minutesPlayed > 0
+        ? selectedStats
+        : (p.currentSeason?.minutesPlayed > 0 ? p.currentSeason : p.twoSeasons);
 
-      if (!stats || stats.minutesPlayed === 0) return;
+      if (!stats || !stats.minutesPlayed) return;
 
       const pos: Position = p.position || 'MF';
-      const mins90 = Math.max(0.5, stats.minutesPlayed / 90);
-
-      let m1 = 0, m2 = 0, m3 = 0, m4 = 0, m5 = 0, m6 = 0;
-
-      if (pos === 'GK') {
-        m1 = (stats.saves || 0) / mins90;
-        m2 = stats.aerialWinPct || 50;
-        m3 = stats.passAccPct || 60;
-        m4 = 67;
-        m5 = stats.matchesPlayed || 1;
-        m6 = 68;
-      } else if (pos === 'DF') {
-        m1 = (stats.tackles || 0) / mins90;
-        m2 = stats.aerialWinPct || 50;
-        m3 = stats.duelWinPct || 50;
-        m4 = (stats.interceptions || 0) / mins90;
-        m5 = stats.passAccPct || 65;
-        m6 = 68;
-      } else if (pos === 'MF') {
-        m1 = (stats.keyPasses || 0) / mins90;
-        m2 = (stats.assists || 0) / mins90;
-        m3 = stats.dribbleSuccessRate || 0;
-        m4 = (stats.tackles || 0) / mins90;
-        m5 = stats.passAccPct || 70;
-        m6 = 68;
-      } else {
-        m1 = (stats.goals || 0) / mins90;
-        m2 = (stats.xG || ((stats.goals || 0) * 0.85)) / mins90;
-        m3 = stats.dribbleSuccessRate || 0;
-        m4 = (stats.assists || 0) / mins90;
-        m5 = stats.minutesPlayed;
-        m6 = 68;
-      }
-
-      playersByPos[pos].push({
-        ...p,
-        stats,
-        mins90,
-        rawM: { m1, m2, m3, m4, m5, m6 },
-      });
+      playersByPos[pos].push({ ...p, stats, roleMetrics: roleMetrics(pos, stats) });
     });
 
     const enrichedPlayers: any[] = [];
 
+    const roleKeys: Record<Position, string[]> = {
+      GK: ['savesPer90', 'aerialWinPct', 'passAccPct', 'duelWinPct', 'tacklesPer90', 'interceptionsPer90'],
+      DF: ['tacklesPer90', 'interceptionsPer90', 'duelWinPct', 'aerialWinPct', 'passAccPct', 'dribbleSuccessPct'],
+      MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct', 'duelWinPct'],
+      FW: ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90', 'dribbleSuccessPct', 'duelWinPct'],
+    };
+
     (Object.keys(playersByPos) as Position[]).forEach((pos) => {
       const group = playersByPos[pos];
-      if (group.length === 0) return;
+      if (!group.length) return;
+      const keys = roleKeys[pos];
+      const distributions: Record<string, (number | null)[]> = {};
+      keys.forEach((key) => { distributions[key] = group.map((item) => item.roleMetrics[key]); });
 
-      const m1Scaled = scaleMetric(group.map((item) => item.rawM.m1));
-      const m2Scaled = scaleMetric(group.map((item) => item.rawM.m2));
-      const m3Scaled = scaleMetric(group.map((item) => item.rawM.m3));
-      const m4Scaled = scaleMetric(group.map((item) => item.rawM.m4));
-      const m5Scaled = scaleMetric(group.map((item) => item.rawM.m5));
-      const m6Scaled = scaleMetric(group.map((item) => item.rawM.m6));
+      group.forEach((p) => {
+        const values = keys.map((key) => percentileRank(distributions[key], p.roleMetrics[key]));
+        const available = values.filter((v): v is number => v !== null);
+        const scoutIndex = available.length ? Math.round(available.reduce((a, b) => a + b, 0) / available.length) : null;
 
-      group.forEach((p, idx) => {
-        const radar = {
-          m1: m1Scaled[idx],
-          m2: m2Scaled[idx],
-          m3: m3Scaled[idx],
-          m4: m4Scaled[idx],
-          m5: m5Scaled[idx],
-          m6: m6Scaled[idx],
-        };
-
-        const avgScore = (radar.m1 + radar.m2 + radar.m3 + radar.m4 + radar.m5 + radar.m6) / 6;
-        const scoutIndex = Math.min(88, Math.max(50, Math.round(48 + (avgScore * 0.4) + (p.age <= 21 ? 3 : 0))));
-
-        // Используем актуальную рыночную стоимость из источника.
-        // Если источник её не дал, рассчитываем оценочную стоимость по возрасту,
-        // позиции, игровому объёму и Scout Index.
-        let actualEUR = Number(p.marketValueCurrency) || 0;
-        let isEstimatedMarketValue = false;
-
-        if (actualEUR <= 0) {
-          const ageFactor =
-            p.age <= 19 ? 1.45 :
-            p.age <= 21 ? 1.25 :
-            p.age <= 27 ? 1.00 :
-            p.age <= 31 ? 0.80 : 0.60;
-
-          const positionFactor =
-            pos === 'FW' ? 1.15 :
-            pos === 'MF' ? 1.05 :
-            pos === 'DF' ? 0.95 : 0.85;
-
-          const minutesFactor = Math.max(1, p.stats.minutesPlayed / 90);
-          const performanceBase =
-            minutesFactor * 6500 +
-            scoutIndex * 1200 +
-            (p.stats.goals || 0) * 18000 +
-            (p.stats.assists || 0) * 9000;
-
-          actualEUR = Math.round(performanceBase * ageFactor * positionFactor);
-          isEstimatedMarketValue = true;
-        }
-
-        const marketVal = formatMarketValue(actualEUR);
+        const radar = { m1: values[0] ?? null, m2: values[1] ?? null, m3: values[2] ?? null, m4: values[3] ?? null, m5: values[4] ?? null, m6: values[5] ?? null };
+        const marketVal = formatMarketValue(safeNumber(p.marketValueCurrency));
 
         enrichedPlayers.push({
           id: `${p.league || 'UZB'}-${p.sofaId}`,
@@ -167,36 +85,39 @@ export async function GET(req: NextRequest) {
           age: p.age,
           isU21: p.age <= 21,
           isLegionnaire: p.isLegionnaire || false,
-          isEstimatedMarketValue,
+          isEstimatedMarketValue: false,
           club: { uz: p.club, ru: p.club },
           position: pos,
-          number: p.jerseyNumber || 10,
-          height: p.height || 182,
-          preferredFoot: p.preferredFoot || 'Right',
+          number: p.jerseyNumber ?? null,
+          height: p.height ?? null,
+          preferredFoot: p.preferredFoot || 'Unknown',
           contractUntil: p.contractUntil || '—',
           marketValue: marketVal.formatted,
           rawMarketValueEUR: marketVal.raw,
           photoUrl: `https://api.sofascore.com/api/v1/player/${p.sofaId}/image`,
           initials: (p.shortName || p.name || 'UZ').split(' ').map((n: string) => n[0]).join('').slice(0, 2),
           scoutIndex,
+          scoutIndexIsCalculated: scoutIndex !== null,
+          scoutIndexBasis: 'Среднее доступных ролевых метрик, рассчитанных как процентили',
           tags: [p.club, pos, p.isLegionnaire ? 'Legioner' : 'Local'],
           minutesPlayed: p.stats.minutesPlayed,
           matchesPlayed: p.stats.matchesPlayed,
-          goals: p.stats.goals || 0,
-          assists: p.stats.assists || 0,
-          xG: p.stats.xG || 0,
-          xA: p.stats.xA || 0,
-          shots: p.stats.shots || 0,
-          keyPasses: p.stats.keyPasses || 0,
-          dribbleSuccessRate: pos === 'GK' ? 0 : (p.stats.dribbleSuccessRate || 0),
-          dribbleWon: p.stats.dribbleWon || 0,
-          dribbleTotal: p.stats.dribbleTotal || 0,
-          duelWinRate: p.stats.duelWinPct || 50,
-          progressiveRuns: pos === 'FW' ? 12 : 5,
-          aerialWinRate: p.stats.aerialWinPct || 50,
-          tackles: p.stats.tackles || 0,
-          interceptions: p.stats.interceptions || 0,
-          saves: p.stats.saves || 0,
+          goals: p.stats.goals ?? 0,
+          assists: p.stats.assists ?? 0,
+          xG: null,
+          xA: null,
+          shots: p.stats.shots ?? 0,
+          keyPasses: p.stats.keyPasses ?? 0,
+          dribbleSuccessRate: pos === 'GK' ? null : safeNumber(p.stats.dribbleSuccessRate),
+          dribbleWon: p.stats.dribbleWon ?? 0,
+          dribbleTotal: p.stats.dribbleTotal ?? 0,
+          duelWinRate: safeNumber(p.stats.duelWinPct),
+          progressiveRuns: null,
+          aerialWinRate: safeNumber(p.stats.aerialWinPct),
+          tackles: p.stats.tackles ?? 0,
+          interceptions: p.stats.interceptions ?? 0,
+          saves: p.stats.saves ?? 0,
+          roleMetrics: p.roleMetrics,
           radar,
         });
       });
