@@ -44,12 +44,12 @@ type SortField = 'value' | 'age' | 'scout';
 type SortOrder = 'asc' | 'desc';
 
 interface RoleRadarMetrics {
-  m1: number;
-  m2: number;
-  m3: number;
-  m4: number;
-  m5: number;
-  m6: number;
+  m1: number | null;
+  m2: number | null;
+  m3: number | null;
+  m4: number | null;
+  m5: number | null;
+  m6: number | null;
 }
 
 interface Player {
@@ -61,17 +61,17 @@ interface Player {
   isLegionnaire: boolean;
   club: { uz: string; ru: string };
   position: Position;
-  number: number;
-  height: number;
+  number: number | null;
+  height: number | null;
   preferredFoot: 'Right' | 'Left' | 'Both' | string;
   marketValue: string;
-  rawMarketValueEUR: number;
+  rawMarketValueEUR: number | null;
   isEstimatedMarketValue?: boolean;
   countryCode?: string;
   contractUntil: string;
   photoUrl: string;
   initials: string;
-  scoutIndex: number;
+  scoutIndex: number | null;
   tags: string[];
   minutesPlayed: number;
   matchesPlayed: number;
@@ -81,12 +81,12 @@ interface Player {
   xA: number | null;
   shots: number;
   keyPasses: number;
-  dribbleSuccessRate: number;
+  dribbleSuccessRate: number | null;
   dribbleWon: number;
   dribbleTotal: number;
-  duelWinRate: number;
-  progressiveRuns: number;
-  aerialWinRate: number;
+  duelWinRate: number | null;
+  progressiveRuns: number | null;
+  aerialWinRate: number | null;
   tackles?: number;
   interceptions?: number;
   saves: number;
