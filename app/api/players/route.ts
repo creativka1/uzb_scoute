@@ -47,7 +47,16 @@ export async function GET(req: NextRequest) {
         return;
       }
 
-      const stats = p[seasonMode] || p.currentSeason || p.twoSeasons;
+      // Если выбранный сезон ещё не содержит сыгранных минут,
+      // используем доступную статистику другого периода.
+      const selectedStats = p[seasonMode];
+      const stats =
+        selectedStats && selectedStats.minutesPlayed > 0
+          ? selectedStats
+          : (p.currentSeason?.minutesPlayed > 0
+              ? p.currentSeason
+              : p.twoSeasons);
+
       if (!stats || stats.minutesPlayed === 0) return;
 
       const pos: Position = p.position || 'MF';
