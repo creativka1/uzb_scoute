@@ -77,8 +77,8 @@ interface Player {
   matchesPlayed: number;
   goals: number;
   assists: number;
-  xG: number;
-  xA: number;
+  xG: number | null;
+  xA: number | null;
   shots: number;
   keyPasses: number;
   dribbleSuccessRate: number;
@@ -98,13 +98,13 @@ const RADAR_AXIS_LABELS = {
     GK: ['Seyvlar', 'Chiqishlar', 'Darvozadan pas', 'Yakkakurash', 'Quruq o‘yinlar', 'Reaksiya'],
     DF: ['To‘p qaytarish', 'Havoda kurash', 'Yerdagi kurash', 'Intizom', 'Uzun paslar', 'Jismoniy holat'],
     MF: ['Xavfli paslar', 'Maydonni ko‘rish', 'To‘p nazorati', 'To‘pni qaytarish', 'Pas aniqligi', 'Dinamika'],
-    FW: ['Zarba yakuni', 'xG xavflilik', '1-ga-1 Dribling', 'Jarimadagi harakat', 'Tezkor siljish', 'Bosh bilan o‘yin'],
+    FW: ['Gollar/90', 'Assistlar/90', 'Zarbalar/90', 'Xavfli paslar/90', 'Dribling %', 'Kurashlar %'],
   },
   ru: {
     GK: ['Сейвы', 'Игра на выходе', 'Ввод мяча', 'Единоборства', 'Сухие матчи', 'Реакция'],
     DF: ['Отборы/перехваты', 'Верховые дуэли', 'Единоборства', 'Позиционная игра', 'Первый пас', 'Физика'],
     MF: ['Острые пасы', 'Видение поля', 'Дриблинг/контроль', 'Возврат владения', 'Точность передач', 'Объем работы'],
-    FW: ['Завершение', 'Острота xG', 'Дриблинг 1-в-1', 'Касания в штрафной', 'Рывки с мячом', 'Игра головой'],
+    FW: ['Голы/90', 'Ассисты/90', 'Удары/90', 'Ключевые передачи/90', 'Дриблинг %', 'Единоборства %'],
   },
 };
 
@@ -649,9 +649,9 @@ export default function Dashboard() {
       let totalWeights = 0;
 
       if (target.position === 'FW') {
-        const xgP90_T = target.xG / targetMins90;
-        const xgP90_C = cand.xG / candMins90;
-        vectorDistSq += 2.5 * Math.pow((xgP90_T - xgP90_C) * 35, 2);
+        const goalsP90_T = target.goals / targetMins90;
+        const goalsP90_C = cand.goals / candMins90;
+        vectorDistSq += 2.5 * Math.pow((goalsP90_T - goalsP90_C) * 35, 2);
         const shotsP90_T = target.shots / targetMins90;
         const shotsP90_C = cand.shots / candMins90;
         vectorDistSq += 1.5 * Math.pow((shotsP90_T - shotsP90_C) * 10, 2);
@@ -660,9 +660,9 @@ export default function Dashboard() {
         vectorDistSq += 1.0 * Math.pow((target.scoutIndex - cand.scoutIndex) * 1.2, 2);
         totalWeights = 7.5;
       } else if (target.position === 'MF') {
-        const xaP90_T = target.xA / targetMins90;
-        const xaP90_C = cand.xA / candMins90;
-        vectorDistSq += 2.5 * Math.pow((xaP90_T - xaP90_C) * 35, 2);
+        const assistsP90_T = target.assists / targetMins90;
+        const assistsP90_C = cand.assists / candMins90;
+        vectorDistSq += 2.5 * Math.pow((assistsP90_T - assistsP90_C) * 35, 2);
         const kpP90_T = target.keyPasses / targetMins90;
         const kpP90_C = cand.keyPasses / candMins90;
         vectorDistSq += 2.0 * Math.pow((kpP90_T - kpP90_C) * 12, 2);
@@ -792,7 +792,7 @@ export default function Dashboard() {
               <tr><td>Точность передач ногами</td><td>${player.radar.m3}%</td></tr>
               ` : `
               <tr><td>Голы</td><td><strong>${player.goals}</strong></td></tr>
-              <tr><td>Острота моментов (xG)</td><td>${player.xG.toFixed(2)} xG</td></tr>
+              <tr><td>Удары всего</td><td>${player.shots}</td></tr>
               <tr><td>Голевые передачи</td><td><strong>${player.assists}</strong></td></tr>
               <tr><td>Удары всего</td><td>${player.shots}</td></tr>
               <tr><td>Единоборства</td><td>${player.duelWinRate}% внизу / ${player.aerialWinRate}% в воздухе</td></tr>
@@ -1394,7 +1394,7 @@ export default function Dashboard() {
                         <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">{selectedPlayer.goals}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
-                        <span className="text-zinc-500 text-[11px] block">{t.xgLabel}</span>
+                        <span className="text-zinc-500 text-[11px] block">{t.shotsSeason}</span>
                         <span className="text-base font-bold text-amber-400 font-mono mt-0.5 block">{selectedPlayer.xG.toFixed(2)}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
@@ -1938,7 +1938,7 @@ export default function Dashboard() {
                         );
                       })()}
                       {(() => {
-                        const c = renderComparisonCell(compareA.xG, compareB.xG, compareA.xG.toFixed(2), compareB.xG.toFixed(2));
+                        const c = renderComparisonCell(compareA.shots, compareB.shots, compareA.shots, compareB.shots);
                         return (
                           <tr className="hover:bg-zinc-850/50">
                             <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
