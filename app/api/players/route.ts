@@ -52,7 +52,8 @@ function scaleMetric(values: number[]): number[] {
   return values.map((v) => Math.round(28 + ((v - min) / (max - min)) * 66));
 }
 
-function formatMarketValue(valEUR: number): { formatted: string; raw: number } {
+function formatMarketValue(valEUR: number | null): { formatted: string; raw: number | null } {
+  if (valEUR === null) return { formatted: '—', raw: null };
   const rounded = Math.max(25000, Math.round(valEUR / 25000) * 25000);
   const formatted = rounded >= 1000000
     ? `€${(rounded / 1000000).toFixed(2)}m`
