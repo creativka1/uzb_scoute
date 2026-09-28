@@ -289,25 +289,20 @@ def sync_targeted_league():
 
         def format_stats(b):
             d_tot = b["duelWon"] + b["duelLost"]
-            d_pct = round((b["duelWon"] / d_tot) * 100) if d_tot > 0 else 50
+            d_pct = round((b["duelWon"] / d_tot) * 100) if d_tot > 0 else None
             a_tot = b["aerialWon"] + b["aerialLost"]
-            a_pct = round((b["aerialWon"] / a_tot) * 100) if a_tot > 0 else 50
-            p_pct = round((b["accuratePass"] / b["totalPass"]) * 100) if b["totalPass"] > 0 else 65
+            a_pct = round((b["aerialWon"] / a_tot) * 100) if a_tot > 0 else None
+            p_pct = round((b["accuratePass"] / b["totalPass"]) * 100) if b["totalPass"] > 0 else None
 
-            drib_pct = 0
+            drib_pct = None
             if p["position"] != "GK" and b["dribbleTotal"] > 0:
                 drib_pct = round((b["dribbleWon"] / b["dribbleTotal"]) * 100)
-
-            xg = round((b["shotsOnTarget"] * 0.32) + ((b["shots"] - b["shotsOnTarget"]) * 0.06) + (b["bigChanceMissed"] * 0.42), 2)
-            xa = round((b["keyPasses"] * 0.15) + (b["bigChanceCreated"] * 0.38), 2)
 
             return {
                 "matchesPlayed": b["matchesPlayed"],
                 "minutesPlayed": b["minutesPlayed"],
                 "goals": b["goals"],
                 "assists": b["assists"],
-                "xG": xg,
-                "xA": xa,
                 "shots": b["shots"],
                 "keyPasses": b["keyPasses"],
                 "tackles": b["tackles"],
