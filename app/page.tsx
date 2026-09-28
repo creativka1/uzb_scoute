@@ -66,6 +66,8 @@ interface Player {
   preferredFoot: 'Right' | 'Left' | 'Both' | string;
   marketValue: string;
   rawMarketValueEUR: number;
+  isEstimatedMarketValue?: boolean;
+  countryCode?: string;
   contractUntil: string;
   photoUrl: string;
   initials: string;
@@ -302,6 +304,48 @@ const TRANSLATIONS = {
     legionerBadge: 'Легионер',
   },
 };
+
+function isContractExpiring(contractUntil: string): boolean {
+  if (!contractUntil || contractUntil === '—') return false;
+
+  const value = contractUntil.trim();
+  let year = 0;
+  let month = 0;
+  let day = 1;
+
+  let match = value.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/);
+  if (match) {
+    day = Number(match[1]);
+    month = Number(match[2]);
+    year = Number(match[3]);
+  } else {
+    match = value.match(/^(\d{1,2})[\/.\-](\d{4})$/);
+    if (match) {
+      month = Number(match[1]);
+      year = Number(match[2]);
+    } else {
+      match = value.match(/^(\d{4})[\/.\-](\d{1,2})$/);
+      if (match) {
+        year = Number(match[1]);
+        month = Number(match[2]);
+      } else {
+        match = value.match(/^(\d{4})$/);
+        if (match) {
+          year = Number(match[1]);
+          month = 12;
+        }
+      }
+    }
+  }
+
+  if (!year || !month || month < 1 || month > 12) return false;
+
+  const expiry = new Date(year, month - 1, day);
+  const now = new Date();
+  const horizon = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+
+  return expiry >= now && expiry <= horizon;
+}
 
 function getScoutBadgeColor(score: number): string {
   if (score >= 75) return 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400';
@@ -556,9 +600,14 @@ export default function Dashboard() {
       const q = searchQuery.toLowerCase();
       const matchSearch = pName.includes(q) || pClub.includes(q);
 
-      const matchLegion = !filterLegionnaire || player.isLegionnaire;
+      const leagueCountry = currentLeague === 'KAZ' ? 'KZ' : 'UZ';
+      const matchLegion =
+        !filterLegionnaire ||
+        player.isLegionnaire ||
+        (!!player.countryCode && player.countryCode.toUpperCase() !== leagueCountry);
+
       const matchU21 = !filterU21 || player.isU21;
-      const matchContract = !filterContract || (player.contractUntil && (player.contractUntil.includes('2026') || player.contractUntil.includes('2027')));
+      const matchContract = !filterContract || isContractExpiring(player.contractUntil);
       const matchMinutes = !filterMinMinutes || player.minutesPlayed >= 450;
       const matchClub = filterClub === 'all' || player.club?.[lang] === filterClub;
       const matchPos = filterPosition === 'all' || player.position === filterPosition;
@@ -1023,7 +1072,7 @@ export default function Dashboard() {
                         )}
                       </div>
                       <div className="text-[11px] text-emerald-400 font-mono font-medium mt-0.5">
-                        {player.marketValue} · <span className="text-zinc-400">{player.age} {t.years}</span>
+                        {player.isEstimatedMarketValue ? '~' : ''}{player.marketValue} · <span className="text-zinc-400">{player.age} {t.years}</span>
                       </div>
                     </div>
                   </td>
