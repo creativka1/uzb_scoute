@@ -1456,7 +1456,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-zinc-800 flex justify-between items-center text-xs">
-                  <span className="text-zinc-400">{t.metricLabel} (Transfermarkt / Opta Protocol)</span>
+                  <span className="text-zinc-400">{t.metricLabel} (Ролевой профиль на основе данных SofaScore)</span>
                   <span className={`font-bold font-mono px-2 py-0.5 rounded border ${getScoutBadgeColor(selectedPlayer.scoutIndex)}`}>
                     {selectedPlayer.scoutIndex} / 100
                   </span>
