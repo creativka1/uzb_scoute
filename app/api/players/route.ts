@@ -6,6 +6,8 @@ export const dynamic = 'force-dynamic';
 
 export type Position = 'FW' | 'MF' | 'DF' | 'GK';
 
+const MIN_PERCENTILE_MINUTES = 450;
+
 
 function safeNumber(value: unknown): number | null {
   if (typeof value !== 'number' || !Number.isFinite(value)) return null;
@@ -107,10 +109,17 @@ export async function GET(req: NextRequest) {
       if (!group.length) return;
       const keys = roleKeys[pos];
       const distributions: Record<string, (number | null)[]> = {};
-      keys.forEach((key) => { distributions[key] = group.map((item) => item.roleMetrics[key]); });
+      keys.forEach((key) => {
+        distributions[key] = group.map((item) =>
+          safeNumber(item.stats?.minutesPlayed) !== null && item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+            ? item.roleMetrics[key]
+            : null
+        );
+      });
 
       group.forEach((p) => {
-        const values = keys.map((key) => percentileRank(distributions[key], p.roleMetrics[key]));
+        const hasReliableSample = safeNumber(p.stats?.minutesPlayed) !== null && p.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES;
+        const values = keys.map((key) => hasReliableSample ? percentileRank(distributions[key], p.roleMetrics[key]) : null);
         const available = values.filter((v): v is number => v !== null);
         const scoutIndex = available.length ? Math.round(available.reduce((a, b) => a + b, 0) / available.length) : null;
 
@@ -138,7 +147,9 @@ export async function GET(req: NextRequest) {
           initials: (p.shortName || p.name || 'UZ').split(' ').map((n: string) => n[0]).join('').slice(0, 2),
           scoutIndex,
           scoutIndexIsCalculated: scoutIndex !== null,
-          scoutIndexBasis: 'Среднее доступных ролевых метрик, рассчитанных как процентили',
+          scoutIndexBasis: hasReliableSample
+            ? 'Среднее доступных ролевых метрик, рассчитанных как процентили среди игроков с минимум 450 минутами'
+            : 'Недостаточно игрового времени для надёжного процентиля (минимум 450 минут)',
           tags: [p.club, pos, p.isLegionnaire ? 'Legioner' : 'Local'],
           minutesPlayed: p.stats.minutesPlayed,
           matchesPlayed: p.stats.matchesPlayed,
@@ -148,6 +159,11 @@ export async function GET(req: NextRequest) {
           xA: null,
           shots: p.stats.shots ?? 0,
           keyPasses: p.stats.keyPasses ?? 0,
+          goalsPer90: per90(p.stats.goals, p.stats.minutesPlayed),
+          assistsPer90: per90(p.stats.assists, p.stats.minutesPlayed),
+          shotsPer90: per90(p.stats.shots, p.stats.minutesPlayed),
+          keyPassesPer90: per90(p.stats.keyPasses, p.stats.minutesPlayed),
+          passAccPct: safeNumber(p.stats.passAccPct),
           dribbleSuccessRate: pos === 'GK' ? null : safeNumber(p.stats.dribbleSuccessRate),
           dribbleWon: p.stats.dribbleWon ?? 0,
           dribbleTotal: p.stats.dribbleTotal ?? 0,
