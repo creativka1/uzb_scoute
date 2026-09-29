@@ -1395,12 +1395,12 @@ export default function Dashboard() {
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.shotsSeason}</span>
-                        <span className="text-base font-bold text-amber-400 font-mono mt-0.5 block">{selectedPlayer.xG.toFixed(2)}</span>
+                        <span className="text-base font-bold text-amber-400 font-mono mt-0.5 block">{selectedPlayer.shots}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.dribbleDetailed}</span>
                         <span className="text-base font-bold text-zinc-200 font-mono mt-0.5 block">
-                          {selectedPlayer.dribbleWon} / {selectedPlayer.dribbleTotal} ({selectedPlayer.dribbleSuccessRate}%)
+                          {selectedPlayer.dribbleWon} / {selectedPlayer.dribbleTotal} ({selectedPlayer.dribbleSuccessRate === null ? '—' : `${selectedPlayer.dribbleSuccessRate}%`})
                         </span>
                       </div>
                     </div>
@@ -1487,11 +1487,11 @@ export default function Dashboard() {
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.xgLabel}</span>
-                    <strong className="text-amber-400 text-sm">{selectedPlayer.xG.toFixed(2)}</strong>
+                    <strong className="text-amber-400 text-sm">{selectedPlayer.xG === null ? '—' : selectedPlayer.xG.toFixed(2)}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.xaLabel}</span>
-                    <strong className="text-sky-400 text-sm">{selectedPlayer.xA.toFixed(2)}</strong>
+                    <strong className="text-sky-400 text-sm">{selectedPlayer.xA === null ? '—' : selectedPlayer.xA.toFixed(2)}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.shotsSeason}</span>
@@ -1507,7 +1507,7 @@ export default function Dashboard() {
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.duelPct}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.duelWinRate}%</strong>
+                    <strong className="text-white text-sm">{selectedPlayer.duelWinRate === null ? '—' : `${selectedPlayer.duelWinRate}%`}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.aerialPct}</span>
