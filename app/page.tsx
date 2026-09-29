@@ -81,6 +81,11 @@ interface Player {
   xA: number | null;
   shots: number;
   keyPasses: number;
+  goalsPer90: number | null;
+  assistsPer90: number | null;
+  shotsPer90: number | null;
+  keyPassesPer90: number | null;
+  passAccPct: number | null;
   dribbleSuccessRate: number | null;
   dribbleWon: number;
   dribbleTotal: number;
@@ -95,15 +100,15 @@ interface Player {
 
 const RADAR_AXIS_LABELS = {
   uz: {
-    GK: ['Seyvlar', 'Chiqishlar', 'Darvozadan pas', 'Yakkakurash', 'Quruq o‘yinlar', 'Reaksiya'],
-    DF: ['To‘p qaytarish', 'Havoda kurash', 'Yerdagi kurash', 'Intizom', 'Uzun paslar', 'Jismoniy holat'],
-    MF: ['Xavfli paslar', 'Maydonni ko‘rish', 'To‘p nazorati', 'To‘pni qaytarish', 'Pas aniqligi', 'Dinamika'],
+    GK: ['Seyvlar/90', 'Havodagi kurash %', 'Pas aniqligi %', 'Yakkakurash %', 'To‘p qaytarish/90', 'To‘xtatish/90'],
+    DF: ['To‘p qaytarish/90', 'To‘xtatish/90', 'Yakkakurash %', 'Havodagi kurash %', 'Pas aniqligi %', 'Dribling %'],
+    MF: ['Xavfli paslar/90', 'Assistlar/90', 'Dribling %', 'To‘p qaytarish/90', 'Pas aniqligi %', 'Yakkakurash %'],
     FW: ['Gollar/90', 'Assistlar/90', 'Zarbalar/90', 'Xavfli paslar/90', 'Dribling %', 'Kurashlar %'],
   },
   ru: {
-    GK: ['Сейвы', 'Игра на выходе', 'Ввод мяча', 'Единоборства', 'Сухие матчи', 'Реакция'],
-    DF: ['Отборы/перехваты', 'Верховые дуэли', 'Единоборства', 'Позиционная игра', 'Первый пас', 'Физика'],
-    MF: ['Острые пасы', 'Видение поля', 'Дриблинг/контроль', 'Возврат владения', 'Точность передач', 'Объем работы'],
+    GK: ['Сейвы/90', 'Верховые дуэли %', 'Точность передач %', 'Единоборства %', 'Отборы/90', 'Перехваты/90'],
+    DF: ['Отборы/90', 'Перехваты/90', 'Единоборства %', 'Верховые дуэли %', 'Точность передач %', 'Дриблинг %'],
+    MF: ['Ключевые передачи/90', 'Ассисты/90', 'Дриблинг %', 'Отборы/90', 'Точность передач %', 'Единоборства %'],
     FW: ['Голы/90', 'Ассисты/90', 'Удары/90', 'Ключевые передачи/90', 'Дриблинг %', 'Единоборства %'],
   },
 };
@@ -1377,8 +1382,13 @@ export default function Dashboard() {
                         <span className="text-base font-bold text-white font-mono mt-0.5 block">{selectedPlayer.matchesPlayed} {t.matchWord}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
-                        <span className="text-zinc-500 text-[11px] block">{t.goalsSeason}</span>
-                        <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">{selectedPlayer.goals}</span>
+                        <span className="text-zinc-500 text-[11px] block">{t.goalsSeason} / {t.assistsSeason}</span>
+                        <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">
+                          {selectedPlayer.goals} {t.goalWord} / {selectedPlayer.assists} {t.assistWord}
+                        </span>
+                        <span className="text-[10px] text-zinc-500 font-mono block mt-1">
+                          /90: {selectedPlayer.goalsPer90 === null ? '—' : selectedPlayer.goalsPer90.toFixed(2)} / {selectedPlayer.assistsPer90 === null ? '—' : selectedPlayer.assistsPer90.toFixed(2)}
+                        </span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.shotsSeason}</span>
@@ -1412,7 +1422,7 @@ export default function Dashboard() {
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.duelPct}</span>
-                        <span className="text-base font-bold text-white font-mono mt-0.5 block">{selectedPlayer.duelWinRate}%</span>
+                        <span className="text-base font-bold text-white font-mono mt-0.5 block">{selectedPlayer.duelWinRate === null ? '—' : `${selectedPlayer.duelWinRate}%`}</span>
                       </div>
                     </div>
                   )}
@@ -1436,7 +1446,7 @@ export default function Dashboard() {
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.aerialPct}</span>
-                        <span className="text-base font-bold text-sky-400 font-mono mt-0.5 block">{selectedPlayer.aerialWinRate}%</span>
+                        <span className="text-base font-bold text-sky-400 font-mono mt-0.5 block">{selectedPlayer.aerialWinRate === null ? '—' : `${selectedPlayer.aerialWinRate}%`}</span>
                       </div>
                     </div>
                   )}
@@ -1490,7 +1500,7 @@ export default function Dashboard() {
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.dribbleDetailed}</span>
-                    <strong className="text-zinc-200 text-sm">{selectedPlayer.dribbleWon} / {selectedPlayer.dribbleTotal} ({selectedPlayer.dribbleSuccessRate}%)</strong>
+                    <strong className="text-zinc-200 text-sm">{selectedPlayer.dribbleWon} / {selectedPlayer.dribbleTotal} ({selectedPlayer.dribbleSuccessRate === null ? '—' : `${selectedPlayer.dribbleSuccessRate}%`})</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.duelPct}</span>
@@ -1498,7 +1508,7 @@ export default function Dashboard() {
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.aerialPct}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.aerialWinRate}%</strong>
+                    <strong className="text-white text-sm">{selectedPlayer.aerialWinRate === null ? '—' : `${selectedPlayer.aerialWinRate}%`}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.tacklesInterceptions}</span>
@@ -1506,7 +1516,7 @@ export default function Dashboard() {
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.passAccPct}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.radar.m5}%</strong>
+                    <strong className="text-white text-sm">{selectedPlayer.passAccPct === null ? '—' : `${selectedPlayer.passAccPct}%`}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.metricLabel}</span>
