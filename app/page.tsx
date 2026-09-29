@@ -393,7 +393,7 @@ function DynamicRoleRadar({
   const t = TRANSLATIONS[lang];
   const pos = primaryPlayer.position;
   const labels = RADAR_AXIS_LABELS[lang][pos];
-  const posAvg = positionAverages[pos] || { m1: 50, m2: 50, m3: 50, m4: 50, m5: 50, m6: 50 };
+  const posAvg = positionAverages[pos] || { m1: null, m2: null, m3: null, m4: null, m5: null, m6: null };
 
   const getPosName = (p: Position) => {
     switch (p) {
@@ -411,7 +411,11 @@ function DynamicRoleRadar({
     { skill: labels[3], primary: primaryPlayer.radar.m4, comparison: comparisonPlayer?.radar.m4, avg: posAvg.m4 },
     { skill: labels[4], primary: primaryPlayer.radar.m5, comparison: comparisonPlayer?.radar.m5, avg: posAvg.m5 },
     { skill: labels[5], primary: primaryPlayer.radar.m6, comparison: comparisonPlayer?.radar.m6, avg: posAvg.m6 },
-  ];
+  ].filter((item) =>
+    item.primary !== null &&
+    item.primary !== undefined &&
+    (!comparisonPlayer || (item.comparison !== null && item.comparison !== undefined))
+  );
 
   const avgLegend = `${t.posAvgLabel} (${getPosName(pos)})`;
 
@@ -551,43 +555,26 @@ export default function Dashboard() {
   };
 
   const positionAverages = useMemo(() => {
-    const accum: Record<Position, { count: number; m1: number; m2: number; m3: number; m4: number; m5: number; m6: number }> = {
-      FW: { count: 0, m1: 0, m2: 0, m3: 0, m4: 0, m5: 0, m6: 0 },
-      MF: { count: 0, m1: 0, m2: 0, m3: 0, m4: 0, m5: 0, m6: 0 },
-      DF: { count: 0, m1: 0, m2: 0, m3: 0, m4: 0, m5: 0, m6: 0 },
-      GK: { count: 0, m1: 0, m2: 0, m3: 0, m4: 0, m5: 0, m6: 0 },
-    };
+    const positions: Position[] = ['FW', 'MF', 'DF', 'GK'];
+    const keys: (keyof RoleRadarMetrics)[] = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
 
-    players.forEach((p) => {
-      const pos = p.position || 'MF';
-      accum[pos].count += 1;
-      accum[pos].m1 += p.radar?.m1 || 50;
-      accum[pos].m2 += p.radar?.m2 || 50;
-      accum[pos].m3 += p.radar?.m3 || 50;
-      accum[pos].m4 += p.radar?.m4 || 50;
-      accum[pos].m5 += p.radar?.m5 || 50;
-      accum[pos].m6 += p.radar?.m6 || 50;
-    });
+    const result = {} as Record<Position, RoleRadarMetrics>;
 
-    const result: Record<Position, RoleRadarMetrics> = {
-      FW: { m1: 50, m2: 50, m3: 50, m4: 50, m5: 50, m6: 50 },
-      MF: { m1: 50, m2: 50, m3: 50, m4: 50, m5: 50, m6: 50 },
-      DF: { m1: 50, m2: 50, m3: 50, m4: 50, m5: 50, m6: 50 },
-      GK: { m1: 50, m2: 50, m3: 50, m4: 50, m5: 50, m6: 50 },
-    };
+    positions.forEach((pos) => {
+      const group = players.filter((p) => p.position === pos);
+      const metrics = {} as RoleRadarMetrics;
 
-    (Object.keys(accum) as Position[]).forEach((pos) => {
-      const c = accum[pos].count;
-      if (c > 0) {
-        result[pos] = {
-          m1: Math.round(accum[pos].m1 / c),
-          m2: Math.round(accum[pos].m2 / c),
-          m3: Math.round(accum[pos].m3 / c),
-          m4: Math.round(accum[pos].m4 / c),
-          m5: Math.round(accum[pos].m5 / c),
-          m6: Math.round(accum[pos].m6 / c),
-        };
-      }
+      keys.forEach((key) => {
+        const values = group
+          .map((p) => p.radar?.[key])
+          .filter((value): value is number => value !== null && value !== undefined && Number.isFinite(value));
+
+        metrics[key] = values.length
+          ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
+          : null;
+      });
+
+      result[pos] = metrics;
     });
 
     return result;
