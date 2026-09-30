@@ -43,6 +43,9 @@ type League = 'UZB' | 'KAZ';
 type SeasonMode = 'current' | 'two';
 type SortField = 'value' | 'age' | 'scout';
 type SortOrder = 'asc' | 'desc';
+type MainView = 'players' | 'recruitment';
+type FootFilter = 'all' | 'Right' | 'Left' | 'Both';
+type NationalityFilter = 'all' | 'local' | 'legionnaire';
 
 interface RoleRadarMetrics {
   m1: number | null;
@@ -286,10 +289,10 @@ const TRANSLATIONS = {
     roleAM: 'Hujumkor yarim himoyachi',
     roleFW: 'Hujumchi',
     calculatedRoleNote: 'Platforma tomonidan real o‘yin metrikalaridan hisoblangan',
-    recruitmentTitle: '4-bosqich · Recruitment Engine',
+    recruitmentTitle: 'Recruitment',
     recruitmentSub: 'Klub talablari bo‘yicha shortlist: faqat mavjud real ma’lumotlar asosida',
-    recruitmentPosition: 'Manba pozitsiyasi',
-    recruitmentRole: 'Analitik rol',
+    recruitmentPosition: 'Pozitsiya (manba)',
+    recruitmentRole: 'O‘yin profili (hisoblangan)',
     recruitmentMaxAge: 'Maks. yosh',
     recruitmentMaxBudget: 'Maks. byudjet (€)',
     recruitmentMinMinutes: 'Min. daqiqa',
@@ -301,7 +304,22 @@ const TRANSLATIONS = {
     shortlistReasons: 'Nega mos keldi',
     noShortlist: 'Bu talablarga mos, yetarli ma’lumotli futbolchi topilmadi.',
     unknownValueExcluded: 'Talab qilingan metrika mavjud bo‘lmasa, futbolchi kriteriydan o‘tmaydi.',
-    allRoles: 'Barcha rollar',
+    allRoles: 'Barcha profillar',
+    tabPlayers: 'Futbolchilar',
+    tabRecruitment: 'Recruitment',
+    recruitmentFoot: 'Yetakchi oyoq',
+    recruitmentNationality: 'Status',
+    statusAll: 'Barchasi',
+    statusLocal: 'Mahalliy',
+    statusLegionnaire: 'Legioner',
+    minGoals90: 'Min. gollar/90',
+    minAssists90: 'Min. assistlar/90',
+    minShots90: 'Min. zarbalar/90',
+    minKeyPasses90: 'Min. xavfli paslar/90',
+    minDribble: 'Min. dribling %',
+    minPassAcc: 'Min. pas aniqligi %',
+    advancedMetrics: 'Rolga mos metrikalar',
+    sourceVsRoleHelp: 'Pozitsiya — manbadagi rasmiy kategoriya. O‘yin profili — platforma real metrikalardan hisoblagan rol.',
     missingMetricsLabel: 'Ma’lumot yetishmaydigan metrikalar',
   },
   ru: {
@@ -430,10 +448,10 @@ const TRANSLATIONS = {
     roleAM: 'Атакующий полузащитник',
     roleFW: 'Нападающий',
     calculatedRoleNote: 'Рассчитано платформой только из доступных игровых метрик',
-    recruitmentTitle: 'Этап 4 · Recruitment Engine',
+    recruitmentTitle: 'Recruitment',
     recruitmentSub: 'Shortlist под требования клуба — только по имеющимся реальным данным',
-    recruitmentPosition: 'Позиция источника',
-    recruitmentRole: 'Аналитическая роль',
+    recruitmentPosition: 'Позиция (из источника)',
+    recruitmentRole: 'Игровой профиль (расчёт)',
     recruitmentMaxAge: 'Макс. возраст',
     recruitmentMaxBudget: 'Макс. бюджет (€)',
     recruitmentMinMinutes: 'Мин. минут',
@@ -445,7 +463,22 @@ const TRANSLATIONS = {
     shortlistReasons: 'Почему подходит',
     noShortlist: 'Нет игроков с достаточными данными, подходящих под эти требования.',
     unknownValueExcluded: 'Если требуемой метрики нет, игрок не проходит этот критерий.',
-    allRoles: 'Все роли',
+    allRoles: 'Все профили',
+    tabPlayers: 'Игроки',
+    tabRecruitment: 'Recruitment',
+    recruitmentFoot: 'Рабочая нога',
+    recruitmentNationality: 'Статус',
+    statusAll: 'Все',
+    statusLocal: 'Местный',
+    statusLegionnaire: 'Легионер',
+    minGoals90: 'Мин. голов/90',
+    minAssists90: 'Мин. ассистов/90',
+    minShots90: 'Мин. ударов/90',
+    minKeyPasses90: 'Мин. ключевых передач/90',
+    minDribble: 'Мин. дриблинг %',
+    minPassAcc: 'Мин. точность паса %',
+    advancedMetrics: 'Метрики под роль',
+    sourceVsRoleHelp: 'Позиция — официальная категория из источника. Игровой профиль — расчёт платформы по реальным метрикам.',
     missingMetricsLabel: 'Метрики без данных',
   },
 };
@@ -652,6 +685,7 @@ function DynamicRoleRadar({
 
 export default function Dashboard() {
   const [lang, setLang] = useState<Language>('uz');
+  const [activeView, setActiveView] = useState<MainView>('players');
   const t = TRANSLATIONS[lang];
 
   // ВЫБОР ЛИГИ И РЕЖИМА СЕЗОНА
@@ -684,11 +718,19 @@ export default function Dashboard() {
   const [recruitmentRole, setRecruitmentRole] = useState<'all' | AnalyticalRole>('all');
   const [recruitmentMaxAge, setRecruitmentMaxAge] = useState('');
   const [recruitmentMaxBudget, setRecruitmentMaxBudget] = useState('');
-  const [recruitmentMinMinutes, setRecruitmentMinMinutes] = useState('450');
+  const [recruitmentMinMinutes, setRecruitmentMinMinutes] = useState('');
   const [recruitmentMinRoleScore, setRecruitmentMinRoleScore] = useState('');
   const [recruitmentMinAttackScore, setRecruitmentMinAttackScore] = useState('');
   const [recruitmentExpiring, setRecruitmentExpiring] = useState(false);
-  const [recruitmentReliableOnly, setRecruitmentReliableOnly] = useState(true);
+  const [recruitmentReliableOnly, setRecruitmentReliableOnly] = useState(false);
+  const [recruitmentFoot, setRecruitmentFoot] = useState<FootFilter>('all');
+  const [recruitmentNationality, setRecruitmentNationality] = useState<NationalityFilter>('all');
+  const [recruitmentMinGoals90, setRecruitmentMinGoals90] = useState('');
+  const [recruitmentMinAssists90, setRecruitmentMinAssists90] = useState('');
+  const [recruitmentMinShots90, setRecruitmentMinShots90] = useState('');
+  const [recruitmentMinKeyPasses90, setRecruitmentMinKeyPasses90] = useState('');
+  const [recruitmentMinDribble, setRecruitmentMinDribble] = useState('');
+  const [recruitmentMinPassAcc, setRecruitmentMinPassAcc] = useState('');
 
   useEffect(() => {
     let isMounted = true;
@@ -853,11 +895,20 @@ export default function Dashboard() {
     const minMinutes = recruitmentMinMinutes === '' ? null : Number(recruitmentMinMinutes);
     const minRole = recruitmentMinRoleScore === '' ? null : Number(recruitmentMinRoleScore);
     const minAttack = recruitmentMinAttackScore === '' ? null : Number(recruitmentMinAttackScore);
+    const minGoals90 = recruitmentMinGoals90 === '' ? null : Number(recruitmentMinGoals90);
+    const minAssists90 = recruitmentMinAssists90 === '' ? null : Number(recruitmentMinAssists90);
+    const minShots90 = recruitmentMinShots90 === '' ? null : Number(recruitmentMinShots90);
+    const minKeyPasses90 = recruitmentMinKeyPasses90 === '' ? null : Number(recruitmentMinKeyPasses90);
+    const minDribble = recruitmentMinDribble === '' ? null : Number(recruitmentMinDribble);
+    const minPassAcc = recruitmentMinPassAcc === '' ? null : Number(recruitmentMinPassAcc);
 
     return players
       .filter((p) => {
         if (recruitmentPosition !== 'all' && p.sourcePosition !== recruitmentPosition) return false;
         if (recruitmentRole !== 'all' && p.analyticalRole !== recruitmentRole) return false;
+        if (recruitmentFoot !== 'all' && p.preferredFoot !== recruitmentFoot) return false;
+        if (recruitmentNationality === 'local' && p.isLegionnaire) return false;
+        if (recruitmentNationality === 'legionnaire' && !p.isLegionnaire) return false;
         if (maxAge !== null && Number.isFinite(maxAge) && p.age > maxAge) return false;
 
         if (maxBudget !== null && Number.isFinite(maxBudget)) {
@@ -876,6 +927,13 @@ export default function Dashboard() {
           if (attackScore === null || attackScore < minAttack) return false;
         }
 
+        if (minGoals90 !== null && Number.isFinite(minGoals90) && (p.goalsPer90 === null || p.goalsPer90 < minGoals90)) return false;
+        if (minAssists90 !== null && Number.isFinite(minAssists90) && (p.assistsPer90 === null || p.assistsPer90 < minAssists90)) return false;
+        if (minShots90 !== null && Number.isFinite(minShots90) && (p.shotsPer90 === null || p.shotsPer90 < minShots90)) return false;
+        if (minKeyPasses90 !== null && Number.isFinite(minKeyPasses90) && (p.keyPassesPer90 === null || p.keyPassesPer90 < minKeyPasses90)) return false;
+        if (minDribble !== null && Number.isFinite(minDribble) && (p.dribbleSuccessRate === null || p.dribbleSuccessRate < minDribble)) return false;
+        if (minPassAcc !== null && Number.isFinite(minPassAcc) && (p.passAccPct === null || p.passAccPct < minPassAcc)) return false;
+
         if (recruitmentExpiring && !isContractExpiring(p.contractUntil)) return false;
         if (recruitmentReliableOnly && p.scoutingEngine?.confidence === 'low') return false;
 
@@ -885,11 +943,19 @@ export default function Dashboard() {
         const reasons: string[] = [];
         if (recruitmentPosition !== 'all') reasons.push(getPositionName(p.sourcePosition));
         if (recruitmentRole !== 'all') reasons.push(getAnalyticalRoleName(p.analyticalRole));
+        if (recruitmentFoot !== 'all') reasons.push(getFootName(p.preferredFoot));
+        if (recruitmentNationality !== 'all') reasons.push(p.isLegionnaire ? t.statusLegionnaire : t.statusLocal);
         if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(lang === 'ru' ? `Возраст ${p.age} ≤ ${maxAge}` : `Yosh ${p.age} ≤ ${maxAge}`);
         if (maxBudget !== null && Number.isFinite(maxBudget) && p.rawMarketValueEUR !== null) reasons.push(`${p.marketValue} ≤ €${Math.round(maxBudget / 1000)}k`);
         if (minMinutes !== null && Number.isFinite(minMinutes)) reasons.push(`${p.minutesPlayed}' ≥ ${minMinutes}'`);
         if (minRole !== null && Number.isFinite(minRole) && p.scoutingEngine?.roleScore !== null) reasons.push(lang === 'ru' ? `Ролевой рейтинг ${p.scoutingEngine.roleScore} ≥ ${minRole}` : `Rol reytingi ${p.scoutingEngine.roleScore} ≥ ${minRole}`);
         if (minAttack !== null && Number.isFinite(minAttack) && p.scoutingEngine?.attackingScore !== null) reasons.push(lang === 'ru' ? `Атакующий вклад ${p.scoutingEngine.attackingScore} ≥ ${minAttack}` : `Hujum hissasi ${p.scoutingEngine.attackingScore} ≥ ${minAttack}`);
+        if (minGoals90 !== null && Number.isFinite(minGoals90) && p.goalsPer90 !== null) reasons.push(`G/90 ${p.goalsPer90.toFixed(2)} ≥ ${minGoals90}`);
+        if (minAssists90 !== null && Number.isFinite(minAssists90) && p.assistsPer90 !== null) reasons.push(`A/90 ${p.assistsPer90.toFixed(2)} ≥ ${minAssists90}`);
+        if (minShots90 !== null && Number.isFinite(minShots90) && p.shotsPer90 !== null) reasons.push(`Shots/90 ${p.shotsPer90.toFixed(2)} ≥ ${minShots90}`);
+        if (minKeyPasses90 !== null && Number.isFinite(minKeyPasses90) && p.keyPassesPer90 !== null) reasons.push(`KP/90 ${p.keyPassesPer90.toFixed(2)} ≥ ${minKeyPasses90}`);
+        if (minDribble !== null && Number.isFinite(minDribble) && p.dribbleSuccessRate !== null) reasons.push(`Dribbling ${p.dribbleSuccessRate}% ≥ ${minDribble}%`);
+        if (minPassAcc !== null && Number.isFinite(minPassAcc) && p.passAccPct !== null) reasons.push(`Pass ${p.passAccPct}% ≥ ${minPassAcc}%`);
         if (recruitmentExpiring) reasons.push(lang === 'ru' ? 'Контракт ≤ 12 мес.' : 'Shartnoma ≤ 12 oy');
         if (recruitmentReliableOnly) reasons.push(`${t.confidenceLabel}: ${p.scoutingEngine?.confidence === 'high' ? t.confidenceHigh : t.confidenceMedium}`);
 
@@ -913,6 +979,14 @@ export default function Dashboard() {
     recruitmentMinAttackScore,
     recruitmentExpiring,
     recruitmentReliableOnly,
+    recruitmentFoot,
+    recruitmentNationality,
+    recruitmentMinGoals90,
+    recruitmentMinAssists90,
+    recruitmentMinShots90,
+    recruitmentMinKeyPasses90,
+    recruitmentMinDribble,
+    recruitmentMinPassAcc,
     lang,
   ]);
 
@@ -1145,6 +1219,7 @@ export default function Dashboard() {
             </button>
           </div>
 
+          {activeView === 'players' && (
           <div className="relative">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-500" />
             <input
@@ -1155,8 +1230,10 @@ export default function Dashboard() {
               className="w-56 sm:w-64 rounded-lg border border-zinc-800 bg-zinc-900/90 pl-9 pr-4 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-emerald-500 focus:outline-none transition shadow-sm"
             />
           </div>
+          )}
 
           {/* ИКОНКА НАСТРОЙКИ ФИЛЬТРОВ СПРАВА */}
+          {activeView === 'players' && (
           <button
             onClick={() => setIsFilterOpen(true)}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-semibold transition shadow-sm ${
@@ -1173,6 +1250,7 @@ export default function Dashboard() {
               </span>
             )}
           </button>
+          )}
         </div>
       </header>
 
@@ -1227,6 +1305,22 @@ export default function Dashboard() {
         </div>
       </div>
 
+      <div className="max-w-7xl mx-auto mb-5 flex items-center gap-2">
+        <button
+          onClick={() => setActiveView('players')}
+          className={`rounded-lg border px-4 py-2 text-xs font-semibold transition ${activeView === 'players' ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-400' : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-white'}`}
+        >
+          {t.tabPlayers}
+        </button>
+        <button
+          onClick={() => setActiveView('recruitment')}
+          className={`rounded-lg border px-4 py-2 text-xs font-semibold transition ${activeView === 'recruitment' ? 'border-sky-500/50 bg-sky-500/15 text-sky-400' : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-white'}`}
+        >
+          {t.tabRecruitment}
+        </button>
+      </div>
+
+      {activeView === 'players' && (<>
       {/* ПАНЕЛЬ БЫСТРОЙ СОРТИРОВКИ */}
       <div className="max-w-7xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-2">
@@ -1291,6 +1385,9 @@ export default function Dashboard() {
         </div>
       </div>
 
+      </>)}
+
+      {activeView === 'recruitment' && (
       {/* ЭТАП 4: RECRUITMENT ENGINE */}
       <section className="max-w-7xl mx-auto mb-5 rounded-xl border border-sky-500/20 bg-zinc-900/70 p-5 shadow-xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-zinc-800 pb-4 mb-4">
@@ -1299,6 +1396,7 @@ export default function Dashboard() {
             <div>
               <h2 className="text-sm font-bold text-white">{t.recruitmentTitle}</h2>
               <p className="text-[11px] text-zinc-400 mt-0.5">{t.recruitmentSub}</p>
+              <p className="text-[10px] text-zinc-500 mt-1">{t.sourceVsRoleHelp}</p>
               <p className="text-[10px] text-amber-400/80 mt-1">{t.unknownValueExcluded}</p>
             </div>
           </div>
@@ -1308,11 +1406,19 @@ export default function Dashboard() {
               setRecruitmentRole('all');
               setRecruitmentMaxAge('');
               setRecruitmentMaxBudget('');
-              setRecruitmentMinMinutes('450');
+              setRecruitmentMinMinutes('');
               setRecruitmentMinRoleScore('');
               setRecruitmentMinAttackScore('');
               setRecruitmentExpiring(false);
-              setRecruitmentReliableOnly(true);
+              setRecruitmentReliableOnly(false);
+              setRecruitmentFoot('all');
+              setRecruitmentNationality('all');
+              setRecruitmentMinGoals90('');
+              setRecruitmentMinAssists90('');
+              setRecruitmentMinShots90('');
+              setRecruitmentMinKeyPasses90('');
+              setRecruitmentMinDribble('');
+              setRecruitmentMinPassAcc('');
             }}
             className="self-start lg:self-auto text-[11px] font-semibold text-zinc-400 hover:text-white border border-zinc-800 rounded-lg px-3 py-1.5"
           >
@@ -1320,7 +1426,7 @@ export default function Dashboard() {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2.5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
           <div>
             <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentPosition}</label>
             <select value={recruitmentPosition} onChange={(e) => setRecruitmentPosition(e.target.value as 'all' | Position)}
@@ -1338,11 +1444,32 @@ export default function Dashboard() {
             <select value={recruitmentRole} onChange={(e) => setRecruitmentRole(e.target.value as 'all' | AnalyticalRole)}
               className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
               <option value="all">{t.allRoles}</option>
-              <option value="FORWARD">{t.roleFW}</option>
-              <option value="ATTACKING_MIDFIELDER">{t.roleAM}</option>
-              <option value="MIDFIELDER">{t.roleMF}</option>
-              <option value="DEFENDER">{t.roleDF}</option>
-              <option value="GOALKEEPER">{t.roleGK}</option>
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'FW') && <option value="FORWARD">{t.roleFW}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="ATTACKING_MIDFIELDER">{t.roleAM}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="MIDFIELDER">{t.roleMF}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'DF') && <option value="DEFENDER">{t.roleDF}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'GK') && <option value="GOALKEEPER">{t.roleGK}</option>}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentFoot}</label>
+            <select value={recruitmentFoot} onChange={(e) => setRecruitmentFoot(e.target.value as FootFilter)}
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
+              <option value="all">{t.statusAll}</option>
+              <option value="Right">{t.footRight}</option>
+              <option value="Left">{t.footLeft}</option>
+              <option value="Both">{t.footBoth}</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentNationality}</label>
+            <select value={recruitmentNationality} onChange={(e) => setRecruitmentNationality(e.target.value as NationalityFilter)}
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
+              <option value="all">{t.statusAll}</option>
+              <option value="local">{t.statusLocal}</option>
+              <option value="legionnaire">{t.statusLegionnaire}</option>
             </select>
           </div>
 
@@ -1387,6 +1514,28 @@ export default function Dashboard() {
                 className="h-3.5 w-3.5 rounded border-zinc-700 bg-zinc-950 text-emerald-500" />
               {t.recruitmentExpiring}
             </label>
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-950/35 p-3">
+          <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-2">{t.advancedMetrics}</div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+            {recruitmentPosition !== 'GK' && (
+              <>
+                <input type="number" step="0.01" min="0" value={recruitmentMinGoals90} onChange={(e) => setRecruitmentMinGoals90(e.target.value)} placeholder={t.minGoals90}
+                  className="rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white placeholder-zinc-600" />
+                <input type="number" step="0.01" min="0" value={recruitmentMinAssists90} onChange={(e) => setRecruitmentMinAssists90(e.target.value)} placeholder={t.minAssists90}
+                  className="rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white placeholder-zinc-600" />
+                <input type="number" step="0.01" min="0" value={recruitmentMinShots90} onChange={(e) => setRecruitmentMinShots90(e.target.value)} placeholder={t.minShots90}
+                  className="rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white placeholder-zinc-600" />
+                <input type="number" step="0.01" min="0" value={recruitmentMinKeyPasses90} onChange={(e) => setRecruitmentMinKeyPasses90(e.target.value)} placeholder={t.minKeyPasses90}
+                  className="rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white placeholder-zinc-600" />
+                <input type="number" step="1" min="0" max="100" value={recruitmentMinDribble} onChange={(e) => setRecruitmentMinDribble(e.target.value)} placeholder={t.minDribble}
+                  className="rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white placeholder-zinc-600" />
+              </>
+            )}
+            <input type="number" step="1" min="0" max="100" value={recruitmentMinPassAcc} onChange={(e) => setRecruitmentMinPassAcc(e.target.value)} placeholder={t.minPassAcc}
+              className="rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white placeholder-zinc-600" />
           </div>
         </div>
 
@@ -1442,6 +1591,9 @@ export default function Dashboard() {
         </div>
       </section>
 
+      )}
+
+      {activeView === 'players' && (
       {/* ТАБЛИЦА */}
       <div className="max-w-7xl mx-auto rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden shadow-2xl backdrop-blur">
         {isLoading ? (
@@ -1534,6 +1686,8 @@ export default function Dashboard() {
           </table>
         )}
       </div>
+
+      )}
 
       {/* МОДАЛКА НАСТРОЙКИ ФИЛЬТРОВ И ВЫБОРА СЕЗОНА */}
       {isFilterOpen && (
