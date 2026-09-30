@@ -1280,6 +1280,157 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ЭТАП 4: RECRUITMENT ENGINE */}
+      <section className="max-w-7xl mx-auto mb-5 rounded-xl border border-sky-500/20 bg-zinc-900/70 p-5 shadow-xl">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-zinc-800 pb-4 mb-4">
+          <div className="flex items-start gap-2.5">
+            <Search className="h-5 w-5 text-sky-400 mt-0.5" />
+            <div>
+              <h2 className="text-sm font-bold text-white">{t.recruitmentTitle}</h2>
+              <p className="text-[11px] text-zinc-400 mt-0.5">{t.recruitmentSub}</p>
+              <p className="text-[10px] text-amber-400/80 mt-1">{t.unknownValueExcluded}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              setRecruitmentPosition('all');
+              setRecruitmentRole('all');
+              setRecruitmentMaxAge('');
+              setRecruitmentMaxBudget('');
+              setRecruitmentMinMinutes('450');
+              setRecruitmentMinRoleScore('');
+              setRecruitmentMinAttackScore('');
+              setRecruitmentExpiring(false);
+              setRecruitmentReliableOnly(true);
+            }}
+            className="self-start lg:self-auto text-[11px] font-semibold text-zinc-400 hover:text-white border border-zinc-800 rounded-lg px-3 py-1.5"
+          >
+            {t.resetFilters}
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2.5">
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentPosition}</label>
+            <select value={recruitmentPosition} onChange={(e) => setRecruitmentPosition(e.target.value as 'all' | Position)}
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
+              <option value="all">{t.allPositions}</option>
+              <option value="FW">{t.posFW}</option>
+              <option value="MF">{t.posMF}</option>
+              <option value="DF">{t.posDF}</option>
+              <option value="GK">{t.posGK}</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentRole}</label>
+            <select value={recruitmentRole} onChange={(e) => setRecruitmentRole(e.target.value as 'all' | AnalyticalRole)}
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
+              <option value="all">{t.allRoles}</option>
+              <option value="FORWARD">{t.roleFW}</option>
+              <option value="ATTACKING_MIDFIELDER">{t.roleAM}</option>
+              <option value="MIDFIELDER">{t.roleMF}</option>
+              <option value="DEFENDER">{t.roleDF}</option>
+              <option value="GOALKEEPER">{t.roleGK}</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentMaxAge}</label>
+            <input type="number" min="15" max="45" value={recruitmentMaxAge} onChange={(e) => setRecruitmentMaxAge(e.target.value)}
+              placeholder="—" className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white" />
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentMaxBudget}</label>
+            <input type="number" min="0" step="25000" value={recruitmentMaxBudget} onChange={(e) => setRecruitmentMaxBudget(e.target.value)}
+              placeholder="—" className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white" />
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentMinMinutes}</label>
+            <input type="number" min="0" step="90" value={recruitmentMinMinutes} onChange={(e) => setRecruitmentMinMinutes(e.target.value)}
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white" />
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentMinRole}</label>
+            <input type="number" min="0" max="100" value={recruitmentMinRoleScore} onChange={(e) => setRecruitmentMinRoleScore(e.target.value)}
+              placeholder="—" className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white" />
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentMinAttack}</label>
+            <input type="number" min="0" max="100" value={recruitmentMinAttackScore} onChange={(e) => setRecruitmentMinAttackScore(e.target.value)}
+              placeholder="—" className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white" />
+          </div>
+
+          <div className="flex flex-col gap-2 justify-end">
+            <label className="flex items-center gap-2 text-[10px] text-zinc-300 cursor-pointer">
+              <input type="checkbox" checked={recruitmentReliableOnly} onChange={(e) => setRecruitmentReliableOnly(e.target.checked)}
+                className="h-3.5 w-3.5 rounded border-zinc-700 bg-zinc-950 text-emerald-500" />
+              {t.recruitmentReliable}
+            </label>
+            <label className="flex items-center gap-2 text-[10px] text-zinc-300 cursor-pointer">
+              <input type="checkbox" checked={recruitmentExpiring} onChange={(e) => setRecruitmentExpiring(e.target.checked)}
+                className="h-3.5 w-3.5 rounded border-zinc-700 bg-zinc-950 text-emerald-500" />
+              {t.recruitmentExpiring}
+            </label>
+          </div>
+        </div>
+
+        <div className="mt-5 pt-4 border-t border-zinc-800">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xs font-bold text-zinc-200">{t.shortlistTitle}</h3>
+            <span className="text-[11px] font-mono text-sky-400">{recruitmentCandidates.length}</span>
+          </div>
+
+          {recruitmentCandidates.length === 0 ? (
+            <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-5 text-center text-xs text-zinc-500">
+              {t.noShortlist}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+              {recruitmentCandidates.map(({ player, reasons }) => (
+                <button
+                  key={player.id}
+                  onClick={() => { setSelectedPlayer(player); setShowFullStats(false); }}
+                  className="text-left rounded-xl border border-zinc-800 bg-zinc-950/60 p-3 hover:border-sky-500/40 hover:bg-zinc-900 transition"
+                >
+                  <div className="flex items-center gap-3">
+                    <PlayerHeadshot url={player.photoUrl} name={player.name[lang]} initials={player.initials} size="sm" />
+                    <div className="min-w-0 flex-1">
+                      <div className="font-semibold text-sm text-white truncate">{player.name[lang]}</div>
+                      <div className="text-[10px] text-zinc-400 truncate">
+                        {player.club[lang]} · {player.age} {t.years} · {player.marketValue}
+                      </div>
+                      <div className="text-[10px] text-sky-400 mt-0.5">
+                        {getPositionName(player.sourcePosition)} · {getAnalyticalRoleName(player.analyticalRole)}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-mono font-bold text-emerald-400">{player.scoutingEngine?.roleScore ?? '—'}</div>
+                      <div className="text-[9px] text-zinc-500">{t.roleScoreLabel}</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <div className="text-[9px] uppercase tracking-wider text-zinc-500 mb-1.5">{t.shortlistReasons}</div>
+                    <div className="flex flex-wrap gap-1">
+                      {reasons.slice(0, 5).map((reason, idx) => (
+                        <span key={idx} className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 text-[9px] text-zinc-300">
+                          {reason}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* ТАБЛИЦА */}
       <div className="max-w-7xl mx-auto rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden shadow-2xl backdrop-blur">
         {isLoading ? (
