@@ -6,8 +6,10 @@ cached in this repository.
 The model never invents a position from preferred foot or player statistics.
 Each match position comes from a confirmed SofaScore starting XI + team
 formation. The starting-XI order is interpreted with explicit templates for
-formations observed in the dataset. If a cached SofaScore heatmap exists, it is
-used only as a side-of-pitch consistency check.
+formations observed in the dataset. When a whole formation line has cached
+SofaScore heatmaps, lateral heatmap medians are used to order that line from
+right to left; otherwise the confirmed SofaScore lineup order is preserved.
+Heatmaps never create a position without formation/lineup evidence.
 
 Output:
   data/detailed_positions.json
@@ -184,6 +186,7 @@ def main() -> None:
     usable_team_sides = 0
     heatmap_validations = 0
     heatmap_conflicts = 0
+    heatmap_reordered_lines = 0
 
     for file in sorted(LINEUPS_DIR.glob("*.json")):
         try:
@@ -216,8 +219,16 @@ def main() -> None:
             if len(xi) != 11 or len(slots) != 10:
                 continue
 
-            # Goalkeeper is the first starter in SofaScore confirmed lineups.
-            goalkeeper = xi[0]
+            goalkeeper = next(
+                (
+                    item for item in xi
+                    if (item.get("position") or (item.get("player") or {}).get("position")) == "G"
+                ),
+                None,
+            )
+            if goalkeeper is None:
+                continue
+
             gk_player = goalkeeper.get("player") or {}
             gk_id = gk_player.get("id")
             if isinstance(gk_id, int):
@@ -233,40 +244,75 @@ def main() -> None:
                     }
                 )
 
-            outfield = xi[1:]
+            outfield = [item for item in xi if item is not goalkeeper]
             if len(outfield) != len(slots):
                 continue
 
             usable_team_sides += 1
 
-            for item, position in zip(outfield, slots):
-                player = item.get("player") or {}
-                player_id = player.get("id")
-                if not isinstance(player_id, int):
+            offset = 0
+            for line_slots in template:
+                line_players = outfield[offset: offset + len(line_slots)]
+                offset += len(line_slots)
+                if len(line_players) != len(line_slots):
                     continue
 
-                median_y = heatmap_lateral_median(event_id, player_id)
-                validated = median_y is not None and (
-                    position in RIGHT_POSITIONS or position in LEFT_POSITIONS
-                )
-                conflict = heatmap_side_conflict(position, median_y)
+                player_medians: list[tuple[dict[str, Any], float | None]] = []
+                for item in line_players:
+                    player = item.get("player") or {}
+                    player_id = player.get("id")
+                    median_y = (
+                        heatmap_lateral_median(event_id, player_id)
+                        if isinstance(player_id, int)
+                        else None
+                    )
+                    player_medians.append((item, median_y))
 
-                if validated:
-                    heatmap_validations += 1
-                if conflict:
-                    heatmap_conflicts += 1
+                # SofaScore's lateral coordinate grows from the right side of
+                # the attacking team toward the left side. Templates are also
+                # written right-to-left. If every player in this formation line
+                # has a heatmap, use the actual spatial order instead of relying
+                # on JSON array order.
+                if len(line_players) > 1 and all(median is not None for _, median in player_medians):
+                    original_ids = [
+                        (item.get("player") or {}).get("id")
+                        for item, _ in player_medians
+                    ]
+                    player_medians.sort(key=lambda pair: float(pair[1]))
+                    sorted_ids = [
+                        (item.get("player") or {}).get("id")
+                        for item, _ in player_medians
+                    ]
+                    if sorted_ids != original_ids:
+                        heatmap_reordered_lines += 1
 
-                per_player[player_id].append(
-                    {
-                        "eventId": event_id,
-                        "formation": formation,
-                        "side": side_name,
-                        "position": position,
-                        "heatmapMedianY": median_y,
-                        "heatmapValidated": validated and not conflict,
-                        "heatmapConflict": conflict,
-                    }
-                )
+                for (item, median_y), position in zip(player_medians, line_slots):
+                    player = item.get("player") or {}
+                    player_id = player.get("id")
+                    if not isinstance(player_id, int):
+                        continue
+
+                    validated = median_y is not None and (
+                        position in RIGHT_POSITIONS or position in LEFT_POSITIONS
+                    )
+                    conflict = heatmap_side_conflict(position, median_y)
+
+                    if validated:
+                        heatmap_validations += 1
+                    if conflict:
+                        heatmap_conflicts += 1
+
+                    per_player[player_id].append(
+                        {
+                            "eventId": event_id,
+                            "formation": formation,
+                            "side": side_name,
+                            "position": position,
+                            "heatmapMedianY": median_y,
+                            "heatmapValidated": validated and not conflict,
+                            "heatmapConflict": conflict,
+                        }
+                    )
 
     output_players: dict[str, Any] = {}
 
@@ -315,7 +361,7 @@ def main() -> None:
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "method": {
             "source": "SofaScore confirmed match lineups and formations",
-            "heatmapRole": "validation only; never used alone to invent a position",
+            "heatmapRole": "lateral ordering and validation inside a formation line; never used alone to invent a position",
             "minimumEvidence": "at least 2 usable starts and >=60% consensus; stronger thresholds for medium/high confidence",
             "unsupportedFormationsAreIgnored": True,
         },
@@ -331,6 +377,7 @@ def main() -> None:
             ),
             "heatmapValidations": heatmap_validations,
             "heatmapConflicts": heatmap_conflicts,
+            "heatmapReorderedFormationLines": heatmap_reordered_lines,
             "unsupportedFormations": dict(unsupported_formations.most_common()),
         },
         "players": output_players,
