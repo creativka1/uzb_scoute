@@ -2047,14 +2047,6 @@ export default function Dashboard() {
                     <strong className="text-white text-sm">{selectedPlayer.assists}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
-                    <span className="text-zinc-500 block text-[10px]">{t.xgLabel}</span>
-                    <strong className="text-amber-400 text-sm">{selectedPlayer.xG === null ? '—' : selectedPlayer.xG.toFixed(2)}</strong>
-                  </div>
-                  <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
-                    <span className="text-zinc-500 block text-[10px]">{t.xaLabel}</span>
-                    <strong className="text-sky-400 text-sm">{selectedPlayer.xA === null ? '—' : selectedPlayer.xA.toFixed(2)}</strong>
-                  </div>
-                  <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.shotsSeason}</span>
                     <strong className="text-white text-sm">{selectedPlayer.shots}</strong>
                   </div>
@@ -2495,7 +2487,7 @@ export default function Dashboard() {
                         );
                       })()}
                       {(() => {
-                        const c = renderComparisonCell(compareA.duelWinRate, compareB.duelWinRate, `${compareA.duelWinRate}%`, `${compareB.duelWinRate}%`);
+                        const c = renderComparisonCell(compareA.duelWinRate, compareB.duelWinRate, compareA.duelWinRate === null ? '—' : `${compareA.duelWinRate}%`, compareB.duelWinRate === null ? '—' : `${compareB.duelWinRate}%`);
                         return (
                           <tr className="hover:bg-zinc-850/50">
                             <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
@@ -2516,16 +2508,6 @@ export default function Dashboard() {
                           <tr className="hover:bg-zinc-850/50">
                             <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
                             <td className="py-2 px-4 text-center text-zinc-400">{t.goalsSeason}</td>
-                            <td className={`py-2 px-4 text-right font-mono ${c.classB}`}>{c.displayB}</td>
-                          </tr>
-                        );
-                      })()}
-                      {(() => {
-                        const c = renderComparisonCell(compareA.shots, compareB.shots, compareA.shots, compareB.shots);
-                        return (
-                          <tr className="hover:bg-zinc-850/50">
-                            <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
-                            <td className="py-2 px-4 text-center text-zinc-400">{t.xgLabel}</td>
                             <td className={`py-2 px-4 text-right font-mono ${c.classB}`}>{c.displayB}</td>
                           </tr>
                         );
