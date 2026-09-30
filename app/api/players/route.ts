@@ -144,6 +144,24 @@ export async function GET(req: NextRequest) {
           percentile: values[index] ?? null,
         }));
 
+        const attackingKeys = ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90'];
+        const attackingPercentiles = attackingKeys.map((key) => {
+          const benchmark = group
+            .filter((item) =>
+              safeNumber(item.stats?.minutesPlayed) !== null &&
+              item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+            )
+            .map((item) => item.roleMetrics[key])
+            .filter((v): v is number => v !== null && Number.isFinite(v));
+
+          if (benchmark.length < 3) return null;
+          return percentileRank(benchmark, p.roleMetrics[key]);
+        });
+        const attackingAvailable = attackingPercentiles.filter((v): v is number => v !== null);
+        const attackingScore = attackingAvailable.length >= 2
+          ? Math.round(attackingAvailable.reduce((a, b) => a + b, 0) / attackingAvailable.length)
+          : null;
+
         const rankedSignals = metricSignals
           .filter((item): item is { key: string; value: number; percentile: number } =>
             item.value !== null && item.percentile !== null
@@ -189,6 +207,7 @@ export async function GET(req: NextRequest) {
           scoutIndexBasis: 'Среднее доступных ролевых процентилей относительно выборки игроков с минимум 450 минутами',
           scoutingEngine: {
             roleScore: scoutIndex,
+            attackingScore,
             confidence,
             metricCoverage,
             totalRoleMetrics: keys.length,
