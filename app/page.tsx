@@ -62,6 +62,7 @@ interface ScoutingMetricSignal {
 interface ScoutingEngine {
   rawRoleScore: number | null;
   roleScore: number | null;
+  rawAttackingScore?: number | null;
   attackingScore: number | null;
   sampleWeight: number;
   adjustedRadar: RoleRadarMetrics;
@@ -300,6 +301,7 @@ const TRANSLATIONS = {
     noShortlist: 'Bu talablarga mos, yetarli ma’lumotli futbolchi topilmadi.',
     unknownValueExcluded: 'Talab qilingan metrika mavjud bo‘lmasa, futbolchi kriteriydan o‘tmaydi.',
     allRoles: 'Barcha rollar',
+    missingMetricsLabel: 'Ma’lumot yetishmaydigan metrikalar',
   },
   ru: {
     tagline: 'Платформа скаутинга и аналитики Центральной Азии',
@@ -442,6 +444,7 @@ const TRANSLATIONS = {
     noShortlist: 'Нет игроков с достаточными данными, подходящих под эти требования.',
     unknownValueExcluded: 'Если требуемой метрики нет, игрок не проходит этот критерий.',
     allRoles: 'Все роли',
+    missingMetricsLabel: 'Метрики без данных',
   },
 };
 
@@ -872,7 +875,7 @@ export default function Dashboard() {
         }
 
         if (recruitmentExpiring && !isContractExpiring(p.contractUntil)) return false;
-        if (recruitmentReliableOnly && p.scoutingEngine?.isLowSample) return false;
+        if (recruitmentReliableOnly && p.scoutingEngine?.confidence === 'low') return false;
 
         return true;
       })
@@ -880,13 +883,13 @@ export default function Dashboard() {
         const reasons: string[] = [];
         if (recruitmentPosition !== 'all') reasons.push(getPositionName(p.sourcePosition));
         if (recruitmentRole !== 'all') reasons.push(getAnalyticalRoleName(p.analyticalRole));
-        if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(`Возраст ${p.age} ≤ ${maxAge}`);
+        if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(lang === 'ru' ? `Возраст ${p.age} ≤ ${maxAge}` : `Yosh ${p.age} ≤ ${maxAge}`);
         if (maxBudget !== null && Number.isFinite(maxBudget) && p.rawMarketValueEUR !== null) reasons.push(`${p.marketValue} ≤ €${Math.round(maxBudget / 1000)}k`);
         if (minMinutes !== null && Number.isFinite(minMinutes)) reasons.push(`${p.minutesPlayed}' ≥ ${minMinutes}'`);
-        if (minRole !== null && Number.isFinite(minRole) && p.scoutingEngine?.roleScore !== null) reasons.push(`Ролевой рейтинг ${p.scoutingEngine.roleScore} ≥ ${minRole}`);
-        if (minAttack !== null && Number.isFinite(minAttack) && p.scoutingEngine?.attackingScore !== null) reasons.push(`Атакующий вклад ${p.scoutingEngine.attackingScore} ≥ ${minAttack}`);
-        if (recruitmentExpiring) reasons.push('Контракт ≤ 12 мес.');
-        if (recruitmentReliableOnly) reasons.push(`Надёжность: ${p.scoutingEngine?.confidence === 'high' ? t.confidenceHigh : t.confidenceMedium}`);
+        if (minRole !== null && Number.isFinite(minRole) && p.scoutingEngine?.roleScore !== null) reasons.push(lang === 'ru' ? `Ролевой рейтинг ${p.scoutingEngine.roleScore} ≥ ${minRole}` : `Rol reytingi ${p.scoutingEngine.roleScore} ≥ ${minRole}`);
+        if (minAttack !== null && Number.isFinite(minAttack) && p.scoutingEngine?.attackingScore !== null) reasons.push(lang === 'ru' ? `Атакующий вклад ${p.scoutingEngine.attackingScore} ≥ ${minAttack}` : `Hujum hissasi ${p.scoutingEngine.attackingScore} ≥ ${minAttack}`);
+        if (recruitmentExpiring) reasons.push(lang === 'ru' ? 'Контракт ≤ 12 мес.' : 'Shartnoma ≤ 12 oy');
+        if (recruitmentReliableOnly) reasons.push(`${t.confidenceLabel}: ${p.scoutingEngine?.confidence === 'high' ? t.confidenceHigh : t.confidenceMedium}`);
 
         return { player: p, reasons };
       })
@@ -1030,7 +1033,7 @@ export default function Dashboard() {
           <div class="grid">
             <div class="card">
               <div class="card-title">Ролевой рейтинг платформы</div>
-              <div class="card-val" style="color: #059669;">${player.scoutIndex} / 100</div>
+              <div class="card-val" style="color: #059669;">${player.scoutingEngine?.roleScore ?? '—'} / 100</div>
             </div>
             <div class="card">
               <div class="card-title">Игровое время и контракт (${seasonMode === 'two' ? '2 сезона' : '1 сезон'})</div>
@@ -1716,8 +1719,17 @@ export default function Dashboard() {
                     )}
                   </div>
                   <p className="text-xs text-zinc-400 mt-1">
-                    #{selectedPlayer.number} · {selectedPlayer.club[lang]} · {getPositionName(selectedPlayer.position)} · {selectedPlayer.age} {t.years} · {t.contractLeft} <strong className="text-zinc-200">{selectedPlayer.contractUntil}</strong>
+                    #{selectedPlayer.number} · {selectedPlayer.club[lang]} · {t.sourcePositionLabel}: {getPositionName(selectedPlayer.sourcePosition)} · {selectedPlayer.age} {t.years} · {t.contractLeft} <strong className="text-zinc-200">{selectedPlayer.contractUntil}</strong>
                   </p>
+                  <div className="mt-2 flex items-center gap-2 text-[11px]">
+                    <span className="text-zinc-500">{t.analyticalRoleLabel}:</span>
+                    <span className="rounded-md border border-sky-500/30 bg-sky-500/10 px-2 py-0.5 font-semibold text-sky-400">
+                      {getAnalyticalRoleName(selectedPlayer.analyticalRole)}
+                    </span>
+                    {selectedPlayer.analyticalRoleIsCalculated && (
+                      <span className="text-zinc-500">{t.calculatedRoleNote}</span>
+                    )}
+                  </div>
                   <div className="flex gap-1.5 mt-2.5">
                     {selectedPlayer.tags?.map((tg, tgIdx) => (
                       <span key={`${tg}-${tgIdx}`} className="text-[10px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-zinc-300">
@@ -1987,6 +1999,22 @@ export default function Dashboard() {
                       </span>
                     </div>
                   </div>
+                  {selectedPlayer.scoutingEngine.missingMetrics.length > 0 && (
+                    <div className="px-3 pb-3 text-[11px]">
+                      <span className="text-zinc-500 block mb-1">{t.missingMetricsLabel}</span>
+                      <div className="flex flex-wrap gap-1">
+                        {selectedPlayer.scoutingEngine.missingMetrics.map((key) => {
+                          const idx = ROLE_KEYS_BY_POSITION[selectedPlayer.position].indexOf(key);
+                          const label = idx >= 0 ? RADAR_AXIS_LABELS[lang][selectedPlayer.position][idx] : key;
+                          return (
+                            <span key={key} className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 text-zinc-400">
+                              {label}: {t.noMetricData}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </details>
               </div>
             )}
