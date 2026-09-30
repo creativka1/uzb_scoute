@@ -138,6 +138,19 @@ export async function GET(req: NextRequest) {
           ? Math.round(available.reduce((a, b) => a + b, 0) / available.length)
           : null;
 
+        // Stage 3 reliability adjustment:
+        // for players below the 450-minute reliability threshold, extreme raw
+        // percentiles are shrunk toward the neutral 50th percentile.
+        // At 450+ minutes, adjusted percentile equals the raw Stage 2 percentile.
+        const sampleWeight = Math.min(1, Math.max(0, p.stats.minutesPlayed / MIN_PERCENTILE_MINUTES));
+        const adjustedValues = values.map((v) =>
+          v === null ? null : Math.round(50 + (v - 50) * sampleWeight)
+        );
+        const adjustedAvailable = adjustedValues.filter((v): v is number => v !== null);
+        const adjustedRoleScore = adjustedAvailable.length >= 3
+          ? Math.round(adjustedAvailable.reduce((a, b) => a + b, 0) / adjustedAvailable.length)
+          : null;
+
         const metricSignals = keys.map((key, index) => ({
           key,
           value: p.roleMetrics[key] ?? null,
@@ -181,6 +194,7 @@ export async function GET(req: NextRequest) {
               : 'medium';
 
         const radar = { m1: values[0] ?? null, m2: values[1] ?? null, m3: values[2] ?? null, m4: values[3] ?? null, m5: values[4] ?? null, m6: values[5] ?? null };
+        const adjustedRadar = { m1: adjustedValues[0] ?? null, m2: adjustedValues[1] ?? null, m3: adjustedValues[2] ?? null, m4: adjustedValues[3] ?? null, m5: adjustedValues[4] ?? null, m6: adjustedValues[5] ?? null };
         const marketVal = formatMarketValue(safeNumber(p.marketValueCurrency));
 
         enrichedPlayers.push({
@@ -206,8 +220,11 @@ export async function GET(req: NextRequest) {
           scoutIndexIsCalculated: scoutIndex !== null,
           scoutIndexBasis: 'Среднее доступных ролевых процентилей относительно выборки игроков с минимум 450 минутами',
           scoutingEngine: {
-            roleScore: scoutIndex,
+            rawRoleScore: scoutIndex,
+            roleScore: adjustedRoleScore,
             attackingScore,
+            sampleWeight,
+            adjustedRadar,
             confidence,
             metricCoverage,
             totalRoleMetrics: keys.length,
