@@ -612,10 +612,18 @@ function getScoutBadgeColor(score: number | null): string {
 }
 
 function PlayerHeadshot({ url, name, initials, size = 'md' }: { url: string; name: string; initials: string; size?: 'sm' | 'md' | 'lg' }) {
-  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const dims = { sm: 'h-10 w-10', md: 'h-12 w-12', lg: 'h-20 w-20' }[size];
 
-  if (error || !url) {
+  const sources = useMemo(() => {
+    if (!url) return [];
+    const fallback = url.includes('img.sofascore.com')
+      ? url.replace('img.sofascore.com', 'api.sofascore.com')
+      : url.replace('api.sofascore.com', 'img.sofascore.com');
+    return fallback !== url ? [url, fallback] : [url];
+  }, [url]);
+
+  if (!sources.length || attempt >= sources.length) {
     return (
       <div className={`${dims} rounded-full bg-zinc-800 border-2 border-emerald-500/40 flex items-center justify-center font-bold text-emerald-400 text-sm shadow-md shrink-0`}>
         {initials}
@@ -625,9 +633,9 @@ function PlayerHeadshot({ url, name, initials, size = 'md' }: { url: string; nam
 
   return (
     <img
-      src={url}
+      src={sources[attempt]}
       alt={name}
-      onError={() => setError(true)}
+      onError={() => setAttempt((current) => current + 1)}
       className={`${dims} rounded-full object-cover border-2 border-emerald-500/40 shadow-lg bg-zinc-900 shrink-0`}
     />
   );
