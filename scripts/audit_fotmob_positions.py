@@ -196,7 +196,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    fixtures_payload = fetch_json("fixtures", {"id": LEAGUE_ID})
+    fixtures_payload = fetch_json("leagues", {"id": LEAGUE_ID})
     fixtures = [m for m in fixture_candidates(fixtures_payload) if fixture_finished(m)]
     fixtures.sort(key=fixture_sort_key, reverse=True)
     fixtures = fixtures[: args.matches]
