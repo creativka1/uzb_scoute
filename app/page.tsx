@@ -246,6 +246,7 @@ const TRANSLATIONS = {
     footRight: 'O‘ng',
     footLeft: 'Chap',
     footBoth: 'Har ikkisi',
+    footUnknown: 'Ma’lumot yo‘q',
     matchWord: 'o‘yin',
     goalWord: 'gol',
     assistWord: 'uzatma',
@@ -418,6 +419,7 @@ const TRANSLATIONS = {
     footRight: 'Правая',
     footLeft: 'Левая',
     footBoth: 'Обе',
+    footUnknown: 'Нет данных',
     matchWord: 'матчей',
     goalWord: 'гол',
     assistWord: 'пас',
@@ -796,9 +798,10 @@ export default function Dashboard() {
   };
 
   const getFootName = (foot: string) => {
+    if (foot === 'Right') return t.footRight;
     if (foot === 'Left') return t.footLeft;
     if (foot === 'Both') return t.footBoth;
-    return t.footRight;
+    return t.footUnknown;
   };
 
   const uniqueClubs = useMemo(() => {
@@ -1142,11 +1145,74 @@ export default function Dashboard() {
     const printWindow = window.open('', '_blank', 'width=800,height=900');
     if (!printWindow) return;
 
+    const p = lang === 'ru'
+      ? {
+          title: 'Скаутский отчёт',
+          roleRating: 'Ролевой рейтинг',
+          playingTimeContract: 'Игровое время и контракт',
+          oneSeason: '1 сезон',
+          twoSeasons: '2 сезона',
+          until: 'до',
+          metric: 'Показатель',
+          value: 'Значение',
+          matches: 'Сыграно матчей',
+          saves: 'Всего сейвов',
+          savesPerMatch: 'Сейвы за матч',
+          passAccuracy: 'Точность передач',
+          goals: 'Голы',
+          assists: 'Голевые передачи',
+          shots: 'Удары',
+          keyPasses: 'Ключевые передачи',
+          dribbling: 'Дриблинг',
+          tackles90: 'Отборы/90',
+          interceptions90: 'Перехваты/90',
+          officialReport: 'Скаутский отчёт',
+        }
+      : {
+          title: 'Skautlik hisoboti',
+          roleRating: 'Rol reytingi',
+          playingTimeContract: 'O‘yin vaqti va shartnoma',
+          oneSeason: '1 mavsum',
+          twoSeasons: '2 mavsum',
+          until: 'gacha',
+          metric: 'Ko‘rsatkich',
+          value: 'Qiymat',
+          matches: 'O‘tkazilgan o‘yinlar',
+          saves: 'Jami seyvlar',
+          savesPerMatch: 'Har o‘yindagi seyvlar',
+          passAccuracy: 'Pas aniqligi',
+          goals: 'Gollar',
+          assists: 'Golli uzatmalar',
+          shots: 'Zarbalar',
+          keyPasses: 'Xavfli paslar',
+          dribbling: 'Dribling',
+          tackles90: 'To‘pni qaytarish/90',
+          interceptions90: 'To‘pni to‘xtatish/90',
+          officialReport: 'Skautlik hisoboti',
+        };
+
+    const statRows = player.position === 'GK'
+      ? `
+        <tr><td>${p.saves}</td><td><strong>${player.saves}</strong></td></tr>
+        <tr><td>${p.savesPerMatch}</td><td>${(player.saves / Math.max(1, player.matchesPlayed)).toFixed(1)}</td></tr>
+        <tr><td>${p.passAccuracy}</td><td>${player.passAccPct === null ? '—' : player.passAccPct + '%'}</td></tr>
+      `
+      : `
+        <tr><td>${p.goals}</td><td><strong>${player.goals}</strong></td></tr>
+        <tr><td>${p.assists}</td><td><strong>${player.assists}</strong></td></tr>
+        <tr><td>${p.shots}</td><td>${player.shots}</td></tr>
+        <tr><td>${p.keyPasses}</td><td>${player.keyPasses}</td></tr>
+        <tr><td>${p.dribbling}</td><td>${player.dribbleSuccessRate === null ? '—' : player.dribbleSuccessRate + '%'}</td></tr>
+        <tr><td>${p.tackles90}</td><td>${player.roleMetrics?.tacklesPer90?.toFixed(2) ?? '—'}</td></tr>
+        <tr><td>${p.interceptions90}</td><td>${player.roleMetrics?.interceptionsPer90?.toFixed(2) ?? '—'}</td></tr>
+        <tr><td>${p.passAccuracy}</td><td>${player.passAccPct === null ? '—' : player.passAccPct + '%'}</td></tr>
+      `;
+
     printWindow.document.write(`
       <!DOCTYPE html>
-      <html>
+      <html lang="${lang}">
         <head>
-          <title>Scout Dossier - ${player.name[lang]}</title>
+          <title>${p.title} — ${player.name[lang]}</title>
           <style>
             @page { size: A4 portrait; margin: 12mm; }
             body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #111827; background: #fff; margin: 0; padding: 0; }
@@ -1172,42 +1238,31 @@ export default function Dashboard() {
               <img class="photo" src="${player.photoUrl}" alt="${player.name[lang]}" onerror="this.style.display='none'" />
               <div>
                 <h1 class="title">${player.name[lang]}</h1>
-                <div class="meta">${player.club[lang]} | ${getPositionName(player.position)} | #${player.number} | ${player.age} ${t.years} | ${t.footLabel} ${getFootName(player.preferredFoot)}</div>
+                <div class="meta">${player.club[lang]} | ${getPositionName(player.position)} | #${player.number ?? '—'} | ${player.age} ${t.years} | ${t.footLabel} ${getFootName(player.preferredFoot)}</div>
               </div>
             </div>
             <div class="badge">${player.marketValue}</div>
           </div>
           <div class="grid">
             <div class="card">
-              <div class="card-title">Ролевой рейтинг платформы</div>
+              <div class="card-title">${p.roleRating}</div>
               <div class="card-val" style="color: #059669;">${player.scoutingEngine?.roleScore ?? '—'} / 100</div>
             </div>
             <div class="card">
-              <div class="card-title">Игровое время и контракт (${seasonMode === 'two' ? '2 сезона' : '1 сезон'})</div>
-              <div class="card-val">${player.matchesPlayed} ${t.matchWord} (${player.minutesPlayed}') | До: ${player.contractUntil}</div>
+              <div class="card-title">${p.playingTimeContract} (${seasonMode === 'two' ? p.twoSeasons : p.oneSeason})</div>
+              <div class="card-val">${player.matchesPlayed} ${t.matchWord} (${player.minutesPlayed}') | ${p.until}: ${player.contractUntil}</div>
             </div>
           </div>
           <table>
             <thead>
-              <tr><th>Метрика</th><th>Значение</th></tr>
+              <tr><th>${p.metric}</th><th>${p.value}</th></tr>
             </thead>
             <tbody>
-              <tr><td>Сыграно матчей</td><td><strong>${player.matchesPlayed} (${player.minutesPlayed}')</strong></td></tr>
-              ${player.position === 'GK' ? `
-              <tr><td>Всего сейвов</td><td><strong>${player.saves}</strong></td></tr>
-              <tr><td>Сейвы за матч</td><td>${(player.saves / Math.max(1, player.matchesPlayed)).toFixed(1)}</td></tr>
-              <tr><td>Точность передач ногами</td><td>${player.radar.m3}%</td></tr>
-              ` : `
-              <tr><td>Голы</td><td><strong>${player.goals}</strong></td></tr>
-              <tr><td>Удары всего</td><td>${player.shots}</td></tr>
-              <tr><td>Голевые передачи</td><td><strong>${player.assists}</strong></td></tr>
-              <tr><td>Удары всего</td><td>${player.shots}</td></tr>
-              <tr><td>Единоборства</td><td>${player.duelWinRate === null ? '—' : player.duelWinRate + '%'} внизу / ${player.aerialWinRate === null ? '—' : player.aerialWinRate + '%'} в воздухе</td></tr>
-              <tr><td>Успешный дриблинг</td><td>${player.dribbleWon} из ${player.dribbleTotal} (${player.dribbleSuccessRate === null ? '—' : player.dribbleSuccessRate + '%'})</td></tr>
-              `}
+              <tr><td>${p.matches}</td><td><strong>${player.matchesPlayed} (${player.minutesPlayed}')</strong></td></tr>
+              ${statRows}
             </tbody>
           </table>
-          <div class="footer">UzStat Talent Tracker • Официальный скаутский отчёт</div>
+          <div class="footer">UzStat Talent Tracker • ${p.officialReport}</div>
           <script>window.onload = function() { window.print(); setTimeout(function() { window.close(); }, 500); };</script>
         </body>
       </html>
@@ -1267,7 +1322,7 @@ export default function Dashboard() {
               </div>
 
               <span className="hidden lg:inline-flex items-center gap-1.5 text-[10px] text-emerald-400 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded font-mono">
-                <Wifi className="h-3 w-3 animate-pulse text-emerald-400" /> LIVE
+                <Wifi className="h-3 w-3 animate-pulse text-emerald-400" /> {t.liveLabel}
               </span>
             </div>
             <p className="text-xs text-zinc-400 mt-0.5">{t.tagline}</p>
