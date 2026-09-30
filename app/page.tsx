@@ -835,8 +835,8 @@ export default function Dashboard() {
           valA = a.age || 0;
           valB = b.age || 0;
         } else if (sortField === 'scout') {
-          valA = a.scoutIndex ?? -1;
-          valB = b.scoutIndex ?? -1;
+          valA = a.scoutingEngine?.roleScore ?? -1;
+          valB = b.scoutingEngine?.roleScore ?? -1;
         }
         return sortOrder === 'desc' ? valB - valA : valA - valB;
       });
@@ -2078,7 +2078,7 @@ export default function Dashboard() {
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.metricLabel}</span>
-                    <strong className="text-amber-400 text-sm">{selectedPlayer.scoutIndex} / 100</strong>
+                    <strong className="text-amber-400 text-sm">{selectedPlayer.scoutingEngine?.roleScore === null ? '—' : `${selectedPlayer.scoutingEngine?.roleScore}/100`}</strong>
                   </div>
                 </div>
               </div>
@@ -2191,8 +2191,8 @@ export default function Dashboard() {
                     <div className="flex items-center gap-4">
                       <div className="text-right">
                         <span className="text-[10px] text-zinc-500 block">{t.colScoutIndex}</span>
-                        <span className={`text-sm font-black px-1.5 py-0.2 rounded border ${getScoutBadgeColor(opponent.scoutIndex)}`}>
-                          {opponent.scoutIndex}
+                        <span className={`text-sm font-black px-1.5 py-0.2 rounded border ${getScoutBadgeColor(opponent.scoutingEngine?.roleScore ?? null)}`}>
+                          {opponent.scoutingEngine?.roleScore ?? '—'}
                         </span>
                       </div>
                       <ChevronRight className="h-5 w-5 text-zinc-600 group-hover:text-emerald-400 transition-transform group-hover:translate-x-1" />
@@ -2287,7 +2287,9 @@ export default function Dashboard() {
                 <tbody className="divide-y divide-zinc-800/60">
                   {/* ОБЩИЕ МЕТРИКИ */}
                   {(() => {
-                    const c = renderComparisonCell(compareA.scoutIndex, compareB.scoutIndex, compareA.scoutIndex, compareB.scoutIndex);
+                    const scoreA = compareA.scoutingEngine?.roleScore ?? null;
+                    const scoreB = compareB.scoutingEngine?.roleScore ?? null;
+                    const c = renderComparisonCell(scoreA ?? -1, scoreB ?? -1, scoreA ?? '—', scoreB ?? '—');
                     return (
                       <tr className="hover:bg-zinc-850/50">
                         <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
