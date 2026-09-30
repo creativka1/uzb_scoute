@@ -166,7 +166,7 @@ const TRANSLATIONS = {
     topScorer: 'Yetakchi to‘purar',
     topScoutIndex: 'Eng yuqori rol reytingi',
     filtersBtn: 'Filtrlar',
-    filterPanelTitle: 'Qidiruv va Skauting Filtrlari',
+    filterPanelTitle: 'Qidiruv va skauting filtrlari',
     filterPanelSub: 'Parametrlarni birlashtirib mos futbolchilarni toping',
     seasonSelectorLabel: 'Statistika davri:',
     seasonCurrentOption: '1 mavsum (Joriy mavsum)',
@@ -191,7 +191,7 @@ const TRANSLATIONS = {
     colPosition: 'Amplua',
     colMatchesAndMin: 'O‘yin (Daq.)',
     colGoals: 'Gollar',
-    colAssists: 'Paslar',
+    colAssists: 'Golli uzatmalar',
     colDribbling: 'Dribling %',
     colScoutIndex: 'Rol reytingi',
     posFW: 'Hujumchi',
@@ -199,14 +199,14 @@ const TRANSLATIONS = {
     posDF: 'Himoyachi',
     posGK: 'Darvozabon',
     years: 'yosh',
-    compareBtn: 'Taqqoslov',
-    exportPdfBtn: 'PDF Eksport',
+    compareBtn: 'Taqqoslash',
+    exportPdfBtn: 'PDF eksporti',
     fullStatsBtn: 'To‘liq statistika',
     hideStatsBtn: 'Yashirish',
     pickerTitle: 'Taqqoslash uchun futbolchini tanlang',
     pickerSub: 'Asosiy futbolchi:',
     onlySamePositionNote: 'Faqat bir xil ampluadagi futbolchilar ko‘rsatilmoqda',
-    h2hTitle: 'Head-to-Head Iqtidorlar taqqoslovi',
+    h2hTitle: 'Futbolchilarni o‘zaro taqqoslash',
     changeOpponent: 'Raqibni o‘zgartirish:',
     close: 'Yopish',
     radarTitle: 'Rol profili',
@@ -221,7 +221,7 @@ const TRANSLATIONS = {
     xaLabel: 'Kutilayotgan assistlar (xA)',
     shotsSeason: 'Jami zarbalar',
     keyPassesSeason: 'Xavfli paslar',
-    dribbleDetailed: 'Dribling (Muvaffaqiyatli / Urinishlar)',
+    dribbleDetailed: 'Dribling (muvaffaqiyatli / urinishlar)',
     duelPct: 'Yutilgan kurashlar %',
     aerialPct: 'Havodagi kurashlar %',
     loading: 'Futbolchilar statistikasi yuklanmoqda...',
@@ -265,7 +265,7 @@ const TRANSLATIONS = {
     confidenceLow: 'Past',
     confidenceMedium: 'O‘rta',
     confidenceHigh: 'Yuqori',
-    lowSampleWarning: 'Kam o‘yin vaqti: radar mavjud, lekin natijani ehtiyotkor talqin qiling.',
+    lowSampleWarning: 'Kam o‘yin vaqti: profil mavjud, lekin natijani ehtiyotkor talqin qiling.',
     noMetricData: 'Ma’lumot yo‘q',
     methodologyLabel: 'Metodologiya va ma’lumot sifati',
     abovePlayers: 'futbolchilardan yuqori',
@@ -279,8 +279,8 @@ const TRANSLATIONS = {
     roleAM: 'Hujumkor yarim himoyachi',
     roleFW: 'Hujumchi',
     calculatedRoleNote: 'Platforma tomonidan real o‘yin metrikalaridan hisoblangan',
-    recruitmentTitle: 'Recruitment',
-    recruitmentSub: 'Klub talablari bo‘yicha shortlist: faqat mavjud real ma’lumotlar asosida',
+    recruitmentTitle: 'Futbolchi tanlash',
+    recruitmentSub: 'Klub talablari bo‘yicha qisqa ro‘yxat — faqat mavjud real ma’lumotlar asosida',
     recruitmentPosition: 'Pozitsiya (manba)',
     recruitmentRole: 'O‘yin profili (hisoblangan)',
     recruitmentMaxAge: 'Maks. yosh',
@@ -291,13 +291,13 @@ const TRANSLATIONS = {
     recruitmentMinAttack: 'Min. hujum hissasi',
     recruitmentExpiring: 'Shartnomasi 12 oy ichida tugaydi',
     recruitmentReliable: 'Faqat ishonchli namuna (≥450 daqiqa)',
-    shortlistTitle: 'Shortlist',
+    shortlistTitle: 'Qisqa ro‘yxat',
     shortlistReasons: 'Nega mos keldi',
     noShortlist: 'Bu talablarga mos, yetarli ma’lumotli futbolchi topilmadi.',
-    unknownValueExcluded: 'Talab qilingan metrika mavjud bo‘lmasa, futbolchi kriteriydan o‘tmaydi.',
+    unknownValueExcluded: 'Talab qilingan ko‘rsatkich mavjud bo‘lmasa, futbolchi mezondan o‘tmaydi.',
     allRoles: 'Barcha profillar',
     tabPlayers: 'Futbolchilar',
-    tabRecruitment: 'Recruitment',
+    tabRecruitment: 'Futbolchi tanlash',
     recruitmentFoot: 'Yetakchi oyoq',
     recruitmentNationality: 'Status',
     statusAll: 'Barchasi',
@@ -311,7 +311,7 @@ const TRANSLATIONS = {
     minPassAcc: 'Min. pas aniqligi %',
     advancedMetrics: 'Qo‘shimcha o‘yin metrikalari',
     basicCriteria: 'Asosiy talablar',
-    setCriteriaPrompt: 'Shortlist ko‘rish uchun kamida bitta talab kiriting.',
+    setCriteriaPrompt: 'Qisqa ro‘yxatni ko‘rish uchun kamida bitta talab kiriting.',
     incompleteRadarTitle: 'To‘liq radar uchun ma’lumot yetarli emas',
     incompleteRadarText: 'Qisman radar chizilmaydi — bu noto‘g‘ri taassurot berishi mumkin.',
     availableMetricsLabel: 'Mavjud',
@@ -321,6 +321,9 @@ const TRANSLATIONS = {
     percentileMeaning: 'pozitsiyada',
     sourceVsRoleHelp: 'Pozitsiya — manbadagi rasmiy kategoriya. O‘yin profili — platforma real metrikalardan hisoblagan rol.',
     missingMetricsLabel: 'Ma’lumot yetishmaydigan metrikalar',
+    liveLabel: 'JONLI',
+    seasonCurrentShort: '1 MAVSUM',
+    seasonTwoShort: '2 MAVSUM',
   },
   ru: {
     tagline: 'Платформа скаутинга и аналитики Центральной Азии',
@@ -342,7 +345,7 @@ const TRANSLATIONS = {
     seasonTwoOption: '2 сезона (Суммарно за 2 сезона)',
     filterLegionnaire: 'Только легионеры',
     filterLegionnaireDesc: 'Игроки за рубежом и иностранцы в чемпионате',
-    filterU21: 'Только U21 таланты',
+    filterU21: 'Только игроки U21',
     filterExpiringContract: 'Истекающие контракты (2026/2027)',
     filterMinMinutes: 'Игроки основы (>450 минут)',
     filterClub: 'Фильтр по клубу:',
@@ -375,7 +378,7 @@ const TRANSLATIONS = {
     pickerTitle: 'Выберите оппонента для сравнения',
     pickerSub: 'Базовый игрок:',
     onlySamePositionNote: 'Показаны только игроки этого же амплуа',
-    h2hTitle: 'Head-to-Head Сравнение талантов',
+    h2hTitle: 'Сравнение игроков',
     changeOpponent: 'Сменить соперника:',
     close: 'Закрыть',
     radarTitle: 'Ролевой профиль',
@@ -434,7 +437,7 @@ const TRANSLATIONS = {
     confidenceLow: 'Низкая',
     confidenceMedium: 'Средняя',
     confidenceHigh: 'Высокая',
-    lowSampleWarning: 'Мало игрового времени: радар показан, но выводы нужно трактовать осторожно.',
+    lowSampleWarning: 'Мало игрового времени: профиль показан, но выводы нужно трактовать осторожно.',
     noMetricData: 'Нет данных',
     methodologyLabel: 'Методология и качество данных',
     abovePlayers: 'выше игроков',
@@ -448,8 +451,8 @@ const TRANSLATIONS = {
     roleAM: 'Атакующий полузащитник',
     roleFW: 'Нападающий',
     calculatedRoleNote: 'Рассчитано платформой только из доступных игровых метрик',
-    recruitmentTitle: 'Recruitment',
-    recruitmentSub: 'Shortlist под требования клуба — только по имеющимся реальным данным',
+    recruitmentTitle: 'Подбор игроков',
+    recruitmentSub: 'Короткий список кандидатов под требования клуба — только по имеющимся реальным данным',
     recruitmentPosition: 'Позиция (из источника)',
     recruitmentRole: 'Игровой профиль (расчёт)',
     recruitmentMaxAge: 'Макс. возраст',
@@ -460,13 +463,13 @@ const TRANSLATIONS = {
     recruitmentMinAttack: 'Мин. атакующий вклад',
     recruitmentExpiring: 'Контракт истекает в течение 12 месяцев',
     recruitmentReliable: 'Только надёжная выборка (≥450 минут)',
-    shortlistTitle: 'Shortlist',
+    shortlistTitle: 'Короткий список кандидатов',
     shortlistReasons: 'Почему подходит',
     noShortlist: 'Нет игроков с достаточными данными, подходящих под эти требования.',
     unknownValueExcluded: 'Если требуемой метрики нет, игрок не проходит этот критерий.',
     allRoles: 'Все профили',
     tabPlayers: 'Игроки',
-    tabRecruitment: 'Recruitment',
+    tabRecruitment: 'Подбор игроков',
     recruitmentFoot: 'Рабочая нога',
     recruitmentNationality: 'Статус',
     statusAll: 'Все',
@@ -480,7 +483,7 @@ const TRANSLATIONS = {
     minPassAcc: 'Мин. точность паса %',
     advancedMetrics: 'Дополнительные игровые метрики',
     basicCriteria: 'Основные требования',
-    setCriteriaPrompt: 'Задайте хотя бы одно требование, чтобы сформировать shortlist.',
+    setCriteriaPrompt: 'Задайте хотя бы одно требование, чтобы сформировать список кандидатов.',
     incompleteRadarTitle: 'Недостаточно данных для полного радара',
     incompleteRadarText: 'Частичный радар не строится, чтобы не создавать ложное впечатление.',
     availableMetricsLabel: 'Доступно',
@@ -490,6 +493,9 @@ const TRANSLATIONS = {
     percentileMeaning: 'по позиции',
     sourceVsRoleHelp: 'Позиция — официальная категория из источника. Игровой профиль — расчёт платформы по реальным метрикам.',
     missingMetricsLabel: 'Метрики без данных',
+    liveLabel: 'ОНЛАЙН',
+    seasonCurrentShort: '1 СЕЗОН',
+    seasonTwoShort: '2 СЕЗОНА',
   },
 };
 
@@ -611,8 +617,7 @@ function DynamicRoleRadar({
       <div className="flex items-start justify-between gap-4 border-b border-zinc-800 pb-3 mb-3">
         <div>
           <h3 className="text-sm font-semibold text-zinc-100">{t.radarTitle}</h3>
-          <p className="mt-1 text-[10px] leading-relaxed text-zinc-500">{t.radarPercentileNote}</p>
-        </div>
+            </div>
         <span className="rounded-md border border-zinc-800 bg-zinc-950/70 px-2 py-1 text-[10px] font-mono text-zinc-400">
           {available}/{rows.length}
         </span>
@@ -1015,12 +1020,12 @@ export default function Dashboard() {
         if (minMinutes !== null && Number.isFinite(minMinutes)) reasons.push(`${p.minutesPlayed}' ≥ ${minMinutes}'`);
         if (minRole !== null && Number.isFinite(minRole) && p.scoutingEngine?.roleScore !== null) reasons.push(lang === 'ru' ? `Ролевой рейтинг ${p.scoutingEngine.roleScore} ≥ ${minRole}` : `Rol reytingi ${p.scoutingEngine.roleScore} ≥ ${minRole}`);
         if (minAttack !== null && Number.isFinite(minAttack) && p.scoutingEngine?.attackingScore !== null) reasons.push(lang === 'ru' ? `Атакующий вклад ${p.scoutingEngine.attackingScore} ≥ ${minAttack}` : `Hujum hissasi ${p.scoutingEngine.attackingScore} ≥ ${minAttack}`);
-        if (minGoals90 !== null && Number.isFinite(minGoals90) && p.goalsPer90 !== null) reasons.push(`G/90 ${p.goalsPer90.toFixed(2)} ≥ ${minGoals90}`);
-        if (minAssists90 !== null && Number.isFinite(minAssists90) && p.assistsPer90 !== null) reasons.push(`A/90 ${p.assistsPer90.toFixed(2)} ≥ ${minAssists90}`);
-        if (minShots90 !== null && Number.isFinite(minShots90) && p.shotsPer90 !== null) reasons.push(`Shots/90 ${p.shotsPer90.toFixed(2)} ≥ ${minShots90}`);
-        if (minKeyPasses90 !== null && Number.isFinite(minKeyPasses90) && p.keyPassesPer90 !== null) reasons.push(`KP/90 ${p.keyPassesPer90.toFixed(2)} ≥ ${minKeyPasses90}`);
-        if (minDribble !== null && Number.isFinite(minDribble) && p.dribbleSuccessRate !== null) reasons.push(`Dribbling ${p.dribbleSuccessRate}% ≥ ${minDribble}%`);
-        if (minPassAcc !== null && Number.isFinite(minPassAcc) && p.passAccPct !== null) reasons.push(`Pass ${p.passAccPct}% ≥ ${minPassAcc}%`);
+        if (minGoals90 !== null && Number.isFinite(minGoals90) && p.goalsPer90 !== null) reasons.push(lang === 'ru' ? `Голы/90 ${p.goalsPer90.toFixed(2)} ≥ ${minGoals90}` : `Gollar/90 ${p.goalsPer90.toFixed(2)} ≥ ${minGoals90}`);
+        if (minAssists90 !== null && Number.isFinite(minAssists90) && p.assistsPer90 !== null) reasons.push(lang === 'ru' ? `Ассисты/90 ${p.assistsPer90.toFixed(2)} ≥ ${minAssists90}` : `Assistlar/90 ${p.assistsPer90.toFixed(2)} ≥ ${minAssists90}`);
+        if (minShots90 !== null && Number.isFinite(minShots90) && p.shotsPer90 !== null) reasons.push(lang === 'ru' ? `Удары/90 ${p.shotsPer90.toFixed(2)} ≥ ${minShots90}` : `Zarbalar/90 ${p.shotsPer90.toFixed(2)} ≥ ${minShots90}`);
+        if (minKeyPasses90 !== null && Number.isFinite(minKeyPasses90) && p.keyPassesPer90 !== null) reasons.push(lang === 'ru' ? `Ключевые передачи/90 ${p.keyPassesPer90.toFixed(2)} ≥ ${minKeyPasses90}` : `Xavfli paslar/90 ${p.keyPassesPer90.toFixed(2)} ≥ ${minKeyPasses90}`);
+        if (minDribble !== null && Number.isFinite(minDribble) && p.dribbleSuccessRate !== null) reasons.push(lang === 'ru' ? `Дриблинг ${p.dribbleSuccessRate}% ≥ ${minDribble}%` : `Dribling ${p.dribbleSuccessRate}% ≥ ${minDribble}%`);
+        if (minPassAcc !== null && Number.isFinite(minPassAcc) && p.passAccPct !== null) reasons.push(lang === 'ru' ? `Точность передач ${p.passAccPct}% ≥ ${minPassAcc}%` : `Pas aniqligi ${p.passAccPct}% ≥ ${minPassAcc}%`);
         if (recruitmentExpiring) reasons.push(lang === 'ru' ? 'Контракт ≤ 12 мес.' : 'Shartnoma ≤ 12 oy');
         if (recruitmentReliableOnly) reasons.push(`${t.confidenceLabel}: ${p.scoutingEngine?.confidence === 'high' ? t.confidenceHigh : t.confidenceMedium}`);
 
@@ -1251,13 +1256,13 @@ export default function Dashboard() {
                   onClick={() => { setCurrentLeague('UZB'); setFilterClub('all'); }}
                   className={`px-2 py-0.5 rounded font-semibold transition ${currentLeague === 'UZB' ? 'bg-emerald-500 text-zinc-950 shadow-sm' : 'text-zinc-400 hover:text-white'}`}
                 >
-                  🇺🇿 SUPERLIGA
+                  {t.leagueUZB}
                 </button>
                 <button
                   onClick={() => { setCurrentLeague('KAZ'); setFilterClub('all'); }}
                   className={`px-2 py-0.5 rounded font-semibold transition ${currentLeague === 'KAZ' ? 'bg-emerald-500 text-zinc-950 shadow-sm' : 'text-zinc-400 hover:text-white'}`}
                 >
-                  🇰🇿 QAZAQSTAN QPL
+                  {t.leagueKAZ}
                 </button>
               </div>
 
@@ -1445,7 +1450,7 @@ export default function Dashboard() {
 
         <div className="text-xs text-zinc-400 flex items-center gap-2">
           <span className="font-semibold text-emerald-400 font-mono">
-            [{seasonMode === 'current' ? '1 СЕЗОН' : '2 СЕЗОНА'}]
+            [{seasonMode === 'current' ? t.seasonCurrentShort : t.seasonTwoShort}]
           </span>
           <span>{t.tableHint}</span>
         </div>
@@ -1974,12 +1979,16 @@ export default function Dashboard() {
                       <span className="text-zinc-500">{t.calculatedRoleNote}</span>
                     )}
                   </div>
-                  <div className="flex gap-1.5 mt-2.5">
-                    {selectedPlayer.tags?.map((tg, tgIdx) => (
-                      <span key={`${tg}-${tgIdx}`} className="text-[10px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-zinc-300">
-                        #{tg}
-                      </span>
-                    ))}
+                  <div className="flex flex-wrap gap-1.5 mt-2.5">
+                    <span className="text-[10px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-zinc-300">
+                      #{selectedPlayer.club[lang]}
+                    </span>
+                    <span className="text-[10px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-zinc-300">
+                      #{getPositionName(selectedPlayer.sourcePosition)}
+                    </span>
+                    <span className="text-[10px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-zinc-300">
+                      #{selectedPlayer.isLegionnaire ? t.statusLegionnaire : t.statusLocal}
+                    </span>
                   </div>
                 </div>
               </div>
