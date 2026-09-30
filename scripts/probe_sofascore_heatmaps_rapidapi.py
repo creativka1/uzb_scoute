@@ -203,9 +203,12 @@ def main() -> None:
                     )
 
                 samples.append(row)
+                centroid = ""
+                if points:
+                    centroid = f" meanX={row['meanX']} meanY={row['meanY']}"
                 print(
                     f"{event['id']} | {player['player']} "
-                    f"status={status} points={len(points)}"
+                    f"status={status} points={len(points)}{centroid}"
                 )
             except Exception as exc:
                 samples.append(
