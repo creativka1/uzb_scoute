@@ -90,7 +90,7 @@ function formatMarketValue(valEUR: number | null): { formatted: string; raw: num
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const seasonMode = searchParams.get('season') === 'two' ? 'twoSeasons' : 'currentSeason';
+    const requestedTwoSeasons = searchParams.get('season') === 'two';
     const leagueFilter = searchParams.get('league') || 'all';
 
     const filePath = path.join(process.cwd(), 'data', 'superliga_stats.json');
@@ -108,10 +108,25 @@ export async function GET(req: NextRequest) {
       const filterLeague = (leagueFilter || '').toUpperCase();
       if (filterLeague !== 'ALL' && playerLeague !== filterLeague) return;
 
-      const selectedStats = p[seasonMode];
-      const stats = selectedStats && selectedStats.minutesPlayed > 0
-        ? selectedStats
-        : (p.currentSeason?.minutesPlayed > 0 ? p.currentSeason : p.twoSeasons);
+      let stats: any = null;
+      let statsSeasonType: 'current' | 'previous' | 'two' = 'current';
+
+      if (requestedTwoSeasons) {
+        stats = p.twoSeasons;
+        statsSeasonType = 'two';
+      } else if (p.currentSeason?.minutesPlayed > 0) {
+        stats = p.currentSeason;
+        statsSeasonType = 'current';
+      } else if (p.previousSeason?.minutesPlayed > 0) {
+        stats = p.previousSeason;
+        statsSeasonType = 'previous';
+      } else if (p.twoSeasons?.minutesPlayed > 0) {
+        // Backward-compatible fallback for existing data files that only store
+        // currentSeason + twoSeasons. If currentSeason is empty, the two-season
+        // aggregate contains only the previous season.
+        stats = p.twoSeasons;
+        statsSeasonType = 'previous';
+      }
 
       if (!stats || !stats.minutesPlayed) return;
 
@@ -256,6 +271,7 @@ export async function GET(req: NextRequest) {
           height: p.height ?? null,
           preferredFoot: p.preferredFoot || 'Unknown',
           contractUntil: p.contractUntil || '—',
+          statsSeasonType,
           marketValue: marketVal.formatted,
           rawMarketValueEUR: marketVal.raw,
           photoUrl: `https://api.sofascore.com/api/v1/player/${p.sofaId}/image`,
