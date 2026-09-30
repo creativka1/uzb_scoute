@@ -37,6 +37,7 @@ import {
 } from 'lucide-react';
 
 type Position = 'FW' | 'MF' | 'DF' | 'GK';
+type AnalyticalRole = 'GOALKEEPER' | 'DEFENDER' | 'MIDFIELDER' | 'ATTACKING_MIDFIELDER' | 'FORWARD';
 type Language = 'uz' | 'ru';
 type League = 'UZB' | 'KAZ';
 type SeasonMode = 'current' | 'two';
@@ -84,6 +85,10 @@ interface Player {
   isLegionnaire: boolean;
   club: { uz: string; ru: string };
   position: Position;
+  sourcePosition: Position;
+  analyticalRole: AnalyticalRole;
+  analyticalRoleIsCalculated: boolean;
+  analyticalRoleBasis: string;
   number: number | null;
   height: number | null;
   preferredFoot: 'Right' | 'Left' | 'Both' | string;
@@ -165,7 +170,7 @@ const TRANSLATIONS = {
     u21Players: 'U21 Iqtidorlari',
     u21PlayersSub: 'Yosh iqtidorlar',
     topScorer: 'Yetakchi to‘purar',
-    topScoutIndex: 'Yetakchi reyting',
+    topScoutIndex: 'Eng yuqori rol reytingi',
     filtersBtn: 'Filtrlar',
     filterPanelTitle: 'Qidiruv va Skauting Filtrlari',
     filterPanelSub: 'Parametrlarni birlashtirib mos futbolchilarni toping',
@@ -185,7 +190,7 @@ const TRANSLATIONS = {
     applyFilters: 'Natijalarni ko‘rish',
     sortByValue: 'Narx',
     sortByAge: 'Yosh',
-    sortByScout: 'Scout Index',
+    sortByScout: 'Rol reytingi',
     tableHint: 'Batafsil ma‘lumot va tahlil uchun futbolchi ustiga bosing',
     colPlayer: 'Futbolchi',
     colClub: 'Klub',
@@ -194,7 +199,7 @@ const TRANSLATIONS = {
     colGoals: 'Gollar',
     colAssists: 'Paslar',
     colDribbling: 'Dribling %',
-    colScoutIndex: 'Scout Index',
+    colScoutIndex: 'Rol reytingi',
     posFW: 'Hujumchi',
     posMF: 'Yarim himoyachi',
     posDF: 'Himoyachi',
@@ -261,7 +266,7 @@ const TRANSLATIONS = {
     coverageLabel: 'Metrikalar qamrovi',
     benchmarkLabel: 'Taqqoslash bazasi',
     strengthsLabel: 'Kuchli signallar',
-    watchoutsLabel: 'Tekshirish kerak',
+    watchoutsLabel: 'Pozitsiya bo‘yicha past ko‘rsatkichlar',
     confidenceLow: 'Past',
     confidenceMedium: 'O‘rta',
     confidenceHigh: 'Yuqori',
@@ -271,6 +276,30 @@ const TRANSLATIONS = {
     abovePlayers: 'futbolchilardan yuqori',
     belowPlayers: 'futbolchilardan past',
     sampleWeightLabel: 'Tanlov og‘irligi',
+    sourcePositionLabel: 'Manba pozitsiyasi',
+    analyticalRoleLabel: 'Analitik rol',
+    roleGK: 'Darvozabon',
+    roleDF: 'Himoyachi',
+    roleMF: 'Yarim himoyachi',
+    roleAM: 'Hujumkor yarim himoyachi',
+    roleFW: 'Hujumchi',
+    calculatedRoleNote: 'Platforma tomonidan real o‘yin metrikalaridan hisoblangan',
+    recruitmentTitle: '4-bosqich · Recruitment Engine',
+    recruitmentSub: 'Klub talablari bo‘yicha shortlist: faqat mavjud real ma’lumotlar asosida',
+    recruitmentPosition: 'Manba pozitsiyasi',
+    recruitmentRole: 'Analitik rol',
+    recruitmentMaxAge: 'Maks. yosh',
+    recruitmentMaxBudget: 'Maks. byudjet (€)',
+    recruitmentMinMinutes: 'Min. daqiqa',
+    recruitmentMinRole: 'Min. rol reytingi',
+    recruitmentMinAttack: 'Min. hujum hissasi',
+    recruitmentExpiring: 'Shartnomasi 12 oy ichida tugaydi',
+    recruitmentReliable: 'Faqat ishonchli namuna (≥450 daqiqa)',
+    shortlistTitle: 'Shortlist',
+    shortlistReasons: 'Nega mos keldi',
+    noShortlist: 'Bu talablarga mos, yetarli ma’lumotli futbolchi topilmadi.',
+    unknownValueExcluded: 'Talab qilingan metrika mavjud bo‘lmasa, futbolchi kriteriydan o‘tmaydi.',
+    allRoles: 'Barcha rollar',
   },
   ru: {
     tagline: 'Платформа скаутинга и аналитики Центральной Азии',
@@ -283,7 +312,7 @@ const TRANSLATIONS = {
     u21Players: 'Таланты U21',
     u21PlayersSub: 'Молодые таланты',
     topScorer: 'Топ-бомбардир',
-    topScoutIndex: 'Высший Scout Index',
+    topScoutIndex: 'Высший ролевой рейтинг',
     filtersBtn: 'Фильтры',
     filterPanelTitle: 'Параметры и фильтры скаутинга',
     filterPanelSub: 'Комбинируйте параметры для точного поиска кандидатов',
@@ -303,7 +332,7 @@ const TRANSLATIONS = {
     applyFilters: 'Применить',
     sortByValue: 'Стоимость',
     sortByAge: 'Возраст',
-    sortByScout: 'Scout Index',
+    sortByScout: 'Ролевой рейтинг',
     tableHint: 'Нажмите на строку игрока для просмотра досье',
     colPlayer: 'Игрок',
     colClub: 'Клуб',
@@ -312,7 +341,7 @@ const TRANSLATIONS = {
     colGoals: 'Голы',
     colAssists: 'Пасы',
     colDribbling: 'Дриблинг %',
-    colScoutIndex: 'Scout Index',
+    colScoutIndex: 'Ролевой рейтинг',
     posFW: 'Нападающий',
     posMF: 'Полузащитник',
     posDF: 'Защитник',
@@ -379,7 +408,7 @@ const TRANSLATIONS = {
     coverageLabel: 'Покрытие метрик',
     benchmarkLabel: 'База сравнения',
     strengthsLabel: 'Сильные сигналы',
-    watchoutsLabel: 'Стоит проверить',
+    watchoutsLabel: 'Ниже среднего по позиции',
     confidenceLow: 'Низкая',
     confidenceMedium: 'Средняя',
     confidenceHigh: 'Высокая',
@@ -389,6 +418,30 @@ const TRANSLATIONS = {
     abovePlayers: 'выше игроков',
     belowPlayers: 'ниже игроков',
     sampleWeightLabel: 'Вес выборки',
+    sourcePositionLabel: 'Позиция источника',
+    analyticalRoleLabel: 'Аналитическая роль',
+    roleGK: 'Вратарь',
+    roleDF: 'Защитник',
+    roleMF: 'Полузащитник',
+    roleAM: 'Атакующий полузащитник',
+    roleFW: 'Нападающий',
+    calculatedRoleNote: 'Рассчитано платформой только из доступных игровых метрик',
+    recruitmentTitle: 'Этап 4 · Recruitment Engine',
+    recruitmentSub: 'Shortlist под требования клуба — только по имеющимся реальным данным',
+    recruitmentPosition: 'Позиция источника',
+    recruitmentRole: 'Аналитическая роль',
+    recruitmentMaxAge: 'Макс. возраст',
+    recruitmentMaxBudget: 'Макс. бюджет (€)',
+    recruitmentMinMinutes: 'Мин. минут',
+    recruitmentMinRole: 'Мин. ролевой рейтинг',
+    recruitmentMinAttack: 'Мин. атакующий вклад',
+    recruitmentExpiring: 'Контракт истекает в течение 12 месяцев',
+    recruitmentReliable: 'Только надёжная выборка (≥450 минут)',
+    shortlistTitle: 'Shortlist',
+    shortlistReasons: 'Почему подходит',
+    noShortlist: 'Нет игроков с достаточными данными, подходящих под эти требования.',
+    unknownValueExcluded: 'Если требуемой метрики нет, игрок не проходит этот критерий.',
+    allRoles: 'Все роли',
   },
 };
 
@@ -621,6 +674,17 @@ export default function Dashboard() {
   const [compareA, setCompareA] = useState<Player | null>(null);
   const [compareB, setCompareB] = useState<Player | null>(null);
 
+  // ЭТАП 4: RECRUITMENT ENGINE
+  const [recruitmentPosition, setRecruitmentPosition] = useState<'all' | Position>('all');
+  const [recruitmentRole, setRecruitmentRole] = useState<'all' | AnalyticalRole>('all');
+  const [recruitmentMaxAge, setRecruitmentMaxAge] = useState('');
+  const [recruitmentMaxBudget, setRecruitmentMaxBudget] = useState('');
+  const [recruitmentMinMinutes, setRecruitmentMinMinutes] = useState('450');
+  const [recruitmentMinRoleScore, setRecruitmentMinRoleScore] = useState('');
+  const [recruitmentMinAttackScore, setRecruitmentMinAttackScore] = useState('');
+  const [recruitmentExpiring, setRecruitmentExpiring] = useState(false);
+  const [recruitmentReliableOnly, setRecruitmentReliableOnly] = useState(true);
+
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
@@ -651,6 +715,16 @@ export default function Dashboard() {
       case 'MF': return t.posMF;
       case 'DF': return t.posDF;
       case 'GK': return t.posGK;
+    }
+  };
+
+  const getAnalyticalRoleName = (role: AnalyticalRole) => {
+    switch (role) {
+      case 'GOALKEEPER': return t.roleGK;
+      case 'DEFENDER': return t.roleDF;
+      case 'MIDFIELDER': return t.roleMF;
+      case 'ATTACKING_MIDFIELDER': return t.roleAM;
+      case 'FORWARD': return t.roleFW;
     }
   };
 
@@ -768,6 +842,75 @@ export default function Dashboard() {
     return list;
   }, [players, searchQuery, filterLegionnaire, filterU21, filterContract, filterMinMinutes, filterClub, filterPosition, sortField, sortOrder, lang]);
 
+  const recruitmentCandidates = useMemo(() => {
+    const maxAge = recruitmentMaxAge === '' ? null : Number(recruitmentMaxAge);
+    const maxBudget = recruitmentMaxBudget === '' ? null : Number(recruitmentMaxBudget);
+    const minMinutes = recruitmentMinMinutes === '' ? null : Number(recruitmentMinMinutes);
+    const minRole = recruitmentMinRoleScore === '' ? null : Number(recruitmentMinRoleScore);
+    const minAttack = recruitmentMinAttackScore === '' ? null : Number(recruitmentMinAttackScore);
+
+    return players
+      .filter((p) => {
+        if (recruitmentPosition !== 'all' && p.sourcePosition !== recruitmentPosition) return false;
+        if (recruitmentRole !== 'all' && p.analyticalRole !== recruitmentRole) return false;
+        if (maxAge !== null && Number.isFinite(maxAge) && p.age > maxAge) return false;
+
+        if (maxBudget !== null && Number.isFinite(maxBudget)) {
+          if (p.rawMarketValueEUR === null || p.rawMarketValueEUR > maxBudget) return false;
+        }
+
+        if (minMinutes !== null && Number.isFinite(minMinutes) && p.minutesPlayed < minMinutes) return false;
+
+        const roleScore = p.scoutingEngine?.roleScore ?? null;
+        if (minRole !== null && Number.isFinite(minRole)) {
+          if (roleScore === null || roleScore < minRole) return false;
+        }
+
+        const attackScore = p.scoutingEngine?.attackingScore ?? null;
+        if (minAttack !== null && Number.isFinite(minAttack)) {
+          if (attackScore === null || attackScore < minAttack) return false;
+        }
+
+        if (recruitmentExpiring && !isContractExpiring(p.contractUntil)) return false;
+        if (recruitmentReliableOnly && p.scoutingEngine?.isLowSample) return false;
+
+        return true;
+      })
+      .map((p) => {
+        const reasons: string[] = [];
+        if (recruitmentPosition !== 'all') reasons.push(getPositionName(p.sourcePosition));
+        if (recruitmentRole !== 'all') reasons.push(getAnalyticalRoleName(p.analyticalRole));
+        if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(`Возраст ${p.age} ≤ ${maxAge}`);
+        if (maxBudget !== null && Number.isFinite(maxBudget) && p.rawMarketValueEUR !== null) reasons.push(`${p.marketValue} ≤ €${Math.round(maxBudget / 1000)}k`);
+        if (minMinutes !== null && Number.isFinite(minMinutes)) reasons.push(`${p.minutesPlayed}' ≥ ${minMinutes}'`);
+        if (minRole !== null && Number.isFinite(minRole) && p.scoutingEngine?.roleScore !== null) reasons.push(`Ролевой рейтинг ${p.scoutingEngine.roleScore} ≥ ${minRole}`);
+        if (minAttack !== null && Number.isFinite(minAttack) && p.scoutingEngine?.attackingScore !== null) reasons.push(`Атакующий вклад ${p.scoutingEngine.attackingScore} ≥ ${minAttack}`);
+        if (recruitmentExpiring) reasons.push('Контракт ≤ 12 мес.');
+        if (recruitmentReliableOnly) reasons.push(`Надёжность: ${p.scoutingEngine?.confidence === 'high' ? t.confidenceHigh : t.confidenceMedium}`);
+
+        return { player: p, reasons };
+      })
+      .sort((a, b) => {
+        const scoreA = a.player.scoutingEngine?.roleScore ?? -1;
+        const scoreB = b.player.scoutingEngine?.roleScore ?? -1;
+        if (scoreB !== scoreA) return scoreB - scoreA;
+        return (b.player.scoutingEngine?.attackingScore ?? -1) - (a.player.scoutingEngine?.attackingScore ?? -1);
+      })
+      .slice(0, 10);
+  }, [
+    players,
+    recruitmentPosition,
+    recruitmentRole,
+    recruitmentMaxAge,
+    recruitmentMaxBudget,
+    recruitmentMinMinutes,
+    recruitmentMinRoleScore,
+    recruitmentMinAttackScore,
+    recruitmentExpiring,
+    recruitmentReliableOnly,
+    lang,
+  ]);
+
   const budgetReplacements = useMemo(() => {
     if (!selectedPlayer) return [];
 
@@ -842,7 +985,7 @@ export default function Dashboard() {
 
   const topScout = useMemo(() => {
     if (players.length === 0) return null;
-    return [...players].sort((a, b) => (b.scoutIndex ?? -1) - (a.scoutIndex ?? -1))[0];
+    return [...players].sort((a, b) => (b.scoutingEngine?.roleScore ?? -1) - (a.scoutingEngine?.roleScore ?? -1))[0];
   }, [players]);
 
   const handlePrintPdf = (player: Player) => {
@@ -886,7 +1029,7 @@ export default function Dashboard() {
           </div>
           <div class="grid">
             <div class="card">
-              <div class="card-title">Scout Index (Opta / CIES)</div>
+              <div class="card-title">Ролевой рейтинг платформы</div>
               <div class="card-val" style="color: #059669;">${player.scoutIndex} / 100</div>
             </div>
             <div class="card">
@@ -1065,7 +1208,7 @@ export default function Dashboard() {
             <Flame className="h-4 w-4 text-amber-400" />
           </div>
           <div className="text-lg font-bold mt-2 text-amber-400">
-            {topScout ? `${topScout.name[lang]} (${topScout.scoutIndex})` : '—'}
+            {topScout ? `${topScout.name[lang]} (${topScout.scoutingEngine?.roleScore ?? '—'})` : '—'}
           </div>
           <span className="text-[11px] text-zinc-500 mt-1 block">
             {topScout ? `${topScout.club[lang]} · ${topScout.assists} ${t.assistWord}` : '—'}
@@ -1193,8 +1336,17 @@ export default function Dashboard() {
                   <td className="py-3 px-3 font-medium text-zinc-200">{player.club[lang]}</td>
                   <td className="py-3 px-3">
                     <span className="rounded bg-zinc-800/90 border border-zinc-700/60 px-2 py-0.5 text-[10px] font-semibold text-zinc-200">
-                      {getPositionName(player.position)}
+                      {getPositionName(player.sourcePosition)}
                     </span>
+                    {player.analyticalRole !== (
+                      player.sourcePosition === 'GK' ? 'GOALKEEPER' :
+                      player.sourcePosition === 'DF' ? 'DEFENDER' :
+                      player.sourcePosition === 'MF' ? 'MIDFIELDER' : 'FORWARD'
+                    ) && (
+                      <span className="block mt-1 text-[10px] text-sky-400">
+                        {getAnalyticalRoleName(player.analyticalRole)}
+                      </span>
+                    )}
                   </td>
                   <td className="py-3 px-3 font-mono text-zinc-300">
                     <strong className="text-white font-semibold">{player.matchesPlayed}</strong>{' '}
@@ -1210,8 +1362,8 @@ export default function Dashboard() {
                     {player.position === 'GK' ? '—' : `${player.dribbleSuccessRate}%`}
                   </td>
                   <td className="py-3 px-4 text-right">
-                    <span className={`inline-flex rounded-lg border px-2.5 py-1 text-xs font-bold ${getScoutBadgeColor(player.scoutIndex)}`}>
-                      {player.scoutIndex}
+                    <span className={`inline-flex rounded-lg border px-2.5 py-1 text-xs font-bold ${getScoutBadgeColor(player.scoutingEngine?.roleScore ?? null)}`}>
+                      {player.scoutingEngine?.roleScore ?? '—'}
                     </span>
                   </td>
                 </tr>
@@ -1960,7 +2112,7 @@ export default function Dashboard() {
                     return (
                       <tr className="hover:bg-zinc-850/50">
                         <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
-                        <td className="py-2 px-4 text-center text-zinc-400">Scout Index (0-100)</td>
+                        <td className="py-2 px-4 text-center text-zinc-400">Ролевой рейтинг (0-100, не абсолютная оценка)</td>
                         <td className={`py-2 px-4 text-right font-mono ${c.classB}`}>{c.displayB}</td>
                       </tr>
                     );
