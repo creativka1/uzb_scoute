@@ -1009,8 +1009,9 @@ export default function Dashboard() {
         if (recruitmentFoot !== 'all') reasons.push(getFootName(p.preferredFoot));
         if (recruitmentNationality !== 'all') reasons.push(p.isLegionnaire ? t.statusLegionnaire : t.statusLocal);
         if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(lang === 'ru' ? `Возраст ${p.age} ≤ ${maxAge}` : `Yosh ${p.age} ≤ ${maxAge}`);
-        if (minBudget !== null && Number.isFinite(minBudget) && p.rawMarketValueEUR !== null) reasons.push(`${p.marketValue} ≥ €${Math.round(minBudget / 1000)}k`);
-        if (maxBudget !== null && Number.isFinite(maxBudget) && p.rawMarketValueEUR !== null) reasons.push(`${p.marketValue} ≤ €${Math.round(maxBudget / 1000)}k`);
+        if ((minBudget !== null || maxBudget !== null) && p.rawMarketValueEUR !== null) {
+          reasons.push(lang === 'ru' ? `Цена: ${p.marketValue}` : `Narxi: ${p.marketValue}`);
+        }
         if (minMinutes !== null && Number.isFinite(minMinutes)) reasons.push(`${p.minutesPlayed}' ≥ ${minMinutes}'`);
         if (minRole !== null && Number.isFinite(minRole) && p.scoutingEngine?.roleScore !== null) reasons.push(lang === 'ru' ? `Ролевой рейтинг ${p.scoutingEngine.roleScore} ≥ ${minRole}` : `Rol reytingi ${p.scoutingEngine.roleScore} ≥ ${minRole}`);
         if (minAttack !== null && Number.isFinite(minAttack) && p.scoutingEngine?.attackingScore !== null) reasons.push(lang === 'ru' ? `Атакующий вклад ${p.scoutingEngine.attackingScore} ≥ ${minAttack}` : `Hujum hissasi ${p.scoutingEngine.attackingScore} ≥ ${minAttack}`);
@@ -2008,7 +2009,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Радар и дифференцированные плашки */}
+            {/* Ролевой профиль и матчевые показатели */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <DynamicRoleRadar
                 primaryName={selectedPlayer.name[lang]}
@@ -2308,17 +2309,25 @@ export default function Dashboard() {
                     <span className="text-zinc-500 block text-[10px]">{t.dribbleDetailed}</span>
                     <strong className="text-zinc-200 text-sm">{selectedPlayer.dribbleWon} / {selectedPlayer.dribbleTotal} ({selectedPlayer.dribbleSuccessRate === null ? '—' : `${selectedPlayer.dribbleSuccessRate}%`})</strong>
                   </div>
+                  {selectedPlayer.duelWinRate !== null && (
+                    <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
+                      <span className="text-zinc-500 block text-[10px]">{t.duelPct}</span>
+                      <strong className="text-white text-sm">{selectedPlayer.duelWinRate}%</strong>
+                    </div>
+                  )}
+                  {selectedPlayer.aerialWinRate !== null && (
+                    <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
+                      <span className="text-zinc-500 block text-[10px]">{t.aerialPct}</span>
+                      <strong className="text-white text-sm">{selectedPlayer.aerialWinRate}%</strong>
+                    </div>
+                  )}
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
-                    <span className="text-zinc-500 block text-[10px]">{t.duelPct}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.duelWinRate === null ? '—' : `${selectedPlayer.duelWinRate}%`}</strong>
+                    <span className="text-zinc-500 block text-[10px]">{t.tacklesOnly}/90</span>
+                    <strong className="text-emerald-400 text-sm">{selectedPlayer.roleMetrics?.tacklesPer90?.toFixed(2) ?? '—'}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
-                    <span className="text-zinc-500 block text-[10px]">{t.aerialPct}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.aerialWinRate === null ? '—' : `${selectedPlayer.aerialWinRate}%`}</strong>
-                  </div>
-                  <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
-                    <span className="text-zinc-500 block text-[10px]">{t.tacklesInterceptions}</span>
-                    <strong className="text-emerald-400 text-sm">{selectedPlayer.tackles} / {selectedPlayer.interceptions}</strong>
+                    <span className="text-zinc-500 block text-[10px]">{t.interceptionsOnly}/90</span>
+                    <strong className="text-emerald-400 text-sm">{selectedPlayer.roleMetrics?.interceptionsPer90?.toFixed(2) ?? '—'}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.passAccPct}</span>
