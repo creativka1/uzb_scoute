@@ -101,6 +101,17 @@ export async function GET(req: NextRequest) {
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const rawPlayers = JSON.parse(fileContent);
 
+    const detailedPositionsPath = path.join(process.cwd(), 'data', 'detailed_positions.json');
+    let detailedPositions: Record<string, any> = {};
+    if (fs.existsSync(detailedPositionsPath)) {
+      try {
+        const detailedPayload = JSON.parse(fs.readFileSync(detailedPositionsPath, 'utf-8'));
+        detailedPositions = detailedPayload?.players || {};
+      } catch {
+        detailedPositions = {};
+      }
+    }
+
     const playersByPos: Record<Position, any[]> = { FW: [], MF: [], DF: [], GK: [] };
 
     rawPlayers.forEach((p: any) => {
@@ -249,6 +260,7 @@ export async function GET(req: NextRequest) {
         const radar = { m1: values[0] ?? null, m2: values[1] ?? null, m3: values[2] ?? null, m4: values[3] ?? null, m5: values[4] ?? null, m6: values[5] ?? null };
         const adjustedRadar = { m1: adjustedValues[0] ?? null, m2: adjustedValues[1] ?? null, m3: adjustedValues[2] ?? null, m4: adjustedValues[3] ?? null, m5: adjustedValues[4] ?? null, m6: adjustedValues[5] ?? null };
         const marketVal = formatMarketValue(safeNumber(p.marketValueCurrency));
+        const detailed = detailedPositions[String(p.sofaId)] || null;
 
         enrichedPlayers.push({
           id: `${p.league || 'UZB'}-${p.sofaId}`,
@@ -267,6 +279,15 @@ export async function GET(req: NextRequest) {
           analyticalRole: analyticalRole.role,
           analyticalRoleIsCalculated: analyticalRole.role !== 'GOALKEEPER' && analyticalRole.role !== 'DEFENDER' && analyticalRole.role !== 'FORWARD' && analyticalRole.role !== 'MIDFIELDER',
           analyticalRoleBasis: analyticalRole.basis,
+          detailedPosition: detailed?.detailedPosition ?? null,
+          detailedPositionConfidence: detailed?.confidence ?? null,
+          detailedPositionStartsUsed: detailed?.startsUsed ?? 0,
+          detailedPositionPrimaryShare: detailed?.primaryShare ?? null,
+          detailedPositionDistribution: detailed?.positionDistribution ?? {},
+          detailedPositionSecondary: detailed?.secondaryPositions ?? [],
+          detailedPositionHeatmapMatchesAvailable: detailed?.heatmapMatchesAvailable ?? 0,
+          detailedPositionHeatmapMatchesValidated: detailed?.heatmapMatchesValidated ?? 0,
+          detailedPositionMethod: detailed?.method ?? null,
           number: p.jerseyNumber ?? null,
           height: p.height ?? null,
           preferredFoot: p.preferredFoot || 'Unknown',
