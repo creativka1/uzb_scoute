@@ -626,7 +626,7 @@ export default function Dashboard() {
     const result = {} as Record<Position, RoleRadarMetrics>;
 
     positions.forEach((pos) => {
-      const group = players.filter((p) => p.position === pos);
+      const group = players.filter((p) => p.position === pos && !p.scoutingEngine?.isLowSample);
       const metrics = {} as RoleRadarMetrics;
 
       keys.forEach((key) => {
@@ -678,8 +678,8 @@ export default function Dashboard() {
           valA = a.age || 0;
           valB = b.age || 0;
         } else if (sortField === 'scout') {
-          valA = a.scoutIndex || 0;
-          valB = b.scoutIndex || 0;
+          valA = a.scoutIndex ?? -1;
+          valB = b.scoutIndex ?? -1;
         }
         return sortOrder === 'desc' ? valB - valA : valA - valB;
       });
@@ -762,7 +762,7 @@ export default function Dashboard() {
 
   const topScout = useMemo(() => {
     if (players.length === 0) return null;
-    return [...players].sort((a, b) => b.scoutIndex - a.scoutIndex)[0];
+    return [...players].sort((a, b) => (b.scoutIndex ?? -1) - (a.scoutIndex ?? -1))[0];
   }, [players]);
 
   const handlePrintPdf = (player: Player) => {
@@ -1484,7 +1484,7 @@ export default function Dashboard() {
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.duelPct}</span>
-                        <span className="text-base font-bold text-white font-mono mt-0.5 block">{selectedPlayer.duelWinRate}%</span>
+                        <span className="text-base font-bold text-white font-mono mt-0.5 block">{selectedPlayer.duelWinRate === null ? '—' : `${selectedPlayer.duelWinRate}%`}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.aerialPct}</span>
@@ -1497,7 +1497,7 @@ export default function Dashboard() {
                 <div className="mt-4 pt-3 border-t border-zinc-800 flex justify-between items-center text-xs">
                   <span className="text-zinc-400">{t.metricLabel} (Ролевой профиль на основе данных SofaScore)</span>
                   <span className={`font-bold font-mono px-2 py-0.5 rounded border ${getScoutBadgeColor(selectedPlayer.scoutIndex)}`}>
-                    {selectedPlayer.scoutIndex} / 100
+                    {selectedPlayer.scoutIndex === null ? '—' : `${selectedPlayer.scoutIndex} / 100`}
                   </span>
                 </div>
               </div>
