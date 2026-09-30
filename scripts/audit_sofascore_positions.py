@@ -25,13 +25,10 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-from urllib.request import Request, urlopen
+from curl_cffi import requests
 
-BASE = "https://www.sofascore.com/api/v1"
-USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
-)
+BASE = "https://api.sofascore.com/api/v1"
+SESSION = requests.Session(impersonate="chrome120")
 
 
 def fetch_json(path: str, retries: int = 3) -> Any:
@@ -39,16 +36,16 @@ def fetch_json(path: str, retries: int = 3) -> Any:
     last_error: Exception | None = None
     for attempt in range(retries):
         try:
-            req = Request(
+            response = SESSION.get(
                 url,
                 headers={
-                    "User-Agent": USER_AGENT,
                     "Accept": "application/json,text/plain,*/*",
                     "Referer": "https://www.sofascore.com/",
                 },
+                timeout=30,
             )
-            with urlopen(req, timeout=30) as response:
-                return json.loads(response.read().decode("utf-8"))
+            response.raise_for_status()
+            return response.json()
         except Exception as exc:
             last_error = exc
             if attempt + 1 < retries:
