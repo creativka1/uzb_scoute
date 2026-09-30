@@ -1156,7 +1156,7 @@ export default function Dashboard() {
     players,
     hasRecruitmentCriteria,
     recruitmentPosition,
-    recruitmentRole,
+    recruitmentDetailedPosition,
     recruitmentMaxAge,
     recruitmentMinBudget,
     recruitmentMaxBudget,
