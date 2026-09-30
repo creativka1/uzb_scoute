@@ -52,6 +52,25 @@ interface RoleRadarMetrics {
   m6: number | null;
 }
 
+interface ScoutingMetricSignal {
+  key: string;
+  value: number;
+  percentile: number;
+}
+
+interface ScoutingEngine {
+  roleScore: number | null;
+  confidence: 'low' | 'medium' | 'high';
+  metricCoverage: number;
+  totalRoleMetrics: number;
+  benchmarkPlayers: number;
+  benchmarkMinMinutes: number;
+  isLowSample: boolean;
+  strengths: ScoutingMetricSignal[];
+  watchouts: ScoutingMetricSignal[];
+  missingMetrics: string[];
+}
+
 interface Player {
   id: string;
   league: League;
@@ -72,6 +91,8 @@ interface Player {
   photoUrl: string;
   initials: string;
   scoutIndex: number | null;
+  scoutIndexBasis?: string;
+  scoutingEngine: ScoutingEngine;
   tags: string[];
   minutesPlayed: number;
   matchesPlayed: number;
@@ -95,6 +116,7 @@ interface Player {
   tackles?: number;
   interceptions?: number;
   saves: number;
+  roleMetrics?: Record<string, number | null>;
   radar: RoleRadarMetrics;
 }
 
@@ -199,7 +221,7 @@ const TRANSLATIONS = {
     interceptionsOnly: 'To‘pni to‘xtatish',
     firstPassAcc: 'Birinchi pas aniqligi %',
     passAccPct: 'Pas aniqligi %',
-    budgetReplacementsTitle: 'Arzonroq o‘xshash muqobillar (Moneyball Scouting)',
+    budgetReplacementsTitle: 'Arzonroq o‘xshash muqobillar',
     budgetReplacementsSub: 'Bosish orqali to‘g‘ridan-to‘g‘ri o‘zaro taqqoslang',
     similarityScore: 'O‘xshashlik',
     noReplacements: 'Mos keluvchi muqobil futbolchilar topilmadi',
@@ -210,6 +232,19 @@ const TRANSLATIONS = {
     goalWord: 'gol',
     assistWord: 'uzatma',
     legionerBadge: 'Legioner',
+    scoutingEngineTitle: 'Skauting dvigateli',
+    scoutingEngineSub: 'Rol profili, ma’lumot sifati va kuchli signallar',
+    roleScoreLabel: 'Rol indeksi',
+    confidenceLabel: 'Ma’lumot ishonchliligi',
+    coverageLabel: 'Metrikalar qamrovi',
+    benchmarkLabel: 'Taqqoslash bazasi',
+    strengthsLabel: 'Kuchli signallar',
+    watchoutsLabel: 'Tekshirish kerak',
+    confidenceLow: 'Past',
+    confidenceMedium: 'O‘rta',
+    confidenceHigh: 'Yuqori',
+    lowSampleWarning: 'Kam o‘yin vaqti: radar mavjud, lekin natijani ehtiyotkor talqin qiling.',
+    noMetricData: 'Ma’lumot yo‘q',
   },
   ru: {
     tagline: 'Платформа скаутинга и аналитики Центральной Азии',
@@ -296,7 +331,7 @@ const TRANSLATIONS = {
     interceptionsOnly: 'Перехваты',
     firstPassAcc: 'Точность первого паса %',
     passAccPct: 'Точность передач %',
-    budgetReplacementsTitle: 'Бюджетная замена с похожим профилем (Moneyball Scouting)',
+    budgetReplacementsTitle: 'Бюджетная замена с похожим профилем',
     budgetReplacementsSub: 'Нажмите на карточку для мгновенного прямого сравнения',
     similarityScore: 'Сходство',
     noReplacements: 'Подходящих аналогов не найдено',
@@ -307,6 +342,19 @@ const TRANSLATIONS = {
     goalWord: 'гол',
     assistWord: 'пас',
     legionerBadge: 'Легионер',
+    scoutingEngineTitle: 'Скаутский движок',
+    scoutingEngineSub: 'Ролевой профиль, качество данных и ключевые сигналы',
+    roleScoreLabel: 'Ролевой индекс',
+    confidenceLabel: 'Надёжность данных',
+    coverageLabel: 'Покрытие метрик',
+    benchmarkLabel: 'База сравнения',
+    strengthsLabel: 'Сильные сигналы',
+    watchoutsLabel: 'Стоит проверить',
+    confidenceLow: 'Низкая',
+    confidenceMedium: 'Средняя',
+    confidenceHigh: 'Высокая',
+    lowSampleWarning: 'Мало игрового времени: радар показан, но выводы нужно трактовать осторожно.',
+    noMetricData: 'Нет данных',
   },
 };
 
@@ -352,7 +400,8 @@ function isContractExpiring(contractUntil: string): boolean {
   return expiry >= now && expiry <= horizon;
 }
 
-function getScoutBadgeColor(score: number): string {
+function getScoutBadgeColor(score: number | null): string {
+  if (score === null) return 'bg-zinc-800/60 border-zinc-700 text-zinc-400';
   if (score >= 75) return 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400';
   if (score >= 60) return 'bg-amber-500/10 border-amber-500/40 text-amber-400';
   return 'bg-rose-500/10 border-rose-500/40 text-rose-400';
@@ -430,7 +479,13 @@ function DynamicRoleRadar({
         <h3 className="text-sm font-semibold text-zinc-100">{t.radarTitle}</h3>
         <span className="text-xs text-amber-400 font-medium">{avgLegend}</span>
       </div>
+      {primaryPlayer.scoutingEngine?.isLowSample && (
+        <div className="mb-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[11px] text-amber-300">
+          {t.lowSampleWarning}
+        </div>
+      )}
       <div className="h-[280px] w-full">
+        {chartData.length >= 3 ? (
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart cx="50%" cy="50%" outerRadius="75%" data={chartData}>
             <PolarGrid stroke="#3f3f46" strokeDasharray="3 3" />
@@ -447,6 +502,11 @@ function DynamicRoleRadar({
             <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
           </RadarChart>
         </ResponsiveContainer>
+        ) : (
+          <div className="h-full flex items-center justify-center text-sm text-zinc-500">
+            {t.noMetricData}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -632,66 +692,48 @@ export default function Dashboard() {
     if (!selectedPlayer) return [];
 
     const target = selectedPlayer;
-    const candidates = players.filter((p) => p.id !== target.id && p.position === target.position);
-    const targetMins90 = Math.max(1, target.minutesPlayed / 90);
+    const radarKeys: (keyof RoleRadarMetrics)[] = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
 
-    const scored = candidates.map((cand) => {
-      const candMins90 = Math.max(1, cand.minutesPlayed / 90);
-      let vectorDistSq = 0;
-      let totalWeights = 0;
+    const scored = players
+      .filter((p) => p.id !== target.id && p.position === target.position)
+      .map((cand) => {
+        const shared = radarKeys
+          .map((key) => {
+            const a = target.radar[key];
+            const b = cand.radar[key];
+            return a !== null && b !== null ? Math.abs(a - b) : null;
+          })
+          .filter((v): v is number => v !== null);
 
-      if (target.position === 'FW') {
-        const goalsP90_T = target.goals / targetMins90;
-        const goalsP90_C = cand.goals / candMins90;
-        vectorDistSq += 2.5 * Math.pow((goalsP90_T - goalsP90_C) * 35, 2);
-        const shotsP90_T = target.shots / targetMins90;
-        const shotsP90_C = cand.shots / candMins90;
-        vectorDistSq += 1.5 * Math.pow((shotsP90_T - shotsP90_C) * 10, 2);
-        vectorDistSq += 1.5 * Math.pow((target.dribbleSuccessRate - cand.dribbleSuccessRate) * 0.4, 2);
-        vectorDistSq += 1.0 * Math.pow((target.aerialWinRate - cand.aerialWinRate) * 0.3, 2);
-        vectorDistSq += 1.0 * Math.pow((target.scoutIndex - cand.scoutIndex) * 1.2, 2);
-        totalWeights = 7.5;
-      } else if (target.position === 'MF') {
-        const assistsP90_T = target.assists / targetMins90;
-        const assistsP90_C = cand.assists / candMins90;
-        vectorDistSq += 2.5 * Math.pow((assistsP90_T - assistsP90_C) * 35, 2);
-        const kpP90_T = target.keyPasses / targetMins90;
-        const kpP90_C = cand.keyPasses / candMins90;
-        vectorDistSq += 2.0 * Math.pow((kpP90_T - kpP90_C) * 12, 2);
-        vectorDistSq += 1.5 * Math.pow((target.dribbleSuccessRate - cand.dribbleSuccessRate) * 0.4, 2);
-        vectorDistSq += 1.5 * Math.pow((target.duelWinRate - cand.duelWinRate) * 0.4, 2);
-        vectorDistSq += 1.0 * Math.pow((target.scoutIndex - cand.scoutIndex) * 1.2, 2);
-        totalWeights = 8.5;
-      } else if (target.position === 'DF') {
-        vectorDistSq += 2.5 * Math.pow((target.radar.m1 - cand.radar.m1) * 0.5, 2);
-        vectorDistSq += 2.0 * Math.pow((target.duelWinRate - cand.duelWinRate) * 0.4, 2);
-        vectorDistSq += 2.0 * Math.pow((target.aerialWinRate - cand.aerialWinRate) * 0.4, 2);
-        vectorDistSq += 1.5 * Math.pow((target.radar.m5 - cand.radar.m5) * 0.35, 2);
-        vectorDistSq += 1.0 * Math.pow((target.scoutIndex - cand.scoutIndex) * 1.2, 2);
-        totalWeights = 9.0;
-      } else {
-        const savesP90_T = target.saves / targetMins90;
-        const savesP90_C = cand.saves / candMins90;
-        vectorDistSq += 3.0 * Math.pow((savesP90_T - savesP90_C) * 10, 2);
-        vectorDistSq += 2.0 * Math.pow((target.radar.m1 - cand.radar.m1) * 0.4, 2);
-        vectorDistSq += 1.5 * Math.pow((target.radar.m3 - cand.radar.m3) * 0.35, 2);
-        vectorDistSq += 1.0 * Math.pow((target.scoutIndex - cand.scoutIndex) * 1.2, 2);
-        totalWeights = 7.5;
-      }
+        if (shared.length < 3) return null;
 
-      const weightedDistance = Math.sqrt(vectorDistSq / totalWeights);
-      const similarity = Math.max(54, Math.min(93, Math.round(98 - weightedDistance * 1.4)));
-      const costDiff = target.rawMarketValueEUR - cand.rawMarketValueEUR;
+        const meanAbsoluteDifference = shared.reduce((sum, v) => sum + v, 0) / shared.length;
+        const similarity = Math.round(Math.max(0, 100 - meanAbsoluteDifference));
 
-      return {
-        player: cand,
-        similarity,
-        costDiff,
-        isCheaper: costDiff > 0,
-      };
-    });
+        const hasBothValues = target.rawMarketValueEUR !== null && cand.rawMarketValueEUR !== null;
+        const costDiff = hasBothValues
+          ? target.rawMarketValueEUR! - cand.rawMarketValueEUR!
+          : null;
 
-    return scored.sort((a, b) => b.similarity - a.similarity).slice(0, 3);
+        return {
+          player: cand,
+          similarity,
+          comparedMetrics: shared.length,
+          costDiff,
+          isCheaper: costDiff !== null && costDiff > 0,
+        };
+      })
+      .filter((item): item is {
+        player: Player;
+        similarity: number;
+        comparedMetrics: number;
+        costDiff: number | null;
+        isCheaper: boolean;
+      } => item !== null);
+
+    return scored
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 3);
   }, [selectedPlayer, players]);
 
   const handleCompareWithReplacement = (replacement: Player) => {
@@ -1460,6 +1502,90 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
+
+            {/* ЭТАП 3: СКАУТСКИЙ ДВИЖОК */}
+            {selectedPlayer.scoutingEngine && (
+              <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-900/80 p-5 shadow-xl">
+                <div className="flex items-center gap-2 border-b border-zinc-800 pb-3 mb-4">
+                  <BarChart3 className="h-5 w-5 text-emerald-400" />
+                  <div>
+                    <h3 className="text-sm font-semibold text-zinc-100">{t.scoutingEngineTitle}</h3>
+                    <p className="text-[11px] text-zinc-500 mt-0.5">{t.scoutingEngineSub}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                    <span className="text-[10px] text-zinc-500 block">{t.roleScoreLabel}</span>
+                    <strong className="text-lg text-emerald-400 font-mono">
+                      {selectedPlayer.scoutingEngine.roleScore === null ? '—' : `${selectedPlayer.scoutingEngine.roleScore}/100`}
+                    </strong>
+                  </div>
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                    <span className="text-[10px] text-zinc-500 block">{t.confidenceLabel}</span>
+                    <strong className="text-sm text-white">
+                      {selectedPlayer.scoutingEngine.confidence === 'high'
+                        ? t.confidenceHigh
+                        : selectedPlayer.scoutingEngine.confidence === 'medium'
+                          ? t.confidenceMedium
+                          : t.confidenceLow}
+                    </strong>
+                  </div>
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                    <span className="text-[10px] text-zinc-500 block">{t.coverageLabel}</span>
+                    <strong className="text-sm text-white font-mono">
+                      {selectedPlayer.scoutingEngine.metricCoverage}/{selectedPlayer.scoutingEngine.totalRoleMetrics}
+                    </strong>
+                  </div>
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                    <span className="text-[10px] text-zinc-500 block">{t.benchmarkLabel}</span>
+                    <strong className="text-sm text-white font-mono">
+                      {selectedPlayer.scoutingEngine.benchmarkPlayers} ≥ {selectedPlayer.scoutingEngine.benchmarkMinMinutes}'
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-3">
+                    <span className="text-emerald-400 font-semibold block mb-2">{t.strengthsLabel}</span>
+                    {selectedPlayer.scoutingEngine.strengths.length ? selectedPlayer.scoutingEngine.strengths.map((signal) => {
+                      const roleKeysByPosition: Record<Position, string[]> = {
+                        GK: ['savesPer90','aerialWinPct','passAccPct','duelWinPct','tacklesPer90','interceptionsPer90'],
+                        DF: ['tacklesPer90','interceptionsPer90','duelWinPct','aerialWinPct','passAccPct','dribbleSuccessPct'],
+                        MF: ['keyPassesPer90','assistsPer90','dribbleSuccessPct','tacklesPer90','passAccPct','duelWinPct'],
+                        FW: ['goalsPer90','assistsPer90','shotsPer90','keyPassesPer90','dribbleSuccessPct','duelWinPct'],
+                      };
+                      const idx = roleKeysByPosition[selectedPlayer.position].indexOf(signal.key);
+                      return (
+                        <div key={signal.key} className="flex items-center justify-between py-1 border-b border-zinc-900 last:border-0">
+                          <span className="text-zinc-300">{idx >= 0 ? RADAR_AXIS_LABELS[lang][selectedPlayer.position][idx] : signal.key}</span>
+                          <span className="font-mono text-emerald-400">{signal.percentile}-й</span>
+                        </div>
+                      );
+                    }) : <span className="text-zinc-500">{t.noMetricData}</span>}
+                  </div>
+
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-3">
+                    <span className="text-amber-400 font-semibold block mb-2">{t.watchoutsLabel}</span>
+                    {selectedPlayer.scoutingEngine.watchouts.length ? selectedPlayer.scoutingEngine.watchouts.map((signal) => {
+                      const roleKeysByPosition: Record<Position, string[]> = {
+                        GK: ['savesPer90','aerialWinPct','passAccPct','duelWinPct','tacklesPer90','interceptionsPer90'],
+                        DF: ['tacklesPer90','interceptionsPer90','duelWinPct','aerialWinPct','passAccPct','dribbleSuccessPct'],
+                        MF: ['keyPassesPer90','assistsPer90','dribbleSuccessPct','tacklesPer90','passAccPct','duelWinPct'],
+                        FW: ['goalsPer90','assistsPer90','shotsPer90','keyPassesPer90','dribbleSuccessPct','duelWinPct'],
+                      };
+                      const idx = roleKeysByPosition[selectedPlayer.position].indexOf(signal.key);
+                      return (
+                        <div key={signal.key} className="flex items-center justify-between py-1 border-b border-zinc-900 last:border-0">
+                          <span className="text-zinc-300">{idx >= 0 ? RADAR_AXIS_LABELS[lang][selectedPlayer.position][idx] : signal.key}</span>
+                          <span className="font-mono text-amber-400">{signal.percentile}-й</span>
+                        </div>
+                      );
+                    }) : <span className="text-zinc-500">{t.noMetricData}</span>}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* РАЗВОРАЧИВАЮЩИЙСЯ БЛОК: ВСЯ СТАТИСТИКА ИГРОКА */}
             {showFullStats && (
