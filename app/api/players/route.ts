@@ -57,6 +57,26 @@ function scaleMetric(values: number[]): number[] {
   return values.map((v) => Math.round(28 + ((v - min) / (max - min)) * 66));
 }
 
+type AnalyticalRole = 'GOALKEEPER' | 'DEFENDER' | 'MIDFIELDER' | 'ATTACKING_MIDFIELDER' | 'FORWARD';
+
+function deriveAnalyticalRole(pos: Position, attackingScore: number | null): {
+  role: AnalyticalRole;
+  basis: string;
+} {
+  if (pos === 'GK') return { role: 'GOALKEEPER', basis: 'Позиция источника: GK' };
+  if (pos === 'DF') return { role: 'DEFENDER', basis: 'Позиция источника: DF' };
+  if (pos === 'FW') return { role: 'FORWARD', basis: 'Позиция источника: FW' };
+
+  if (attackingScore !== null && attackingScore >= 75) {
+    return {
+      role: 'ATTACKING_MIDFIELDER',
+      basis: 'Рассчитано платформой: позиция источника MF + атакующий вклад не ниже 75-го процентильного профиля',
+    };
+  }
+
+  return { role: 'MIDFIELDER', basis: 'Позиция источника: MF; недостаточно оснований для более узкой аналитической роли' };
+}
+
 function formatMarketValue(valEUR: number | null): { formatted: string; raw: number | null } {
   if (valEUR === null) return { formatted: '—', raw: null };
   const rounded = Math.max(25000, Math.round(valEUR / 25000) * 25000);
@@ -175,6 +195,8 @@ export async function GET(req: NextRequest) {
           ? Math.round(attackingAvailable.reduce((a, b) => a + b, 0) / attackingAvailable.length)
           : null;
 
+        const analyticalRole = deriveAnalyticalRole(pos, attackingScore);
+
         const rankedSignals = metricSignals
           .filter((item): item is { key: string; value: number; percentile: number } =>
             item.value !== null && item.percentile !== null
@@ -213,6 +235,10 @@ export async function GET(req: NextRequest) {
           isEstimatedMarketValue: false,
           club: { uz: p.club, ru: p.club },
           position: pos,
+          sourcePosition: pos,
+          analyticalRole: analyticalRole.role,
+          analyticalRoleIsCalculated: analyticalRole.role !== 'GOALKEEPER' && analyticalRole.role !== 'DEFENDER' && analyticalRole.role !== 'FORWARD' && analyticalRole.role !== 'MIDFIELDER',
+          analyticalRoleBasis: analyticalRole.basis,
           number: p.jerseyNumber ?? null,
           height: p.height ?? null,
           preferredFoot: p.preferredFoot || 'Unknown',
