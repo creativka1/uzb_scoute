@@ -244,7 +244,9 @@ export async function GET(req: NextRequest) {
           isU21: p.age <= 21,
           isLegionnaire: p.isLegionnaire || false,
           isEstimatedMarketValue: false,
-          club: { uz: p.club, ru: p.club },
+          club: /^no team$/i.test(String(p.club || '').trim())
+            ? { uz: 'Jamoasiz', ru: 'Без клуба' }
+            : { uz: p.club, ru: p.club },
           position: pos,
           sourcePosition: pos,
           analyticalRole: analyticalRole.role,
