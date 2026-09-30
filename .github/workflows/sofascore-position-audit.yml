@@ -7,6 +7,8 @@ on:
     paths:
       - "scripts/audit_sofascore_positions.py"
       - ".github/workflows/sofascore-position-audit.yml"
+      - "data/cache/seasons/matches_UZB_*.json"
+      - "data/cache/lineups/*.json"
 
 permissions:
   contents: read
@@ -14,7 +16,7 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 5
 
     steps:
       - name: Checkout
@@ -25,11 +27,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install HTTP client
-        run: pip install curl_cffi
-
-      - name: Audit 30 cached Uzbekistan Superliga matches
-        run: python scripts/audit_sofascore_positions.py --matches 30 --heatmaps-per-match 4
+      - name: Audit cached Uzbekistan Superliga position data
+        run: python scripts/audit_sofascore_positions.py --matches 30
 
       - name: Upload audit report
         uses: actions/upload-artifact@v4
