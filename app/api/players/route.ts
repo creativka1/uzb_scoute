@@ -25,9 +25,12 @@ function percentileRank(values: (number | null)[], value: number | null): number
   if (value === null || !Number.isFinite(value)) return null;
   const valid = values.filter((v): v is number => v !== null && Number.isFinite(v));
   if (!valid.length) return null;
-  if (valid.length === 1) return 100;
-  const lessOrEqual = valid.filter((v) => v <= value).length;
-  return Math.round(((lessOrEqual - 1) / (valid.length - 1)) * 100);
+
+  const less = valid.filter((v) => v < value).length;
+  const equal = valid.filter((v) => v === value).length;
+  const percentile = ((less + equal * 0.5) / valid.length) * 100;
+
+  return Math.max(0, Math.min(100, Math.round(percentile)));
 }
 
 function roleMetrics(pos: Position, stats: any): Record<string, number | null> {
