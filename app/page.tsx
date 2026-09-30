@@ -325,6 +325,9 @@ const TRANSLATIONS = {
     liveLabel: 'JONLI',
     seasonCurrentShort: '1 MAVSUM',
     seasonTwoShort: '2 MAVSUM',
+    profileSourceNote: 'SofaScore ma’lumotlari asosidagi rol profili',
+    directCompareHint: 'To‘g‘ridan-to‘g‘ri taqqoslash uchun bosing',
+    roleRatingComparisonLabel: 'Rol reytingi (0–100, mutlaq baho emas)',
   },
   ru: {
     tagline: 'Платформа скаутинга и аналитики Центральной Азии',
@@ -498,6 +501,9 @@ const TRANSLATIONS = {
     liveLabel: 'ОНЛАЙН',
     seasonCurrentShort: '1 СЕЗОН',
     seasonTwoShort: '2 СЕЗОНА',
+    profileSourceNote: 'Ролевой профиль на основе данных SofaScore',
+    directCompareHint: 'Нажмите для прямого сравнения',
+    roleRatingComparisonLabel: 'Ролевой рейтинг (0–100, не абсолютная оценка)',
   },
 };
 
@@ -2210,7 +2216,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-zinc-800 flex justify-between items-center text-xs">
-                  <span className="text-zinc-400">{t.metricLabel} (Ролевой профиль на основе данных SofaScore)</span>
+                  <span className="text-zinc-400">{t.metricLabel} · {t.profileSourceNote}</span>
                   <span className={`font-bold font-mono px-2 py-0.5 rounded border ${getScoutBadgeColor(selectedPlayer.scoutingEngine?.roleScore ?? selectedPlayer.scoutIndex)}`}>
                     {(selectedPlayer.scoutingEngine?.roleScore ?? selectedPlayer.scoutIndex) === null
                       ? '—'
@@ -2425,7 +2431,7 @@ export default function Dashboard() {
                     <div
                       key={`${item.player.id}-${idx}`}
                       onClick={() => handleCompareWithReplacement(item.player)}
-                      title="Кликните для прямого сравнения"
+                      title={t.directCompareHint}
                       className="group cursor-pointer rounded-lg border border-zinc-800 bg-zinc-950/70 p-3 hover:border-emerald-500/50 hover:bg-zinc-900 transition-all flex flex-col justify-between"
                     >
                       <div className="flex items-center gap-2.5">
@@ -2614,7 +2620,7 @@ export default function Dashboard() {
                     return (
                       <tr className="hover:bg-zinc-850/50">
                         <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
-                        <td className="py-2 px-4 text-center text-zinc-400">Ролевой рейтинг (0-100, не абсолютная оценка)</td>
+                        <td className="py-2 px-4 text-center text-zinc-400">{t.roleRatingComparisonLabel}</td>
                         <td className={`py-2 px-4 text-right font-mono ${c.classB}`}>{c.displayB}</td>
                       </tr>
                     );
