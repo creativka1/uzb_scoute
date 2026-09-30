@@ -644,12 +644,14 @@ function DynamicRoleRadar({
       })
     : [];
   const hasCompleteRadar = missingPrimaryIndexes.length === 0 && missingComparisonIndexes.length === 0;
+  const hasCompleteAverage = [posAvg.m1, posAvg.m2, posAvg.m3, posAvg.m4, posAvg.m5, posAvg.m6]
+    .every((value) => value !== null && value !== undefined);
 
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900/90 p-5 shadow-xl">
       <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-2">
         <h3 className="text-sm font-semibold text-zinc-100">{t.radarTitle}</h3>
-        <span className="text-xs text-amber-400 font-medium">{avgLegend}</span>
+        {hasCompleteAverage && <span className="text-xs text-amber-400 font-medium">{avgLegend}</span>}
       </div>
       {primaryPlayer.scoutingEngine?.isLowSample && (
         <div className="mb-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[11px] text-amber-300">
@@ -668,9 +670,9 @@ function DynamicRoleRadar({
             <Radar name={primaryName} dataKey="primary" stroke="#10b981" fill="#10b981" fillOpacity={0.4} strokeWidth={2.5} />
             {comparisonPlayer && comparisonName ? (
               <Radar name={comparisonName} dataKey="comparison" stroke="#38bdf8" fill="#38bdf8" fillOpacity={0.35} strokeWidth={2.5} />
-            ) : (
+            ) : hasCompleteAverage ? (
               <Radar name={avgLegend} dataKey="avg" stroke="#f59e0b" strokeDasharray="4 4" strokeWidth={2} fill="#f59e0b" fillOpacity={0.09} />
-            )}
+            ) : null}
             <Tooltip
               content={({ active, payload }) => {
                 if (!active || !payload?.length) return null;
@@ -2073,7 +2075,9 @@ export default function Dashboard() {
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.gkPassing}</span>
-                        <span className="text-base font-bold text-amber-400 font-mono mt-0.5 block">{selectedPlayer.radar.m3}%</span>
+                        <span className="text-base font-bold text-amber-400 font-mono mt-0.5 block">
+                          {selectedPlayer.passAccPct === null ? '—' : `${selectedPlayer.passAccPct}%`}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -2141,13 +2145,13 @@ export default function Dashboard() {
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.tacklesOnly}/90</span>
                         <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">
-                          {selectedPlayer.roleMetrics?.tacklesPer90 == null ? '—' : selectedPlayer.roleMetrics.tacklesPer90.toFixed(2)}
+                          {selectedPlayer.roleMetrics?.tacklesPer90?.toFixed(2) ?? '—'}
                         </span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.interceptionsOnly}/90</span>
                         <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">
-                          {selectedPlayer.roleMetrics?.interceptionsPer90 == null ? '—' : selectedPlayer.roleMetrics.interceptionsPer90.toFixed(2)}
+                          {selectedPlayer.roleMetrics?.interceptionsPer90?.toFixed(2) ?? '—'}
                         </span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
