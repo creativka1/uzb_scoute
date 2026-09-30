@@ -21,7 +21,7 @@ from typing import Any
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-BASE = "https://www.fotmob.com/api"
+BASE = "https://www.fotmob.com/api/data"
 LEAGUE_ID = 540
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
