@@ -78,12 +78,13 @@ function deriveAnalyticalRole(pos: Position, attackingScore: number | null): {
 }
 
 function formatMarketValue(valEUR: number | null): { formatted: string; raw: number | null } {
-  if (valEUR === null) return { formatted: '—', raw: null };
-  const rounded = Math.max(25000, Math.round(valEUR / 25000) * 25000);
-  const formatted = rounded >= 1000000
-    ? `€${(rounded / 1000000).toFixed(2)}m`
-    : `€${Math.round(rounded / 1000)}k`;
-  return { formatted, raw: rounded };
+  if (valEUR === null || valEUR <= 0) return { formatted: '—', raw: null };
+
+  const formatted = valEUR >= 1000000
+    ? `€${(valEUR / 1000000).toFixed(valEUR % 1000000 === 0 ? 0 : 2).replace(/0+$/, '').replace(/\.$/, '')}m`
+    : `€${Math.round(valEUR / 1000)}k`;
+
+  return { formatted, raw: valEUR };
 }
 
 export async function GET(req: NextRequest) {
