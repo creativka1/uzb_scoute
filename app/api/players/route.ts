@@ -181,6 +181,11 @@ export async function GET(req: NextRequest) {
           )
           .sort((a, b) => b.percentile - a.percentile);
 
+        const strengths = rankedSignals.filter((item) => item.percentile >= 75);
+        const watchouts = rankedSignals
+          .filter((item) => item.percentile < 40)
+          .sort((a, b) => a.percentile - b.percentile);
+
         const benchmarkPlayers = group.filter((item) =>
           safeNumber(item.stats?.minutesPlayed) !== null && item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
         ).length;
@@ -231,8 +236,8 @@ export async function GET(req: NextRequest) {
             benchmarkPlayers,
             benchmarkMinMinutes: MIN_PERCENTILE_MINUTES,
             isLowSample: !hasReliableSample,
-            strengths: rankedSignals.slice(0, 2),
-            watchouts: rankedSignals.slice(-2).reverse(),
+            strengths: strengths.slice(0, 3),
+            watchouts: watchouts.slice(0, 3),
             missingMetrics: metricSignals.filter((item) => item.value === null).map((item) => item.key),
           },
           tags: [p.club, pos, p.isLegionnaire ? 'Legioner' : 'Local'],
