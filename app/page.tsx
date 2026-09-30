@@ -60,6 +60,7 @@ interface ScoutingMetricSignal {
 
 interface ScoutingEngine {
   roleScore: number | null;
+  attackingScore: number | null;
   confidence: 'low' | 'medium' | 'high';
   metricCoverage: number;
   totalRoleMetrics: number;
@@ -135,6 +136,20 @@ const RADAR_AXIS_LABELS = {
   },
 };
 
+
+const ROLE_KEYS_BY_POSITION: Record<Position, string[]> = {
+  GK: ['savesPer90', 'aerialWinPct', 'passAccPct', 'duelWinPct', 'tacklesPer90', 'interceptionsPer90'],
+  DF: ['tacklesPer90', 'interceptionsPer90', 'duelWinPct', 'aerialWinPct', 'passAccPct', 'dribbleSuccessPct'],
+  MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct', 'duelWinPct'],
+  FW: ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90', 'dribbleSuccessPct', 'duelWinPct'],
+};
+
+function formatRoleMetricRaw(key: string, value: number | null | undefined): string {
+  if (value === null || value === undefined || !Number.isFinite(value)) return '—';
+  if (key.endsWith('Pct')) return `${Math.round(value)}%`;
+  return value.toFixed(2);
+}
+
 const TRANSLATIONS = {
   uz: {
     tagline: 'Markaziy Osiyo skautingi va professional tahlil platformasi',
@@ -193,6 +208,7 @@ const TRANSLATIONS = {
     changeOpponent: 'Raqibni o‘zgartirish:',
     close: 'Yopish',
     radarTitle: 'Ko‘nikmalar radari (Protsentil)',
+    radarPercentileNote: 'Radar haqiqiy foizni emas, shu pozitsiyadagi futbolchilar orasidagi protsentilni ko‘rsatadi.',
     posAvgLabel: 'Amplua o‘rtachasi',
     metricLabel: 'Skauting profili',
     marketValue: 'Transfer narxi',
@@ -235,6 +251,7 @@ const TRANSLATIONS = {
     scoutingEngineTitle: 'Skauting dvigateli',
     scoutingEngineSub: 'Rol profili, ma’lumot sifati va kuchli signallar',
     roleScoreLabel: 'Rol indeksi',
+    attackingScoreLabel: 'Hujum hissasi',
     confidenceLabel: 'Ma’lumot ishonchliligi',
     coverageLabel: 'Metrikalar qamrovi',
     benchmarkLabel: 'Taqqoslash bazasi',
@@ -303,6 +320,7 @@ const TRANSLATIONS = {
     changeOpponent: 'Сменить соперника:',
     close: 'Закрыть',
     radarTitle: 'Радар навыков (Процентили)',
+    radarPercentileNote: 'Радар показывает процентиль среди игроков позиции, а не само исходное значение метрики.',
     posAvgLabel: 'Среднее по позиции',
     metricLabel: 'Скаутский профиль',
     marketValue: 'Рыночная стоимость',
@@ -345,6 +363,7 @@ const TRANSLATIONS = {
     scoutingEngineTitle: 'Скаутский движок',
     scoutingEngineSub: 'Ролевой профиль, качество данных и ключевые сигналы',
     roleScoreLabel: 'Ролевой индекс',
+    attackingScoreLabel: 'Атакующий вклад',
     confidenceLabel: 'Надёжность данных',
     coverageLabel: 'Покрытие метрик',
     benchmarkLabel: 'База сравнения',
@@ -458,13 +477,14 @@ function DynamicRoleRadar({
     }
   };
 
+  const roleKeys = ROLE_KEYS_BY_POSITION[pos];
   const chartData = [
-    { skill: labels[0], primary: primaryPlayer.radar.m1, comparison: comparisonPlayer?.radar.m1, avg: posAvg.m1 },
-    { skill: labels[1], primary: primaryPlayer.radar.m2, comparison: comparisonPlayer?.radar.m2, avg: posAvg.m2 },
-    { skill: labels[2], primary: primaryPlayer.radar.m3, comparison: comparisonPlayer?.radar.m3, avg: posAvg.m3 },
-    { skill: labels[3], primary: primaryPlayer.radar.m4, comparison: comparisonPlayer?.radar.m4, avg: posAvg.m4 },
-    { skill: labels[4], primary: primaryPlayer.radar.m5, comparison: comparisonPlayer?.radar.m5, avg: posAvg.m5 },
-    { skill: labels[5], primary: primaryPlayer.radar.m6, comparison: comparisonPlayer?.radar.m6, avg: posAvg.m6 },
+    { skill: labels[0], key: roleKeys[0], primary: primaryPlayer.radar.m1, comparison: comparisonPlayer?.radar.m1, avg: posAvg.m1, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[0]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[0]] },
+    { skill: labels[1], key: roleKeys[1], primary: primaryPlayer.radar.m2, comparison: comparisonPlayer?.radar.m2, avg: posAvg.m2, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[1]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[1]] },
+    { skill: labels[2], key: roleKeys[2], primary: primaryPlayer.radar.m3, comparison: comparisonPlayer?.radar.m3, avg: posAvg.m3, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[2]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[2]] },
+    { skill: labels[3], key: roleKeys[3], primary: primaryPlayer.radar.m4, comparison: comparisonPlayer?.radar.m4, avg: posAvg.m4, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[3]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[3]] },
+    { skill: labels[4], key: roleKeys[4], primary: primaryPlayer.radar.m5, comparison: comparisonPlayer?.radar.m5, avg: posAvg.m5, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[4]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[4]] },
+    { skill: labels[5], key: roleKeys[5], primary: primaryPlayer.radar.m6, comparison: comparisonPlayer?.radar.m6, avg: posAvg.m6, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[5]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[5]] },
   ].filter((item) =>
     item.primary !== null &&
     item.primary !== undefined &&
@@ -484,6 +504,7 @@ function DynamicRoleRadar({
           {t.lowSampleWarning}
         </div>
       )}
+      <p className="text-[10px] text-zinc-500 mb-2">{t.radarPercentileNote}</p>
       <div className="h-[280px] w-full">
         {chartData.length >= 3 ? (
         <ResponsiveContainer width="100%" height="100%">
@@ -498,7 +519,30 @@ function DynamicRoleRadar({
             ) : (
               <Radar name={avgLegend} dataKey="avg" stroke="#f59e0b" strokeDasharray="4 4" strokeWidth={2} fill="#f59e0b" fillOpacity={0.09} />
             )}
-            <Tooltip contentStyle={{ backgroundColor: '#09090b', borderColor: '#3f3f46', borderRadius: '8px', fontSize: '12px' }} />
+            <Tooltip
+              content={({ active, payload }) => {
+                if (!active || !payload?.length) return null;
+                const row: any = payload[0]?.payload;
+                return (
+                  <div className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs shadow-xl">
+                    <div className="font-semibold text-zinc-100 mb-1">{row.skill}</div>
+                    <div className="text-emerald-400">
+                      {primaryName}: {row.primary} pctl · {formatRoleMetricRaw(row.key, row.primaryRaw)}
+                    </div>
+                    {comparisonPlayer && comparisonName && (
+                      <div className="text-sky-400">
+                        {comparisonName}: {row.comparison} pctl · {formatRoleMetricRaw(row.key, row.comparisonRaw)}
+                      </div>
+                    )}
+                    {!comparisonPlayer && row.avg !== null && row.avg !== undefined && (
+                      <div className="text-amber-400">
+                        {avgLegend}: {row.avg} pctl
+                      </div>
+                    )}
+                  </div>
+                );
+              }}
+            />
             <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
           </RadarChart>
         </ResponsiveContainer>
@@ -1514,11 +1558,17 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
                   <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
                     <span className="text-[10px] text-zinc-500 block">{t.roleScoreLabel}</span>
                     <strong className="text-lg text-emerald-400 font-mono">
                       {selectedPlayer.scoutingEngine.roleScore === null ? '—' : `${selectedPlayer.scoutingEngine.roleScore}/100`}
+                    </strong>
+                  </div>
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                    <span className="text-[10px] text-zinc-500 block">{t.attackingScoreLabel}</span>
+                    <strong className="text-lg text-sky-400 font-mono">
+                      {selectedPlayer.scoutingEngine.attackingScore === null ? '—' : `${selectedPlayer.scoutingEngine.attackingScore}/100`}
                     </strong>
                   </div>
                   <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
@@ -1549,13 +1599,7 @@ export default function Dashboard() {
                   <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-3">
                     <span className="text-emerald-400 font-semibold block mb-2">{t.strengthsLabel}</span>
                     {selectedPlayer.scoutingEngine.strengths.length ? selectedPlayer.scoutingEngine.strengths.map((signal) => {
-                      const roleKeysByPosition: Record<Position, string[]> = {
-                        GK: ['savesPer90','aerialWinPct','passAccPct','duelWinPct','tacklesPer90','interceptionsPer90'],
-                        DF: ['tacklesPer90','interceptionsPer90','duelWinPct','aerialWinPct','passAccPct','dribbleSuccessPct'],
-                        MF: ['keyPassesPer90','assistsPer90','dribbleSuccessPct','tacklesPer90','passAccPct','duelWinPct'],
-                        FW: ['goalsPer90','assistsPer90','shotsPer90','keyPassesPer90','dribbleSuccessPct','duelWinPct'],
-                      };
-                      const idx = roleKeysByPosition[selectedPlayer.position].indexOf(signal.key);
+                      const idx = ROLE_KEYS_BY_POSITION[selectedPlayer.position].indexOf(signal.key);
                       return (
                         <div key={signal.key} className="flex items-center justify-between py-1 border-b border-zinc-900 last:border-0">
                           <span className="text-zinc-300">{idx >= 0 ? RADAR_AXIS_LABELS[lang][selectedPlayer.position][idx] : signal.key}</span>
@@ -1568,13 +1612,7 @@ export default function Dashboard() {
                   <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-3">
                     <span className="text-amber-400 font-semibold block mb-2">{t.watchoutsLabel}</span>
                     {selectedPlayer.scoutingEngine.watchouts.length ? selectedPlayer.scoutingEngine.watchouts.map((signal) => {
-                      const roleKeysByPosition: Record<Position, string[]> = {
-                        GK: ['savesPer90','aerialWinPct','passAccPct','duelWinPct','tacklesPer90','interceptionsPer90'],
-                        DF: ['tacklesPer90','interceptionsPer90','duelWinPct','aerialWinPct','passAccPct','dribbleSuccessPct'],
-                        MF: ['keyPassesPer90','assistsPer90','dribbleSuccessPct','tacklesPer90','passAccPct','duelWinPct'],
-                        FW: ['goalsPer90','assistsPer90','shotsPer90','keyPassesPer90','dribbleSuccessPct','duelWinPct'],
-                      };
-                      const idx = roleKeysByPosition[selectedPlayer.position].indexOf(signal.key);
+                      const idx = ROLE_KEYS_BY_POSITION[selectedPlayer.position].indexOf(signal.key);
                       return (
                         <div key={signal.key} className="flex items-center justify-between py-1 border-b border-zinc-900 last:border-0">
                           <span className="text-zinc-300">{idx >= 0 ? RADAR_AXIS_LABELS[lang][selectedPlayer.position][idx] : signal.key}</span>
@@ -1864,6 +1902,26 @@ export default function Dashboard() {
                       </tr>
                     );
                   })()}
+
+                  <tr className="hover:bg-zinc-850/50">
+                    <td className="py-2 px-4 font-mono text-emerald-400">
+                      {compareA.scoutingEngine?.attackingScore === null || compareA.scoutingEngine?.attackingScore === undefined ? '—' : compareA.scoutingEngine.attackingScore}
+                    </td>
+                    <td className="py-2 px-4 text-center text-zinc-400">{t.attackingScoreLabel} (0-100)</td>
+                    <td className="py-2 px-4 text-right font-mono text-sky-400">
+                      {compareB.scoutingEngine?.attackingScore === null || compareB.scoutingEngine?.attackingScore === undefined ? '—' : compareB.scoutingEngine.attackingScore}
+                    </td>
+                  </tr>
+
+                  <tr className="hover:bg-zinc-850/50">
+                    <td className="py-2 px-4 text-zinc-300">
+                      {compareA.scoutingEngine?.confidence === 'high' ? t.confidenceHigh : compareA.scoutingEngine?.confidence === 'medium' ? t.confidenceMedium : t.confidenceLow}
+                    </td>
+                    <td className="py-2 px-4 text-center text-zinc-400">{t.confidenceLabel}</td>
+                    <td className="py-2 px-4 text-right text-zinc-300">
+                      {compareB.scoutingEngine?.confidence === 'high' ? t.confidenceHigh : compareB.scoutingEngine?.confidence === 'medium' ? t.confidenceMedium : t.confidenceLow}
+                    </td>
+                  </tr>
 
                   {(() => {
                     const c = renderComparisonCell(compareA.rawMarketValueEUR, compareB.rawMarketValueEUR, compareA.marketValue, compareB.marketValue);
