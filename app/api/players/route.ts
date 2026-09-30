@@ -174,7 +174,8 @@ export async function GET(req: NextRequest) {
         const metricSignals = keys.map((key, index) => ({
           key,
           value: p.roleMetrics[key] ?? null,
-          percentile: values[index] ?? null,
+          percentile: adjustedValues[index] ?? null,
+          rawPercentile: values[index] ?? null,
         }));
 
         const attackingKeys = ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90'];
@@ -191,9 +192,12 @@ export async function GET(req: NextRequest) {
           return percentileRank(benchmark, p.roleMetrics[key]);
         });
         const attackingAvailable = attackingPercentiles.filter((v): v is number => v !== null);
-        const attackingScore = attackingAvailable.length >= 2
+        const rawAttackingScore = attackingAvailable.length >= 2
           ? Math.round(attackingAvailable.reduce((a, b) => a + b, 0) / attackingAvailable.length)
           : null;
+        const attackingScore = rawAttackingScore === null
+          ? null
+          : Math.round(50 + (rawAttackingScore - 50) * sampleWeight);
 
         const analyticalRole = deriveAnalyticalRole(pos, attackingScore);
 
@@ -253,6 +257,7 @@ export async function GET(req: NextRequest) {
           scoutingEngine: {
             rawRoleScore: scoutIndex,
             roleScore: adjustedRoleScore,
+            rawAttackingScore,
             attackingScore,
             sampleWeight,
             adjustedRadar,
