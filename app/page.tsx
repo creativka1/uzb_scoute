@@ -2587,7 +2587,7 @@ export default function Dashboard() {
                         </div>
                         <div className="text-right">
                           <span className="font-bold text-zinc-200 font-mono block">{item.player.marketValue}</span>
-                          {item.costDiff !== 0 && (
+                          {item.costDiff !== null && item.costDiff !== 0 && (
                             <span className={`text-[10px] font-semibold ${item.isCheaper ? 'text-emerald-400' : 'text-rose-500'}`}>
                               {item.isCheaper ? `-€${Math.round(item.costDiff / 1000)}k` : `+€${Math.round(Math.abs(item.costDiff) / 1000)}k`}
                             </span>
