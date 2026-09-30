@@ -260,6 +260,7 @@ const TRANSLATIONS = {
     scoutingEngineTitle: 'Skauting profili',
     scoutingEngineSub: 'Futbolchining roli, hujum hissasi va asosiy skautlik signallari',
     roleScoreLabel: 'Rol reytingi',
+    roleScoreNote: 'Pozitsiya ichidagi qiyosiy profil; futbolchining mutlaq bahosi emas.',
     attackingScoreLabel: 'Hujum hissasi',
     confidenceLabel: 'Ma’lumot ishonchliligi',
     rawRoleScoreLabel: 'Xom rol indeksi',
@@ -403,6 +404,7 @@ const TRANSLATIONS = {
     scoutingEngineTitle: 'Скаутский профиль',
     scoutingEngineSub: 'Роль игрока, атакующий вклад и ключевые сигналы для скаута',
     roleScoreLabel: 'Ролевой рейтинг',
+    roleScoreNote: 'Сравнительный профиль внутри позиции, а не абсолютная оценка игрока.',
     attackingScoreLabel: 'Атакующий вклад',
     confidenceLabel: 'Надёжность данных',
     rawRoleScoreLabel: 'Сырой ролевой индекс',
@@ -1923,6 +1925,7 @@ export default function Dashboard() {
                     <strong className="text-xl text-emerald-400 font-mono">
                       {selectedPlayer.scoutingEngine.roleScore === null ? '—' : `${selectedPlayer.scoutingEngine.roleScore}/100`}
                     </strong>
+                    <span className="mt-1 block text-[9px] leading-snug text-zinc-600">{t.roleScoreNote}</span>
                   </div>
                   <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-4">
                     <span className="text-[11px] text-zinc-500 block">{t.attackingScoreLabel}</span>
