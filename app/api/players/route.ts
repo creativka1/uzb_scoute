@@ -233,7 +233,7 @@ export async function GET(req: NextRequest) {
         const analyticalRole = deriveAnalyticalRole(pos, attackingScore);
 
         const rankedSignals = metricSignals
-          .filter((item): item is { key: string; value: number; percentile: number } =>
+          .filter((item): item is { key: string; value: number; percentile: number; rawPercentile: number | null } =>
             item.value !== null && item.percentile !== null
           )
           .sort((a, b) => b.percentile - a.percentile);
