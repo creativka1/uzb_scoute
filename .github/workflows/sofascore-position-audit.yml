@@ -25,6 +25,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install HTTP client
+        run: pip install curl_cffi
+
       - name: Audit 30 cached Uzbekistan Superliga matches
         run: python scripts/audit_sofascore_positions.py --matches 30 --heatmaps-per-match 4
 
