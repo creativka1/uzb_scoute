@@ -59,8 +59,11 @@ interface ScoutingMetricSignal {
 }
 
 interface ScoutingEngine {
+  rawRoleScore: number | null;
   roleScore: number | null;
   attackingScore: number | null;
+  sampleWeight: number;
+  adjustedRadar: RoleRadarMetrics;
   confidence: 'low' | 'medium' | 'high';
   metricCoverage: number;
   totalRoleMetrics: number;
@@ -249,10 +252,12 @@ const TRANSLATIONS = {
     assistWord: 'uzatma',
     legionerBadge: 'Legioner',
     scoutingEngineTitle: 'Skauting dvigateli',
-    scoutingEngineSub: 'Rol profili, ma’lumot sifati va kuchli signallar',
-    roleScoreLabel: 'Rol indeksi',
+    scoutingEngineSub: '3-bosqich: kichik tanlovni hisobga olgan tuzatilgan rol profili, ma’lumot sifati va kuchli signallar',
+    roleScoreLabel: 'Tuzatilgan rol indeksi',
     attackingScoreLabel: 'Hujum hissasi',
     confidenceLabel: 'Ma’lumot ishonchliligi',
+    rawRoleScoreLabel: '2-bosqich xom indeksi',
+    adjustedRadarLabel: '3-bosqich tuzatilgan radar',
     coverageLabel: 'Metrikalar qamrovi',
     benchmarkLabel: 'Taqqoslash bazasi',
     strengthsLabel: 'Kuchli signallar',
@@ -361,10 +366,12 @@ const TRANSLATIONS = {
     assistWord: 'пас',
     legionerBadge: 'Легионер',
     scoutingEngineTitle: 'Скаутский движок',
-    scoutingEngineSub: 'Ролевой профиль, качество данных и ключевые сигналы',
-    roleScoreLabel: 'Ролевой индекс',
+    scoutingEngineSub: 'Этап 3: скорректированный ролевой профиль с учётом малой выборки, качества данных и ключевых сигналов',
+    roleScoreLabel: 'Скорректированный ролевой индекс',
     attackingScoreLabel: 'Атакующий вклад',
     confidenceLabel: 'Надёжность данных',
+    rawRoleScoreLabel: 'Сырой индекс этапа 2',
+    adjustedRadarLabel: 'Скорректированный радар этапа 3',
     coverageLabel: 'Покрытие метрик',
     benchmarkLabel: 'База сравнения',
     strengthsLabel: 'Сильные сигналы',
@@ -478,13 +485,20 @@ function DynamicRoleRadar({
   };
 
   const roleKeys = ROLE_KEYS_BY_POSITION[pos];
+  const displayedPrimaryRadar = primaryPlayer.scoutingEngine?.isLowSample
+    ? primaryPlayer.scoutingEngine.adjustedRadar
+    : primaryPlayer.radar;
+  const displayedComparisonRadar = comparisonPlayer
+    ? (comparisonPlayer.scoutingEngine?.isLowSample ? comparisonPlayer.scoutingEngine.adjustedRadar : comparisonPlayer.radar)
+    : undefined;
+
   const chartData = [
-    { skill: labels[0], key: roleKeys[0], primary: primaryPlayer.radar.m1, comparison: comparisonPlayer?.radar.m1, avg: posAvg.m1, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[0]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[0]] },
-    { skill: labels[1], key: roleKeys[1], primary: primaryPlayer.radar.m2, comparison: comparisonPlayer?.radar.m2, avg: posAvg.m2, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[1]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[1]] },
-    { skill: labels[2], key: roleKeys[2], primary: primaryPlayer.radar.m3, comparison: comparisonPlayer?.radar.m3, avg: posAvg.m3, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[2]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[2]] },
-    { skill: labels[3], key: roleKeys[3], primary: primaryPlayer.radar.m4, comparison: comparisonPlayer?.radar.m4, avg: posAvg.m4, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[3]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[3]] },
-    { skill: labels[4], key: roleKeys[4], primary: primaryPlayer.radar.m5, comparison: comparisonPlayer?.radar.m5, avg: posAvg.m5, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[4]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[4]] },
-    { skill: labels[5], key: roleKeys[5], primary: primaryPlayer.radar.m6, comparison: comparisonPlayer?.radar.m6, avg: posAvg.m6, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[5]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[5]] },
+    { skill: labels[0], key: roleKeys[0], primary: displayedPrimaryRadar.m1, comparison: displayedComparisonRadar?.m1, rawPrimaryPercentile: primaryPlayer.radar.m1, rawComparisonPercentile: comparisonPlayer?.radar.m1, avg: posAvg.m1, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[0]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[0]] },
+    { skill: labels[1], key: roleKeys[1], primary: displayedPrimaryRadar.m2, comparison: displayedComparisonRadar?.m2, rawPrimaryPercentile: primaryPlayer.radar.m2, rawComparisonPercentile: comparisonPlayer?.radar.m2, avg: posAvg.m2, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[1]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[1]] },
+    { skill: labels[2], key: roleKeys[2], primary: displayedPrimaryRadar.m3, comparison: displayedComparisonRadar?.m3, rawPrimaryPercentile: primaryPlayer.radar.m3, rawComparisonPercentile: comparisonPlayer?.radar.m3, avg: posAvg.m3, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[2]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[2]] },
+    { skill: labels[3], key: roleKeys[3], primary: displayedPrimaryRadar.m4, comparison: displayedComparisonRadar?.m4, rawPrimaryPercentile: primaryPlayer.radar.m4, rawComparisonPercentile: comparisonPlayer?.radar.m4, avg: posAvg.m4, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[3]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[3]] },
+    { skill: labels[4], key: roleKeys[4], primary: displayedPrimaryRadar.m5, comparison: displayedComparisonRadar?.m5, rawPrimaryPercentile: primaryPlayer.radar.m5, rawComparisonPercentile: comparisonPlayer?.radar.m5, avg: posAvg.m5, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[4]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[4]] },
+    { skill: labels[5], key: roleKeys[5], primary: displayedPrimaryRadar.m6, comparison: displayedComparisonRadar?.m6, rawPrimaryPercentile: primaryPlayer.radar.m6, rawComparisonPercentile: comparisonPlayer?.radar.m6, avg: posAvg.m6, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[5]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[5]] },
   ].filter((item) =>
     item.primary !== null &&
     item.primary !== undefined &&
@@ -502,6 +516,14 @@ function DynamicRoleRadar({
       {primaryPlayer.scoutingEngine?.isLowSample && (
         <div className="mb-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[11px] text-amber-300">
           {t.lowSampleWarning}
+        </div>
+      )}
+      {primaryPlayer.scoutingEngine?.isLowSample && (
+        <div className="mb-2 flex items-center justify-between rounded-lg border border-sky-500/20 bg-sky-500/5 px-3 py-2 text-[10px]">
+          <span className="text-sky-300">{t.adjustedRadarLabel}</span>
+          <span className="font-mono text-zinc-400">
+            {Math.round((primaryPlayer.scoutingEngine.sampleWeight || 0) * 100)}% sample weight
+          </span>
         </div>
       )}
       <p className="text-[10px] text-zinc-500 mb-2">{t.radarPercentileNote}</p>
@@ -527,11 +549,15 @@ function DynamicRoleRadar({
                   <div className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs shadow-xl">
                     <div className="font-semibold text-zinc-100 mb-1">{row.skill}</div>
                     <div className="text-emerald-400">
-                      {primaryName}: {row.primary} pctl · {formatRoleMetricRaw(row.key, row.primaryRaw)}
+                      {primaryName}: {row.primary} pctl
+                      {row.rawPrimaryPercentile !== row.primary ? ` (raw ${row.rawPrimaryPercentile})` : ''}
+                      {' · '}{formatRoleMetricRaw(row.key, row.primaryRaw)}
                     </div>
                     {comparisonPlayer && comparisonName && (
                       <div className="text-sky-400">
-                        {comparisonName}: {row.comparison} pctl · {formatRoleMetricRaw(row.key, row.comparisonRaw)}
+                        {comparisonName}: {row.comparison} pctl
+                        {row.rawComparisonPercentile !== row.comparison ? ` (raw ${row.rawComparisonPercentile})` : ''}
+                        {' · '}{formatRoleMetricRaw(row.key, row.comparisonRaw)}
                       </div>
                     )}
                     {!comparisonPlayer && row.avg !== null && row.avg !== undefined && (
@@ -1558,7 +1584,13 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
+                <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 mb-4">
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+                    <span className="text-[10px] text-zinc-500 block">{t.rawRoleScoreLabel}</span>
+                    <strong className="text-lg text-zinc-300 font-mono">
+                      {selectedPlayer.scoutingEngine.rawRoleScore === null ? '—' : `${selectedPlayer.scoutingEngine.rawRoleScore}/100`}
+                    </strong>
+                  </div>
                   <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
                     <span className="text-[10px] text-zinc-500 block">{t.roleScoreLabel}</span>
                     <strong className="text-lg text-emerald-400 font-mono">
