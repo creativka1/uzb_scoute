@@ -220,7 +220,7 @@ const TRANSLATIONS = {
     changeOpponent: 'Raqibni o‘zgartirish:',
     close: 'Yopish',
     radarTitle: 'Rol radari',
-    radarPercentileNote: 'Chiziq uzunligi — protsentil. Har bir o‘qda real qiymat va P-protsentil ko‘rsatiladi.',
+    radarPercentileNote: 'Radar faqat barcha 6 rol metrikasi mavjud bo‘lsa chiziladi. Tafsilotlarni nuqta ustiga olib boring.',
     posAvgLabel: 'Amplua o‘rtachasi',
     metricLabel: 'Skauting profili',
     marketValue: 'Transfer narxi',
@@ -294,7 +294,8 @@ const TRANSLATIONS = {
     recruitmentPosition: 'Pozitsiya (manba)',
     recruitmentRole: 'O‘yin profili (hisoblangan)',
     recruitmentMaxAge: 'Maks. yosh',
-    recruitmentMaxBudget: 'Maks. byudjet (€)',
+    recruitmentMinBudget: 'Narxdan (€)',
+    recruitmentMaxBudget: 'Narxgacha (€)',
     recruitmentMinMinutes: 'Min. daqiqa',
     recruitmentMinRole: 'Min. rol reytingi',
     recruitmentMinAttack: 'Min. hujum hissasi',
@@ -318,7 +319,13 @@ const TRANSLATIONS = {
     minKeyPasses90: 'Min. xavfli paslar/90',
     minDribble: 'Min. dribling %',
     minPassAcc: 'Min. pas aniqligi %',
-    advancedMetrics: 'Rolga mos metrikalar',
+    advancedMetrics: 'Qo‘shimcha o‘yin metrikalari',
+    basicCriteria: 'Asosiy talablar',
+    setCriteriaPrompt: 'Shortlist ko‘rish uchun kamida bitta talab kiriting.',
+    incompleteRadarTitle: 'To‘liq radar uchun ma’lumot yetarli emas',
+    incompleteRadarText: 'Qisman radar chizilmaydi — bu noto‘g‘ri taassurot berishi mumkin.',
+    availableMetricsLabel: 'Mavjud',
+    missingMetricsShort: 'Yo‘q',
     sourceVsRoleHelp: 'Pozitsiya — manbadagi rasmiy kategoriya. O‘yin profili — platforma real metrikalardan hisoblagan rol.',
     missingMetricsLabel: 'Ma’lumot yetishmaydigan metrikalar',
   },
@@ -379,7 +386,7 @@ const TRANSLATIONS = {
     changeOpponent: 'Сменить соперника:',
     close: 'Закрыть',
     radarTitle: 'Ролевой радар',
-    radarPercentileNote: 'Длина луча — процентиль. На каждой оси показаны реальное значение и P-процентиль.',
+    radarPercentileNote: 'Радар строится только когда доступны все 6 ролевых метрик. Детали — при наведении на точку.',
     posAvgLabel: 'Среднее по позиции',
     metricLabel: 'Скаутский профиль',
     marketValue: 'Рыночная стоимость',
@@ -453,7 +460,8 @@ const TRANSLATIONS = {
     recruitmentPosition: 'Позиция (из источника)',
     recruitmentRole: 'Игровой профиль (расчёт)',
     recruitmentMaxAge: 'Макс. возраст',
-    recruitmentMaxBudget: 'Макс. бюджет (€)',
+    recruitmentMinBudget: 'Цена от (€)',
+    recruitmentMaxBudget: 'Цена до (€)',
     recruitmentMinMinutes: 'Мин. минут',
     recruitmentMinRole: 'Мин. ролевой рейтинг',
     recruitmentMinAttack: 'Мин. атакующий вклад',
@@ -477,7 +485,13 @@ const TRANSLATIONS = {
     minKeyPasses90: 'Мин. ключевых передач/90',
     minDribble: 'Мин. дриблинг %',
     minPassAcc: 'Мин. точность паса %',
-    advancedMetrics: 'Метрики под роль',
+    advancedMetrics: 'Дополнительные игровые метрики',
+    basicCriteria: 'Основные требования',
+    setCriteriaPrompt: 'Задайте хотя бы одно требование, чтобы сформировать shortlist.',
+    incompleteRadarTitle: 'Недостаточно данных для полного радара',
+    incompleteRadarText: 'Частичный радар не строится, чтобы не создавать ложное впечатление.',
+    availableMetricsLabel: 'Доступно',
+    missingMetricsShort: 'Нет',
     sourceVsRoleHelp: 'Позиция — официальная категория из источника. Игровой профиль — расчёт платформы по реальным метрикам.',
     missingMetricsLabel: 'Метрики без данных',
   },
@@ -605,20 +619,31 @@ function DynamicRoleRadar({
   );
 
   const avgLegend = `${t.posAvgLabel} (${getPosName(pos)})`;
-
-  const renderAxisTick = ({ payload, x, y, textAnchor }: any) => {
-    const row = chartData.find((item) => item.skill === payload.value);
-    if (!row) return null;
-    const raw = formatRoleMetricRaw(row.key, row.primaryRaw);
-    const pctl = row.primary ?? '—';
-
-    return (
-      <text x={x} y={y} textAnchor={textAnchor} fill="#e4e4e7" fontSize={10}>
-        <tspan x={x} dy="0" fontWeight="600">{row.skill}</tspan>
-        <tspan x={x} dy="13" fill="#a1a1aa">{raw} · P{pctl}</tspan>
-      </text>
-    );
-  };
+  const missingPrimaryIndexes = [0, 1, 2, 3, 4, 5].filter((index) => {
+    const value = [
+      displayedPrimaryRadar.m1,
+      displayedPrimaryRadar.m2,
+      displayedPrimaryRadar.m3,
+      displayedPrimaryRadar.m4,
+      displayedPrimaryRadar.m5,
+      displayedPrimaryRadar.m6,
+    ][index];
+    return value === null || value === undefined;
+  });
+  const missingComparisonIndexes = comparisonPlayer
+    ? [0, 1, 2, 3, 4, 5].filter((index) => {
+        const value = [
+          displayedComparisonRadar?.m1,
+          displayedComparisonRadar?.m2,
+          displayedComparisonRadar?.m3,
+          displayedComparisonRadar?.m4,
+          displayedComparisonRadar?.m5,
+          displayedComparisonRadar?.m6,
+        ][index];
+        return value === null || value === undefined;
+      })
+    : [];
+  const hasCompleteRadar = missingPrimaryIndexes.length === 0 && missingComparisonIndexes.length === 0;
 
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900/90 p-5 shadow-xl">
@@ -633,12 +658,12 @@ function DynamicRoleRadar({
       )}
       <p className="text-[10px] text-zinc-500 mb-2">{t.radarPercentileNote}</p>
       <div className="h-[280px] w-full">
-        {chartData.length >= 3 ? (
+        {hasCompleteRadar ? (
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart cx="50%" cy="50%" outerRadius="75%" data={chartData}>
             <PolarGrid stroke="#3f3f46" strokeDasharray="3 3" />
-            <PolarAngleAxis dataKey="skill" tick={renderAxisTick} />
-            <PolarRadiusAxis domain={[0, 100]} stroke="#52525b" tick={{ fill: '#a1a1aa', fontSize: 9 }} />
+            <PolarAngleAxis dataKey="skill" tick={{ fill: '#e4e4e7', fontSize: 10, fontWeight: 600 }} />
+            <PolarRadiusAxis domain={[0, 100]} stroke="#52525b" tick={false} axisLine={false} />
 
             <Radar name={primaryName} dataKey="primary" stroke="#10b981" fill="#10b981" fillOpacity={0.4} strokeWidth={2.5} />
             {comparisonPlayer && comparisonName ? (
@@ -654,16 +679,16 @@ function DynamicRoleRadar({
                   <div className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs shadow-xl">
                     <div className="font-semibold text-zinc-100 mb-1">{row.skill}</div>
                     <div className="text-emerald-400">
-                      {primaryName}: {formatRoleMetricRaw(row.key, row.primaryRaw)} · P{row.primary}
+                      {primaryName}: {formatRoleMetricRaw(row.key, row.primaryRaw)} · {lang === 'ru' ? 'процентиль' : 'protsentil'} {row.primary}
                     </div>
                     {comparisonPlayer && comparisonName && (
                       <div className="text-sky-400">
-                        {comparisonName}: {formatRoleMetricRaw(row.key, row.comparisonRaw)} · P{row.comparison}
+                        {comparisonName}: {formatRoleMetricRaw(row.key, row.comparisonRaw)} · {lang === 'ru' ? 'процентиль' : 'protsentil'} {row.comparison}
                       </div>
                     )}
                     {!comparisonPlayer && row.avg !== null && row.avg !== undefined && (
                       <div className="text-amber-400">
-                        {avgLegend}: P{row.avg}
+                        {avgLegend}: {lang === 'ru' ? 'процентиль' : 'protsentil'} {row.avg}
                       </div>
                     )}
                   </div>
@@ -674,8 +699,21 @@ function DynamicRoleRadar({
           </RadarChart>
         </ResponsiveContainer>
         ) : (
-          <div className="h-full flex items-center justify-center text-sm text-zinc-500">
-            {t.noMetricData}
+          <div className="h-full flex flex-col items-center justify-center px-6 text-center">
+            <div className="text-sm font-semibold text-zinc-200">{t.incompleteRadarTitle}</div>
+            <div className="mt-1 max-w-sm text-[11px] text-zinc-500">{t.incompleteRadarText}</div>
+            <div className="mt-4 flex flex-wrap justify-center gap-1.5 text-[10px]">
+              {missingPrimaryIndexes.map((index) => (
+                <span key={`primary-missing-${index}`} className="rounded border border-rose-500/20 bg-rose-500/5 px-2 py-1 text-rose-300">
+                  {labels[index]}: {t.missingMetricsShort}
+                </span>
+              ))}
+              {comparisonPlayer && missingComparisonIndexes.map((index) => (
+                <span key={`comparison-missing-${index}`} className="rounded border border-sky-500/20 bg-sky-500/5 px-2 py-1 text-sky-300">
+                  {comparisonName} · {labels[index]}: {t.missingMetricsShort}
+                </span>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -717,6 +755,7 @@ export default function Dashboard() {
   const [recruitmentPosition, setRecruitmentPosition] = useState<'all' | Position>('all');
   const [recruitmentRole, setRecruitmentRole] = useState<'all' | AnalyticalRole>('all');
   const [recruitmentMaxAge, setRecruitmentMaxAge] = useState('');
+  const [recruitmentMinBudget, setRecruitmentMinBudget] = useState('');
   const [recruitmentMaxBudget, setRecruitmentMaxBudget] = useState('');
   const [recruitmentMinMinutes, setRecruitmentMinMinutes] = useState('');
   const [recruitmentMinRoleScore, setRecruitmentMinRoleScore] = useState('');
@@ -889,8 +928,53 @@ export default function Dashboard() {
     return list;
   }, [players, searchQuery, filterLegionnaire, filterU21, filterContract, filterMinMinutes, filterClub, filterPosition, sortField, sortOrder, lang]);
 
+  const hasRecruitmentCriteria = useMemo(() => {
+    return (
+      recruitmentPosition !== 'all' ||
+      recruitmentRole !== 'all' ||
+      recruitmentFoot !== 'all' ||
+      recruitmentNationality !== 'all' ||
+      recruitmentMaxAge !== '' ||
+      recruitmentMinBudget !== '' ||
+      recruitmentMaxBudget !== '' ||
+      recruitmentMinMinutes !== '' ||
+      recruitmentMinRoleScore !== '' ||
+      recruitmentMinAttackScore !== '' ||
+      recruitmentMinGoals90 !== '' ||
+      recruitmentMinAssists90 !== '' ||
+      recruitmentMinShots90 !== '' ||
+      recruitmentMinKeyPasses90 !== '' ||
+      recruitmentMinDribble !== '' ||
+      recruitmentMinPassAcc !== '' ||
+      recruitmentExpiring ||
+      recruitmentReliableOnly
+    );
+  }, [
+    recruitmentPosition,
+    recruitmentRole,
+    recruitmentFoot,
+    recruitmentNationality,
+    recruitmentMaxAge,
+    recruitmentMinBudget,
+    recruitmentMaxBudget,
+    recruitmentMinMinutes,
+    recruitmentMinRoleScore,
+    recruitmentMinAttackScore,
+    recruitmentMinGoals90,
+    recruitmentMinAssists90,
+    recruitmentMinShots90,
+    recruitmentMinKeyPasses90,
+    recruitmentMinDribble,
+    recruitmentMinPassAcc,
+    recruitmentExpiring,
+    recruitmentReliableOnly,
+  ]);
+
   const recruitmentCandidates = useMemo(() => {
+    if (!hasRecruitmentCriteria) return [];
+
     const maxAge = recruitmentMaxAge === '' ? null : Number(recruitmentMaxAge);
+    const minBudget = recruitmentMinBudget === '' ? null : Number(recruitmentMinBudget);
     const maxBudget = recruitmentMaxBudget === '' ? null : Number(recruitmentMaxBudget);
     const minMinutes = recruitmentMinMinutes === '' ? null : Number(recruitmentMinMinutes);
     const minRole = recruitmentMinRoleScore === '' ? null : Number(recruitmentMinRoleScore);
@@ -911,6 +995,9 @@ export default function Dashboard() {
         if (recruitmentNationality === 'legionnaire' && !p.isLegionnaire) return false;
         if (maxAge !== null && Number.isFinite(maxAge) && p.age > maxAge) return false;
 
+        if (minBudget !== null && Number.isFinite(minBudget)) {
+          if (p.rawMarketValueEUR === null || p.rawMarketValueEUR < minBudget) return false;
+        }
         if (maxBudget !== null && Number.isFinite(maxBudget)) {
           if (p.rawMarketValueEUR === null || p.rawMarketValueEUR > maxBudget) return false;
         }
@@ -946,6 +1033,7 @@ export default function Dashboard() {
         if (recruitmentFoot !== 'all') reasons.push(getFootName(p.preferredFoot));
         if (recruitmentNationality !== 'all') reasons.push(p.isLegionnaire ? t.statusLegionnaire : t.statusLocal);
         if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(lang === 'ru' ? `Возраст ${p.age} ≤ ${maxAge}` : `Yosh ${p.age} ≤ ${maxAge}`);
+        if (minBudget !== null && Number.isFinite(minBudget) && p.rawMarketValueEUR !== null) reasons.push(`${p.marketValue} ≥ €${Math.round(minBudget / 1000)}k`);
         if (maxBudget !== null && Number.isFinite(maxBudget) && p.rawMarketValueEUR !== null) reasons.push(`${p.marketValue} ≤ €${Math.round(maxBudget / 1000)}k`);
         if (minMinutes !== null && Number.isFinite(minMinutes)) reasons.push(`${p.minutesPlayed}' ≥ ${minMinutes}'`);
         if (minRole !== null && Number.isFinite(minRole) && p.scoutingEngine?.roleScore !== null) reasons.push(lang === 'ru' ? `Ролевой рейтинг ${p.scoutingEngine.roleScore} ≥ ${minRole}` : `Rol reytingi ${p.scoutingEngine.roleScore} ≥ ${minRole}`);
@@ -966,13 +1054,14 @@ export default function Dashboard() {
         const scoreB = b.player.scoutingEngine?.roleScore ?? -1;
         if (scoreB !== scoreA) return scoreB - scoreA;
         return (b.player.scoutingEngine?.attackingScore ?? -1) - (a.player.scoutingEngine?.attackingScore ?? -1);
-      })
-      .slice(0, 10);
+      });
   }, [
     players,
+    hasRecruitmentCriteria,
     recruitmentPosition,
     recruitmentRole,
     recruitmentMaxAge,
+    recruitmentMinBudget,
     recruitmentMaxBudget,
     recruitmentMinMinutes,
     recruitmentMinRoleScore,
@@ -1406,6 +1495,7 @@ export default function Dashboard() {
               setRecruitmentPosition('all');
               setRecruitmentRole('all');
               setRecruitmentMaxAge('');
+              setRecruitmentMinBudget('');
               setRecruitmentMaxBudget('');
               setRecruitmentMinMinutes('');
               setRecruitmentMinRoleScore('');
@@ -1427,6 +1517,7 @@ export default function Dashboard() {
           </button>
         </div>
 
+        <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-2">{t.basicCriteria}</div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
           <div>
             <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentPosition}</label>
@@ -1481,6 +1572,12 @@ export default function Dashboard() {
           </div>
 
           <div>
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentMinBudget}</label>
+            <input type="number" min="0" step="25000" value={recruitmentMinBudget} onChange={(e) => setRecruitmentMinBudget(e.target.value)}
+              placeholder="—" className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white" />
+          </div>
+
+          <div>
             <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentMaxBudget}</label>
             <input type="number" min="0" step="25000" value={recruitmentMaxBudget} onChange={(e) => setRecruitmentMaxBudget(e.target.value)}
               placeholder="—" className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white" />
@@ -1518,9 +1615,11 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-950/35 p-3">
-          <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-2">{t.advancedMetrics}</div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+        <details className="mt-4 rounded-lg border border-zinc-800 bg-zinc-950/35">
+          <summary className="cursor-pointer px-3 py-3 text-[10px] uppercase tracking-wider text-zinc-400 hover:text-zinc-200">
+            {t.advancedMetrics}
+          </summary>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 px-3 pb-3">
             {recruitmentPosition !== 'GK' && (
               <>
                 <input type="number" step="0.01" min="0" value={recruitmentMinGoals90} onChange={(e) => setRecruitmentMinGoals90(e.target.value)} placeholder={t.minGoals90}
@@ -1538,7 +1637,7 @@ export default function Dashboard() {
             <input type="number" step="1" min="0" max="100" value={recruitmentMinPassAcc} onChange={(e) => setRecruitmentMinPassAcc(e.target.value)} placeholder={t.minPassAcc}
               className="rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white placeholder-zinc-600" />
           </div>
-        </div>
+        </details>
 
         <div className="mt-5 pt-4 border-t border-zinc-800">
           <div className="flex items-center justify-between mb-3">
@@ -1546,7 +1645,11 @@ export default function Dashboard() {
             <span className="text-[11px] font-mono text-sky-400">{recruitmentCandidates.length}</span>
           </div>
 
-          {recruitmentCandidates.length === 0 ? (
+          {!hasRecruitmentCriteria ? (
+            <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-5 text-center text-xs text-zinc-500">
+              {t.setCriteriaPrompt}
+            </div>
+          ) : recruitmentCandidates.length === 0 ? (
             <div className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-5 text-center text-xs text-zinc-500">
               {t.noShortlist}
             </div>
@@ -2030,15 +2133,21 @@ export default function Dashboard() {
 
                   {/* 4. ПЛАШКИ DF */}
                   {selectedPlayer.position === 'DF' && (
-                    <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.matchesPlayed}</span>
                         <span className="text-base font-bold text-white font-mono mt-0.5 block">{selectedPlayer.matchesPlayed} {t.matchWord}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
-                        <span className="text-zinc-500 text-[11px] block">{t.tacklesInterceptions}</span>
+                        <span className="text-zinc-500 text-[11px] block">{t.tacklesOnly}/90</span>
                         <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">
-                          {selectedPlayer.tackles || 0} / {selectedPlayer.interceptions || 0}
+                          {selectedPlayer.roleMetrics?.tacklesPer90 == null ? '—' : selectedPlayer.roleMetrics.tacklesPer90.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
+                        <span className="text-zinc-500 text-[11px] block">{t.interceptionsOnly}/90</span>
+                        <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">
+                          {selectedPlayer.roleMetrics?.interceptionsPer90 == null ? '—' : selectedPlayer.roleMetrics.interceptionsPer90.toFixed(2)}
                         </span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
@@ -2048,6 +2157,10 @@ export default function Dashboard() {
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.aerialPct}</span>
                         <span className="text-base font-bold text-sky-400 font-mono mt-0.5 block">{selectedPlayer.aerialWinRate === null ? '—' : `${selectedPlayer.aerialWinRate}%`}</span>
+                      </div>
+                      <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
+                        <span className="text-zinc-500 text-[11px] block">{t.passAccPct}</span>
+                        <span className="text-base font-bold text-white font-mono mt-0.5 block">{selectedPlayer.passAccPct === null ? '—' : `${selectedPlayer.passAccPct}%`}</span>
                       </div>
                     </div>
                   )}
@@ -2064,7 +2177,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* ЭТАП 3: СКАУТСКИЙ ДВИЖОК */}
+            {/* СКАУТСКИЙ ПРОФИЛЬ */}
             {selectedPlayer.scoutingEngine && (
               <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-900/80 p-5 shadow-xl">
                 <div className="flex items-center gap-2 border-b border-zinc-800 pb-3 mb-4">
