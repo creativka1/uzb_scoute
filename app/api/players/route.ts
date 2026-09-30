@@ -292,7 +292,7 @@ export async function GET(req: NextRequest) {
           height: p.height ?? null,
           preferredFoot: p.preferredFoot || 'Unknown',
           contractUntil: p.contractUntil || '—',
-          statsSeasonType,
+          statsSeasonType: p.statsSeasonType,
           marketValue: marketVal.formatted,
           rawMarketValueEUR: marketVal.raw,
           photoUrl: `https://api.sofascore.com/api/v1/player/${p.sofaId}/image`,
