@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """
-Audit whether SofaScore has enough spatial data for detailed player positions
-in Uzbekistan Superliga.
+Audit whether the SofaScore data already cached in this repository is sufficient
+to support more detailed football positions for Uzbekistan Superliga.
 
-The audit does NOT assign LB/RB/DM/CM/AM/LW/RW/ST to any player.
-It only measures coverage of:
-- lineups + formation
-- average positions
-- player heatmaps
+Important:
+- This script does NOT assign LB/RB/DM/CM/AM/LW/RW/ST to players.
+- It checks only source-backed signals already present in the repo:
+  * confirmed match lineups
+  * team formation
+  * complete starting XI
+  * broad lineup positions (G/D/M/F)
+  * SofaScore's hasEventPlayerHeatMap flag on the event
 
-It uses the UZB match cache already committed in the repo so we do not invent
-or guess event IDs.
+Why cache-only?
+Direct SofaScore event endpoints may return HTTP 403 from GitHub-hosted runners.
+The repository already contains the same match lineups collected by the existing
+sync pipeline, so this audit avoids treating access blocking as "missing data".
 
 Output:
   data/audits/sofascore_position_coverage.json
@@ -21,45 +26,24 @@ from __future__ import annotations
 import argparse
 import glob
 import json
-import time
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-from curl_cffi import requests
-
-BASE = "https://api.sofascore.com/api/v1"
-SESSION = requests.Session(impersonate="chrome120")
 
 
-def fetch_json(path: str, retries: int = 3) -> Any:
-    url = f"{BASE}/{path.lstrip('/')}"
-    last_error: Exception | None = None
-    for attempt in range(retries):
-        try:
-            response = SESSION.get(
-                url,
-                headers={
-                    "Accept": "application/json,text/plain,*/*",
-                    "Referer": "https://www.sofascore.com/",
-                },
-                timeout=30,
-            )
-            response.raise_for_status()
-            return response.json()
-        except Exception as exc:
-            last_error = exc
-            if attempt + 1 < retries:
-                time.sleep(1.0 * (attempt + 1))
-    raise RuntimeError(f"Failed GET {url}: {last_error}")
+def pct(num: int, den: int) -> float:
+    return round(num / den * 100.0, 1) if den else 0.0
 
 
 def cached_uzb_events() -> list[dict[str, Any]]:
-    events: dict[str, dict[str, Any]] = {}
+    events: dict[int, dict[str, Any]] = {}
     for filename in glob.glob("data/cache/seasons/matches_UZB_*.json"):
         try:
             payload = json.loads(Path(filename).read_text(encoding="utf-8"))
         except Exception:
             continue
+
         rows = payload.get("events") or payload.get("matches") or []
         for event in rows:
             if not isinstance(event, dict):
@@ -67,9 +51,10 @@ def cached_uzb_events() -> list[dict[str, Any]]:
             if event.get("status", {}).get("type") != "finished":
                 continue
             event_id = event.get("id")
-            if event_id is None:
+            if not isinstance(event_id, int):
                 continue
-            events[str(event_id)] = event
+            events[event_id] = event
+
     return sorted(
         events.values(),
         key=lambda e: int(e.get("startTimestamp") or 0),
@@ -77,97 +62,59 @@ def cached_uzb_events() -> list[dict[str, Any]]:
     )
 
 
-def side_players(lineups: dict[str, Any], side: str) -> list[dict[str, Any]]:
-    obj = lineups.get(side)
-    if not isinstance(obj, dict):
+def starters(side: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = side.get("players") if isinstance(side, dict) else None
+    if not isinstance(rows, list):
         return []
-    players = obj.get("players")
-    return [p for p in players if isinstance(p, dict)] if isinstance(players, list) else []
+    return [
+        p for p in rows
+        if isinstance(p, dict) and p.get("substitute") is not True
+    ]
 
 
-def starter_rows(lineups: dict[str, Any]) -> list[dict[str, Any]]:
-    result: list[dict[str, Any]] = []
-    for side in ("home", "away"):
-        for item in side_players(lineups, side):
-            # SofaScore uses substitute=false for starters in match lineups.
-            if item.get("substitute") is True:
-                continue
-            player = item.get("player") or {}
-            pid = player.get("id")
-            if pid is None:
-                continue
-            result.append(
-                {
-                    "side": side,
-                    "playerId": int(pid),
-                    "name": player.get("name"),
-                    "broadPosition": item.get("position") or player.get("position"),
-                    "minutesPlayed": (item.get("statistics") or {}).get("minutesPlayed"),
-                }
-            )
-    return result
+def broad_position(item: dict[str, Any]) -> str:
+    player = item.get("player") or {}
+    return str(item.get("position") or player.get("position") or "?")
 
 
-def normalize_average_positions(payload: Any) -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    if not isinstance(payload, dict):
-        return rows
-
-    for side in ("home", "away"):
-        side_rows = payload.get(side)
-        if not isinstance(side_rows, list):
-            continue
-        for item in side_rows:
-            if not isinstance(item, dict):
-                continue
-            player = item.get("player") or {}
-            pid = player.get("id")
-            # Common SofaScore shape exposes averageX/averageY.
-            x = item.get("averageX")
-            y = item.get("averageY")
-            if x is None:
-                x = item.get("x")
-            if y is None:
-                y = item.get("y")
-            if pid is None or not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
-                continue
-            rows.append(
-                {
-                    "side": side,
-                    "playerId": int(pid),
-                    "name": player.get("name"),
-                    "x": float(x),
-                    "y": float(y),
-                }
-            )
-    return rows
+def formation_expected_counts(formation: str | None) -> tuple[int, ...] | None:
+    if not formation:
+        return None
+    try:
+        parts = tuple(int(x) for x in formation.split("-"))
+    except ValueError:
+        return None
+    return parts if sum(parts) == 10 else None
 
 
-def choose_heatmap_sample(starters: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
-    """Prefer outfield players and spread sample across broad D/M/F groups."""
-    chosen: list[dict[str, Any]] = []
-    for code in ("D", "M", "F"):
-        for row in starters:
-            if row.get("broadPosition") == code and row not in chosen:
-                chosen.append(row)
-                if len(chosen) >= limit:
-                    return chosen
-    for row in starters:
-        if row.get("broadPosition") != "G" and row not in chosen:
-            chosen.append(row)
-            if len(chosen) >= limit:
-                break
-    return chosen
+def broad_counts_match_formation(
+    formation: str | None,
+    xi: list[dict[str, Any]],
+) -> bool | None:
+    expected = formation_expected_counts(formation)
+    if expected is None or len(xi) != 11:
+        return None
 
+    counts = Counter(broad_position(p) for p in xi)
+    # Formation lines after goalkeeper map to SofaScore's broad categories.
+    # A 4-2-3-1, for example, can be represented as 4 D, 5 M, 1 F.
+    # We therefore compare total D/M/F count against formation line totals,
+    # not individual LB/RB/etc slots.
+    defenders = expected[0]
+    forwards = expected[-1]
+    midfielders = 10 - defenders - forwards
 
-def pct(num: int, den: int) -> float:
-    return round((num / den * 100.0), 1) if den else 0.0
+    return (
+        counts.get("G", 0) == 1
+        and counts.get("D", 0) == defenders
+        and counts.get("M", 0) == midfielders
+        and counts.get("F", 0) == forwards
+    )
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--matches", type=int, default=30)
-    parser.add_argument("--heatmaps-per-match", type=int, default=4)
     parser.add_argument(
         "--output",
         default="data/audits/sofascore_position_coverage.json",
@@ -176,168 +123,148 @@ def main() -> None:
 
     events = cached_uzb_events()[: args.matches]
     if not events:
-        raise RuntimeError("No cached finished UZB events found in data/cache/seasons.")
+        raise RuntimeError("No cached finished UZB events found.")
 
-    results: list[dict[str, Any]] = []
-    errors: list[dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
 
-    total_starters = 0
-    total_avg_positions = 0
-    heatmap_requests = 0
-    heatmap_success = 0
-    heatmap_points = 0
-    broad_position_counts: dict[str, int] = {}
+    lineup_cached = 0
+    confirmed = 0
+    both_formations = 0
+    complete_xi = 0
+    heatmap_flag = 0
+    formation_side_total = 0
+    formation_side_consistent = 0
+    formation_counter: Counter[str] = Counter()
 
-    for index, event in enumerate(events, start=1):
-        event_id = int(event["id"])
-        home = (event.get("homeTeam") or {}).get("name", "?")
-        away = (event.get("awayTeam") or {}).get("name", "?")
+    for event in events:
+        event_id = event["id"]
+        lineup_path = Path(f"data/cache/lineups/{event_id}.json")
+        has_heatmap = event.get("hasEventPlayerHeatMap") is True
+        if has_heatmap:
+            heatmap_flag += 1
 
         row: dict[str, Any] = {
             "eventId": event_id,
-            "match": f"{home} vs {away}",
-            "lineups": False,
-            "formations": {"home": None, "away": None},
-            "starters": 0,
-            "averagePositions": 0,
-            "heatmapsChecked": 0,
-            "heatmapsAvailable": 0,
-            "heatmapPoints": 0,
+            "match": (
+                f"{(event.get('homeTeam') or {}).get('name', '?')} vs "
+                f"{(event.get('awayTeam') or {}).get('name', '?')}"
+            ),
+            "hasEventPlayerHeatMap": has_heatmap,
+            "lineupCached": lineup_path.exists(),
+            "confirmed": False,
+            "homeFormation": None,
+            "awayFormation": None,
+            "homeStarters": 0,
+            "awayStarters": 0,
         }
 
-        try:
-            lineups = fetch_json(f"event/{event_id}/lineups")
-            home_players = side_players(lineups, "home")
-            away_players = side_players(lineups, "away")
-            row["lineups"] = bool(home_players and away_players)
-            row["formations"] = {
-                "home": (lineups.get("home") or {}).get("formation"),
-                "away": (lineups.get("away") or {}).get("formation"),
-            }
+        if not lineup_path.exists():
+            rows.append(row)
+            continue
 
-            starters = starter_rows(lineups)
-            row["starters"] = len(starters)
-            total_starters += len(starters)
+        lineup_cached += 1
+        lineup = json.loads(lineup_path.read_text(encoding="utf-8"))
+        if lineup.get("confirmed") is True:
+            confirmed += 1
+            row["confirmed"] = True
 
-            for starter in starters:
-                code = str(starter.get("broadPosition") or "?")
-                broad_position_counts[code] = broad_position_counts.get(code, 0) + 1
+        home = lineup.get("home") or {}
+        away = lineup.get("away") or {}
+        hf = home.get("formation")
+        af = away.get("formation")
+        row["homeFormation"] = hf
+        row["awayFormation"] = af
 
-            try:
-                avg_payload = fetch_json(f"event/{event_id}/average-positions")
-                avg_rows = normalize_average_positions(avg_payload)
-                starter_ids = {s["playerId"] for s in starters}
-                avg_starters = [p for p in avg_rows if p["playerId"] in starter_ids]
-                row["averagePositions"] = len(avg_starters)
-                total_avg_positions += len(avg_starters)
-            except Exception as exc:
-                row["averagePositionsError"] = str(exc)
+        if hf:
+            formation_counter[str(hf)] += 1
+        if af:
+            formation_counter[str(af)] += 1
+        if hf and af:
+            both_formations += 1
 
-            for starter in choose_heatmap_sample(starters, args.heatmaps_per_match):
-                heatmap_requests += 1
-                row["heatmapsChecked"] += 1
-                try:
-                    hm = fetch_json(
-                        f"event/{event_id}/player/{starter['playerId']}/heatmap"
-                    )
-                    points = hm.get("heatmap") if isinstance(hm, dict) else None
-                    if isinstance(points, list) and points:
-                        valid_points = [
-                            p
-                            for p in points
-                            if isinstance(p, dict)
-                            and isinstance(p.get("x"), (int, float))
-                            and isinstance(p.get("y"), (int, float))
-                        ]
-                        if valid_points:
-                            heatmap_success += 1
-                            row["heatmapsAvailable"] += 1
-                            heatmap_points += len(valid_points)
-                            row["heatmapPoints"] += len(valid_points)
-                except Exception:
-                    pass
-                time.sleep(0.05)
+        hxi = starters(home)
+        axi = starters(away)
+        row["homeStarters"] = len(hxi)
+        row["awayStarters"] = len(axi)
+        if len(hxi) == 11 and len(axi) == 11:
+            complete_xi += 1
 
-            print(
-                f"[{index:02d}/{len(events)}] {row['match']}: "
-                f"lineups={row['lineups']} formations={row['formations']} "
-                f"starters={row['starters']} avg={row['averagePositions']} "
-                f"heatmaps={row['heatmapsAvailable']}/{row['heatmapsChecked']}"
-            )
-            results.append(row)
-        except Exception as exc:
-            errors.append({"eventId": event_id, "match": row["match"], "error": str(exc)})
-            print(f"[{index:02d}/{len(events)}] ERROR {event_id}: {exc}")
+        for formation, xi in ((hf, hxi), (af, axi)):
+            consistency = broad_counts_match_formation(formation, xi)
+            if consistency is not None:
+                formation_side_total += 1
+                if consistency:
+                    formation_side_consistent += 1
 
-        time.sleep(0.1)
+        rows.append(row)
 
-    analyzed = len(results)
-    lineup_matches = sum(1 for r in results if r["lineups"])
-    both_formations = sum(
-        1
-        for r in results
-        if r["formations"].get("home") and r["formations"].get("away")
-    )
-    matches_with_avg = sum(1 for r in results if r["averagePositions"] > 0)
+    n = len(events)
 
     report = {
-        "source": "SofaScore public web endpoints",
+        "source": "SofaScore data already cached by this repository",
         "league": "Uzbekistan Superliga",
         "generatedAt": datetime.now(timezone.utc).isoformat(),
-        "requestedMatches": args.matches,
-        "matchesAnalyzed": analyzed,
-        "errors": errors,
+        "matchesChecked": n,
         "coverage": {
-            "matchesWithBothLineups": {
-                "count": lineup_matches,
-                "total": analyzed,
-                "percent": pct(lineup_matches, analyzed),
+            "cachedLineups": {
+                "count": lineup_cached,
+                "total": n,
+                "percent": pct(lineup_cached, n),
             },
-            "matchesWithBothFormations": {
+            "confirmedLineups": {
+                "count": confirmed,
+                "total": n,
+                "percent": pct(confirmed, n),
+            },
+            "bothTeamFormations": {
                 "count": both_formations,
-                "total": analyzed,
-                "percent": pct(both_formations, analyzed),
+                "total": n,
+                "percent": pct(both_formations, n),
             },
-            "matchesWithAveragePositions": {
-                "count": matches_with_avg,
-                "total": analyzed,
-                "percent": pct(matches_with_avg, analyzed),
+            "completeStartingXI": {
+                "count": complete_xi,
+                "total": n,
+                "percent": pct(complete_xi, n),
             },
-            "starterAveragePositionCoverage": {
-                "count": total_avg_positions,
-                "total": total_starters,
-                "percent": pct(total_avg_positions, total_starters),
+            "matchesFlaggedWithPlayerHeatmaps": {
+                "count": heatmap_flag,
+                "total": n,
+                "percent": pct(heatmap_flag, n),
             },
-            "sampledHeatmapCoverage": {
-                "count": heatmap_success,
-                "total": heatmap_requests,
-                "percent": pct(heatmap_success, heatmap_requests),
-                "totalPoints": heatmap_points,
+            "formationVsBroadPositionConsistency": {
+                "count": formation_side_consistent,
+                "total": formation_side_total,
+                "percent": pct(formation_side_consistent, formation_side_total),
             },
-            "broadLineupPositions": broad_position_counts,
+            "formations": dict(formation_counter.most_common()),
         },
-        "interpretation": {
-            "averagePositionsUsefulForDetailedPosition": (
-                pct(total_avg_positions, total_starters) >= 80
-                and pct(both_formations, analyzed) >= 80
+        "conclusion": {
+            "detailedPositionsPotentiallyFeasible": (
+                pct(both_formations, n) >= 80
+                and pct(heatmap_flag, n) >= 80
+                and pct(complete_xi, n) >= 80
             ),
-            "heatmapsUsefulAsSupportingEvidence": pct(heatmap_success, heatmap_requests) >= 70,
-            "note": (
-                "Average positions + formation are preferred for LB/RB/DM/CM/AM/LW/RW/ST. "
-                "Heatmaps should support the classification, not determine it alone."
+            "recommendedMethod": (
+                "Use confirmed formation + repeated match lineups as the base. "
+                "Use average-position/heatmap coordinates only to resolve left/right "
+                "and role depth. Never infer LB/RB/LW/RW from preferred foot alone."
+            ),
+            "heatmapCaveat": (
+                "A heatmap alone is not an official position: players roam, press, "
+                "take set pieces and switch sides. Aggregate several matches."
             ),
         },
-        "matches": results,
+        "matches": rows,
     }
 
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print("\n=== SOFASCORE POSITION COVERAGE ===")
+    print("=== SOFASCORE CACHED POSITION COVERAGE ===")
     print(json.dumps(report["coverage"], ensure_ascii=False, indent=2))
-    print("\nInterpretation:")
-    print(json.dumps(report["interpretation"], ensure_ascii=False, indent=2))
+    print("\nConclusion:")
+    print(json.dumps(report["conclusion"], ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
