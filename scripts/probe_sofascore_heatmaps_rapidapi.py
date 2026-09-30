@@ -107,6 +107,34 @@ def valid_heatmap_points(payload: Any) -> list[dict[str, Any]]:
     ]
 
 
+def fetch_heatmap(session, headers, match_id: int, player_id: int):
+    last_status = None
+    for attempt in range(4):
+        response = session.get(
+            ENDPOINT,
+            headers=headers,
+            params={"matchId": match_id, "playerId": player_id},
+            timeout=30,
+        )
+        last_status = response.status_code
+
+        if response.status_code == 200:
+            return response.status_code, response.json()
+
+        if response.status_code == 429:
+            retry_after = response.headers.get("Retry-After")
+            try:
+                wait = max(2.0, float(retry_after)) if retry_after else 3.0 * (attempt + 1)
+            except Exception:
+                wait = 3.0 * (attempt + 1)
+            time.sleep(wait)
+            continue
+
+        return response.status_code, None
+
+    return last_status or 0, None
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--matches", type=int, default=10)
@@ -147,18 +175,12 @@ def main() -> None:
             checked += 1
 
             try:
-                response = session.get(
-                    ENDPOINT,
-                    headers=headers,
-                    params={
-                        "matchId": event["id"],
-                        "playerId": player["playerId"],
-                    },
-                    timeout=30,
+                status, payload = fetch_heatmap(
+                    session,
+                    headers,
+                    event["id"],
+                    player["playerId"],
                 )
-
-                status = response.status_code
-                payload = response.json() if status == 200 else None
                 points = valid_heatmap_points(payload)
 
                 row = {
@@ -197,7 +219,7 @@ def main() -> None:
                     }
                 )
 
-            time.sleep(0.1)
+            time.sleep(1.5)
 
     report = {
         "source": "SofaScore via RapidAPI",
