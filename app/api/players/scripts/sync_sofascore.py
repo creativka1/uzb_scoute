@@ -7,7 +7,13 @@ from curl_cffi import requests
 
 # Конфигурация шлюза RapidAPI
 RAPIDAPI_HOST = "sofascore.p.rapidapi.com"
-RAPIDAPI_KEY = "d859b78cadmshfbf9a5b1d1a25bdp1b5d9ajsnab0015b3dc1f"
+RAPIDAPI_KEY = os.environ.get("RAPIDAPI_KEY", "").strip()
+
+if not RAPIDAPI_KEY:
+    raise RuntimeError(
+        "RAPIDAPI_KEY is not set. Add it as an environment variable "
+        "or GitHub Actions repository secret; do not commit the key to the repo."
+    )
 
 # Выбираем лигу для текущей загрузки (сейчас KAZ, потом можно сменить на UZB)
 TARGET_TOURNAMENTS = [
