@@ -142,7 +142,7 @@ export async function GET(req: NextRequest) {
       if (!stats || !stats.minutesPlayed) return;
 
       const pos: Position = p.position || 'MF';
-      playersByPos[pos].push({ ...p, stats, roleMetrics: roleMetrics(pos, stats) });
+      playersByPos[pos].push({ ...p, stats, statsSeasonType, roleMetrics: roleMetrics(pos, stats) });
     });
 
     const enrichedPlayers: any[] = [];
