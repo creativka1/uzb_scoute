@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: sofascore-heatmap-probe
+  cancel-in-progress: true
+
 jobs:
   probe:
     runs-on: ubuntu-latest
@@ -31,7 +35,7 @@ jobs:
         run: pip install curl_cffi
 
       - name: Probe SofaScore player heatmaps
-        run: python scripts/probe_sofascore_heatmaps_rapidapi.py --matches 10 --players-per-match 3
+        run: python scripts/probe_sofascore_heatmaps_rapidapi.py --matches 1 --players-per-match 6
 
       - name: Upload probe report
         if: always()
