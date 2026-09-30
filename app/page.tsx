@@ -28,6 +28,7 @@ import {
 
 type Position = 'FW' | 'MF' | 'DF' | 'GK';
 type AnalyticalRole = 'GOALKEEPER' | 'DEFENDER' | 'MIDFIELDER' | 'ATTACKING_MIDFIELDER' | 'FORWARD';
+type DetailedPosition = 'GK' | 'RB' | 'CB' | 'LB' | 'RWB' | 'LWB' | 'DM' | 'CM' | 'AM' | 'RM' | 'LM' | 'RW' | 'LW' | 'ST';
 type Language = 'uz' | 'ru';
 type League = 'UZB' | 'KAZ';
 type SeasonMode = 'current' | 'two';
@@ -83,6 +84,15 @@ interface Player {
   analyticalRole: AnalyticalRole;
   analyticalRoleIsCalculated: boolean;
   analyticalRoleBasis: string;
+  detailedPosition: DetailedPosition | null;
+  detailedPositionConfidence: 'low' | 'medium' | 'high' | null;
+  detailedPositionStartsUsed: number;
+  detailedPositionPrimaryShare: number | null;
+  detailedPositionDistribution: Record<string, number>;
+  detailedPositionSecondary: { position: DetailedPosition; starts: number; share: number }[];
+  detailedPositionHeatmapMatchesAvailable: number;
+  detailedPositionHeatmapMatchesValidated: number;
+  detailedPositionMethod: string | null;
   number: number | null;
   height: number | null;
   preferredFoot: 'Right' | 'Left' | 'Both' | string;
@@ -274,6 +284,26 @@ const TRANSLATIONS = {
     sampleWeightLabel: 'Tanlov og‘irligi',
     sourcePositionLabel: 'Manba pozitsiyasi',
     analyticalRoleLabel: 'Analitik rol',
+    detailedPositionLabel: 'Aniq pozitsiya',
+    detailedPositionNoData: 'Yetarli ma’lumot yo‘q',
+    detailedPositionStarts: 'start',
+    detailedPositionHeatmap: 'issiqlik xaritasi',
+    recruitmentDetailedPosition: 'Aniq pozitsiya (o‘yinlardan)',
+    allDetailedPositions: 'Barcha aniq pozitsiyalar',
+    dposGK: 'Darvozabon',
+    dposRB: 'O‘ng himoyachi',
+    dposCB: 'Markaziy himoyachi',
+    dposLB: 'Chap himoyachi',
+    dposRWB: 'O‘ng qanot himoyachisi',
+    dposLWB: 'Chap qanot himoyachisi',
+    dposDM: 'Tayanch yarim himoyachi',
+    dposCM: 'Markaziy yarim himoyachi',
+    dposAM: 'Hujumkor yarim himoyachi',
+    dposRM: 'O‘ng yarim himoyachi',
+    dposLM: 'Chap yarim himoyachi',
+    dposRW: 'O‘ng vinger',
+    dposLW: 'Chap vinger',
+    dposST: 'Markaziy hujumchi',
     roleGK: 'Darvozabon',
     roleDF: 'Himoyachi',
     roleMF: 'Yarim himoyachi',
@@ -320,7 +350,7 @@ const TRANSLATIONS = {
     playerProfileLegend: 'Futbolchi',
     positionAverageLegend: 'Pozitsiya o‘rtachasi',
     percentileMeaning: 'pozitsiyada',
-    sourceVsRoleHelp: 'Pozitsiya — manbadagi rasmiy kategoriya. O‘yin profili — platforma real metrikalardan hisoblagan rol.',
+    sourceVsRoleHelp: 'Manba pozitsiyasi — umumiy kategoriya. Aniq pozitsiya tasdiqlangan tarkib va o‘yin sxemasidan hisoblanadi; mavjud bo‘lsa issiqlik xaritasi yon tomonni tekshiradi.',
     missingMetricsLabel: 'Ma’lumot yetishmaydigan metrikalar',
     liveLabel: 'JONLI',
     seasonCurrentShort: '1 MAVSUM',
@@ -452,6 +482,26 @@ const TRANSLATIONS = {
     sampleWeightLabel: 'Вес выборки',
     sourcePositionLabel: 'Позиция источника',
     analyticalRoleLabel: 'Аналитическая роль',
+    detailedPositionLabel: 'Точная позиция',
+    detailedPositionNoData: 'Недостаточно данных',
+    detailedPositionStarts: 'стартов',
+    detailedPositionHeatmap: 'тепловая карта',
+    recruitmentDetailedPosition: 'Точная позиция (по матчам)',
+    allDetailedPositions: 'Все точные позиции',
+    dposGK: 'Вратарь',
+    dposRB: 'Правый защитник',
+    dposCB: 'Центральный защитник',
+    dposLB: 'Левый защитник',
+    dposRWB: 'Правый латераль',
+    dposLWB: 'Левый латераль',
+    dposDM: 'Опорный полузащитник',
+    dposCM: 'Центральный полузащитник',
+    dposAM: 'Атакующий полузащитник',
+    dposRM: 'Правый полузащитник',
+    dposLM: 'Левый полузащитник',
+    dposRW: 'Правый вингер',
+    dposLW: 'Левый вингер',
+    dposST: 'Центральный нападающий',
     roleGK: 'Вратарь',
     roleDF: 'Защитник',
     roleMF: 'Полузащитник',
@@ -498,7 +548,7 @@ const TRANSLATIONS = {
     playerProfileLegend: 'Игрок',
     positionAverageLegend: 'Среднее по позиции',
     percentileMeaning: 'по позиции',
-    sourceVsRoleHelp: 'Позиция — официальная категория из источника. Игровой профиль — расчёт платформы по реальным метрикам.',
+    sourceVsRoleHelp: 'Позиция источника — общая категория. Точная позиция рассчитывается по подтверждённому составу и схеме матча; при наличии тепловая карта проверяет сторону поля.',
     missingMetricsLabel: 'Метрики без данных',
     liveLabel: 'ОНЛАЙН',
     seasonCurrentShort: '1 СЕЗОН',
@@ -758,7 +808,7 @@ export default function Dashboard() {
 
   // ЭТАП 4: RECRUITMENT ENGINE
   const [recruitmentPosition, setRecruitmentPosition] = useState<'all' | Position>('all');
-  const [recruitmentRole, setRecruitmentRole] = useState<'all' | AnalyticalRole>('all');
+  const [recruitmentDetailedPosition, setRecruitmentDetailedPosition] = useState<'all' | DetailedPosition>('all');
   const [recruitmentMaxAge, setRecruitmentMaxAge] = useState('');
   const [recruitmentMinBudget, setRecruitmentMinBudget] = useState('');
   const [recruitmentMaxBudget, setRecruitmentMaxBudget] = useState('');
@@ -816,6 +866,26 @@ export default function Dashboard() {
       case 'MIDFIELDER': return t.roleMF;
       case 'ATTACKING_MIDFIELDER': return t.roleAM;
       case 'FORWARD': return t.roleFW;
+    }
+  };
+
+  const getDetailedPositionName = (position: DetailedPosition | null) => {
+    switch (position) {
+      case 'GK': return t.dposGK;
+      case 'RB': return t.dposRB;
+      case 'CB': return t.dposCB;
+      case 'LB': return t.dposLB;
+      case 'RWB': return t.dposRWB;
+      case 'LWB': return t.dposLWB;
+      case 'DM': return t.dposDM;
+      case 'CM': return t.dposCM;
+      case 'AM': return t.dposAM;
+      case 'RM': return t.dposRM;
+      case 'LM': return t.dposLM;
+      case 'RW': return t.dposRW;
+      case 'LW': return t.dposLW;
+      case 'ST': return t.dposST;
+      default: return t.detailedPositionNoData;
     }
   };
 
@@ -957,7 +1027,7 @@ export default function Dashboard() {
   const hasRecruitmentCriteria = useMemo(() => {
     return (
       recruitmentPosition !== 'all' ||
-      recruitmentRole !== 'all' ||
+      recruitmentDetailedPosition !== 'all' ||
       recruitmentFoot !== 'all' ||
       recruitmentNationality !== 'all' ||
       recruitmentMaxAge !== '' ||
@@ -977,7 +1047,7 @@ export default function Dashboard() {
     );
   }, [
     recruitmentPosition,
-    recruitmentRole,
+    recruitmentDetailedPosition,
     recruitmentFoot,
     recruitmentNationality,
     recruitmentMaxAge,
@@ -1015,7 +1085,7 @@ export default function Dashboard() {
     return players
       .filter((p) => {
         if (recruitmentPosition !== 'all' && p.sourcePosition !== recruitmentPosition) return false;
-        if (recruitmentRole !== 'all' && p.analyticalRole !== recruitmentRole) return false;
+        if (recruitmentDetailedPosition !== 'all' && p.detailedPosition !== recruitmentDetailedPosition) return false;
         if (recruitmentFoot !== 'all' && p.preferredFoot !== recruitmentFoot) return false;
         if (recruitmentNationality === 'local' && p.isLegionnaire) return false;
         if (recruitmentNationality === 'legionnaire' && !p.isLegionnaire) return false;
@@ -1055,7 +1125,7 @@ export default function Dashboard() {
       .map((p) => {
         const reasons: string[] = [];
         if (recruitmentPosition !== 'all') reasons.push(getPositionName(p.sourcePosition));
-        if (recruitmentRole !== 'all') reasons.push(getAnalyticalRoleName(p.analyticalRole));
+        if (recruitmentDetailedPosition !== 'all') reasons.push(getDetailedPositionName(p.detailedPosition));
         if (recruitmentFoot !== 'all') reasons.push(getFootName(p.preferredFoot));
         if (recruitmentNationality !== 'all') reasons.push(p.isLegionnaire ? t.statusLegionnaire : t.statusLocal);
         if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(lang === 'ru' ? `Возраст ${p.age} ≤ ${maxAge}` : `Yosh ${p.age} ≤ ${maxAge}`);
@@ -1572,7 +1642,7 @@ export default function Dashboard() {
           <button
             onClick={() => {
               setRecruitmentPosition('all');
-              setRecruitmentRole('all');
+              setRecruitmentDetailedPosition('all');
               setRecruitmentMaxAge('');
               setRecruitmentMinBudget('');
               setRecruitmentMaxBudget('');
@@ -1600,7 +1670,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
           <div>
             <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentPosition}</label>
-            <select value={recruitmentPosition} onChange={(e) => { setRecruitmentPosition(e.target.value as 'all' | Position); setRecruitmentRole('all'); }}
+            <select value={recruitmentPosition} onChange={(e) => setRecruitmentPosition(e.target.value as 'all' | Position)}
               className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
               <option value="all">{t.allPositions}</option>
               <option value="FW">{t.posFW}</option>
@@ -1611,15 +1681,24 @@ export default function Dashboard() {
           </div>
 
           <div>
-            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentRole}</label>
-            <select value={recruitmentRole} onChange={(e) => setRecruitmentRole(e.target.value as 'all' | AnalyticalRole)}
+            <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentDetailedPosition}</label>
+            <select value={recruitmentDetailedPosition} onChange={(e) => setRecruitmentDetailedPosition(e.target.value as 'all' | DetailedPosition)}
               className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
-              <option value="all">{t.allRoles}</option>
-              {(recruitmentPosition === 'all' || recruitmentPosition === 'FW') && <option value="FORWARD">{t.roleFW}</option>}
-              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="ATTACKING_MIDFIELDER">{t.roleAM}</option>}
-              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="MIDFIELDER">{t.roleMF}</option>}
-              {(recruitmentPosition === 'all' || recruitmentPosition === 'DF') && <option value="DEFENDER">{t.roleDF}</option>}
-              {(recruitmentPosition === 'all' || recruitmentPosition === 'GK') && <option value="GOALKEEPER">{t.roleGK}</option>}
+              <option value="all">{t.allDetailedPositions}</option>
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'GK') && <option value="GK">{t.dposGK}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'DF') && <option value="RB">{t.dposRB}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'DF') && <option value="CB">{t.dposCB}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'DF') && <option value="LB">{t.dposLB}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'DF' || recruitmentPosition === 'MF') && <option value="RWB">{t.dposRWB}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'DF' || recruitmentPosition === 'MF') && <option value="LWB">{t.dposLWB}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="DM">{t.dposDM}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="CM">{t.dposCM}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="AM">{t.dposAM}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="RM">{t.dposRM}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF') && <option value="LM">{t.dposLM}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF' || recruitmentPosition === 'FW') && <option value="RW">{t.dposRW}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'MF' || recruitmentPosition === 'FW') && <option value="LW">{t.dposLW}</option>}
+              {(recruitmentPosition === 'all' || recruitmentPosition === 'FW') && <option value="ST">{t.dposST}</option>}
             </select>
           </div>
 
@@ -1748,7 +1827,7 @@ export default function Dashboard() {
                         {player.club[lang]} · {player.age} {t.years} · {player.marketValue}
                       </div>
                       <div className="text-[10px] text-sky-400 mt-0.5">
-                        {getPositionName(player.sourcePosition)} · {getAnalyticalRoleName(player.analyticalRole)}
+                        {getPositionName(player.sourcePosition)}{player.detailedPosition ? ` · ${getDetailedPositionName(player.detailedPosition)}` : ''}
                       </div>
                     </div>
                     <div className="text-right">
@@ -1836,13 +1915,9 @@ export default function Dashboard() {
                     <span className="rounded bg-zinc-800/90 border border-zinc-700/60 px-2 py-0.5 text-[10px] font-semibold text-zinc-200">
                       {getPositionName(player.sourcePosition)}
                     </span>
-                    {player.analyticalRole !== (
-                      player.sourcePosition === 'GK' ? 'GOALKEEPER' :
-                      player.sourcePosition === 'DF' ? 'DEFENDER' :
-                      player.sourcePosition === 'MF' ? 'MIDFIELDER' : 'FORWARD'
-                    ) && (
+                    {player.detailedPosition && (
                       <span className="block mt-1 text-[10px] text-sky-400">
-                        {getAnalyticalRoleName(player.analyticalRole)}
+                        {getDetailedPositionName(player.detailedPosition)}
                       </span>
                     )}
                   </td>
@@ -2067,15 +2142,30 @@ export default function Dashboard() {
                   <p className="text-xs text-zinc-400 mt-1">
                     #{selectedPlayer.number} · {selectedPlayer.club[lang]} · {t.sourcePositionLabel}: {getPositionName(selectedPlayer.sourcePosition)} · {selectedPlayer.age} {t.years} · {t.contractLeft} <strong className="text-zinc-200">{selectedPlayer.contractUntil}</strong>
                   </p>
-                  <div className="mt-2 flex items-center gap-2 text-[11px]">
-                    <span className="text-zinc-500">{t.analyticalRoleLabel}:</span>
-                    <span className="rounded-md border border-sky-500/30 bg-sky-500/10 px-2 py-0.5 font-semibold text-sky-400">
-                      {getAnalyticalRoleName(selectedPlayer.analyticalRole)}
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
+                    <span className="text-zinc-500">{t.detailedPositionLabel}:</span>
+                    <span className={`rounded-md border px-2 py-0.5 font-semibold ${
+                      selectedPlayer.detailedPosition
+                        ? 'border-sky-500/30 bg-sky-500/10 text-sky-400'
+                        : 'border-zinc-800 bg-zinc-900 text-zinc-500'
+                    }`}>
+                      {getDetailedPositionName(selectedPlayer.detailedPosition)}
                     </span>
-                    {selectedPlayer.analyticalRoleIsCalculated && (
-                      <span className="text-zinc-500">{t.calculatedRoleNote}</span>
+                    {selectedPlayer.detailedPosition && (
+                      <span className="text-zinc-500">
+                        {selectedPlayer.detailedPositionStartsUsed} {t.detailedPositionStarts}
+                        {selectedPlayer.detailedPositionHeatmapMatchesValidated > 0
+                          ? ` · ${t.detailedPositionHeatmap}: ${selectedPlayer.detailedPositionHeatmapMatchesValidated}`
+                          : ''}
+                      </span>
                     )}
                   </div>
+                  {selectedPlayer.analyticalRoleIsCalculated && (
+                    <div className="mt-1.5 flex items-center gap-2 text-[10px]">
+                      <span className="text-zinc-600">{t.analyticalRoleLabel}:</span>
+                      <span className="text-zinc-400">{getAnalyticalRoleName(selectedPlayer.analyticalRole)}</span>
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-1.5 mt-2.5">
                     <span className="text-[10px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-zinc-300">
                       #{selectedPlayer.club[lang]}
