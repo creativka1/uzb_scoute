@@ -210,7 +210,6 @@ const TRANSLATIONS = {
     changeOpponent: 'Raqibni o‘zgartirish:',
     close: 'Yopish',
     radarTitle: 'Rol profili',
-    radarPercentileNote: 'Chiziq uzunligi — futbolchining shu ko‘rsatkich bo‘yicha pozitsiyadagi o‘rni. Yetishmaydigan qiymatlar yashirilmaydi.',
     posAvgLabel: 'Amplua o‘rtachasi',
     metricLabel: 'Skauting profili',
     marketValue: 'Transfer narxi',
@@ -386,7 +385,6 @@ const TRANSLATIONS = {
     changeOpponent: 'Сменить соперника:',
     close: 'Закрыть',
     radarTitle: 'Ролевой профиль',
-    radarPercentileNote: 'Длина полосы показывает положение игрока среди футболистов той же позиции. Отсутствующие значения не подменяются.',
     posAvgLabel: 'Среднее по позиции',
     metricLabel: 'Скаутский профиль',
     marketValue: 'Рыночная стоимость',
@@ -643,13 +641,24 @@ function DynamicRoleRadar({
             <div className="mb-1.5 flex items-center justify-between gap-3">
               <span className="text-[11px] font-medium text-zinc-300">{row.label}</span>
               <div className="flex items-center gap-2 text-[10px] font-mono">
-                <span className={row.raw === null ? 'text-zinc-600' : 'text-zinc-200'}>
-                  {formatRoleMetricRaw(row.key, row.raw)}
-                </span>
-                {comparisonPlayer && (
-                  <span className={row.comparisonRaw === null ? 'text-zinc-600' : 'text-sky-400'}>
+                {!comparisonPlayer ? (
+                  <span className={row.raw === null ? 'text-zinc-600' : 'text-zinc-200'}>
+                    {formatRoleMetricRaw(row.key, row.raw)}
+                  </span>
+                ) : row.raw !== null && row.comparisonRaw !== null && row.raw === row.comparisonRaw ? (
+                  <span className="text-zinc-300">
+                    {formatRoleMetricRaw(row.key, row.raw)}
+                  </span>
+                ) : row.raw !== null && (row.comparisonRaw === null || row.raw > row.comparisonRaw) ? (
+                  <span className="text-emerald-400">
+                    {formatRoleMetricRaw(row.key, row.raw)}
+                  </span>
+                ) : row.comparisonRaw !== null ? (
+                  <span className="text-sky-400">
                     {formatRoleMetricRaw(row.key, row.comparisonRaw)}
                   </span>
+                ) : (
+                  <span className="text-zinc-600">—</span>
                 )}
               </div>
             </div>
@@ -808,6 +817,26 @@ export default function Dashboard() {
     if (foot === 'Left') return t.footLeft;
     if (foot === 'Both') return t.footBoth;
     return t.footUnknown;
+  };
+
+  const renderFootIcon = (foot: string) => {
+    if (foot === 'Both') {
+      return (
+        <span className="inline-flex items-center gap-0.5" aria-hidden="true">
+          <span className="inline-block">🦶</span>
+          <span className="inline-block scale-x-[-1]">🦶</span>
+        </span>
+      );
+    }
+
+    return (
+      <span
+        className={`inline-block ${foot === 'Right' ? 'scale-x-[-1]' : ''}`}
+        aria-hidden="true"
+      >
+        🦶
+      </span>
+    );
   };
 
   const uniqueClubs = useMemo(() => {
@@ -2020,7 +2049,7 @@ export default function Dashboard() {
                       {selectedPlayer.marketValue}
                     </span>
                     <span className="text-[11px] bg-zinc-900 border border-zinc-700 px-2.5 py-0.5 rounded-md text-zinc-300 font-medium">
-                      🦶 {t.footLabel} <strong className="text-white">{getFootName(selectedPlayer.preferredFoot)}</strong>
+                      {renderFootIcon(selectedPlayer.preferredFoot)} {t.footLabel} <strong className="text-white">{getFootName(selectedPlayer.preferredFoot)}</strong>
                     </span>
                     {selectedPlayer.isLegionnaire && (
                       <span className="text-[11px] bg-sky-500/20 text-sky-400 border border-sky-500/40 px-2 py-0.5 rounded-md font-bold">
@@ -2442,7 +2471,7 @@ export default function Dashboard() {
                             <ArrowRightLeft className="h-3 w-3 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <div className="text-[11px] text-zinc-400">
-                            {item.player.club[lang]} · {item.player.age} {t.years} · 🦶 {getFootName(item.player.preferredFoot)}
+                            {item.player.club[lang]} · {item.player.age} {t.years} · {renderFootIcon(item.player.preferredFoot)} {getFootName(item.player.preferredFoot)}
                           </div>
                         </div>
                       </div>
@@ -2577,14 +2606,14 @@ export default function Dashboard() {
                 <PlayerHeadshot url={compareA.photoUrl} name={compareA.name[lang]} initials={compareA.initials} size="md" />
                 <div>
                   <div className="font-bold text-sm text-zinc-100">{compareA.name[lang]}</div>
-                  <div className="text-xs text-emerald-400">{compareA.club[lang]} · {getPositionName(compareA.position)} · {compareA.marketValue} · 🦶 {getFootName(compareA.preferredFoot)}</div>
+                  <div className="text-xs text-emerald-400">{compareA.club[lang]} · {getPositionName(compareA.position)} · {compareA.marketValue} · {renderFootIcon(compareA.preferredFoot)} {getFootName(compareA.preferredFoot)}</div>
                 </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 text-right">
                 <div>
                   <div className="font-bold text-sm text-zinc-100">{compareB.name[lang]}</div>
-                  <div className="text-xs text-sky-400">{compareB.club[lang]} · {getPositionName(compareB.position)} · {compareB.marketValue} · 🦶 {getFootName(compareB.preferredFoot)}</div>
+                  <div className="text-xs text-sky-400">{compareB.club[lang]} · {getPositionName(compareB.position)} · {compareB.marketValue} · {renderFootIcon(compareB.preferredFoot)} {getFootName(compareB.preferredFoot)}</div>
                 </div>
                 <PlayerHeadshot url={compareB.photoUrl} name={compareB.name[lang]} initials={compareB.initials} size="md" />
               </div>
