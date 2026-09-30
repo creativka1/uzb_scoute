@@ -119,9 +119,45 @@ export async function GET(req: NextRequest) {
 
       group.forEach((p) => {
         const hasReliableSample = safeNumber(p.stats?.minutesPlayed) !== null && p.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES;
-        const values = keys.map((key) => hasReliableSample ? percentileRank(distributions[key], p.roleMetrics[key]) : null);
+
+        // A player's percentile can still be shown with a small personal sample,
+        // but the comparison benchmark itself only uses players with >= 450 minutes.
+        // This keeps the radar visible while clearly separating sample reliability
+        // from the percentile calculation.
+        const values = keys.map((key) => {
+          const benchmark = distributions[key].filter((v): v is number => v !== null && Number.isFinite(v));
+          if (benchmark.length < 3) return null;
+          return percentileRank(benchmark, p.roleMetrics[key]);
+        });
+
         const available = values.filter((v): v is number => v !== null);
-        const scoutIndex = available.length ? Math.round(available.reduce((a, b) => a + b, 0) / available.length) : null;
+        const scoutIndex = available.length >= 3
+          ? Math.round(available.reduce((a, b) => a + b, 0) / available.length)
+          : null;
+
+        const metricSignals = keys.map((key, index) => ({
+          key,
+          value: p.roleMetrics[key] ?? null,
+          percentile: values[index] ?? null,
+        }));
+
+        const rankedSignals = metricSignals
+          .filter((item): item is { key: string; value: number; percentile: number } =>
+            item.value !== null && item.percentile !== null
+          )
+          .sort((a, b) => b.percentile - a.percentile);
+
+        const benchmarkPlayers = group.filter((item) =>
+          safeNumber(item.stats?.minutesPlayed) !== null && item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+        ).length;
+
+        const metricCoverage = available.length;
+        const confidence =
+          !hasReliableSample || metricCoverage < 4
+            ? 'low'
+            : p.stats.minutesPlayed >= 900 && metricCoverage >= 5
+              ? 'high'
+              : 'medium';
 
         const radar = { m1: values[0] ?? null, m2: values[1] ?? null, m3: values[2] ?? null, m4: values[3] ?? null, m5: values[4] ?? null, m6: values[5] ?? null };
         const marketVal = formatMarketValue(safeNumber(p.marketValueCurrency));
@@ -147,9 +183,19 @@ export async function GET(req: NextRequest) {
           initials: (p.shortName || p.name || 'UZ').split(' ').map((n: string) => n[0]).join('').slice(0, 2),
           scoutIndex,
           scoutIndexIsCalculated: scoutIndex !== null,
-          scoutIndexBasis: hasReliableSample
-            ? 'Среднее доступных ролевых метрик, рассчитанных как процентили среди игроков с минимум 450 минутами'
-            : 'Недостаточно игрового времени для надёжного процентиля (минимум 450 минут)',
+          scoutIndexBasis: 'Среднее доступных ролевых процентилей относительно выборки игроков с минимум 450 минутами',
+          scoutingEngine: {
+            roleScore: scoutIndex,
+            confidence,
+            metricCoverage,
+            totalRoleMetrics: keys.length,
+            benchmarkPlayers,
+            benchmarkMinMinutes: MIN_PERCENTILE_MINUTES,
+            isLowSample: !hasReliableSample,
+            strengths: rankedSignals.slice(0, 2),
+            watchouts: rankedSignals.slice(-2).reverse(),
+            missingMetrics: metricSignals.filter((item) => item.value === null).map((item) => item.key),
+          },
           tags: [p.club, pos, p.isLegionnaire ? 'Legioner' : 'Local'],
           minutesPlayed: p.stats.minutesPlayed,
           matchesPlayed: p.stats.matchesPlayed,
