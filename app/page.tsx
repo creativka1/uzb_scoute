@@ -2,16 +2,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-  Legend,
-  Tooltip,
-} from 'recharts';
-import {
   Users,
   Sparkles,
   TrendingUp,
@@ -135,25 +125,25 @@ interface Player {
 
 const RADAR_AXIS_LABELS = {
   uz: {
-    GK: ['Seyvlar/90', 'Havodagi kurash %', 'Pas aniqligi %', 'Yakkakurash %', 'To‘p qaytarish/90', 'To‘xtatish/90'],
-    DF: ['To‘p qaytarish/90', 'To‘xtatish/90', 'Yakkakurash %', 'Havodagi kurash %', 'Pas aniqligi %', 'Dribling %'],
-    MF: ['Xavfli paslar/90', 'Assistlar/90', 'Dribling %', 'To‘p qaytarish/90', 'Pas aniqligi %', 'Yakkakurash %'],
-    FW: ['Gollar/90', 'Assistlar/90', 'Zarbalar/90', 'Xavfli paslar/90', 'Dribling %', 'Kurashlar %'],
+    GK: ['Seyvlar/90', 'Pas aniqligi %'],
+    DF: ['To‘p qaytarish/90', 'To‘xtatish/90', 'Pas aniqligi %', 'Dribling %', 'Xavfli paslar/90'],
+    MF: ['Xavfli paslar/90', 'Assistlar/90', 'Dribling %', 'To‘p qaytarish/90', 'Pas aniqligi %'],
+    FW: ['Gollar/90', 'Assistlar/90', 'Zarbalar/90', 'Xavfli paslar/90', 'Dribling %'],
   },
   ru: {
-    GK: ['Сейвы/90', 'Верховые дуэли %', 'Точность передач %', 'Единоборства %', 'Отборы/90', 'Перехваты/90'],
-    DF: ['Отборы/90', 'Перехваты/90', 'Единоборства %', 'Верховые дуэли %', 'Точность передач %', 'Дриблинг %'],
-    MF: ['Ключевые передачи/90', 'Ассисты/90', 'Дриблинг %', 'Отборы/90', 'Точность передач %', 'Единоборства %'],
-    FW: ['Голы/90', 'Ассисты/90', 'Удары/90', 'Ключевые передачи/90', 'Дриблинг %', 'Единоборства %'],
+    GK: ['Сейвы/90', 'Точность передач %'],
+    DF: ['Отборы/90', 'Перехваты/90', 'Точность передач %', 'Дриблинг %', 'Ключевые передачи/90'],
+    MF: ['Ключевые передачи/90', 'Ассисты/90', 'Дриблинг %', 'Отборы/90', 'Точность передач %'],
+    FW: ['Голы/90', 'Ассисты/90', 'Удары/90', 'Ключевые передачи/90', 'Дриблинг %'],
   },
 };
 
 
 const ROLE_KEYS_BY_POSITION: Record<Position, string[]> = {
-  GK: ['savesPer90', 'aerialWinPct', 'passAccPct', 'duelWinPct', 'tacklesPer90', 'interceptionsPer90'],
-  DF: ['tacklesPer90', 'interceptionsPer90', 'duelWinPct', 'aerialWinPct', 'passAccPct', 'dribbleSuccessPct'],
-  MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct', 'duelWinPct'],
-  FW: ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90', 'dribbleSuccessPct', 'duelWinPct'],
+  GK: ['savesPer90', 'passAccPct'],
+  DF: ['tacklesPer90', 'interceptionsPer90', 'passAccPct', 'dribbleSuccessPct', 'keyPassesPer90'],
+  MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct'],
+  FW: ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90', 'dribbleSuccessPct'],
 };
 
 function formatRoleMetricRaw(key: string, value: number | null | undefined): string {
@@ -219,8 +209,8 @@ const TRANSLATIONS = {
     h2hTitle: 'Head-to-Head Iqtidorlar taqqoslovi',
     changeOpponent: 'Raqibni o‘zgartirish:',
     close: 'Yopish',
-    radarTitle: 'Rol radari',
-    radarPercentileNote: 'Radar faqat barcha 6 rol metrikasi mavjud bo‘lsa chiziladi. Tafsilotlarni nuqta ustiga olib boring.',
+    radarTitle: 'Rol profili',
+    radarPercentileNote: 'Chiziq uzunligi — futbolchining shu ko‘rsatkich bo‘yicha pozitsiyadagi o‘rni. Yetishmaydigan qiymatlar yashirilmaydi.',
     posAvgLabel: 'Amplua o‘rtachasi',
     metricLabel: 'Skauting profili',
     marketValue: 'Transfer narxi',
@@ -238,7 +228,7 @@ const TRANSLATIONS = {
     noData: 'Belgilangan parametrlar bo‘yicha futbolchilar topilmadi.',
     contractLeft: 'Shartnoma:',
     footLabel: 'Yetakchi oyoq:',
-    physicalReport: 'Jismoniy va taktika ko‘rsatkichlari',
+    physicalReport: 'O‘yin ko‘rsatkichlari',
     gkReport: 'Darvozabon ko‘rsatkichlari',
     gkPassing: 'Oyoq bilan uzatmalar aniqligi %',
     gkSavesPerMatch: 'Har o‘yindagi seyvlar',
@@ -326,6 +316,9 @@ const TRANSLATIONS = {
     incompleteRadarText: 'Qisman radar chizilmaydi — bu noto‘g‘ri taassurot berishi mumkin.',
     availableMetricsLabel: 'Mavjud',
     missingMetricsShort: 'Yo‘q',
+    playerProfileLegend: 'Futbolchi',
+    positionAverageLegend: 'Pozitsiya o‘rtachasi',
+    percentileMeaning: 'pozitsiyada',
     sourceVsRoleHelp: 'Pozitsiya — manbadagi rasmiy kategoriya. O‘yin profili — platforma real metrikalardan hisoblagan rol.',
     missingMetricsLabel: 'Ma’lumot yetishmaydigan metrikalar',
   },
@@ -385,8 +378,8 @@ const TRANSLATIONS = {
     h2hTitle: 'Head-to-Head Сравнение талантов',
     changeOpponent: 'Сменить соперника:',
     close: 'Закрыть',
-    radarTitle: 'Ролевой радар',
-    radarPercentileNote: 'Радар строится только когда доступны все 6 ролевых метрик. Детали — при наведении на точку.',
+    radarTitle: 'Ролевой профиль',
+    radarPercentileNote: 'Длина полосы показывает положение игрока среди футболистов той же позиции. Отсутствующие значения не подменяются.',
     posAvgLabel: 'Среднее по позиции',
     metricLabel: 'Скаутский профиль',
     marketValue: 'Рыночная стоимость',
@@ -404,7 +397,7 @@ const TRANSLATIONS = {
     noData: 'По заданным фильтрам футболисты не найдены.',
     contractLeft: 'Контракт до:',
     footLabel: 'Рабочая нога:',
-    physicalReport: 'Физические и тактические метрики',
+    physicalReport: 'Матчевые показатели',
     gkReport: 'Профильные метрики вратаря',
     gkPassing: 'Точность передач ногами %',
     gkSavesPerMatch: 'Сейвы в среднем за матч',
@@ -492,6 +485,9 @@ const TRANSLATIONS = {
     incompleteRadarText: 'Частичный радар не строится, чтобы не создавать ложное впечатление.',
     availableMetricsLabel: 'Доступно',
     missingMetricsShort: 'Нет',
+    playerProfileLegend: 'Игрок',
+    positionAverageLegend: 'Среднее по позиции',
+    percentileMeaning: 'по позиции',
     sourceVsRoleHelp: 'Позиция — официальная категория из источника. Игровой профиль — расчёт платформы по реальным метрикам.',
     missingMetricsLabel: 'Метрики без данных',
   },
@@ -586,137 +582,115 @@ function DynamicRoleRadar({
   const t = TRANSLATIONS[lang];
   const pos = primaryPlayer.position;
   const labels = RADAR_AXIS_LABELS[lang][pos];
+  const roleKeys = ROLE_KEYS_BY_POSITION[pos];
   const posAvg = positionAverages[pos] || { m1: null, m2: null, m3: null, m4: null, m5: null, m6: null };
 
-  const getPosName = (p: Position) => {
-    switch (p) {
-      case 'FW': return t.posFW;
-      case 'MF': return t.posMF;
-      case 'DF': return t.posDF;
-      case 'GK': return t.posGK;
-    }
-  };
-
-  const roleKeys = ROLE_KEYS_BY_POSITION[pos];
-  const displayedPrimaryRadar = primaryPlayer.scoutingEngine?.isLowSample
+  const rawRadar = primaryPlayer.scoutingEngine?.isLowSample
     ? primaryPlayer.scoutingEngine.adjustedRadar
     : primaryPlayer.radar;
-  const displayedComparisonRadar = comparisonPlayer
+  const comparisonRadar = comparisonPlayer
     ? (comparisonPlayer.scoutingEngine?.isLowSample ? comparisonPlayer.scoutingEngine.adjustedRadar : comparisonPlayer.radar)
     : undefined;
 
-  const chartData = [
-    { skill: labels[0], key: roleKeys[0], primary: displayedPrimaryRadar.m1, comparison: displayedComparisonRadar?.m1, rawPrimaryPercentile: primaryPlayer.radar.m1, rawComparisonPercentile: comparisonPlayer?.radar.m1, avg: posAvg.m1, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[0]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[0]] },
-    { skill: labels[1], key: roleKeys[1], primary: displayedPrimaryRadar.m2, comparison: displayedComparisonRadar?.m2, rawPrimaryPercentile: primaryPlayer.radar.m2, rawComparisonPercentile: comparisonPlayer?.radar.m2, avg: posAvg.m2, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[1]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[1]] },
-    { skill: labels[2], key: roleKeys[2], primary: displayedPrimaryRadar.m3, comparison: displayedComparisonRadar?.m3, rawPrimaryPercentile: primaryPlayer.radar.m3, rawComparisonPercentile: comparisonPlayer?.radar.m3, avg: posAvg.m3, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[2]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[2]] },
-    { skill: labels[3], key: roleKeys[3], primary: displayedPrimaryRadar.m4, comparison: displayedComparisonRadar?.m4, rawPrimaryPercentile: primaryPlayer.radar.m4, rawComparisonPercentile: comparisonPlayer?.radar.m4, avg: posAvg.m4, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[3]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[3]] },
-    { skill: labels[4], key: roleKeys[4], primary: displayedPrimaryRadar.m5, comparison: displayedComparisonRadar?.m5, rawPrimaryPercentile: primaryPlayer.radar.m5, rawComparisonPercentile: comparisonPlayer?.radar.m5, avg: posAvg.m5, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[4]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[4]] },
-    { skill: labels[5], key: roleKeys[5], primary: displayedPrimaryRadar.m6, comparison: displayedComparisonRadar?.m6, rawPrimaryPercentile: primaryPlayer.radar.m6, rawComparisonPercentile: comparisonPlayer?.radar.m6, avg: posAvg.m6, primaryRaw: primaryPlayer.roleMetrics?.[roleKeys[5]], comparisonRaw: comparisonPlayer?.roleMetrics?.[roleKeys[5]] },
-  ].filter((item) =>
-    item.primary !== null &&
-    item.primary !== undefined &&
-    (!comparisonPlayer || (item.comparison !== null && item.comparison !== undefined))
-  );
+  const slots: (keyof RoleRadarMetrics)[] = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
 
-  const avgLegend = `${t.posAvgLabel} (${getPosName(pos)})`;
-  const missingPrimaryIndexes = [0, 1, 2, 3, 4, 5].filter((index) => {
-    const value = [
-      displayedPrimaryRadar.m1,
-      displayedPrimaryRadar.m2,
-      displayedPrimaryRadar.m3,
-      displayedPrimaryRadar.m4,
-      displayedPrimaryRadar.m5,
-      displayedPrimaryRadar.m6,
-    ][index];
-    return value === null || value === undefined;
-  });
-  const missingComparisonIndexes = comparisonPlayer
-    ? [0, 1, 2, 3, 4, 5].filter((index) => {
-        const value = [
-          displayedComparisonRadar?.m1,
-          displayedComparisonRadar?.m2,
-          displayedComparisonRadar?.m3,
-          displayedComparisonRadar?.m4,
-          displayedComparisonRadar?.m5,
-          displayedComparisonRadar?.m6,
-        ][index];
-        return value === null || value === undefined;
-      })
-    : [];
-  const hasCompleteRadar = missingPrimaryIndexes.length === 0 && missingComparisonIndexes.length === 0;
-  const hasCompleteAverage = [posAvg.m1, posAvg.m2, posAvg.m3, posAvg.m4, posAvg.m5, posAvg.m6]
-    .every((value) => value !== null && value !== undefined);
+  const rows = roleKeys.map((key, index) => ({
+    key,
+    label: labels[index],
+    percentile: rawRadar[slots[index]],
+    raw: primaryPlayer.roleMetrics?.[key] ?? null,
+    average: posAvg[slots[index]],
+    comparisonPercentile: comparisonRadar?.[slots[index]] ?? null,
+    comparisonRaw: comparisonPlayer?.roleMetrics?.[key] ?? null,
+  }));
+
+  const available = rows.filter((row) => row.percentile !== null).length;
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/90 p-5 shadow-xl">
-      <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-2">
-        <h3 className="text-sm font-semibold text-zinc-100">{t.radarTitle}</h3>
-        {hasCompleteAverage && <span className="text-xs text-amber-400 font-medium">{avgLegend}</span>}
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900/80 p-5 shadow-xl">
+      <div className="flex items-start justify-between gap-4 border-b border-zinc-800 pb-3 mb-3">
+        <div>
+          <h3 className="text-sm font-semibold text-zinc-100">{t.radarTitle}</h3>
+          <p className="mt-1 text-[10px] leading-relaxed text-zinc-500">{t.radarPercentileNote}</p>
+        </div>
+        <span className="rounded-md border border-zinc-800 bg-zinc-950/70 px-2 py-1 text-[10px] font-mono text-zinc-400">
+          {available}/{rows.length}
+        </span>
       </div>
+
       {primaryPlayer.scoutingEngine?.isLowSample && (
-        <div className="mb-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[11px] text-amber-300">
+        <div className="mb-3 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[11px] text-amber-300">
           {t.lowSampleWarning}
         </div>
       )}
-      <p className="text-[10px] text-zinc-500 mb-2">{t.radarPercentileNote}</p>
-      <div className="h-[280px] w-full">
-        {hasCompleteRadar ? (
-        <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="75%" data={chartData}>
-            <PolarGrid stroke="#3f3f46" strokeDasharray="3 3" />
-            <PolarAngleAxis dataKey="skill" tick={{ fill: '#e4e4e7', fontSize: 10, fontWeight: 600 }} />
-            <PolarRadiusAxis domain={[0, 100]} stroke="#52525b" tick={false} axisLine={false} />
 
-            <Radar name={primaryName} dataKey="primary" stroke="#10b981" fill="#10b981" fillOpacity={0.4} strokeWidth={2.5} />
-            {comparisonPlayer && comparisonName ? (
-              <Radar name={comparisonName} dataKey="comparison" stroke="#38bdf8" fill="#38bdf8" fillOpacity={0.35} strokeWidth={2.5} />
-            ) : hasCompleteAverage ? (
-              <Radar name={avgLegend} dataKey="avg" stroke="#f59e0b" strokeDasharray="4 4" strokeWidth={2} fill="#f59e0b" fillOpacity={0.09} />
-            ) : null}
-            <Tooltip
-              content={({ active, payload }) => {
-                if (!active || !payload?.length) return null;
-                const row: any = payload[0]?.payload;
-                return (
-                  <div className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs shadow-xl">
-                    <div className="font-semibold text-zinc-100 mb-1">{row.skill}</div>
-                    <div className="text-emerald-400">
-                      {primaryName}: {formatRoleMetricRaw(row.key, row.primaryRaw)} · {lang === 'ru' ? 'процентиль' : 'protsentil'} {row.primary}
-                    </div>
-                    {comparisonPlayer && comparisonName && (
-                      <div className="text-sky-400">
-                        {comparisonName}: {formatRoleMetricRaw(row.key, row.comparisonRaw)} · {lang === 'ru' ? 'процентиль' : 'protsentil'} {row.comparison}
-                      </div>
-                    )}
-                    {!comparisonPlayer && row.avg !== null && row.avg !== undefined && (
-                      <div className="text-amber-400">
-                        {avgLegend}: {lang === 'ru' ? 'процентиль' : 'protsentil'} {row.avg}
-                      </div>
-                    )}
-                  </div>
-                );
-              }}
-            />
-            <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-          </RadarChart>
-        </ResponsiveContainer>
-        ) : (
-          <div className="h-full flex flex-col items-center justify-center px-6 text-center">
-            <div className="text-sm font-semibold text-zinc-200">{t.incompleteRadarTitle}</div>
-            <div className="mt-1 max-w-sm text-[11px] text-zinc-500">{t.incompleteRadarText}</div>
-            <div className="mt-4 flex flex-wrap justify-center gap-1.5 text-[10px]">
-              {missingPrimaryIndexes.map((index) => (
-                <span key={`primary-missing-${index}`} className="rounded border border-rose-500/20 bg-rose-500/5 px-2 py-1 text-rose-300">
-                  {labels[index]}: {t.missingMetricsShort}
+      <div className="space-y-4">
+        {rows.map((row) => (
+          <div key={row.key}>
+            <div className="mb-1.5 flex items-center justify-between gap-3">
+              <span className="text-[11px] font-medium text-zinc-300">{row.label}</span>
+              <div className="flex items-center gap-2 text-[10px] font-mono">
+                <span className={row.raw === null ? 'text-zinc-600' : 'text-zinc-200'}>
+                  {formatRoleMetricRaw(row.key, row.raw)}
                 </span>
-              ))}
-              {comparisonPlayer && missingComparisonIndexes.map((index) => (
-                <span key={`comparison-missing-${index}`} className="rounded border border-sky-500/20 bg-sky-500/5 px-2 py-1 text-sky-300">
-                  {comparisonName} · {labels[index]}: {t.missingMetricsShort}
-                </span>
-              ))}
+                {comparisonPlayer && (
+                  <span className={row.comparisonRaw === null ? 'text-zinc-600' : 'text-sky-400'}>
+                    {formatRoleMetricRaw(row.key, row.comparisonRaw)}
+                  </span>
+                )}
+              </div>
             </div>
+
+            {row.percentile === null ? (
+              <div className="flex h-7 items-center rounded-md border border-dashed border-zinc-800 bg-zinc-950/40 px-2 text-[10px] text-zinc-600">
+                {t.noMetricData}
+              </div>
+            ) : (
+              <div className="relative">
+                <div className="h-2.5 overflow-hidden rounded-full bg-zinc-800">
+                  <div
+                    className="h-full rounded-full bg-emerald-500 transition-all"
+                    style={{ width: `${Math.max(2, row.percentile)}%` }}
+                  />
+                </div>
+
+                {!comparisonPlayer && row.average !== null && (
+                  <div
+                    className="absolute -top-1 h-4 w-0.5 rounded bg-amber-400"
+                    style={{ left: `${Math.max(0, Math.min(100, row.average))}%` }}
+                    title={t.positionAverageLegend}
+                  />
+                )}
+
+                {comparisonPlayer && row.comparisonPercentile !== null && (
+                  <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-zinc-800">
+                    <div
+                      className="h-full rounded-full bg-sky-400 transition-all"
+                      style={{ width: `${Math.max(2, row.comparisonPercentile)}%` }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
+        ))}
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-zinc-800 pt-3 text-[10px]">
+        <span className="flex items-center gap-1.5 text-zinc-400">
+          <span className="h-2 w-4 rounded-full bg-emerald-500" />
+          {primaryName}
+        </span>
+        {comparisonPlayer && comparisonName ? (
+          <span className="flex items-center gap-1.5 text-zinc-400">
+            <span className="h-2 w-4 rounded-full bg-sky-400" />
+            {comparisonName}
+          </span>
+        ) : (
+          <span className="flex items-center gap-1.5 text-zinc-500">
+            <span className="h-3 w-0.5 bg-amber-400" />
+            {t.positionAverageLegend}
+          </span>
         )}
       </div>
     </div>
