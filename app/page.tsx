@@ -91,6 +91,7 @@ interface Player {
   isEstimatedMarketValue?: boolean;
   countryCode?: string;
   contractUntil: string;
+  statsSeasonType: 'current' | 'previous' | 'two';
   photoUrl: string;
   initials: string;
   scoutIndex: number | null;
@@ -324,6 +325,9 @@ const TRANSLATIONS = {
     liveLabel: 'JONLI',
     seasonCurrentShort: '1 MAVSUM',
     seasonTwoShort: '2 MAVSUM',
+    statsCurrentSeason: 'Joriy mavsum',
+    statsPreviousSeason: 'O‘tgan mavsum',
+    statsTwoSeasons: '2 mavsum',
     profileSourceNote: 'SofaScore ma’lumotlari asosidagi rol profili',
     directCompareHint: 'To‘g‘ridan-to‘g‘ri taqqoslash uchun bosing',
     roleRatingComparisonLabel: 'Rol reytingi (0–100, mutlaq baho emas)',
@@ -499,6 +503,9 @@ const TRANSLATIONS = {
     liveLabel: 'ОНЛАЙН',
     seasonCurrentShort: '1 СЕЗОН',
     seasonTwoShort: '2 СЕЗОНА',
+    statsCurrentSeason: 'Текущий сезон',
+    statsPreviousSeason: 'Прошлый сезон',
+    statsTwoSeasons: '2 сезона',
     profileSourceNote: 'Ролевой профиль на основе данных SofaScore',
     directCompareHint: 'Нажмите для прямого сравнения',
     roleRatingComparisonLabel: 'Ролевой рейтинг (0–100, не абсолютная оценка)',
@@ -2128,6 +2135,13 @@ export default function Dashboard() {
                     <h3 className="text-sm font-semibold text-zinc-100">
                       {selectedPlayer.position === 'GK' ? t.gkReport : t.physicalReport}
                     </h3>
+                    <span className="ml-auto rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 text-[10px] font-medium text-zinc-400">
+                      {selectedPlayer.statsSeasonType === 'previous'
+                        ? t.statsPreviousSeason
+                        : selectedPlayer.statsSeasonType === 'two'
+                          ? t.statsTwoSeasons
+                          : t.statsCurrentSeason}
+                    </span>
                   </div>
 
                   {/* 1. ПЛАШКИ GK */}
