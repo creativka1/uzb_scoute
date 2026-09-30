@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "scripts/build_detailed_positions.py"
+      - ".github/workflows/build-detailed-positions.yml"
       - "data/cache/lineups/*.json"
       - "data/cache/heatmaps/*.json"
   workflow_dispatch:
