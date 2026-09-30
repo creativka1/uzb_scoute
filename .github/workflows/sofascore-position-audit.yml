@@ -1,0 +1,36 @@
+name: SofaScore Position Coverage Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/audit_sofascore_positions.py"
+      - ".github/workflows/sofascore-position-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Audit 30 cached Uzbekistan Superliga matches
+        run: python scripts/audit_sofascore_positions.py --matches 30 --heatmaps-per-match 4
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: sofascore-position-coverage
+          path: data/audits/sofascore_position_coverage.json
+          if-no-files-found: error
