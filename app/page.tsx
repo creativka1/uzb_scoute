@@ -1385,8 +1385,8 @@ export default function Dashboard() {
   const renderComparisonCell = (
     valA: number | null,
     valB: number | null,
-    displayA: string | number,
-    displayB: string | number,
+    displayA: string | number | null,
+    displayB: string | number | null,
     higherIsBetter = true
   ) => {
     let classA = 'text-zinc-400 font-medium';
