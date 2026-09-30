@@ -38,7 +38,7 @@ jobs:
 
       - name: Commit generated position data
         run: |
-          if git diff --quiet -- data/detailed_positions.json; then
+          if [ -z "$(git status --porcelain -- data/detailed_positions.json)" ]; then
             echo "No detailed position changes."
             exit 0
           fi
