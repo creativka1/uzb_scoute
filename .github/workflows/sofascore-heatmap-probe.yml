@@ -1,0 +1,42 @@
+name: SofaScore Heatmap Probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sofascore-heatmap-probe.yml"
+      - "scripts/probe_sofascore_heatmaps_rapidapi.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install HTTP client
+        run: pip install curl_cffi
+
+      - name: Probe SofaScore player heatmaps
+        run: python scripts/probe_sofascore_heatmaps_rapidapi.py --matches 10 --players-per-match 3
+
+      - name: Upload probe report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sofascore-heatmap-probe
+          path: data/audits/rapidapi_sofascore_heatmap_probe.json
+          if-no-files-found: ignore
