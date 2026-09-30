@@ -122,10 +122,13 @@ export async function GET(req: NextRequest) {
     const enrichedPlayers: any[] = [];
 
     const roleKeys: Record<Position, string[]> = {
-      GK: ['savesPer90', 'aerialWinPct', 'passAccPct', 'duelWinPct', 'tacklesPer90', 'interceptionsPer90'],
-      DF: ['tacklesPer90', 'interceptionsPer90', 'duelWinPct', 'aerialWinPct', 'passAccPct', 'dribbleSuccessPct'],
-      MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct', 'duelWinPct'],
-      FW: ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90', 'dribbleSuccessPct', 'duelWinPct'],
+      // Only metrics currently backed by the dataset are used in role profiles.
+      // duelWinPct / aerialWinPct stay available as raw fields when a source
+      // provides them, but they are not part of the score until coverage exists.
+      GK: ['savesPer90', 'passAccPct'],
+      DF: ['tacklesPer90', 'interceptionsPer90', 'passAccPct', 'dribbleSuccessPct', 'keyPassesPer90'],
+      MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct'],
+      FW: ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90', 'dribbleSuccessPct'],
     };
 
     (Object.keys(playersByPos) as Position[]).forEach((pos) => {
@@ -155,7 +158,8 @@ export async function GET(req: NextRequest) {
         });
 
         const available = values.filter((v): v is number => v !== null);
-        const scoutIndex = available.length >= 3
+        const minRoleMetrics = pos === 'GK' ? 2 : 3;
+        const scoutIndex = available.length >= minRoleMetrics
           ? Math.round(available.reduce((a, b) => a + b, 0) / available.length)
           : null;
 
@@ -168,7 +172,7 @@ export async function GET(req: NextRequest) {
           v === null ? null : Math.round(50 + (v - 50) * sampleWeight)
         );
         const adjustedAvailable = adjustedValues.filter((v): v is number => v !== null);
-        const adjustedRoleScore = adjustedAvailable.length >= 3
+        const adjustedRoleScore = adjustedAvailable.length >= minRoleMetrics
           ? Math.round(adjustedAvailable.reduce((a, b) => a + b, 0) / adjustedAvailable.length)
           : null;
 
@@ -180,7 +184,7 @@ export async function GET(req: NextRequest) {
         }));
 
         const attackingKeys = ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90'];
-        const attackingPercentiles = attackingKeys.map((key) => {
+        const attackingPercentiles = (pos === 'FW' || pos === 'MF') ? attackingKeys.map((key) => {
           const benchmark = group
             .filter((item) =>
               safeNumber(item.stats?.minutesPlayed) !== null &&
@@ -191,7 +195,7 @@ export async function GET(req: NextRequest) {
 
           if (benchmark.length < 3) return null;
           return percentileRank(benchmark, p.roleMetrics[key]);
-        });
+        }) : [];
         const attackingAvailable = attackingPercentiles.filter((v): v is number => v !== null);
         const rawAttackingScore = attackingAvailable.length >= 2
           ? Math.round(attackingAvailable.reduce((a, b) => a + b, 0) / attackingAvailable.length)
@@ -218,10 +222,12 @@ export async function GET(req: NextRequest) {
         ).length;
 
         const metricCoverage = available.length;
+        const mediumCoverageThreshold = pos === 'GK' ? 2 : 4;
+        const highCoverageThreshold = pos === 'GK' ? 2 : 5;
         const confidence =
-          !hasReliableSample || metricCoverage < 4
+          !hasReliableSample || metricCoverage < mediumCoverageThreshold
             ? 'low'
-            : p.stats.minutesPlayed >= 900 && metricCoverage >= 5
+            : p.stats.minutesPlayed >= 900 && metricCoverage >= highCoverageThreshold
               ? 'high'
               : 'medium';
 
@@ -254,7 +260,7 @@ export async function GET(req: NextRequest) {
           initials: (p.shortName || p.name || 'UZ').split(' ').map((n: string) => n[0]).join('').slice(0, 2),
           scoutIndex,
           scoutIndexIsCalculated: scoutIndex !== null,
-          scoutIndexBasis: 'Среднее доступных ролевых процентилей относительно выборки игроков с минимум 450 минутами',
+          scoutIndexBasis: 'Среднее доступных ролевых процентилей по метрикам с реальным покрытием данных; база сравнения — игроки с минимум 450 минутами',
           scoutingEngine: {
             rawRoleScore: scoutIndex,
             roleScore: adjustedRoleScore,
