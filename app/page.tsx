@@ -210,8 +210,8 @@ const TRANSLATIONS = {
     h2hTitle: 'Head-to-Head Iqtidorlar taqqoslovi',
     changeOpponent: 'Raqibni o‘zgartirish:',
     close: 'Yopish',
-    radarTitle: 'Ko‘nikmalar radari (Protsentil)',
-    radarPercentileNote: 'Radar haqiqiy foizni emas, shu pozitsiyadagi futbolchilar orasidagi protsentilni ko‘rsatadi.',
+    radarTitle: 'Rol radari',
+    radarPercentileNote: 'Chiziq uzunligi — protsentil. Har bir o‘qda real qiymat va P-protsentil ko‘rsatiladi.',
     posAvgLabel: 'Amplua o‘rtachasi',
     metricLabel: 'Skauting profili',
     marketValue: 'Transfer narxi',
@@ -251,13 +251,13 @@ const TRANSLATIONS = {
     goalWord: 'gol',
     assistWord: 'uzatma',
     legionerBadge: 'Legioner',
-    scoutingEngineTitle: 'Skauting dvigateli',
-    scoutingEngineSub: '3-bosqich: kichik tanlovni hisobga olgan tuzatilgan rol profili, ma’lumot sifati va kuchli signallar',
-    roleScoreLabel: 'Tuzatilgan rol indeksi',
+    scoutingEngineTitle: 'Skauting profili',
+    scoutingEngineSub: 'Futbolchining roli, hujum hissasi va asosiy skautlik signallari',
+    roleScoreLabel: 'Rol reytingi',
     attackingScoreLabel: 'Hujum hissasi',
     confidenceLabel: 'Ma’lumot ishonchliligi',
-    rawRoleScoreLabel: '2-bosqich xom indeksi',
-    adjustedRadarLabel: '3-bosqich tuzatilgan radar',
+    rawRoleScoreLabel: 'Xom rol indeksi',
+    adjustedRadarLabel: 'Kam daqiqalar uchun tuzatilgan profil',
     coverageLabel: 'Metrikalar qamrovi',
     benchmarkLabel: 'Taqqoslash bazasi',
     strengthsLabel: 'Kuchli signallar',
@@ -267,6 +267,10 @@ const TRANSLATIONS = {
     confidenceHigh: 'Yuqori',
     lowSampleWarning: 'Kam o‘yin vaqti: radar mavjud, lekin natijani ehtiyotkor talqin qiling.',
     noMetricData: 'Ma’lumot yo‘q',
+    methodologyLabel: 'Metodologiya va ma’lumot sifati',
+    abovePlayers: 'futbolchilardan yuqori',
+    belowPlayers: 'futbolchilardan past',
+    sampleWeightLabel: 'Tanlov og‘irligi',
   },
   ru: {
     tagline: 'Платформа скаутинга и аналитики Центральной Азии',
@@ -324,8 +328,8 @@ const TRANSLATIONS = {
     h2hTitle: 'Head-to-Head Сравнение талантов',
     changeOpponent: 'Сменить соперника:',
     close: 'Закрыть',
-    radarTitle: 'Радар навыков (Процентили)',
-    radarPercentileNote: 'Радар показывает процентиль среди игроков позиции, а не само исходное значение метрики.',
+    radarTitle: 'Ролевой радар',
+    radarPercentileNote: 'Длина луча — процентиль. На каждой оси показаны реальное значение и P-процентиль.',
     posAvgLabel: 'Среднее по позиции',
     metricLabel: 'Скаутский профиль',
     marketValue: 'Рыночная стоимость',
@@ -365,13 +369,13 @@ const TRANSLATIONS = {
     goalWord: 'гол',
     assistWord: 'пас',
     legionerBadge: 'Легионер',
-    scoutingEngineTitle: 'Скаутский движок',
-    scoutingEngineSub: 'Этап 3: скорректированный ролевой профиль с учётом малой выборки, качества данных и ключевых сигналов',
-    roleScoreLabel: 'Скорректированный ролевой индекс',
+    scoutingEngineTitle: 'Скаутский профиль',
+    scoutingEngineSub: 'Роль игрока, атакующий вклад и ключевые сигналы для скаута',
+    roleScoreLabel: 'Ролевой рейтинг',
     attackingScoreLabel: 'Атакующий вклад',
     confidenceLabel: 'Надёжность данных',
-    rawRoleScoreLabel: 'Сырой индекс этапа 2',
-    adjustedRadarLabel: 'Скорректированный радар этапа 3',
+    rawRoleScoreLabel: 'Сырой ролевой индекс',
+    adjustedRadarLabel: 'Профиль с поправкой на малую выборку',
     coverageLabel: 'Покрытие метрик',
     benchmarkLabel: 'База сравнения',
     strengthsLabel: 'Сильные сигналы',
@@ -381,6 +385,10 @@ const TRANSLATIONS = {
     confidenceHigh: 'Высокая',
     lowSampleWarning: 'Мало игрового времени: радар показан, но выводы нужно трактовать осторожно.',
     noMetricData: 'Нет данных',
+    methodologyLabel: 'Методология и качество данных',
+    abovePlayers: 'выше игроков',
+    belowPlayers: 'ниже игроков',
+    sampleWeightLabel: 'Вес выборки',
   },
 };
 
@@ -507,6 +515,20 @@ function DynamicRoleRadar({
 
   const avgLegend = `${t.posAvgLabel} (${getPosName(pos)})`;
 
+  const renderAxisTick = ({ payload, x, y, textAnchor }: any) => {
+    const row = chartData.find((item) => item.skill === payload.value);
+    if (!row) return null;
+    const raw = formatRoleMetricRaw(row.key, row.primaryRaw);
+    const pctl = row.primary ?? '—';
+
+    return (
+      <text x={x} y={y} textAnchor={textAnchor} fill="#e4e4e7" fontSize={10}>
+        <tspan x={x} dy="0" fontWeight="600">{row.skill}</tspan>
+        <tspan x={x} dy="13" fill="#a1a1aa">{raw} · P{pctl}</tspan>
+      </text>
+    );
+  };
+
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900/90 p-5 shadow-xl">
       <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-2">
@@ -518,21 +540,13 @@ function DynamicRoleRadar({
           {t.lowSampleWarning}
         </div>
       )}
-      {primaryPlayer.scoutingEngine?.isLowSample && (
-        <div className="mb-2 flex items-center justify-between rounded-lg border border-sky-500/20 bg-sky-500/5 px-3 py-2 text-[10px]">
-          <span className="text-sky-300">{t.adjustedRadarLabel}</span>
-          <span className="font-mono text-zinc-400">
-            {Math.round((primaryPlayer.scoutingEngine.sampleWeight || 0) * 100)}% sample weight
-          </span>
-        </div>
-      )}
       <p className="text-[10px] text-zinc-500 mb-2">{t.radarPercentileNote}</p>
       <div className="h-[280px] w-full">
         {chartData.length >= 3 ? (
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart cx="50%" cy="50%" outerRadius="75%" data={chartData}>
             <PolarGrid stroke="#3f3f46" strokeDasharray="3 3" />
-            <PolarAngleAxis dataKey="skill" tick={{ fill: '#e4e4e7', fontSize: 10, fontWeight: 500 }} />
+            <PolarAngleAxis dataKey="skill" tick={renderAxisTick} />
             <PolarRadiusAxis domain={[0, 100]} stroke="#52525b" tick={{ fill: '#a1a1aa', fontSize: 9 }} />
 
             <Radar name={primaryName} dataKey="primary" stroke="#10b981" fill="#10b981" fillOpacity={0.4} strokeWidth={2.5} />
@@ -549,20 +563,16 @@ function DynamicRoleRadar({
                   <div className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs shadow-xl">
                     <div className="font-semibold text-zinc-100 mb-1">{row.skill}</div>
                     <div className="text-emerald-400">
-                      {primaryName}: {row.primary} pctl
-                      {row.rawPrimaryPercentile !== row.primary ? ` (raw ${row.rawPrimaryPercentile})` : ''}
-                      {' · '}{formatRoleMetricRaw(row.key, row.primaryRaw)}
+                      {primaryName}: {formatRoleMetricRaw(row.key, row.primaryRaw)} · P{row.primary}
                     </div>
                     {comparisonPlayer && comparisonName && (
                       <div className="text-sky-400">
-                        {comparisonName}: {row.comparison} pctl
-                        {row.rawComparisonPercentile !== row.comparison ? ` (raw ${row.rawComparisonPercentile})` : ''}
-                        {' · '}{formatRoleMetricRaw(row.key, row.comparisonRaw)}
+                        {comparisonName}: {formatRoleMetricRaw(row.key, row.comparisonRaw)} · P{row.comparison}
                       </div>
                     )}
                     {!comparisonPlayer && row.avg !== null && row.avg !== undefined && (
                       <div className="text-amber-400">
-                        {avgLegend}: {row.avg} pctl
+                        {avgLegend}: P{row.avg}
                       </div>
                     )}
                   </div>
@@ -1566,8 +1576,10 @@ export default function Dashboard() {
 
                 <div className="mt-4 pt-3 border-t border-zinc-800 flex justify-between items-center text-xs">
                   <span className="text-zinc-400">{t.metricLabel} (Ролевой профиль на основе данных SofaScore)</span>
-                  <span className={`font-bold font-mono px-2 py-0.5 rounded border ${getScoutBadgeColor(selectedPlayer.scoutIndex)}`}>
-                    {selectedPlayer.scoutIndex === null ? '—' : `${selectedPlayer.scoutIndex} / 100`}
+                  <span className={`font-bold font-mono px-2 py-0.5 rounded border ${getScoutBadgeColor(selectedPlayer.scoutingEngine?.roleScore ?? selectedPlayer.scoutIndex)}`}>
+                    {(selectedPlayer.scoutingEngine?.roleScore ?? selectedPlayer.scoutIndex) === null
+                      ? '—'
+                      : `${selectedPlayer.scoutingEngine?.roleScore ?? selectedPlayer.scoutIndex} / 100`}
                   </span>
                 </div>
               </div>
@@ -1584,45 +1596,27 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 mb-4">
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
-                    <span className="text-[10px] text-zinc-500 block">{t.rawRoleScoreLabel}</span>
-                    <strong className="text-lg text-zinc-300 font-mono">
-                      {selectedPlayer.scoutingEngine.rawRoleScore === null ? '—' : `${selectedPlayer.scoutingEngine.rawRoleScore}/100`}
-                    </strong>
-                  </div>
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
-                    <span className="text-[10px] text-zinc-500 block">{t.roleScoreLabel}</span>
-                    <strong className="text-lg text-emerald-400 font-mono">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-4">
+                    <span className="text-[11px] text-zinc-500 block">{t.roleScoreLabel}</span>
+                    <strong className="text-xl text-emerald-400 font-mono">
                       {selectedPlayer.scoutingEngine.roleScore === null ? '—' : `${selectedPlayer.scoutingEngine.roleScore}/100`}
                     </strong>
                   </div>
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
-                    <span className="text-[10px] text-zinc-500 block">{t.attackingScoreLabel}</span>
-                    <strong className="text-lg text-sky-400 font-mono">
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-4">
+                    <span className="text-[11px] text-zinc-500 block">{t.attackingScoreLabel}</span>
+                    <strong className="text-xl text-sky-400 font-mono">
                       {selectedPlayer.scoutingEngine.attackingScore === null ? '—' : `${selectedPlayer.scoutingEngine.attackingScore}/100`}
                     </strong>
                   </div>
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
-                    <span className="text-[10px] text-zinc-500 block">{t.confidenceLabel}</span>
-                    <strong className="text-sm text-white">
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-4">
+                    <span className="text-[11px] text-zinc-500 block">{t.confidenceLabel}</span>
+                    <strong className="text-base text-white">
                       {selectedPlayer.scoutingEngine.confidence === 'high'
                         ? t.confidenceHigh
                         : selectedPlayer.scoutingEngine.confidence === 'medium'
                           ? t.confidenceMedium
                           : t.confidenceLow}
-                    </strong>
-                  </div>
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
-                    <span className="text-[10px] text-zinc-500 block">{t.coverageLabel}</span>
-                    <strong className="text-sm text-white font-mono">
-                      {selectedPlayer.scoutingEngine.metricCoverage}/{selectedPlayer.scoutingEngine.totalRoleMetrics}
-                    </strong>
-                  </div>
-                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
-                    <span className="text-[10px] text-zinc-500 block">{t.benchmarkLabel}</span>
-                    <strong className="text-sm text-white font-mono">
-                      {selectedPlayer.scoutingEngine.benchmarkPlayers} ≥ {selectedPlayer.scoutingEngine.benchmarkMinMinutes}'
                     </strong>
                   </div>
                 </div>
@@ -1633,9 +1627,11 @@ export default function Dashboard() {
                     {selectedPlayer.scoutingEngine.strengths.length ? selectedPlayer.scoutingEngine.strengths.map((signal) => {
                       const idx = ROLE_KEYS_BY_POSITION[selectedPlayer.position].indexOf(signal.key);
                       return (
-                        <div key={signal.key} className="flex items-center justify-between py-1 border-b border-zinc-900 last:border-0">
+                        <div key={signal.key} className="flex items-center justify-between gap-4 py-1.5 border-b border-zinc-900 last:border-0">
                           <span className="text-zinc-300">{idx >= 0 ? RADAR_AXIS_LABELS[lang][selectedPlayer.position][idx] : signal.key}</span>
-                          <span className="font-mono text-emerald-400">{signal.percentile}-й</span>
+                          <span className="font-medium text-emerald-400 whitespace-nowrap">
+                            {lang === 'ru' ? `Выше ${signal.percentile}% игроков` : `${signal.percentile}% futbolchilardan yuqori`}
+                          </span>
                         </div>
                       );
                     }) : <span className="text-zinc-500">{t.noMetricData}</span>}
@@ -1645,15 +1641,50 @@ export default function Dashboard() {
                     <span className="text-amber-400 font-semibold block mb-2">{t.watchoutsLabel}</span>
                     {selectedPlayer.scoutingEngine.watchouts.length ? selectedPlayer.scoutingEngine.watchouts.map((signal) => {
                       const idx = ROLE_KEYS_BY_POSITION[selectedPlayer.position].indexOf(signal.key);
+                      const below = 100 - signal.percentile;
                       return (
-                        <div key={signal.key} className="flex items-center justify-between py-1 border-b border-zinc-900 last:border-0">
+                        <div key={signal.key} className="flex items-center justify-between gap-4 py-1.5 border-b border-zinc-900 last:border-0">
                           <span className="text-zinc-300">{idx >= 0 ? RADAR_AXIS_LABELS[lang][selectedPlayer.position][idx] : signal.key}</span>
-                          <span className="font-mono text-amber-400">{signal.percentile}-й</span>
+                          <span className="font-medium text-amber-400 whitespace-nowrap">
+                            {lang === 'ru' ? `Ниже ${below}% игроков` : `${below}% futbolchilardan past`}
+                          </span>
                         </div>
                       );
                     }) : <span className="text-zinc-500">{t.noMetricData}</span>}
                   </div>
                 </div>
+
+                <details className="mt-4 rounded-lg border border-zinc-800 bg-zinc-950/40">
+                  <summary className="cursor-pointer px-3 py-2.5 text-xs font-medium text-zinc-400 hover:text-zinc-200">
+                    {t.methodologyLabel}
+                  </summary>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 px-3 pb-3 text-[11px]">
+                    <div className="rounded bg-zinc-900/70 p-2">
+                      <span className="text-zinc-500 block">{t.rawRoleScoreLabel}</span>
+                      <span className="text-zinc-200 font-mono">
+                        {selectedPlayer.scoutingEngine.rawRoleScore === null ? '—' : `${selectedPlayer.scoutingEngine.rawRoleScore}/100`}
+                      </span>
+                    </div>
+                    <div className="rounded bg-zinc-900/70 p-2">
+                      <span className="text-zinc-500 block">{t.coverageLabel}</span>
+                      <span className="text-zinc-200 font-mono">
+                        {selectedPlayer.scoutingEngine.metricCoverage}/{selectedPlayer.scoutingEngine.totalRoleMetrics}
+                      </span>
+                    </div>
+                    <div className="rounded bg-zinc-900/70 p-2">
+                      <span className="text-zinc-500 block">{t.benchmarkLabel}</span>
+                      <span className="text-zinc-200 font-mono">
+                        {selectedPlayer.scoutingEngine.benchmarkPlayers} ≥ {selectedPlayer.scoutingEngine.benchmarkMinMinutes}'
+                      </span>
+                    </div>
+                    <div className="rounded bg-zinc-900/70 p-2">
+                      <span className="text-zinc-500 block">{t.sampleWeightLabel}</span>
+                      <span className="text-zinc-200 font-mono">
+                        {Math.round((selectedPlayer.scoutingEngine.sampleWeight || 0) * 100)}%
+                      </span>
+                    </div>
+                  </div>
+                </details>
               </div>
             )}
 
