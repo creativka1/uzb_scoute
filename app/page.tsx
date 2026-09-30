@@ -1055,8 +1055,8 @@ export default function Dashboard() {
               <tr><td>Удары всего</td><td>${player.shots}</td></tr>
               <tr><td>Голевые передачи</td><td><strong>${player.assists}</strong></td></tr>
               <tr><td>Удары всего</td><td>${player.shots}</td></tr>
-              <tr><td>Единоборства</td><td>${player.duelWinRate}% внизу / ${player.aerialWinRate}% в воздухе</td></tr>
-              <tr><td>Успешный дриблинг</td><td>${player.dribbleWon} из ${player.dribbleTotal} (${player.dribbleSuccessRate}%)</td></tr>
+              <tr><td>Единоборства</td><td>${player.duelWinRate === null ? '—' : player.duelWinRate + '%'} внизу / ${player.aerialWinRate === null ? '—' : player.aerialWinRate + '%'} в воздухе</td></tr>
+              <tr><td>Успешный дриблинг</td><td>${player.dribbleWon} из ${player.dribbleTotal} (${player.dribbleSuccessRate === null ? '—' : player.dribbleSuccessRate + '%'})</td></tr>
               `}
             </tbody>
           </table>
@@ -1068,11 +1068,17 @@ export default function Dashboard() {
     printWindow.document.close();
   };
 
-  const renderComparisonCell = (valA: number, valB: number, displayA: string | number, displayB: string | number, higherIsBetter = true) => {
+  const renderComparisonCell = (
+    valA: number | null,
+    valB: number | null,
+    displayA: string | number,
+    displayB: string | number,
+    higherIsBetter = true
+  ) => {
     let classA = 'text-zinc-400 font-medium';
     let classB = 'text-zinc-400 font-medium';
 
-    if (valA !== valB) {
+    if (valA !== null && valB !== null && valA !== valB) {
       const isABetter = higherIsBetter ? valA > valB : valA < valB;
       if (isABetter) {
         classA = 'text-white font-black text-sm tracking-wide';
@@ -1513,7 +1519,7 @@ export default function Dashboard() {
                     <strong className="text-white text-sm">{player.assists}</strong>
                   </td>
                   <td className="py-3 px-3 font-mono text-zinc-300 font-semibold">
-                    {player.position === 'GK' ? '—' : `${player.dribbleSuccessRate}%`}
+                    {player.position === 'GK' || player.dribbleSuccessRate === null ? '—' : `${player.dribbleSuccessRate}%`}
                   </td>
                   <td className="py-3 px-4 text-right">
                     <span className={`inline-flex rounded-lg border px-2.5 py-1 text-xs font-bold ${getScoutBadgeColor(player.scoutingEngine?.roleScore ?? null)}`}>
@@ -2408,7 +2414,7 @@ export default function Dashboard() {
                         );
                       })()}
                       {(() => {
-                        const c = renderComparisonCell(compareA.duelWinRate, compareB.duelWinRate, `${compareA.duelWinRate}%`, `${compareB.duelWinRate}%`);
+                        const c = renderComparisonCell(compareA.duelWinRate, compareB.duelWinRate, compareA.duelWinRate === null ? '—' : `${compareA.duelWinRate}%`, compareB.duelWinRate === null ? '—' : `${compareB.duelWinRate}%`);
                         return (
                           <tr className="hover:bg-zinc-850/50">
                             <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
@@ -2418,7 +2424,7 @@ export default function Dashboard() {
                         );
                       })()}
                       {(() => {
-                        const c = renderComparisonCell(compareA.aerialWinRate, compareB.aerialWinRate, `${compareA.aerialWinRate}%`, `${compareB.aerialWinRate}%`);
+                        const c = renderComparisonCell(compareA.aerialWinRate, compareB.aerialWinRate, compareA.aerialWinRate === null ? '—' : `${compareA.aerialWinRate}%`, compareB.aerialWinRate === null ? '—' : `${compareB.aerialWinRate}%`);
                         return (
                           <tr className="hover:bg-zinc-850/50">
                             <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
@@ -2477,8 +2483,8 @@ export default function Dashboard() {
                         const c = renderComparisonCell(
                           compareA.dribbleSuccessRate,
                           compareB.dribbleSuccessRate,
-                          `${compareA.dribbleWon} / ${compareA.dribbleTotal} (${compareA.dribbleSuccessRate}%)`,
-                          `${compareB.dribbleWon} / ${compareB.dribbleTotal} (${compareB.dribbleSuccessRate}%)`
+                          compareA.dribbleSuccessRate === null ? `${compareA.dribbleWon} / ${compareA.dribbleTotal} (—)` : `${compareA.dribbleWon} / ${compareA.dribbleTotal} (${compareA.dribbleSuccessRate}%)`,
+                          compareB.dribbleSuccessRate === null ? `${compareB.dribbleWon} / ${compareB.dribbleTotal} (—)` : `${compareB.dribbleWon} / ${compareB.dribbleTotal} (${compareB.dribbleSuccessRate}%)`
                         );
                         return (
                           <tr className="hover:bg-zinc-850/50">
@@ -2538,8 +2544,8 @@ export default function Dashboard() {
                         const c = renderComparisonCell(
                           compareA.dribbleSuccessRate,
                           compareB.dribbleSuccessRate,
-                          `${compareA.dribbleWon} / ${compareA.dribbleTotal} (${compareA.dribbleSuccessRate}%)`,
-                          `${compareB.dribbleWon} / ${compareB.dribbleTotal} (${compareB.dribbleSuccessRate}%)`
+                          compareA.dribbleSuccessRate === null ? `${compareA.dribbleWon} / ${compareA.dribbleTotal} (—)` : `${compareA.dribbleWon} / ${compareA.dribbleTotal} (${compareA.dribbleSuccessRate}%)`,
+                          compareB.dribbleSuccessRate === null ? `${compareB.dribbleWon} / ${compareB.dribbleTotal} (—)` : `${compareB.dribbleWon} / ${compareB.dribbleTotal} (${compareB.dribbleSuccessRate}%)`
                         );
                         return (
                           <tr className="hover:bg-zinc-850/50">
