@@ -1388,7 +1388,8 @@ export default function Dashboard() {
       </>)}
 
       {activeView === 'recruitment' && (
-      {/* ЭТАП 4: RECRUITMENT ENGINE */}
+      <>
+      {/* RECRUITMENT */}
       <section className="max-w-7xl mx-auto mb-5 rounded-xl border border-sky-500/20 bg-zinc-900/70 p-5 shadow-xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-zinc-800 pb-4 mb-4">
           <div className="flex items-start gap-2.5">
@@ -1429,7 +1430,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
           <div>
             <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentPosition}</label>
-            <select value={recruitmentPosition} onChange={(e) => setRecruitmentPosition(e.target.value as 'all' | Position)}
+            <select value={recruitmentPosition} onChange={(e) => { setRecruitmentPosition(e.target.value as 'all' | Position); setRecruitmentRole('all'); }}
               className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
               <option value="all">{t.allPositions}</option>
               <option value="FW">{t.posFW}</option>
@@ -1590,10 +1591,11 @@ export default function Dashboard() {
           )}
         </div>
       </section>
-
+      </>
       )}
 
       {activeView === 'players' && (
+      <>
       {/* ТАБЛИЦА */}
       <div className="max-w-7xl mx-auto rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden shadow-2xl backdrop-blur">
         {isLoading ? (
@@ -1686,7 +1688,7 @@ export default function Dashboard() {
           </table>
         )}
       </div>
-
+      </>
       )}
 
       {/* МОДАЛКА НАСТРОЙКИ ФИЛЬТРОВ И ВЫБОРА СЕЗОНА */}
