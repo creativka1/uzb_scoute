@@ -295,7 +295,7 @@ export async function GET(req: NextRequest) {
           statsSeasonType: p.statsSeasonType,
           marketValue: marketVal.formatted,
           rawMarketValueEUR: marketVal.raw,
-          photoUrl: `https://api.sofascore.com/api/v1/player/${p.sofaId}/image`,
+          photoUrl: `https://img.sofascore.com/api/v1/player/${p.sofaId}/image`,
           initials: (p.shortName || p.name || 'UZ').split(' ').map((n: string) => n[0]).join('').slice(0, 2),
           scoutIndex,
           scoutIndexIsCalculated: scoutIndex !== null,
