@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "npm run typecheck",
+    "test": "python -B -m unittest discover -s tests -p \"test_*.py\" && node --test tests/*.test.cjs",
+    "typecheck": "tsc --noEmit --incremental false"
   },
   "dependencies": {
     "clsx": "^2.1.1",

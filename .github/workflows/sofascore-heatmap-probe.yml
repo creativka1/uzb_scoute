@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: sync-sofascore-heatmaps
+  group: source-data-updates
   cancel-in-progress: false
 
 jobs:
@@ -28,6 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Python
@@ -41,16 +42,20 @@ jobs:
       - name: Cache a small heatmap batch
         run: python scripts/sync_sofascore_heatmaps.py --max-requests 12 --delay 8
 
+      - name: Rebuild position evidence
+        if: always()
+        run: python scripts/build_detailed_positions.py
+
       - name: Commit source heatmaps
+        if: always()
         run: |
-          if [ -z "$(git status --porcelain -- data/cache/heatmaps data/audits/heatmap_sync_status.json)" ]; then
+          if [ -z "$(git status --porcelain -- data/cache/heatmaps data/cache/heatmap-status data/detailed_positions.json data/audits/heatmap_sync_status.json)" ]; then
             echo "No new heatmaps."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/cache/heatmaps data/audits/heatmap_sync_status.json
+          git add -A data/cache data/detailed_positions.json data/audits/heatmap_sync_status.json
           git commit -m "data: cache SofaScore player heatmaps"
-          git pull --rebase origin main
           git push

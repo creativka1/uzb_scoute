@@ -9,8 +9,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: refresh-player-profiles
-  cancel-in-progress: true
+  group: source-data-updates
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -30,15 +32,22 @@ jobs:
       - name: Refresh SofaScore profiles
         run: python app/api/players/scripts/refresh_player_profiles.py
 
-      - name: Commit updated player data
+      - name: Rebuild verified datasets
+        if: always()
         run: |
-          if git diff --quiet -- data/superliga_stats.json; then
+          python scripts/data_integrity.py
+          python scripts/build_detailed_positions.py
+
+      - name: Commit updated player data
+        if: always()
+        run: |
+          if [ -z "$(git status --porcelain -- data/superliga_stats.json data/detailed_positions.json data/cache/players data/audits)" ]; then
             echo "No player profile changes."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/superliga_stats.json
+          git add data/superliga_stats.json data/detailed_positions.json data/cache/players data/audits
           git commit -m "chore: refresh player profiles"
           git push

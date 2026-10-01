@@ -24,6 +24,7 @@ import glob
 import json
 import os
 import time
+import math
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -48,6 +49,9 @@ def valid_points(payload: Any) -> list[dict[str, Any]]:
         if isinstance(p, dict)
         and isinstance(p.get("x"), (int, float))
         and isinstance(p.get("y"), (int, float))
+        and not isinstance(p["x"], bool) and not isinstance(p["y"], bool)
+        and math.isfinite(p["x"]) and math.isfinite(p["y"])
+        and 0 <= p["x"] <= 100 and 0 <= p["y"] <= 100
     ]
 
 
@@ -114,22 +118,27 @@ def candidate_starters(event: dict[str, Any], lineup: dict[str, Any]):
             }
 
 
-def fetch_heatmap(session, headers, event_id: int, player_id: int):
-    for attempt in range(3):
-        response = session.get(
-            ENDPOINT,
-            headers=headers,
-            params={"matchId": event_id, "playerId": player_id},
-            timeout=30,
-        )
+def fetch_heatmap(session, headers, event_id: int, player_id: int, budget: int):
+    for attempt in range(min(3, budget)):
+        try:
+            response = session.get(
+                ENDPOINT,
+                headers=headers,
+                params={"matchId": event_id, "playerId": player_id},
+                timeout=30,
+            )
+        except Exception:
+            return 0, None, False, attempt + 1
 
         if response.status_code == 200:
             try:
-                return 200, response.json(), False
+                return 200, response.json(), False, attempt + 1
             except Exception:
-                return 200, None, False
+                return 200, None, False, attempt + 1
 
         if response.status_code == 429:
+            if attempt + 1 >= min(3, budget):
+                break
             retry_after = response.headers.get("Retry-After")
             try:
                 wait = float(retry_after) if retry_after else 15.0 * (attempt + 1)
@@ -140,9 +149,9 @@ def fetch_heatmap(session, headers, event_id: int, player_id: int):
             time.sleep(wait)
             continue
 
-        return response.status_code, None, False
+        return response.status_code, None, False, attempt + 1
 
-    return 429, None, True
+    return 429, None, True, min(3, budget)
 
 
 def main() -> None:
@@ -169,6 +178,7 @@ def main() -> None:
     saved = 0
     empty = 0
     rate_limited = False
+    failures = 0
     checked_candidates = 0
     saved_rows: list[dict[str, Any]] = []
 
@@ -182,16 +192,22 @@ def main() -> None:
             target = HEATMAP_DIR / f"{row['eventId']}_{row['playerId']}.json"
             if target.exists():
                 continue
+            state_path = ROOT / "data/cache/heatmap-status" / target.name
+            if state_path.exists():
+                previous = json.loads(state_path.read_text())
+                if time.time() < previous.get("retryAfter", 0):
+                    continue
             if requests_made >= args.max_requests:
                 break
 
-            status, payload, exhausted = fetch_heatmap(
+            status, payload, exhausted, attempts = fetch_heatmap(
                 session,
                 headers,
                 row["eventId"],
                 row["playerId"],
+                args.max_requests - requests_made,
             )
-            requests_made += 1
+            requests_made += attempts
 
             points = valid_points(payload)
             print(
@@ -214,6 +230,11 @@ def main() -> None:
                 })
             elif status == 200:
                 empty += 1
+            else:
+                failures += 1
+            if not (status == 200 and points):
+                state_path.parent.mkdir(parents=True, exist_ok=True)
+                state_path.write_text(json.dumps({"httpStatus": status, "retryAfter": time.time() + (7 * 86400 if status == 200 else 3600)}))
 
             if exhausted:
                 rate_limited = True
@@ -227,6 +248,8 @@ def main() -> None:
     total_cached = len(list(HEATMAP_DIR.glob("[0-9]*_[0-9]*.json")))
     status_payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "status": "failed" if failures and not saved else "partial" if failures else "success" if saved else "idle",
+        "failedResponsesThisRun": failures,
         "requestsMadeThisRun": requests_made,
         "heatmapsSavedThisRun": saved,
         "emptyResponsesThisRun": empty,
@@ -241,6 +264,8 @@ def main() -> None:
 
     print("\n=== HEATMAP SYNC ===")
     print(json.dumps(status_payload, ensure_ascii=False, indent=2))
+    if failures:
+        raise RuntimeError("Heatmap batch incomplete; see heatmap_sync_status.json")
 
 
 if __name__ == "__main__":

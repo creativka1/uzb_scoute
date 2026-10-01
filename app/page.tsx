@@ -1,5 +1,6 @@
 'use client';
 
+import { getBudgetReplacements } from '@/lib/recruitment';
 import React, { useState, useMemo, useEffect } from 'react';
 import {
   Users,
@@ -23,125 +24,20 @@ import {
   SlidersHorizontal,
   RotateCcw,
   Globe,
-  Calendar,
 } from 'lucide-react';
 
-type Position = 'FW' | 'MF' | 'DF' | 'GK';
-type AnalyticalRole = 'GOALKEEPER' | 'DEFENDER' | 'MIDFIELDER' | 'ATTACKING_MIDFIELDER' | 'FORWARD';
-type DetailedPosition = 'GK' | 'RB' | 'CB' | 'LB' | 'RWB' | 'LWB' | 'DM' | 'CM' | 'AM' | 'RM' | 'LM' | 'RW' | 'LW' | 'ST';
-type Language = 'uz' | 'ru';
-type League = 'UZB' | 'KAZ';
-type SeasonMode = 'current' | 'two';
-type SortField = 'value' | 'age' | 'scout';
-type SortOrder = 'asc' | 'desc';
-type MainView = 'players' | 'recruitment';
-type FootFilter = 'all' | 'Right' | 'Left' | 'Both';
-type NationalityFilter = 'all' | 'local' | 'legionnaire';
-
-interface RoleRadarMetrics {
-  m1: number | null;
-  m2: number | null;
-  m3: number | null;
-  m4: number | null;
-  m5: number | null;
-  m6: number | null;
-}
-
-interface ScoutingMetricSignal {
-  key: string;
-  value: number;
-  percentile: number;
-}
-
-interface ScoutingEngine {
-  rawRoleScore: number | null;
-  roleScore: number | null;
-  rawAttackingScore?: number | null;
-  attackingScore: number | null;
-  sampleWeight: number;
-  adjustedRadar: RoleRadarMetrics;
-  confidence: 'low' | 'medium' | 'high';
-  metricCoverage: number;
-  totalRoleMetrics: number;
-  benchmarkPlayers: number;
-  benchmarkMinMinutes: number;
-  isLowSample: boolean;
-  strengths: ScoutingMetricSignal[];
-  watchouts: ScoutingMetricSignal[];
-  missingMetrics: string[];
-}
-
-interface Player {
-  id: string;
-  league: League;
-  name: { uz: string; ru: string };
-  age: number;
-  isU21: boolean;
-  isLegionnaire: boolean;
-  club: { uz: string; ru: string };
-  position: Position;
-  sourcePosition: Position;
-  analyticalRole: AnalyticalRole;
-  analyticalRoleIsCalculated: boolean;
-  analyticalRoleBasis: string;
-  detailedPosition: DetailedPosition | null;
-  detailedPositionConfidence: 'low' | 'medium' | 'high' | null;
-  detailedPositionStartsUsed: number;
-  detailedPositionPrimaryShare: number | null;
-  detailedPositionDistribution: Record<string, number>;
-  detailedPositionSecondary: { position: DetailedPosition; starts: number; share: number }[];
-  detailedPositionHeatmapMatchesAvailable: number;
-  detailedPositionHeatmapMatchesValidated: number;
-  detailedPositionMethod: string | null;
-  number: number | null;
-  height: number | null;
-  preferredFoot: 'Right' | 'Left' | 'Both' | string;
-  marketValue: string;
-  rawMarketValueEUR: number | null;
-  isEstimatedMarketValue?: boolean;
-  countryCode?: string;
-  contractUntil: string;
-  statsSeasonType: 'current' | 'previous' | 'two';
-  photoUrl: string;
-  initials: string;
-  scoutIndex: number | null;
-  scoutIndexBasis?: string;
-  scoutingEngine: ScoutingEngine;
-  tags: string[];
-  minutesPlayed: number;
-  matchesPlayed: number;
-  goals: number;
-  assists: number;
-  xG: number | null;
-  xA: number | null;
-  shots: number;
-  keyPasses: number;
-  goalsPer90: number | null;
-  assistsPer90: number | null;
-  shotsPer90: number | null;
-  keyPassesPer90: number | null;
-  passAccPct: number | null;
-  dribbleSuccessRate: number | null;
-  dribbleWon: number;
-  dribbleTotal: number;
-  duelWinRate: number | null;
-  progressiveRuns: number | null;
-  aerialWinRate: number | null;
-  tackles?: number;
-  interceptions?: number;
-  saves: number;
-  roleMetrics?: Record<string, number | null>;
-  radar: RoleRadarMetrics;
-}
+import type { Position, AnalyticalRole, DetailedPosition, Language, League, SeasonMode, SortField, SortOrder, MainView, FootFilter, NationalityFilter, RoleRadarMetrics, ScoutingMetricSignal, ScoutingEngine, Player } from '@/types/players';
 
 const RADAR_AXIS_LABELS = {
   uz: {
+    UNKNOWN: [],
     GK: ['Seyvlar/90', 'Pas aniqligi %'],
     DF: ['To‘p qaytarish/90', 'To‘xtatish/90', 'Pas aniqligi %', 'Dribling %', 'Xavfli paslar/90'],
     MF: ['Xavfli paslar/90', 'Assistlar/90', 'Dribling %', 'To‘p qaytarish/90', 'Pas aniqligi %'],
     FW: ['Gollar/90', 'Assistlar/90', 'Zarbalar/90', 'Xavfli paslar/90', 'Dribling %'],
   },
   ru: {
+    UNKNOWN: [],
     GK: ['Сейвы/90', 'Точность передач %'],
     DF: ['Отборы/90', 'Перехваты/90', 'Точность передач %', 'Дриблинг %', 'Ключевые передачи/90'],
     MF: ['Ключевые передачи/90', 'Ассисты/90', 'Дриблинг %', 'Отборы/90', 'Точность передач %'],
@@ -151,6 +47,7 @@ const RADAR_AXIS_LABELS = {
 
 
 const ROLE_KEYS_BY_POSITION: Record<Position, string[]> = {
+  UNKNOWN: [],
   GK: ['savesPer90', 'passAccPct'],
   DF: ['tacklesPer90', 'interceptionsPer90', 'passAccPct', 'dribbleSuccessPct', 'keyPassesPer90'],
   MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct'],
@@ -350,7 +247,7 @@ const TRANSLATIONS = {
     playerProfileLegend: 'Futbolchi',
     positionAverageLegend: 'Pozitsiya o‘rtachasi',
     percentileMeaning: 'pozitsiyada',
-    sourceVsRoleHelp: 'Manba pozitsiyasi — umumiy kategoriya. Aniq pozitsiya tasdiqlangan tarkib va o‘yin sxemasidan hisoblanadi; mavjud bo‘lsa issiqlik xaritasi yon tomonni tekshiradi.',
+    sourceVsRoleHelp: 'Manba pozitsiyasi — umumiy kategoriya. Aniq pozitsiya faqat manba profilida bir ma’noli va zid bo‘lmagan ma’lumot mavjud bo‘lsa ko‘rsatiladi.',
     missingMetricsLabel: 'Ma’lumot yetishmaydigan metrikalar',
     liveLabel: 'JONLI',
     seasonCurrentShort: '1 MAVSUM',
@@ -548,7 +445,7 @@ const TRANSLATIONS = {
     playerProfileLegend: 'Игрок',
     positionAverageLegend: 'Среднее по позиции',
     percentileMeaning: 'по позиции',
-    sourceVsRoleHelp: 'Позиция источника — общая категория. Точная позиция рассчитывается по подтверждённому составу и схеме матча; при наличии тепловая карта проверяет сторону поля.',
+    sourceVsRoleHelp: 'Позиция источника — общая категория. Точная позиция показывается только при однозначных непротиворечивых данных профиля источника. Расчёты по порядку состава не считаются подтверждением.',
     missingMetricsLabel: 'Метрики без данных',
     liveLabel: 'ОНЛАЙН',
     seasonCurrentShort: '1 СЕЗОН',
@@ -562,46 +459,22 @@ const TRANSLATIONS = {
   },
 };
 
+function nullableRateNumber(value: number | null, denominator: number): number | null {
+  return value === null || denominator <= 0 ? null : Number((value / denominator).toFixed(1));
+}
+function nullableRate(value: number | null, denominator: number): string {
+  return nullableRateNumber(value, denominator)?.toFixed(1) ?? '—';
+}
+function nullableSum(a: number | null, b: number | null): number | null {
+  return a === null || b === null ? null : a + b;
+}
 function isContractExpiring(contractUntil: string): boolean {
-  if (!contractUntil || contractUntil === '—') return false;
-
-  const value = contractUntil.trim();
-  let year = 0;
-  let month = 0;
-  let day = 1;
-
-  let match = value.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/);
-  if (match) {
-    day = Number(match[1]);
-    month = Number(match[2]);
-    year = Number(match[3]);
-  } else {
-    match = value.match(/^(\d{1,2})[\/.\-](\d{4})$/);
-    if (match) {
-      month = Number(match[1]);
-      year = Number(match[2]);
-    } else {
-      match = value.match(/^(\d{4})[\/.\-](\d{1,2})$/);
-      if (match) {
-        year = Number(match[1]);
-        month = Number(match[2]);
-      } else {
-        match = value.match(/^(\d{4})$/);
-        if (match) {
-          year = Number(match[1]);
-          month = 12;
-        }
-      }
-    }
-  }
-
-  if (!year || !month || month < 1 || month > 12) return false;
-
-  const expiry = new Date(year, month - 1, day);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(contractUntil)) return false;
+  const expiry = new Date(`${contractUntil}T00:00:00Z`);
   const now = new Date();
-  const horizon = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
-
-  return expiry >= now && expiry <= horizon;
+  const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  const horizon = new Date(Date.UTC(now.getUTCFullYear() + 1, now.getUTCMonth(), now.getUTCDate()));
+  return Number.isFinite(expiry.getTime()) && expiry >= today && expiry <= horizon;
 }
 
 function getScoutBadgeColor(score: number | null): string {
@@ -613,6 +486,7 @@ function getScoutBadgeColor(score: number | null): string {
 
 function PlayerHeadshot({ url, name, initials, size = 'md' }: { url: string; name: string; initials: string; size?: 'sm' | 'md' | 'lg' }) {
   const [attempt, setAttempt] = useState(0);
+  useEffect(() => setAttempt(0), [url]);
   const dims = { sm: 'h-10 w-10', md: 'h-12 w-12', lg: 'h-20 w-20' }[size];
 
   const sources = useMemo(() => {
@@ -641,6 +515,10 @@ function PlayerHeadshot({ url, name, initials, size = 'md' }: { url: string; nam
   );
 }
 
+function getPositionLabel(pos: Position, lang: Language) {
+  return ({GK: TRANSLATIONS[lang].posGK, DF: TRANSLATIONS[lang].posDF, MF: TRANSLATIONS[lang].posMF, FW: TRANSLATIONS[lang].posFW, UNKNOWN: '—'})[pos];
+}
+
 function DynamicRoleRadar({
   primaryName,
   primaryPlayer,
@@ -662,11 +540,9 @@ function DynamicRoleRadar({
   const roleKeys = ROLE_KEYS_BY_POSITION[pos];
   const posAvg = positionAverages[pos] || { m1: null, m2: null, m3: null, m4: null, m5: null, m6: null };
 
-  const rawRadar = primaryPlayer.scoutingEngine?.isLowSample
-    ? primaryPlayer.scoutingEngine.adjustedRadar
-    : primaryPlayer.radar;
+  const rawRadar = primaryPlayer.radar;
   const comparisonRadar = comparisonPlayer
-    ? (comparisonPlayer.scoutingEngine?.isLowSample ? comparisonPlayer.scoutingEngine.adjustedRadar : comparisonPlayer.radar)
+    ? comparisonPlayer.radar
     : undefined;
 
   const slots: (keyof RoleRadarMetrics)[] = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
@@ -694,6 +570,7 @@ function DynamicRoleRadar({
         </span>
       </div>
 
+      <p className="mb-3 text-[10px] text-zinc-400">{primaryPlayer.statsSeasonLabel} · {getPositionLabel(pos, lang)} · {lang === 'ru' ? 'P — исходный процентиль; N — игроков с ≥450 минутами. Ролевой балл отдельно учитывает малую выборку.' : 'P — asl percentil; N — ≥450 daqiqali futbolchilar. Rol bali kichik tanlovni alohida hisobga oladi.'}</p>
       {primaryPlayer.scoutingEngine?.isLowSample && (
         <div className="mb-3 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[11px] text-amber-300">
           {t.lowSampleWarning}
@@ -706,25 +583,9 @@ function DynamicRoleRadar({
             <div className="mb-1.5 flex items-center justify-between gap-3">
               <span className="text-[11px] font-medium text-zinc-300">{row.label}</span>
               <div className="flex items-center gap-2 text-[10px] font-mono">
-                {!comparisonPlayer ? (
-                  <span className={row.raw === null ? 'text-zinc-600' : 'text-zinc-200'}>
-                    {formatRoleMetricRaw(row.key, row.raw)}
-                  </span>
-                ) : row.raw !== null && row.comparisonRaw !== null && row.raw === row.comparisonRaw ? (
-                  <span className="text-zinc-300">
-                    {formatRoleMetricRaw(row.key, row.raw)}
-                  </span>
-                ) : row.raw !== null && (row.comparisonRaw === null || row.raw > row.comparisonRaw) ? (
-                  <span className="text-emerald-400">
-                    {formatRoleMetricRaw(row.key, row.raw)}
-                  </span>
-                ) : row.comparisonRaw !== null ? (
-                  <span className="text-sky-400">
-                    {formatRoleMetricRaw(row.key, row.comparisonRaw)}
-                  </span>
-                ) : (
-                  <span className="text-zinc-600">—</span>
-                )}
+                <span className="text-emerald-400">{formatRoleMetricRaw(row.key, row.raw)} · {row.percentile === null ? '—' : `P${row.percentile}`}</span>
+                {comparisonPlayer && <span className="text-sky-400">{formatRoleMetricRaw(row.key, row.comparisonRaw)} · {row.comparisonPercentile === null ? '—' : `P${row.comparisonPercentile}`}</span>}
+                <span className="text-zinc-500">N={primaryPlayer.scoutingEngine.benchmarkByMetric?.[row.key] ?? 0}</span>
               </div>
             </div>
 
@@ -737,7 +598,7 @@ function DynamicRoleRadar({
                 <div className="h-2.5 overflow-hidden rounded-full bg-zinc-800">
                   <div
                     className="h-full rounded-full bg-emerald-500 transition-all"
-                    style={{ width: `${Math.max(2, row.percentile)}%` }}
+                    style={{ width: `${row.percentile}%` }}
                   />
                 </div>
 
@@ -749,16 +610,17 @@ function DynamicRoleRadar({
                   />
                 )}
 
+
+              </div>
+            )}
                 {comparisonPlayer && row.comparisonPercentile !== null && (
                   <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-zinc-800">
                     <div
                       className="h-full rounded-full bg-sky-400 transition-all"
-                      style={{ width: `${Math.max(2, row.comparisonPercentile)}%` }}
+                      style={{ width: `${row.comparisonPercentile}%` }}
                     />
                   </div>
                 )}
-              </div>
-            )}
           </div>
         ))}
       </div>
@@ -791,10 +653,35 @@ export default function Dashboard() {
 
   // ВЫБОР ЛИГИ И РЕЖИМА СЕЗОНА
   const [currentLeague, setCurrentLeague] = useState<League>('UZB');
-  const [seasonMode, setSeasonMode] = useState<SeasonMode>('current');
+  const [seasonMode, setSeasonMode] = useState<SeasonMode>('latest');
 
   const [players, setPlayers] = useState<Player[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [periodLabel, setPeriodLabel] = useState('');
+  const [coverageComplete, setCoverageComplete] = useState(false);
+
+  const [savedCandidates, setSavedCandidates] = useState<Pick<Player, 'id' | 'name'>[]>([]);
+  const [savedReady, setSavedReady] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+  useEffect(() => {
+    try {
+      const value = JSON.parse(localStorage.getItem('uzstat.shortlist.v1') || '[]');
+      if (!Array.isArray(value) || value.some(p => typeof p?.id !== 'string' || typeof p?.name?.ru !== 'string' || typeof p?.name?.uz !== 'string')) throw new Error('Invalid saved candidates');
+      setSavedCandidates(value);
+      setSavedReady(true);
+    } catch { setSaveError(true); }
+  }, []);
+  useEffect(() => {
+    if (!savedReady) return;
+    try { localStorage.setItem('uzstat.shortlist.v1', JSON.stringify(savedCandidates)); setSaveError(false); }
+    catch { setSaveError(true); }
+  }, [savedCandidates, savedReady]);
+  const saveCandidates = (items: Player[]) => setSavedCandidates(previous => {
+    const unique = new Map(previous.map(p => [p.id, p]));
+    items.forEach(p => unique.set(p.id, { id: p.id, name: p.name }));
+    return [...unique.values()];
+  });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -837,9 +724,28 @@ export default function Dashboard() {
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
+    setLoadError(false);
+    setPlayers([]);
+    setPeriodLabel('');
+    setCoverageComplete(false);
+    setSelectedPlayer(null);
+    setCompareA(null);
+    setCompareB(null);
+    setPickingOpponentFor(null);
 
     fetch(`/api/players?season=${seasonMode}&league=${currentLeague}`)
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`Player API: ${res.status}`);
+        const metadata = JSON.parse(res.headers.get('X-Data-Metadata') || '{}');
+        const period = metadata.periods?.[currentLeague];
+        if (isMounted) {
+          setPeriodLabel(period?.label || '—');
+          setCoverageComplete(period?.complete === true);
+        }
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('Invalid player response');
+        return data;
+      })
       .then((data: any[]) => {
         if (isMounted) {
           if (Array.isArray(data)) {
@@ -850,7 +756,7 @@ export default function Dashboard() {
       })
       .catch((err) => {
         console.error('Ошибка загрузки данных:', err);
-        if (isMounted) setIsLoading(false);
+        if (isMounted) { setPlayers([]); setLoadError(true); setIsLoading(false); }
       });
 
     return () => {
@@ -864,6 +770,7 @@ export default function Dashboard() {
       case 'MF': return t.posMF;
       case 'DF': return t.posDF;
       case 'GK': return t.posGK;
+      default: return '—';
     }
   };
 
@@ -874,6 +781,7 @@ export default function Dashboard() {
       case 'MIDFIELDER': return t.roleMF;
       case 'ATTACKING_MIDFIELDER': return t.roleAM;
       case 'FORWARD': return t.roleFW;
+      default: return '—';
     }
   };
 
@@ -934,7 +842,6 @@ export default function Dashboard() {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (seasonMode === 'two') count++;
     if (filterLegionnaire) count++;
     if (filterU21) count++;
     if (filterContract) count++;
@@ -964,7 +871,7 @@ export default function Dashboard() {
   };
 
   const positionAverages = useMemo(() => {
-    const positions: Position[] = ['FW', 'MF', 'DF', 'GK'];
+    const positions: Position[] = ['FW', 'MF', 'DF', 'GK', 'UNKNOWN'];
     const keys: (keyof RoleRadarMetrics)[] = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
 
     const result = {} as Record<Position, RoleRadarMetrics>;
@@ -1013,18 +920,10 @@ export default function Dashboard() {
 
     if (sortField) {
       list.sort((a, b) => {
-        let valA = 0;
-        let valB = 0;
-        if (sortField === 'value') {
-          valA = a.rawMarketValueEUR || 0;
-          valB = b.rawMarketValueEUR || 0;
-        } else if (sortField === 'age') {
-          valA = a.age || 0;
-          valB = b.age || 0;
-        } else if (sortField === 'scout') {
-          valA = a.scoutingEngine?.roleScore ?? -1;
-          valB = b.scoutingEngine?.roleScore ?? -1;
-        }
+        const read = (p: Player) => sortField === 'value' ? p.rawMarketValueEUR : sortField === 'age' ? p.age : p.scoutingEngine?.roleScore ?? null;
+        const valA = read(a), valB = read(b);
+        if (valA === null) return valB === null ? 0 : 1;
+        if (valB === null) return -1;
         return sortOrder === 'desc' ? valB - valA : valA - valB;
       });
     }
@@ -1095,9 +994,9 @@ export default function Dashboard() {
         if (recruitmentPosition !== 'all' && p.sourcePosition !== recruitmentPosition) return false;
         if (recruitmentDetailedPosition !== 'all' && p.detailedPosition !== recruitmentDetailedPosition) return false;
         if (recruitmentFoot !== 'all' && p.preferredFoot !== recruitmentFoot) return false;
-        if (recruitmentNationality === 'local' && p.isLegionnaire) return false;
-        if (recruitmentNationality === 'legionnaire' && !p.isLegionnaire) return false;
-        if (maxAge !== null && Number.isFinite(maxAge) && p.age > maxAge) return false;
+        if (recruitmentNationality === 'local' && p.isLegionnaire !== false) return false;
+        if (recruitmentNationality === 'legionnaire' && p.isLegionnaire !== true) return false;
+        if (maxAge !== null && Number.isFinite(maxAge) && (p.age === null || p.age > maxAge)) return false;
 
         if (minBudget !== null && Number.isFinite(minBudget)) {
           if (p.rawMarketValueEUR === null || p.rawMarketValueEUR < minBudget) return false;
@@ -1136,7 +1035,7 @@ export default function Dashboard() {
         if (recruitmentDetailedPosition !== 'all') reasons.push(getDetailedPositionName(p.detailedPosition));
         if (recruitmentFoot !== 'all') reasons.push(getFootName(p.preferredFoot));
         if (recruitmentNationality !== 'all') reasons.push(p.isLegionnaire ? t.statusLegionnaire : t.statusLocal);
-        if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(lang === 'ru' ? `Возраст ${p.age} ≤ ${maxAge}` : `Yosh ${p.age} ≤ ${maxAge}`);
+        if (maxAge !== null && Number.isFinite(maxAge)) reasons.push(lang === 'ru' ? `Возраст ${p.age ?? '—'} ≤ ${maxAge}` : `Yosh ${p.age ?? '—'} ≤ ${maxAge}`);
         if ((minBudget !== null || maxBudget !== null) && p.rawMarketValueEUR !== null) {
           reasons.push(lang === 'ru' ? `Цена: ${p.marketValue}` : `Narxi: ${p.marketValue}`);
         }
@@ -1184,53 +1083,7 @@ export default function Dashboard() {
     lang,
   ]);
 
-  const budgetReplacements = useMemo(() => {
-    if (!selectedPlayer) return [];
-
-    const target = selectedPlayer;
-    const radarKeys: (keyof RoleRadarMetrics)[] = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
-
-    const scored = players
-      .filter((p) => p.id !== target.id && p.position === target.position)
-      .map((cand) => {
-        const shared = radarKeys
-          .map((key) => {
-            const a = target.radar[key];
-            const b = cand.radar[key];
-            return a !== null && b !== null ? Math.abs(a - b) : null;
-          })
-          .filter((v): v is number => v !== null);
-
-        if (shared.length < 3) return null;
-
-        const meanAbsoluteDifference = shared.reduce((sum, v) => sum + v, 0) / shared.length;
-        const similarity = Math.round(Math.max(0, 100 - meanAbsoluteDifference));
-
-        const hasBothValues = target.rawMarketValueEUR !== null && cand.rawMarketValueEUR !== null;
-        const costDiff = hasBothValues
-          ? target.rawMarketValueEUR! - cand.rawMarketValueEUR!
-          : null;
-
-        return {
-          player: cand,
-          similarity,
-          comparedMetrics: shared.length,
-          costDiff,
-          isCheaper: costDiff !== null && costDiff > 0,
-        };
-      })
-      .filter((item): item is {
-        player: Player;
-        similarity: number;
-        comparedMetrics: number;
-        costDiff: number | null;
-        isCheaper: boolean;
-      } => item !== null);
-
-    return scored
-      .sort((a, b) => b.similarity - a.similarity)
-      .slice(0, 3);
-  }, [selectedPlayer, players]);
+  const budgetReplacements = useMemo(() => getBudgetReplacements(selectedPlayer, players), [selectedPlayer, players]);
 
   const handleCompareWithReplacement = (replacement: Player) => {
     if (!selectedPlayer) return;
@@ -1253,12 +1106,12 @@ export default function Dashboard() {
 
   const topScorer = useMemo(() => {
     if (players.length === 0) return null;
-    return [...players].sort((a, b) => b.goals - a.goals)[0];
+    return players.filter((p) => p.goals !== null).sort((a, b) => b.goals! - a.goals!)[0] || null;
   }, [players]);
 
   const topScout = useMemo(() => {
     if (players.length === 0) return null;
-    return [...players].sort((a, b) => (b.scoutingEngine?.roleScore ?? -1) - (a.scoutingEngine?.roleScore ?? -1))[0];
+    return players.filter((p) => p.scoutingEngine?.roleScore !== null).sort((a, b) => (b.scoutingEngine?.roleScore ?? -1) - (a.scoutingEngine?.roleScore ?? -1))[0] || null;
   }, [players]);
 
   const handlePrintPdf = (player: Player) => {
@@ -1313,26 +1166,27 @@ export default function Dashboard() {
 
     const statRows = player.position === 'GK'
       ? `
-        <tr><td>${p.saves}</td><td><strong>${player.saves}</strong></td></tr>
-        <tr><td>${p.savesPerMatch}</td><td>${(player.saves / Math.max(1, player.matchesPlayed)).toFixed(1)}</td></tr>
+        <tr><td>${p.saves ?? '—'}</td><td><strong>${player.saves ?? '—'}</strong></td></tr>
+        <tr><td>${p.savesPerMatch}</td><td>${nullableRate(player.saves, player.matchesPlayed)}</td></tr>
         <tr><td>${p.passAccuracy}</td><td>${player.passAccPct === null ? '—' : player.passAccPct + '%'}</td></tr>
       `
       : `
-        <tr><td>${p.goals}</td><td><strong>${player.goals}</strong></td></tr>
-        <tr><td>${p.assists}</td><td><strong>${player.assists}</strong></td></tr>
-        <tr><td>${p.shots}</td><td>${player.shots}</td></tr>
-        <tr><td>${p.keyPasses}</td><td>${player.keyPasses}</td></tr>
+        <tr><td>${p.goals ?? '—'}</td><td><strong>${player.goals ?? '—'}</strong></td></tr>
+        <tr><td>${p.assists ?? '—'}</td><td><strong>${player.assists ?? '—'}</strong></td></tr>
+        <tr><td>${p.shots ?? '—'}</td><td>${player.shots ?? '—'}</td></tr>
+        <tr><td>${p.keyPasses ?? '—'}</td><td>${player.keyPasses ?? '—'}</td></tr>
         <tr><td>${p.dribbling}</td><td>${player.dribbleSuccessRate === null ? '—' : player.dribbleSuccessRate + '%'}</td></tr>
         <tr><td>${p.tackles90}</td><td>${player.roleMetrics?.tacklesPer90?.toFixed(2) ?? '—'}</td></tr>
         <tr><td>${p.interceptions90}</td><td>${player.roleMetrics?.interceptionsPer90?.toFixed(2) ?? '—'}</td></tr>
         <tr><td>${p.passAccuracy}</td><td>${player.passAccPct === null ? '—' : player.passAccPct + '%'}</td></tr>
       `;
 
+    const escapeHtml = (value: unknown) => String(value ?? '—').replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]!));
     printWindow.document.write(`
       <!DOCTYPE html>
       <html lang="${lang}">
         <head>
-          <title>${p.title} — ${player.name[lang]}</title>
+          <title>${p.title} — ${escapeHtml(player.name[lang])}</title>
           <style>
             @page { size: A4 portrait; margin: 12mm; }
             body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #111827; background: #fff; margin: 0; padding: 0; }
@@ -1355,10 +1209,10 @@ export default function Dashboard() {
         <body>
           <div class="header">
             <div class="player-box">
-              <img class="photo" src="${player.photoUrl}" alt="${player.name[lang]}" onerror="this.style.display='none'" />
+              <img class="photo" src="${escapeHtml(player.photoUrl)}" alt="${escapeHtml(player.name[lang])}" onerror="this.style.display='none'" />
               <div>
-                <h1 class="title">${player.name[lang]}</h1>
-                <div class="meta">${player.club[lang]} | ${getPositionName(player.position)} | #${player.number ?? '—'} | ${player.age} ${t.years} | ${t.footLabel} ${getFootName(player.preferredFoot)}</div>
+                <h1 class="title">${escapeHtml(player.name[lang])}</h1>
+                <div class="meta">${escapeHtml(player.club[lang])} | ${getPositionName(player.position)} | #${player.number ?? '—'} | ${player.age ?? '—'} ${t.years} | ${t.footLabel} ${getFootName(player.preferredFoot)}</div>
               </div>
             </div>
             <div class="badge">${player.marketValue}</div>
@@ -1369,7 +1223,7 @@ export default function Dashboard() {
               <div class="card-val" style="color: #059669;">${player.scoutingEngine?.roleScore ?? '—'} / 100</div>
             </div>
             <div class="card">
-              <div class="card-title">${p.playingTimeContract} (${seasonMode === 'two' ? p.twoSeasons : p.oneSeason})</div>
+              <div class="card-title">${p.playingTimeContract} (${player.statsSeasonLabel} · ${lang === 'ru' ? 'По загруженным матчам' : 'Yuklangan o‘yinlar bo‘yicha'})</div>
               <div class="card-val">${player.matchesPlayed} ${t.matchWord} (${player.minutesPlayed}') | ${p.until}: ${player.contractUntil}</div>
             </div>
           </div>
@@ -1411,7 +1265,7 @@ export default function Dashboard() {
       }
     }
 
-    return { classA, classB, displayA, displayB };
+    return { classA, classB, displayA: displayA ?? '—', displayB: displayB ?? '—' };
   };
 
   return (
@@ -1442,7 +1296,7 @@ export default function Dashboard() {
               </div>
 
               <span className="hidden lg:inline-flex items-center gap-1.5 text-[10px] text-emerald-400 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded font-mono">
-                <Wifi className="h-3 w-3 animate-pulse text-emerald-400" /> {t.liveLabel}
+                <Wifi className="h-3 w-3 text-zinc-400" /> {lang === 'ru' ? 'КЭШ' : 'KESH'}
               </span>
             </div>
             <p className="text-xs text-zinc-400 mt-0.5">{t.tagline}</p>
@@ -1500,6 +1354,22 @@ export default function Dashboard() {
         </div>
       </header>
 
+      <div className="max-w-7xl mx-auto mt-4 flex flex-wrap items-center gap-3 text-xs">
+        <label>{lang === 'ru' ? 'Период статистики' : 'Statistika davri'}
+          <select className="ml-2 rounded border border-zinc-700 bg-zinc-900 p-2" value={seasonMode} onChange={e => setSeasonMode(e.target.value as SeasonMode)}>
+            <option value="latest">{lang === 'ru' ? 'Последний доступный сезон' : 'Oxirgi mavjud mavsum'}</option>
+            <option value="current">{t.statsCurrentSeason}</option>
+            <option value="previous">{t.statsPreviousSeason}</option>
+            <option value="two">{t.statsTwoSeasons}</option>
+          </select>
+        </label>
+        <span className="text-zinc-300">{periodLabel}</span>
+        {!isLoading && !loadError && <span className="text-amber-300">{coverageComplete
+          ? (lang === 'ru' ? 'Загруженные матчи сезона' : 'Yuklangan mavsum o‘yinlari')
+          : (lang === 'ru' ? 'Неполное покрытие: показатели только по подтверждённым загруженным матчам. Нет данных ≠ 0.' : 'Qamrov to‘liq emas: faqat tasdiqlangan yuklangan o‘yinlar. Ma’lumot yo‘qligi ≠ 0.')}</span>}
+        {loadError && <span role="alert" className="text-rose-400">{lang === 'ru' ? 'Не удалось загрузить данные. Повторите запрос выбором периода.' : 'Ma’lumot yuklanmadi. Davrni qayta tanlang.'}</span>}
+      </div>
+
       {/* KPI METRICS */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 my-6">
         <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/70 p-4 backdrop-blur shadow-sm">
@@ -1509,7 +1379,7 @@ export default function Dashboard() {
           </div>
           <div className="text-2xl font-bold mt-2 text-white">{players.length}</div>
           <span className="text-[11px] text-zinc-500 mt-1 block">
-            {seasonMode === 'current' ? t.seasonCurrentBadge : t.seasonTwoBadge}
+            {periodLabel}
           </span>
         </div>
 
@@ -1625,7 +1495,7 @@ export default function Dashboard() {
 
         <div className="text-xs text-zinc-400 flex items-center gap-2">
           <span className="font-semibold text-emerald-400 font-mono">
-            [{seasonMode === 'current' ? t.seasonCurrentShort : t.seasonTwoShort}]
+            [{periodLabel}]
           </span>
           <span>{t.tableHint}</span>
         </div>
@@ -1635,6 +1505,24 @@ export default function Dashboard() {
 
       {activeView === 'recruitment' && (
       <>
+      <section className="max-w-7xl mx-auto mb-4 rounded-xl border border-zinc-800 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+          <h2>{lang === 'ru' ? 'Сохранённые кандидаты · в этом браузере' : 'Saqlangan nomzodlar · shu brauzerda'} ({savedCandidates.length})</h2>
+          <button disabled={!savedReady || !recruitmentCandidates.length} onClick={() => saveCandidates(recruitmentCandidates.map(item => item.player))} className="rounded border border-sky-500/40 px-3 py-2 text-sky-300 disabled:opacity-40">
+            {lang === 'ru' ? 'Сохранить результаты' : 'Natijalarni saqlash'}
+          </button>
+        </div>
+        {saveError && <p role="alert" className="mt-2 text-xs text-rose-400">{lang === 'ru' ? 'Браузер не разрешил сохранение списка.' : 'Brauzer ro‘yxatni saqlashga ruxsat bermadi.'}</p>}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {savedCandidates.map(saved => {
+            const player = players.find(p => p.id === saved.id);
+            return <div key={saved.id} className="flex items-center gap-2 rounded border border-zinc-700 px-3 py-2 text-xs">
+              <button disabled={!player} onClick={() => { if (player) { setSelectedPlayer(player); setShowFullStats(false); } }} className="text-sky-300 disabled:text-zinc-500" title={!player ? (lang === 'ru' ? 'Нет данных в выбранной лиге и периоде' : 'Tanlangan liga va davrda ma’lumot yo‘q') : undefined}>{saved.name[lang]}</button>
+              <button aria-label={lang === 'ru' ? 'Удалить из сохранённых' : 'Saqlanganlardan o‘chirish'} onClick={() => setSavedCandidates(items => items.filter(p => p.id !== saved.id))}><X className="h-3 w-3" /></button>
+            </div>;
+          })}
+        </div>
+      </section>
       {/* RECRUITMENT */}
       <section className="max-w-7xl mx-auto mb-5 rounded-xl border border-sky-500/20 bg-zinc-900/70 p-5 shadow-xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-zinc-800 pb-4 mb-4">
@@ -1678,7 +1566,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
           <div>
             <label className="block text-[10px] text-zinc-500 mb-1">{t.recruitmentPosition}</label>
-            <select value={recruitmentPosition} onChange={(e) => setRecruitmentPosition(e.target.value as 'all' | Position)}
+            <select value={recruitmentPosition} onChange={(e) => { setRecruitmentPosition(e.target.value as 'all' | Position); setRecruitmentDetailedPosition('all'); if (e.target.value === 'GK') { setRecruitmentMinAttackScore(''); setRecruitmentMinGoals90(''); setRecruitmentMinAssists90(''); setRecruitmentMinShots90(''); setRecruitmentMinKeyPasses90(''); setRecruitmentMinDribble(''); } }}
               className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-2 text-xs text-white">
               <option value="all">{t.allPositions}</option>
               <option value="FW">{t.posFW}</option>
@@ -1807,7 +1695,7 @@ export default function Dashboard() {
 
         <div className="mt-5 pt-4 border-t border-zinc-800">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-bold text-zinc-200">{t.shortlistTitle}</h3>
+            <h3 className="text-xs font-bold text-zinc-200">{lang === 'ru' ? 'Результаты поиска' : 'Qidiruv natijalari'}</h3>
             <span className="text-[11px] font-mono text-sky-400">{recruitmentCandidates.length}</span>
           </div>
 
@@ -1832,7 +1720,7 @@ export default function Dashboard() {
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-sm text-white truncate">{player.name[lang]}</div>
                       <div className="text-[10px] text-zinc-400 truncate">
-                        {player.club[lang]} · {player.age} {t.years} · {player.marketValue}
+                        {player.club[lang]} · {player.age ?? '—'} {t.years} · {player.marketValue}
                       </div>
                       <div className="text-[10px] text-sky-400 mt-0.5">
                         {getPositionName(player.sourcePosition)}{player.detailedPosition ? ` · ${getDetailedPositionName(player.detailedPosition)}` : ''}
@@ -1914,7 +1802,7 @@ export default function Dashboard() {
                         )}
                       </div>
                       <div className="text-[11px] text-emerald-400 font-mono font-medium mt-0.5">
-                        {player.isEstimatedMarketValue ? '~' : ''}{player.marketValue} · <span className="text-zinc-400">{player.age} {t.years}</span>
+                        {player.isEstimatedMarketValue ? '~' : ''}{player.marketValue} · <span className="text-zinc-400">{player.age ?? '—'} {t.years}</span>
                       </div>
                     </div>
                   </td>
@@ -1934,10 +1822,10 @@ export default function Dashboard() {
                     <span className="text-zinc-500 text-[11px]">({player.minutesPlayed}')</span>
                   </td>
                   <td className="py-3 px-3 font-mono">
-                    <strong className="text-white text-sm">{player.goals}</strong>
+                    <strong className="text-white text-sm">{player.goals ?? '—'}</strong>
                   </td>
                   <td className="py-3 px-3 font-mono">
-                    <strong className="text-white text-sm">{player.assists}</strong>
+                    <strong className="text-white text-sm">{player.assists ?? '—'}</strong>
                   </td>
                   <td className="py-3 px-3 font-mono text-zinc-300 font-semibold">
                     {player.position === 'GK' || player.dribbleSuccessRate === null ? '—' : `${player.dribbleSuccessRate}%`}
@@ -1977,36 +1865,6 @@ export default function Dashboard() {
             </div>
 
             <div className="space-y-4">
-              {/* ВЫБОР СЕЗОНА: 1 СЕЗОН (ДЕФОЛТ) ИЛИ 2 СЕЗОНА */}
-              <div className="p-3.5 rounded-xl border border-emerald-500/30 bg-emerald-950/20">
-                <label className="block text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                  <Calendar className="h-4 w-4" />
-                  {t.seasonSelectorLabel}
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => setSeasonMode('current')}
-                    className={`px-3 py-2 rounded-lg text-xs font-semibold border transition text-center ${
-                      seasonMode === 'current'
-                        ? 'bg-emerald-500 text-zinc-950 border-emerald-400 font-bold shadow-md'
-                        : 'bg-zinc-900 text-zinc-300 border-zinc-800 hover:text-white'
-                    }`}
-                  >
-                    {t.seasonCurrentOption}
-                  </button>
-                  <button
-                    onClick={() => setSeasonMode('two')}
-                    className={`px-3 py-2 rounded-lg text-xs font-semibold border transition text-center ${
-                      seasonMode === 'two'
-                        ? 'bg-emerald-500 text-zinc-950 border-emerald-400 font-bold shadow-md'
-                        : 'bg-zinc-900 text-zinc-300 border-zinc-800 hover:text-white'
-                    }`}
-                  >
-                    {t.seasonTwoOption}
-                  </button>
-                </div>
-              </div>
-
               {/* ЛЕГИОНЕРЫ */}
               <label className="flex items-start gap-3 p-3 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-900 cursor-pointer transition">
                 <input
@@ -2148,7 +2006,12 @@ export default function Dashboard() {
                     )}
                   </div>
                   <p className="text-xs text-zinc-400 mt-1">
-                    #{selectedPlayer.number} · {selectedPlayer.club[lang]} · {t.sourcePositionLabel}: {getPositionName(selectedPlayer.sourcePosition)} · {selectedPlayer.age} {t.years} · {t.contractLeft} <strong className="text-zinc-200">{selectedPlayer.contractUntil}</strong>
+                    #{selectedPlayer.number ?? '—'} · {selectedPlayer.club[lang]} · {t.sourcePositionLabel}: {getPositionName(selectedPlayer.sourcePosition)} · {selectedPlayer.age ?? '—'} {t.years} · {t.contractLeft} <strong className="text-zinc-200">{selectedPlayer.contractUntil}</strong>
+                  </p>
+                  <p className="mt-1 text-[10px] text-zinc-500">{selectedPlayer.clubSource === 'last_match'
+                    ? (lang === 'ru' ? 'Клуб в последнем подтверждённом матче' : 'Oxirgi tasdiqlangan o‘yindagi klub')
+                    : (lang === 'ru' ? 'Кэш профиля источника' : 'Manba profilining keshi')}
+                    {selectedPlayer.clubObservedAt ? ` · ${new Date(selectedPlayer.clubObservedAt * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')}` : ' · —'}
                   </p>
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
                     <span className="text-zinc-500">{t.detailedPositionLabel}:</span>
@@ -2161,7 +2024,7 @@ export default function Dashboard() {
                     </span>
                     {selectedPlayer.detailedPosition && (
                       <span className="text-zinc-500">
-                        {selectedPlayer.detailedPositionStartsUsed} {t.detailedPositionStarts}
+                        {lang === 'ru' ? 'Позиция из кэша профиля SofaScore' : 'SofaScore profil keshidagi pozitsiya'}
                         {selectedPlayer.detailedPositionHeatmapMatchesValidated > 0
                           ? ` · ${t.detailedPositionHeatmap}: ${selectedPlayer.detailedPositionHeatmapMatchesValidated}`
                           : ''}
@@ -2182,13 +2045,16 @@ export default function Dashboard() {
                       #{getPositionName(selectedPlayer.sourcePosition)}
                     </span>
                     <span className="text-[10px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-zinc-300">
-                      #{selectedPlayer.isLegionnaire ? t.statusLegionnaire : t.statusLocal}
+                      #{selectedPlayer.isLegionnaire === null ? '—' : selectedPlayer.isLegionnaire ? t.statusLegionnaire : t.statusLocal}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2.5">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <button disabled={!savedReady} onClick={() => saveCandidates([selectedPlayer])} className="rounded-lg border border-sky-500/40 px-3 py-2 text-xs text-sky-300">
+                  {savedCandidates.some(p => p.id === selectedPlayer.id) ? (lang === 'ru' ? 'Сохранён' : 'Saqlangan') : (lang === 'ru' ? 'Сохранить кандидата' : 'Nomzodni saqlash')}
+                </button>
                 <button
                   onClick={() => setShowFullStats(!showFullStats)}
                   className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs font-semibold text-zinc-200 hover:bg-zinc-800 transition shadow-sm"
@@ -2234,11 +2100,7 @@ export default function Dashboard() {
                       {selectedPlayer.position === 'GK' ? t.gkReport : t.physicalReport}
                     </h3>
                     <span className="ml-auto rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 text-[10px] font-medium text-zinc-400">
-                      {selectedPlayer.statsSeasonType === 'previous'
-                        ? t.statsPreviousSeason
-                        : selectedPlayer.statsSeasonType === 'two'
-                          ? t.statsTwoSeasons
-                          : t.statsCurrentSeason}
+                      {selectedPlayer.statsSeasonLabel}
                     </span>
                   </div>
 
@@ -2251,12 +2113,12 @@ export default function Dashboard() {
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.gkTotalSaves}</span>
-                        <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">{selectedPlayer.saves}</span>
+                        <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">{selectedPlayer.saves ?? '—'}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.gkSavesPerMatch}</span>
                         <span className="text-base font-bold text-sky-400 font-mono mt-0.5 block">
-                          {(selectedPlayer.saves / Math.max(1, selectedPlayer.matchesPlayed)).toFixed(1)}
+                          {nullableRate(selectedPlayer.saves, selectedPlayer.matchesPlayed)}
                         </span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
@@ -2278,7 +2140,7 @@ export default function Dashboard() {
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.goalsSeason} / {t.assistsSeason}</span>
                         <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">
-                          {selectedPlayer.goals} {t.goalWord} / {selectedPlayer.assists} {t.assistWord}
+                          {selectedPlayer.goals ?? '—'} {t.goalWord} / {selectedPlayer.assists ?? '—'} {t.assistWord}
                         </span>
                         <span className="text-[10px] text-zinc-500 font-mono block mt-1">
                           /90: {selectedPlayer.goalsPer90 === null ? '—' : selectedPlayer.goalsPer90.toFixed(2)} / {selectedPlayer.assistsPer90 === null ? '—' : selectedPlayer.assistsPer90.toFixed(2)}
@@ -2286,12 +2148,12 @@ export default function Dashboard() {
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.shotsSeason}</span>
-                        <span className="text-base font-bold text-amber-400 font-mono mt-0.5 block">{selectedPlayer.shots}</span>
+                        <span className="text-base font-bold text-amber-400 font-mono mt-0.5 block">{selectedPlayer.shots ?? '—'}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.dribbleDetailed}</span>
                         <span className="text-base font-bold text-zinc-200 font-mono mt-0.5 block">
-                          {selectedPlayer.dribbleWon} / {selectedPlayer.dribbleTotal} ({selectedPlayer.dribbleSuccessRate === null ? '—' : `${selectedPlayer.dribbleSuccessRate}%`})
+                          {selectedPlayer.dribbleWon ?? '—'} / {selectedPlayer.dribbleTotal ?? '—'} ({selectedPlayer.dribbleSuccessRate === null ? '—' : `${selectedPlayer.dribbleSuccessRate}%`})
                         </span>
                       </div>
                     </div>
@@ -2307,12 +2169,12 @@ export default function Dashboard() {
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.goalsSeason} / {t.assistsSeason}</span>
                         <span className="text-base font-bold text-emerald-400 font-mono mt-0.5 block">
-                          {selectedPlayer.goals} {t.goalWord} / {selectedPlayer.assists} {t.assistWord}
+                          {selectedPlayer.goals ?? '—'} {t.goalWord} / {selectedPlayer.assists ?? '—'} {t.assistWord}
                         </span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.keyPassesSeason}</span>
-                        <span className="text-base font-bold text-sky-400 font-mono mt-0.5 block">{selectedPlayer.keyPasses}</span>
+                        <span className="text-base font-bold text-sky-400 font-mono mt-0.5 block">{selectedPlayer.keyPasses ?? '—'}</span>
                       </div>
                       <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg">
                         <span className="text-zinc-500 text-[11px] block">{t.duelPct}</span>
@@ -2367,6 +2229,10 @@ export default function Dashboard() {
               </div>
             </div>
 
+            <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
+              <div className="rounded border border-zinc-800 p-3">xG: <strong>{selectedPlayer.xG?.toFixed(2) ?? '—'}</strong></div>
+              <div className="rounded border border-zinc-800 p-3">xA: <strong>{selectedPlayer.xA?.toFixed(2) ?? '—'}</strong></div>
+            </div>
             {/* СКАУТСКИЙ ПРОФИЛЬ */}
             {selectedPlayer.scoutingEngine && (
               <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-900/80 p-5 shadow-xl">
@@ -2502,23 +2368,23 @@ export default function Dashboard() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.goalsSeason}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.goals}</strong>
+                    <strong className="text-white text-sm">{selectedPlayer.goals ?? '—'}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.assistsSeason}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.assists}</strong>
+                    <strong className="text-white text-sm">{selectedPlayer.assists ?? '—'}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.shotsSeason}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.shots}</strong>
+                    <strong className="text-white text-sm">{selectedPlayer.shots ?? '—'}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.keyPassesSeason}</span>
-                    <strong className="text-white text-sm">{selectedPlayer.keyPasses}</strong>
+                    <strong className="text-white text-sm">{selectedPlayer.keyPasses ?? '—'}</strong>
                   </div>
                   <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
                     <span className="text-zinc-500 block text-[10px]">{t.dribbleDetailed}</span>
-                    <strong className="text-zinc-200 text-sm">{selectedPlayer.dribbleWon} / {selectedPlayer.dribbleTotal} ({selectedPlayer.dribbleSuccessRate === null ? '—' : `${selectedPlayer.dribbleSuccessRate}%`})</strong>
+                    <strong className="text-zinc-200 text-sm">{selectedPlayer.dribbleWon ?? '—'} / {selectedPlayer.dribbleTotal ?? '—'} ({selectedPlayer.dribbleSuccessRate === null ? '—' : `${selectedPlayer.dribbleSuccessRate}%`})</strong>
                   </div>
                   {selectedPlayer.duelWinRate !== null && (
                     <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded">
@@ -2583,7 +2449,7 @@ export default function Dashboard() {
                             <ArrowRightLeft className="h-3 w-3 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <div className="text-[11px] text-zinc-400">
-                            {item.player.club[lang]} · {item.player.age} {t.years} · {renderFootIcon(item.player.preferredFoot)} {getFootName(item.player.preferredFoot)}
+                            {item.player.club[lang]} · {item.player.age ?? '—'} {t.years} · {renderFootIcon(item.player.preferredFoot)} {getFootName(item.player.preferredFoot)}
                           </div>
                         </div>
                       </div>
@@ -2651,7 +2517,7 @@ export default function Dashboard() {
                           {opponent.name[lang]}
                         </div>
                         <div className="text-xs text-zinc-400">
-                          {opponent.club[lang]} · <span className="text-zinc-300 font-semibold">{getPositionName(opponent.position)}</span> · {opponent.age} {t.years}
+                          {opponent.club[lang]} · <span className="text-zinc-300 font-semibold">{getPositionName(opponent.position)}</span> · {opponent.age ?? '—'} {t.years}
                         </div>
                       </div>
                     </div>
@@ -2757,7 +2623,7 @@ export default function Dashboard() {
                   {(() => {
                     const scoreA = compareA.scoutingEngine?.roleScore ?? null;
                     const scoreB = compareB.scoutingEngine?.roleScore ?? null;
-                    const c = renderComparisonCell(scoreA ?? -1, scoreB ?? -1, scoreA ?? '—', scoreB ?? '—');
+                    const c = renderComparisonCell(scoreA, scoreB, scoreA ?? '—', scoreB ?? '—');
                     return (
                       <tr className="hover:bg-zinc-850/50">
                         <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
@@ -2823,8 +2689,8 @@ export default function Dashboard() {
                         );
                       })()}
                       {(() => {
-                        const rateA = Number((compareA.saves / Math.max(1, compareA.matchesPlayed)).toFixed(1));
-                        const rateB = Number((compareB.saves / Math.max(1, compareB.matchesPlayed)).toFixed(1));
+                        const rateA = nullableRateNumber(compareA.saves, compareA.matchesPlayed);
+                        const rateB = nullableRateNumber(compareB.saves, compareB.matchesPlayed);
                         const c = renderComparisonCell(rateA, rateB, rateA, rateB);
                         return (
                           <tr className="hover:bg-zinc-850/50">
@@ -2835,17 +2701,7 @@ export default function Dashboard() {
                         );
                       })()}
                       {(() => {
-                        const c = renderComparisonCell(compareA.radar.m5, compareB.radar.m5, compareA.radar.m5, compareB.radar.m5);
-                        return (
-                          <tr className="hover:bg-zinc-850/50">
-                            <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
-                            <td className="py-2 px-4 text-center text-zinc-400">{t.gkCleanSheets}</td>
-                            <td className={`py-2 px-4 text-right font-mono ${c.classB}`}>{c.displayB}</td>
-                          </tr>
-                        );
-                      })()}
-                      {(() => {
-                        const c = renderComparisonCell(compareA.radar.m3, compareB.radar.m3, `${compareA.radar.m3}%`, `${compareB.radar.m3}%`);
+                        const c = renderComparisonCell(compareA.passAccPct, compareB.passAccPct, formatRoleMetricRaw('passAccPct', compareA.passAccPct), formatRoleMetricRaw('passAccPct', compareB.passAccPct));
                         return (
                           <tr className="hover:bg-zinc-850/50">
                             <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
@@ -2862,10 +2718,10 @@ export default function Dashboard() {
                     <>
                       {(() => {
                         const c = renderComparisonCell(
-                          (compareA.tackles || 0) + (compareA.interceptions || 0),
-                          (compareB.tackles || 0) + (compareB.interceptions || 0),
-                          `${compareA.tackles || 0} ${t.tacklesOnly} / ${compareA.interceptions || 0} ${t.interceptionsOnly}`,
-                          `${compareB.tackles || 0} ${t.tacklesOnly} / ${compareB.interceptions || 0} ${t.interceptionsOnly}`
+                          nullableSum(compareA.tackles, compareA.interceptions),
+                          nullableSum(compareB.tackles, compareB.interceptions),
+                          `${compareA.tackles ?? '—'} ${t.tacklesOnly} / ${compareA.interceptions ?? '—'} ${t.interceptionsOnly}`,
+                          `${compareB.tackles ?? '—'} ${t.tacklesOnly} / ${compareB.interceptions ?? '—'} ${t.interceptionsOnly}`
                         );
                         return (
                           <tr className="hover:bg-zinc-850/50">
@@ -2896,11 +2752,11 @@ export default function Dashboard() {
                         );
                       })()}
                       {(() => {
-                        const c = renderComparisonCell(compareA.radar.m5, compareB.radar.m5, `${compareA.radar.m5}%`, `${compareB.radar.m5}%`);
+                        const c = renderComparisonCell(compareA.passAccPct, compareB.passAccPct, formatRoleMetricRaw('passAccPct', compareA.passAccPct), formatRoleMetricRaw('passAccPct', compareB.passAccPct));
                         return (
                           <tr className="hover:bg-zinc-850/50">
                             <td className={`py-2 px-4 font-mono ${c.classA}`}>{c.displayA}</td>
-                            <td className="py-2 px-4 text-center text-zinc-400">{t.firstPassAcc}</td>
+                            <td className="py-2 px-4 text-center text-zinc-400">{t.passAccPct}</td>
                             <td className={`py-2 px-4 text-right font-mono ${c.classB}`}>{c.displayB}</td>
                           </tr>
                         );
@@ -2945,8 +2801,8 @@ export default function Dashboard() {
                         const c = renderComparisonCell(
                           compareA.dribbleSuccessRate,
                           compareB.dribbleSuccessRate,
-                          compareA.dribbleSuccessRate === null ? `${compareA.dribbleWon} / ${compareA.dribbleTotal} (—)` : `${compareA.dribbleWon} / ${compareA.dribbleTotal} (${compareA.dribbleSuccessRate}%)`,
-                          compareB.dribbleSuccessRate === null ? `${compareB.dribbleWon} / ${compareB.dribbleTotal} (—)` : `${compareB.dribbleWon} / ${compareB.dribbleTotal} (${compareB.dribbleSuccessRate}%)`
+                          compareA.dribbleSuccessRate === null ? `${compareA.dribbleWon ?? '—'} / ${compareA.dribbleTotal ?? '—'} (—)` : `${compareA.dribbleWon ?? '—'} / ${compareA.dribbleTotal ?? '—'} (${compareA.dribbleSuccessRate}%)`,
+                          compareB.dribbleSuccessRate === null ? `${compareB.dribbleWon ?? '—'} / ${compareB.dribbleTotal ?? '—'} (—)` : `${compareB.dribbleWon ?? '—'} / ${compareB.dribbleTotal ?? '—'} (${compareB.dribbleSuccessRate}%)`
                         );
                         return (
                           <tr className="hover:bg-zinc-850/50">
@@ -2996,8 +2852,8 @@ export default function Dashboard() {
                         const c = renderComparisonCell(
                           compareA.dribbleSuccessRate,
                           compareB.dribbleSuccessRate,
-                          compareA.dribbleSuccessRate === null ? `${compareA.dribbleWon} / ${compareA.dribbleTotal} (—)` : `${compareA.dribbleWon} / ${compareA.dribbleTotal} (${compareA.dribbleSuccessRate}%)`,
-                          compareB.dribbleSuccessRate === null ? `${compareB.dribbleWon} / ${compareB.dribbleTotal} (—)` : `${compareB.dribbleWon} / ${compareB.dribbleTotal} (${compareB.dribbleSuccessRate}%)`
+                          compareA.dribbleSuccessRate === null ? `${compareA.dribbleWon ?? '—'} / ${compareA.dribbleTotal ?? '—'} (—)` : `${compareA.dribbleWon ?? '—'} / ${compareA.dribbleTotal ?? '—'} (${compareA.dribbleSuccessRate}%)`,
+                          compareB.dribbleSuccessRate === null ? `${compareB.dribbleWon ?? '—'} / ${compareB.dribbleTotal ?? '—'} (—)` : `${compareB.dribbleWon ?? '—'} / ${compareB.dribbleTotal ?? '—'} (${compareB.dribbleSuccessRate}%)`
                         );
                         return (
                           <tr className="hover:bg-zinc-850/50">
