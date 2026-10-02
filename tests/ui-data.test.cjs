@@ -14,7 +14,7 @@ function load(file) {
   const code = ts.transpileModule(fs.readFileSync(path.join(root, file), 'utf8'), {
     compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true, jsx: ts.JsxEmit.ReactJSX},
   }).outputText;
-  const imports = name => name.startsWith('@/') ? load(name.slice(2) + (name.endsWith('player-analysis') ? '.tsx' : '.ts')) : require(name);
+  const imports = name => name.startsWith('@/') ? load(name.slice(2) + (fs.existsSync(path.join(root, name.slice(2) + '.tsx')) ? '.tsx' : '.ts')) : require(name);
   vm.runInNewContext(code, {exports, require: imports, console, process: {cwd: () => root}, URL, Date, Object, Number});
   cache.set(file, exports);
   return exports;
@@ -70,4 +70,9 @@ test('all real source-backed player positions render with missing fields safely'
     assert.ok(!html.includes('NaN'));
     assert.ok(!html.includes('undefined'));
   }
+});
+
+test('zero assists give an empty actual bar despite tied nonzero percentile',async()=>{
+const p=(await sourcePlayers()).find(p=>p.position==='MF'&&p.assists===0&&p.radar.m2>0);assert.ok(p);
+const html=render(ui.MetricProfile,{player:p,lang:'ru'}),row=html.split('Голевые передачи')[1].split('profile-row')[0];assert.ok(row.includes('0.00'));assert.ok(row.includes('width:0%'));assert.ok(!row.includes(`width:${p.radar.m2}%`));assert.ok(html.includes('Фактические показатели'));assert.equal(ui.formatValue(0.0001,2),'<0.01');
 });

@@ -70,6 +70,41 @@ class DataIntegrityTests(unittest.TestCase):
                     if known < stats['matchesPlayed']:
                         self.assertIsNone(stats[metric], (player['sofaId'], key, metric))
 
+class MatchObservationTests(unittest.TestCase):
+    def test_partial_rate_uses_only_observed_minutes(self):
+        d=aggregate([appearance(1,{'minutesPlayed':30,'goalAssist':1}),appearance(2,{})])['metricDetails']['assists']
+        self.assertEqual(d['value'],1)
+        self.assertEqual(d['per90'],3)
+        self.assertEqual(d['eventIds'],[1])
+        self.assertEqual(d['status'],'partial')
+
+    def test_ratios_cannot_mix_matches(self):
+        stats=aggregate([appearance(1,{'accuratePass':8,'totalPass':10}),appearance(2,{'totalPass':100}),appearance(3,{'accuratePass':80})])
+        d=stats['metricDetails']['passAccPct']
+        self.assertEqual(d['value'],80)
+        self.assertEqual(d['eventIds'],[1])
+        self.assertIsNone(aggregate([appearance(1,{'totalContest':0,'wonContest':0})])['metricDetails']['dribbleSuccessRate']['value'])
+
+    def test_core_provenance_matches_original_payloads(self):
+        import gzip,hashlib
+        from data_integrity import METRICS
+        root=Path(__file__).resolve().parents[1]
+        core=json.loads(gzip.decompress((root/'data/match_core.json.gz').read_bytes()))
+        matches={m['id']:m for m in core['matches']}
+        self.assertEqual(len(core['appearances']),len({a['id'] for a in core['appearances']}))
+        payloads={}
+        for a in core['appearances']:
+            m=matches[a['matchId']]
+            self.assertIn(a['teamId'],[m['homeTeamId'],m['awayTeamId']])
+            self.assertTrue(m['lineupAvailable'])
+            if m['id'] not in payloads:
+                raw=(root/m['sourcePath']).read_bytes()
+                self.assertEqual(hashlib.sha256(raw).hexdigest(),m['lineupHash'])
+                payloads[m['id']]=json.loads(raw)
+            side='home' if a['teamId']==m['homeTeamId'] else 'away'
+            original=next(p for p in payloads[m['id']][side]['players'] if p['player']['id']==a['playerId'])
+            for key,src in METRICS.items():
+                self.assertEqual(a['stats'][key],number(original.get('statistics',{}).get(src)))
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { gunzipSync } from 'zlib';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,21 +34,33 @@ function percentileRank(values: (number | null)[], value: number | null): number
   return Math.max(0, Math.min(100, Math.round(percentile)));
 }
 
-function roleMetrics(pos: Position, stats: any): Record<string, number | null> {
-  const minutes = stats?.minutesPlayed;
-  return {
-    savesPer90: per90(stats?.saves, minutes),
-    aerialWinPct: safeNumber(stats?.aerialWinPct),
-    passAccPct: safeNumber(stats?.passAccPct),
-    duelWinPct: safeNumber(stats?.duelWinPct),
-    tacklesPer90: per90(stats?.tackles, minutes),
-    interceptionsPer90: per90(stats?.interceptions, minutes),
-    keyPassesPer90: per90(stats?.keyPasses, minutes),
-    assistsPer90: per90(stats?.assists, minutes),
-    dribbleSuccessPct: safeNumber(stats?.dribbleSuccessRate),
-    goalsPer90: per90(stats?.goals, minutes),
-    shotsPer90: per90(stats?.shots, minutes),
+const roleSources: Record<string, string> = {
+  savesPer90: 'saves', tacklesPer90: 'tackles', interceptionsPer90: 'interceptions',
+  keyPassesPer90: 'keyPasses', assistsPer90: 'assists', goalsPer90: 'goals', shotsPer90: 'shots',
+  passAccPct: 'passAccPct', dribbleSuccessPct: 'dribbleSuccessRate', aerialWinPct: 'aerialWinPct', duelWinPct: 'duelWinPct',
+};
+function observed(stats: any, key: string): number | null {
+  return safeNumber(stats.metricDetails?.[key]?.value ?? stats[key]);
+}
+function metricDetail(stats: any, key: string) {
+  return stats.metricDetails?.[roleSources[key] || key] ?? {
+    matches: stats.matchesPlayed, totalMatches: stats.matchesPlayed, minutes: stats.minutesPlayed,
+    totalMinutes: stats.minutesPlayed, status: 'complete',
   };
+}
+function eligibleMetric(stats: any, key: string, benchmark = false): boolean {
+  const d = metricDetail(stats, key);
+  // Explicit analytical policy, not an assertion of source completeness.
+  return d.minutes >= (benchmark ? 450 : 90) && d.totalMinutes > 0 &&
+    d.minutes / d.totalMinutes >= (benchmark ? 0.8 : 0.6);
+}
+function observedPer90(stats: any, key: string): number | null {
+  if (stats.metricDetails?.[key]) return safeNumber(stats.metricDetails[key].per90);
+  return per90(stats[key], stats.minutesPlayed);
+}
+function roleMetrics(pos: Position, stats: any): Record<string, number | null> {
+  return Object.fromEntries(Object.entries(roleSources).map(([key, source]) =>
+    [key, key.endsWith('Per90') ? observedPer90(stats, source) : observed(stats, source)]));
 }
 
 type AnalyticalRole = 'UNKNOWN' | 'GOALKEEPER' | 'DEFENDER' | 'MIDFIELDER' | 'ATTACKING_MIDFIELDER' | 'FORWARD';
@@ -95,6 +108,12 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'DATA_UNAVAILABLE' }, { status: 503 });
     }
     const rawPlayers = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const observationPath = path.join(process.cwd(), 'data/metric_observations.json.gz');
+    if (!fs.existsSync(observationPath)) return NextResponse.json({error:'METRIC_OBSERVATIONS_UNAVAILABLE'}, {status:503});
+    const observations = JSON.parse(gunzipSync(fs.readFileSync(observationPath)).toString('utf8'));
+    for (const p of rawPlayers) for (const period of ['currentSeason','previousSeason','twoSeasons']) {
+      if (p[period]) p[period].metricDetails = observations[`${p.league}-${p.sofaId}`]?.[period] || {};
+    }
     const audit = JSON.parse(fs.readFileSync(auditPath, 'utf-8'));
     if (!Array.isArray(rawPlayers) || audit.schemaVersion !== 2 || rawPlayers.some((p: any) => p.schemaVersion !== 2)) {
       throw new Error('Unverified dataset schema');
@@ -148,7 +167,7 @@ export async function GET(req: NextRequest) {
       const distributions: Record<string, (number | null)[]> = {};
       keys.forEach((key) => {
         distributions[key] = group.map((item) =>
-          safeNumber(item.stats?.minutesPlayed) !== null && item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+          eligibleMetric(item.stats, key, true)
             ? item.roleMetrics[key]
             : null
         );
@@ -163,7 +182,7 @@ export async function GET(req: NextRequest) {
         // from the percentile calculation.
         const values = keys.map((key) => {
           const benchmark = distributions[key].filter((v): v is number => v !== null && Number.isFinite(v));
-          if (benchmark.length < 3) return null;
+          if (benchmark.length < 3 || !eligibleMetric(p.stats, key)) return null;
           return percentileRank(benchmark, p.roleMetrics[key]);
         });
 
@@ -178,8 +197,8 @@ export async function GET(req: NextRequest) {
         // percentiles are shrunk toward the neutral 50th percentile.
         // At 450+ minutes, adjusted percentile equals the raw Stage 2 percentile.
         const sampleWeight = Math.min(1, Math.max(0, p.stats.minutesPlayed / MIN_PERCENTILE_MINUTES));
-        const adjustedValues = values.map((v) =>
-          v === null ? null : Math.round(50 + (v - 50) * sampleWeight)
+        const adjustedValues = values.map((v, i) =>
+          v === null ? null : Math.round(50 + (v - 50) * Math.min(1, metricDetail(p.stats, keys[i]).minutes / MIN_PERCENTILE_MINUTES))
         );
         const adjustedAvailable = adjustedValues.filter((v): v is number => v !== null);
         const adjustedRoleScore = adjustedAvailable.length >= minRoleMetrics
@@ -198,13 +217,12 @@ export async function GET(req: NextRequest) {
         const attackingPercentiles = (pos === 'FW' || pos === 'MF') ? attackingKeys.map((key) => {
           const benchmark = group
             .filter((item) =>
-              safeNumber(item.stats?.minutesPlayed) !== null &&
-              item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+              eligibleMetric(item.stats, key, true)
             )
             .map((item) => item.roleMetrics[key])
             .filter((v): v is number => v !== null && Number.isFinite(v));
 
-          if (benchmark.length < 3) return null;
+          if (benchmark.length < 3 || !eligibleMetric(p.stats, key)) return null;
           return percentileRank(benchmark, p.roleMetrics[key]);
         }) : [];
         const attackingAvailable = attackingPercentiles.filter((v): v is number => v !== null);
@@ -229,14 +247,14 @@ export async function GET(req: NextRequest) {
           .sort((a, b) => a.percentile - b.percentile);
 
         const benchmarkPlayers = group.filter((item) =>
-          safeNumber(item.stats?.minutesPlayed) !== null && item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+          keys.some(key => eligibleMetric(item.stats, key, true) && item.roleMetrics[key] !== null)
         ).length;
 
         const metricCoverage = available.length;
         const mediumCoverageThreshold = pos === 'GK' ? 2 : 4;
         const highCoverageThreshold = pos === 'GK' ? 2 : 5;
         const confidence =
-          !p.period.complete || !hasReliableSample || metricCoverage < mediumCoverageThreshold
+          !p.period.complete || !hasReliableSample || metricCoverage < mediumCoverageThreshold || keys.some(key => metricDetail(p.stats, key).status !== 'complete')
             ? 'low'
             : p.stats.minutesPlayed >= 900 && metricCoverage >= highCoverageThreshold
               ? 'high'
@@ -292,13 +310,16 @@ export async function GET(req: NextRequest) {
           statsDateTo: p.stats.dateTo,
           statsEventIds: p.stats.eventIds,
           statsMetricCoverage: p.stats.metricCoverage,
+          statsMetricDetails: p.stats.metricDetails || {},
+          statsSeasonIds: p.period.seasons.map((s: any) => s.id),
+          roleMetricCoverage: Object.fromEntries(Object.keys(roleSources).map(key => [key, metricDetail(p.stats, key)])),
           marketValue: marketVal.formatted,
           rawMarketValueEUR: marketVal.raw,
           photoUrl: `https://img.sofascore.com/api/v1/player/${p.sofaId}/image`,
           initials: (p.shortName || p.name || 'UZ').split(' ').map((n: string) => n[0]).join('').slice(0, 2),
-          scoutIndex,
+          scoutIndex: adjustedRoleScore,
           scoutIndexIsCalculated: scoutIndex !== null,
-          scoutIndexBasis: 'Среднее доступных ролевых процентилей по метрикам с реальным покрытием данных; база сравнения — игроки с минимум 450 минутами',
+          scoutIndexBasis: 'Среднее ролевых процентилей с поправкой на покрытые минуты. База: ≥450 покрытых минут и ≥80% минут выборки; оценка игрока: ≥90 минут и ≥60%. Набор метрик может различаться.',
           scoutingEngine: {
             rawRoleScore: scoutIndex,
             roleScore: adjustedRoleScore,
@@ -320,26 +341,26 @@ export async function GET(req: NextRequest) {
           tags: [p.club, pos, p.isLegionnaire === null ? null : p.isLegionnaire ? 'Legioner' : 'Local'].filter(Boolean),
           minutesPlayed: p.stats.minutesPlayed,
           matchesPlayed: p.stats.matchesPlayed,
-          goals: safeNumber(p.stats.goals),
-          assists: safeNumber(p.stats.assists),
-          xG: safeNumber(p.stats.xG),
-          xA: safeNumber(p.stats.xA),
-          shots: safeNumber(p.stats.shots),
-          keyPasses: safeNumber(p.stats.keyPasses),
-          goalsPer90: per90(p.stats.goals, p.stats.minutesPlayed),
-          assistsPer90: per90(p.stats.assists, p.stats.minutesPlayed),
-          shotsPer90: per90(p.stats.shots, p.stats.minutesPlayed),
-          keyPassesPer90: per90(p.stats.keyPasses, p.stats.minutesPlayed),
-          passAccPct: safeNumber(p.stats.passAccPct),
-          dribbleSuccessRate: pos === 'GK' ? null : safeNumber(p.stats.dribbleSuccessRate),
-          dribbleWon: safeNumber(p.stats.dribbleWon),
-          dribbleTotal: safeNumber(p.stats.dribbleTotal),
-          duelWinRate: safeNumber(p.stats.duelWinPct),
+          goals: observed(p.stats, 'goals'),
+          assists: observed(p.stats, 'assists'),
+          xG: observed(p.stats, 'xG'),
+          xA: observed(p.stats, 'xA'),
+          shots: observed(p.stats, 'shots'),
+          keyPasses: observed(p.stats, 'keyPasses'),
+          goalsPer90: observedPer90(p.stats, 'goals'),
+          assistsPer90: observedPer90(p.stats, 'assists'),
+          shotsPer90: observedPer90(p.stats, 'shots'),
+          keyPassesPer90: observedPer90(p.stats, 'keyPasses'),
+          passAccPct: observed(p.stats, 'passAccPct'),
+          dribbleSuccessRate: pos === 'GK' ? null : observed(p.stats, 'dribbleSuccessRate'),
+          dribbleWon: observed(p.stats, 'dribbleWon'),
+          dribbleTotal: observed(p.stats, 'dribbleTotal'),
+          duelWinRate: observed(p.stats, 'duelWinPct'),
           progressiveRuns: null,
-          aerialWinRate: safeNumber(p.stats.aerialWinPct),
-          tackles: safeNumber(p.stats.tackles),
-          interceptions: safeNumber(p.stats.interceptions),
-          saves: safeNumber(p.stats.saves),
+          aerialWinRate: observed(p.stats, 'aerialWinPct'),
+          tackles: observed(p.stats, 'tackles'),
+          interceptions: observed(p.stats, 'interceptions'),
+          saves: observed(p.stats, 'saves'),
           roleMetrics: p.roleMetrics,
           radar,
         });

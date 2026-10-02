@@ -6,7 +6,7 @@ export type League = 'UZB' | 'KAZ';
 export type SeasonMode = 'latest' | 'current' | 'previous' | 'two';
 export type SortField = 'value' | 'age' | 'scout';
 export type SortOrder = 'asc' | 'desc';
-export type MainView = 'players' | 'recruitment' | 'saved';
+export type MainView = 'players' | 'recruitment' | 'saved' | 'team';
 export type FootFilter = 'all' | 'Right' | 'Left' | 'Both';
 export type NationalityFilter = 'all' | 'local' | 'legionnaire';
 
@@ -44,6 +44,11 @@ export interface ScoutingEngine {
   missingMetrics: string[];
 }
 
+export interface MetricDetail {
+  value: number | null; per90: number | null; matches: number; totalMatches: number;
+  minutes: number; totalMinutes: number; eventIds: number[];
+  status: 'missing' | 'partial' | 'complete'; reason?: string | null;
+}
 export interface Player {
   id: string;
   league: League;
@@ -74,6 +79,9 @@ export interface Player {
   isEstimatedMarketValue?: boolean;
   countryCode?: string | null;
   contractUntil: string;
+  statsMetricDetails?: Record<string, MetricDetail>;
+  roleMetricCoverage?: Record<string, MetricDetail>;
+  statsSeasonIds?: number[];
   statsSeasonType: 'current' | 'previous' | 'two';
   statsSeasonLabel: string;
   statsCoverageComplete: boolean;

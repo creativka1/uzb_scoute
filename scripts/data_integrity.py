@@ -9,6 +9,8 @@ never a claim of complete season coverage.
 from __future__ import annotations
 
 import json
+import hashlib
+import gzip
 import math
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -51,6 +53,15 @@ def atomic_json(path, payload):
     temp.replace(path)
 
 
+def atomic_gzip(path, payload):
+    content = gzip.compress(json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode(), mtime=0)
+    if path.exists() and path.read_bytes() == content:
+        return
+    temp = path.with_suffix(path.suffix + ".tmp")
+    temp.write_bytes(content)
+    temp.replace(path)
+
+
 def ratio(won, total):
     if won is None or total is None or total <= 0 or won > total:
         return None
@@ -67,7 +78,7 @@ def aggregate(appearances):
         "eventIds": sorted(a["eventId"] for a in appearances),
         "dateFrom": min(a["date"] for a in appearances),
         "dateTo": max(a["date"] for a in appearances),
-        "metricCoverage": {}, "observedTotals": {},
+        "metricCoverage": {}, "observedTotals": {}, "metricDetails": {},
     }
     for target, source in METRICS.items():
         values = [number(a["statistics"].get(source)) for a in appearances]
@@ -76,11 +87,39 @@ def aggregate(appearances):
         observed = round(sum(known), 4) if known else None
         result["observedTotals"][target] = observed
         result[target] = observed if len(known) == count else None
+        covered = [a for a, v in zip(appearances, values) if v is not None]
+        minutes = sum(a["statistics"]["minutesPlayed"] for a in covered)
+        result["metricDetails"][target] = {
+            "value": observed, "per90": round(observed / minutes * 90, 6) if observed is not None and minutes > 0 else None,
+            "matches": len(covered), "totalMatches": count, "minutes": minutes,
+            "totalMinutes": result["minutesPlayed"], "eventIds": sorted(a["eventId"] for a in covered),
+            "status": "missing" if not covered else "complete" if len(covered) == count else "partial",
+        }
     result["passAccPct"] = ratio(result["accuratePass"], result["totalPass"])
     result["dribbleSuccessRate"] = ratio(result["dribbleWon"], result["dribbleTotal"])
     for prefix in ("duel", "aerial"):
         won, lost = result[prefix + "Won"], result[prefix + "Lost"]
         result[prefix + "WinPct"] = ratio(won, won + lost if won is not None and lost is not None else None)
+    # Ratios use paired observations, never independent sums from different matches.
+    for key, numerator, denominator, add in [
+        ("passAccPct", "accuratePass", "totalPass", False),
+        ("dribbleSuccessRate", "wonContest", "totalContest", False),
+        ("duelWinPct", "duelWon", "duelLost", True),
+        ("aerialWinPct", "aerialWon", "aerialLost", True),
+    ]:
+        pairs = [(a, number(a["statistics"].get(numerator)), number(a["statistics"].get(denominator))) for a in appearances]
+        pairs = [(a, n, d) for a, n, d in pairs if n is not None and d is not None and (add or n <= d)]
+        top = sum(n for _, n, _ in pairs) if pairs else None
+        bottom = sum(n + d if add else d for _, n, d in pairs) if pairs else None
+        value = ratio(top, bottom)
+        result["metricDetails"][key] = {
+            "value": value, "per90": None, "matches": len(pairs), "totalMatches": count,
+            "minutes": sum(a["statistics"]["minutesPlayed"] for a, _, _ in pairs),
+            "totalMinutes": result["minutesPlayed"], "eventIds": sorted(a["eventId"] for a, _, _ in pairs),
+            "numerator": top, "denominator": bottom,
+            "status": "missing" if not pairs else "complete" if len(pairs) == count else "partial",
+            "reason": "no_attempts" if bottom == 0 else "not_provided" if not pairs else None,
+        }
     return result
 
 
@@ -179,6 +218,7 @@ def rebuild(root=ROOT):
                     "date": event["startTimestamp"], "team": team,
                     "player": player, "statistics": stats,
                     "position": POSITION.get(item.get("position") or player.get("position")),
+                    "substitute": item.get("substitute") if isinstance(item.get("substitute"), bool) else None,
                 })
     missing_lineups = sorted(set(events) - linked)
     # Keep identities even when their historical aggregate cannot be verified.
@@ -256,6 +296,64 @@ def rebuild(root=ROOT):
         "playersWithPreviousStats": sum(p["previousSeason"] is not None for p in output),
     }
     # Source caches are never deleted or rewritten by the recovery operation.
+    # A normalized, reproducible first match store. Raw cache is immutable here.
+    core_matches, core_appearances, teams, core_players = [], [], {}, {}
+    for event_id, event in sorted(events.items()):
+        for side in ("home", "away"):
+            team = event.get(side + "Team") or {}
+            if isinstance(team.get("id"), int):
+                teams[team["id"]] = {"id": team["id"], "name": team.get("name")}
+        lineup_path = data / "cache/lineups" / f"{event_id}.json"
+        lineup = load(lineup_path, {}) if event_id in linked else {}
+        core_matches.append({
+            "id": event_id, "league": event["league"], "competitionId": TOURNAMENTS[event["league"]],
+            "seasonId": event["season"]["id"], "seasonName": event["season"].get("name"),
+            "date": event["startTimestamp"], "homeTeamId": (event.get("homeTeam") or {}).get("id"),
+            "awayTeamId": (event.get("awayTeam") or {}).get("id"),
+            "homeScore": number((event.get("homeScore") or {}).get("current")),
+            "awayScore": number((event.get("awayScore") or {}).get("current")),
+            "lineupAvailable": event_id in linked,
+            "homeFormation": (lineup.get("home") or {}).get("formation"),
+            "awayFormation": (lineup.get("away") or {}).get("formation"),
+            "source": "SofaScore", "sourceEventId": event_id,
+            "eventHash": hashlib.sha256(json.dumps(event, sort_keys=True).encode()).hexdigest(),
+            "lineupHash": hashlib.sha256(lineup_path.read_bytes()).hexdigest() if event_id in linked else None,
+            "sourcePath": f"data/cache/lineups/{event_id}.json" if event_id in linked else None,
+        })
+    seen = set()
+    for (league, pid), rows in sorted(appearances.items()):
+        for a in rows:
+            key = (a["eventId"], pid)
+            if key in seen:
+                raise ValueError(f"Duplicate appearance {key}")
+            seen.add(key)
+            core_players[pid] = {"id": pid, "name": a["player"].get("name")}
+            core_appearances.append({
+                "id": f"{a['eventId']}:{pid}", "matchId": a["eventId"], "playerId": pid,
+                "teamId": a["team"]["id"], "minutes": a["statistics"]["minutesPlayed"],
+                "position": a["position"], "substitute": a["substitute"],
+                "stats": {target: number(a["statistics"].get(source)) for target, source in METRICS.items()},
+            })
+    core = {"schemaVersion": 1, "calculationVersion": "observed-v1", "source": "SofaScore",
+            "seasons": season_meta, "teams": list(teams.values()), "players": list(core_players.values()),
+            "matches": core_matches, "appearances": core_appearances,
+            "unlinkedEventIds": sorted(unlinked), "unconfirmedEventIds": sorted(unconfirmed)}
+    # Compact derived store avoids duplicating the large provider payloads.
+    atomic_gzip(data / "match_core.json.gz", core)
+    coverage_report = {}
+    for league in TOURNAMENTS:
+        league_rows = [a for (l, _), rows in appearances.items() if l == league for a in rows]
+        coverage_report[league] = {"appearances": len(league_rows), "metrics": {
+            key: {"known": sum(number(a["statistics"].get(src)) is not None for a in league_rows),
+                  "missing": sum(number(a["statistics"].get(src)) is None for a in league_rows)}
+            for key, src in METRICS.items()}}
+    atomic_json(data / "audits/metric_coverage.json", coverage_report)
+    observations = {}
+    for player in output:
+        observations[f"{player['league']}-{player['sofaId']}"] = {
+            period: player[period].pop("metricDetails") for period in ("currentSeason", "previousSeason", "twoSeasons") if player[period]
+        }
+    atomic_gzip(data / "metric_observations.json.gz", observations)
     atomic_json(data / "superliga_stats.json", output)
     atomic_json(data / "audits/data_integrity.json", report)
     return report
