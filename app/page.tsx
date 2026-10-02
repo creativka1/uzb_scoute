@@ -1240,8 +1240,8 @@ export default function Dashboard() {
                     )}
                   </td>
                   <td className="py-3 px-3 font-mono text-zinc-300">
-                    <strong className="text-white font-semibold">{player.matchesPlayed}</strong>{' '}
-                    <span className="text-zinc-500 text-[11px]">({player.minutesPlayed}')</span>
+                    <strong className="block text-white font-semibold">{player.matchesPlayed}</strong>
+                    <span className="block text-zinc-500 text-[11px]">{player.minutesPlayed} {lang==='ru'?'мин':'daq'}</span>
                   </td>
                   <td className="py-3 px-3 font-mono">
                     <strong className="text-white text-sm">{player.goals ?? '—'}</strong>{player.statsMetricDetails?.goals?.status==='partial'&&<small className="metric-coverage partial">{lang==='ru'?'Частично':'Qisman'}</small>}

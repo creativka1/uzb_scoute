@@ -379,3 +379,12 @@ select option { background: #172023; color: var(--ink); }
 @media(max-width:600px) { .dossier-columns .profile-facts .facts { grid-template-columns:1fr; }.match-summary-row { grid-template-columns:1fr 65px 24px; gap:8px; padding:14px; }.match-summary-row time { grid-column:1/-1; }.match-summary-row>span:last-child { display:none; }.match-score { gap:8px; }.match-score>span { font-size:14px; }.match-score>strong { font-size:27px; }.form-comparison { padding:16px; gap:16px 8px; grid-template-columns:minmax(100px,1.5fr) 1fr 1fr; font-size:11px; }.form-comparison strong { font-size:20px; }.focused-team .section-heading { flex-wrap:wrap; gap:12px; } }
 
 .metric-scale { color:var(--muted); font-size:11px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+
+/* Group average shares the player's scale; it is not another bar. */
+.compact-profile, .metric-lines, .metric-line { min-width:0; }
+.single-player .metric-line { grid-template-columns:minmax(0,1fr) 56px; }
+.profile-track>i.mean-marker { left:auto; top:50%; transform:translate(-50%,-50%); height:15px; width:2px; background:#d6e0e2; opacity:1; }
+.compact-profile .comparison-key .mean-key i { width:2px; height:12px; border-radius:0; background:#d6e0e2; }
+.metric-mean-caption { margin-top:7px; color:var(--muted); font-size:11px; }
+.participation-stack { display:grid; gap:3px; margin-top:8px; font-size:12px; }
+.participation-stack small { color:var(--muted); font-size:11px; }
