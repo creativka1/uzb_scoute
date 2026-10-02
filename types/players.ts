@@ -6,7 +6,7 @@ export type League = 'UZB' | 'KAZ';
 export type SeasonMode = 'latest' | 'current' | 'previous' | 'two';
 export type SortField = 'value' | 'age' | 'scout';
 export type SortOrder = 'asc' | 'desc';
-export type MainView = 'players' | 'recruitment';
+export type MainView = 'players' | 'recruitment' | 'saved';
 export type FootFilter = 'all' | 'Right' | 'Left' | 'Both';
 export type NationalityFilter = 'all' | 'local' | 'legionnaire';
 

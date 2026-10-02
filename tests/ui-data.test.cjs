@@ -1,0 +1,73 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const ts = require('typescript');
+const React = require('react');
+const {renderToStaticMarkup} = require('react-dom/server');
+const root = path.resolve(__dirname, '..');
+const cache = new Map();
+function load(file) {
+  if (cache.has(file)) return cache.get(file);
+  const exports = {};
+  const code = ts.transpileModule(fs.readFileSync(path.join(root, file), 'utf8'), {
+    compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true, jsx: ts.JsxEmit.ReactJSX},
+  }).outputText;
+  const imports = name => name.startsWith('@/') ? load(name.slice(2) + (name.endsWith('player-analysis') ? '.tsx' : '.ts')) : require(name);
+  vm.runInNewContext(code, {exports, require: imports, console, process: {cwd: () => root}, URL, Date, Object, Number});
+  cache.set(file, exports);
+  return exports;
+}
+const ui = load('components/football/player-analysis.tsx');
+const api = load('app/api/players/route.ts');
+const {NextRequest} = require('next/server');
+let players;
+async function sourcePlayers() {
+  return players ||= await (await api.GET(new NextRequest('http://localhost/api/players?league=UZB&season=previous'))).json();
+}
+function render(component, props) {return renderToStaticMarkup(React.createElement(component, props));}
+
+test('display formatter distinguishes an actual zero from a missing source value', () => {
+  assert.equal(ui.formatValue(null, 1, '%'), '—');
+  assert.equal(ui.formatValue(0, 1, '%'), '0.0%');
+  assert.equal(ui.formatValue(undefined), '—');
+  assert.equal(ui.formatValue(NaN), '—');
+});
+
+test('profile does not turn missing raw statistics into zero or a percentile', async () => {
+  const player = (await sourcePlayers()).find(p => p.position === 'MF');
+  // Isolated rendering variant tests the missing-value presentation, not production data.
+  const missing = {...player, roleMetrics: {}, radar: {m1:null,m2:null,m3:null,m4:null,m5:null,m6:null}};
+  for (const lang of ['ru', 'uz']) {
+    const html = render(ui.MetricProfile, {player: missing, lang});
+    assert.ok(html.includes('—'));
+    assert.ok(!html.includes('width:0%'));
+    assert.ok(!html.includes('N='));
+    assert.ok(!/P\d{1,3}/.test(html));
+    assert.ok(!/<details[^>]* open/.test(html));
+  }
+});
+
+test('comparison still shows the second player when the first has missing metrics', async () => {
+  const list = await sourcePlayers();
+  const other = list.find(p => p.position === 'MF' && p.radar.m2 !== null);
+  assert.ok(other);
+  const missing = {...other, id: 'render-fixture', roleMetrics: {}, radar: {m1:null,m2:null,m3:null,m4:null,m5:null,m6:null}};
+  const html = render(ui.MetricProfile, {player: missing, comparison: other, lang: 'ru'});
+  assert.ok(html.includes('profile-track comparison'));
+  assert.ok(html.includes(ui.formatValue(other.roleMetrics.assistsPer90, 2)));
+});
+
+test('all real source-backed player positions render with missing fields safely', async () => {
+  const list = await sourcePlayers();
+  for (const pos of new Set(list.map(p => p.position))) {
+    const player = list.find(p => p.position === pos);
+    const html = render(ui.PlayerDossier, {player, players: [], lang: 'ru', saved: false, canSave: true,
+      onSave(){},onCompare(){},onCompareReplacement(){},onPrint(){},onClose(){}, detailedLabel:'—', footLabel:'—'});
+    assert.ok(html.includes('Профиль игрока'));
+    assert.ok(html.includes('Источник и надёжность данных'));
+    assert.ok(!html.includes('NaN'));
+    assert.ok(!html.includes('undefined'));
+  }
+});
