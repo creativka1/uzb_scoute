@@ -118,6 +118,7 @@ export interface Player {
   interceptions: number | null;
   saves: number | null;
   roleMetrics?: Record<string, number | null>;
+  roleBenchmarks?: Record<string, {mean:number|null;max:number|null;count:number}>;
   radar: RoleRadarMetrics;
 }
 

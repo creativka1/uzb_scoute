@@ -20,6 +20,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 
+import type { AnalysisLocation } from '@/types/matches';
 import type { Position, AnalyticalRole, DetailedPosition, Language, League, SeasonMode, SortField, SortOrder, MainView, FootFilter, NationalityFilter, Player } from '@/types/players';
 
 const TRANSLATIONS = {
@@ -527,6 +528,8 @@ export default function Dashboard() {
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
+  const [analysisSelection,setAnalysisSelection]=useState<AnalysisLocation|null>(null);
+  const [recruitmentContext,setRecruitmentContext]=useState('');
   const [inspectionPlayers,setInspectionPlayers]=useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [pickingOpponentFor, setPickingOpponentFor] = useState<Player | null>(null);
@@ -1015,7 +1018,7 @@ export default function Dashboard() {
         <nav className="workspace-nav" aria-label={lang === 'ru' ? 'Основная навигация' : 'Asosiy navigatsiya'}>
           <button aria-current={activeView === 'players' ? 'page' : undefined} onClick={() => setActiveView('players')}><Users size={17} />{t.tabPlayers}</button>
           <button aria-current={activeView === 'recruitment' ? 'page' : undefined} onClick={() => setActiveView('recruitment')}><Search size={17} />{lang === 'ru' ? 'Поиск под задачу' : 'Vazifa uchun qidiruv'}</button>
-          <button aria-current={activeView === 'team' ? 'page' : undefined} onClick={()=>setActiveView('team')}><Activity size={17}/>{lang==='ru'?'Команда и матчи':'Jamoa va o‘yinlar'}</button>
+          <button aria-current={activeView === 'team' ? 'page' : undefined} onClick={()=>{setAnalysisSelection(null);setActiveView('team');}}><Activity size={17}/>{lang==='ru'?'Команда и матчи':'Jamoa va o‘yinlar'}</button>
           <button aria-current={activeView === 'saved' ? 'page' : undefined} onClick={() => setActiveView('saved')}><Bookmark size={17} />{lang === 'ru' ? 'Сохранённые' : 'Saqlanganlar'}<span className="nav-count">{savedCandidates.length}</span></button>
         </nav>
         <div className="language-switch" aria-label={lang === 'ru' ? 'Язык' : 'Til'}>{(['uz', 'ru'] as Language[]).map(l => <button key={l} aria-pressed={lang === l} onClick={() => setLang(l)}>{l.toUpperCase()}</button>)}</div>
@@ -1027,15 +1030,15 @@ export default function Dashboard() {
         </div>
       </section>
       <div className="scope-toolbar">
-        <label>{lang === 'ru' ? 'Чемпионат' : 'Chempionat'}<select value={currentLeague} onChange={e => { setCurrentLeague(e.target.value as League); setFilterClub('all'); }}><option value="UZB">{t.leagueUZB}</option><option value="KAZ">{t.leagueKAZ}</option></select></label>
+        <label>{lang === 'ru' ? 'Чемпионат' : 'Chempionat'}<select value={currentLeague} onChange={e => { setCurrentLeague(e.target.value as League);setAnalysisSelection(null);setRecruitmentContext(''); setFilterClub('all'); }}><option value="UZB">{t.leagueUZB}</option><option value="KAZ">{t.leagueKAZ}</option></select></label>
         {activeView!=='team'&&<label>{lang === 'ru' ? 'Период' : 'Davr'}<select value={seasonMode} onChange={e => setSeasonMode(e.target.value as SeasonMode)}><option value="latest">{lang === 'ru' ? 'Последний доступный сезон' : 'Oxirgi mavjud mavsum'}</option><option value="current">{t.statsCurrentSeason}</option><option value="previous">{t.statsPreviousSeason}</option><option value="two">{t.statsTwoSeasons}</option></select></label>}
         {activeView!=='team'&&<div className="scope-summary"><strong>{isLoading ? '…' : periodLabel || '—'}</strong><span>{isLoading ? t.loading : `${players.length} ${lang === 'ru' ? 'игроков с данными' : 'futbolchida ma’lumot bor'}`}</span></div>}
       </div>
       {activeView!=='team' && !isLoading && !loadError && <details className={`coverage-note ${coverageComplete ? 'complete' : ''}`}><summary>{coverageComplete ? (lang === 'ru' ? 'Данные по загруженным матчам' : 'Yuklangan o‘yinlar ma’lumotlari') : (lang === 'ru' ? 'Данные сезона неполные' : 'Mavsum ma’lumotlari to‘liq emas')}<span>{lang === 'ru' ? 'Что это значит?' : 'Bu nimani anglatadi?'}</span></summary><p>{lang === 'ru' ? 'Показатели рассчитаны только по подтверждённым загруженным матчам SofaScore. Пропущенные значения обозначены прочерком. Прошлый сезон никогда не подставляется в текущий.' : 'Ko‘rsatkichlar faqat SofaScore’dan yuklangan tasdiqlangan o‘yinlardan hisoblangan. Yetishmayotgan qiymatlar tire bilan belgilangan. Oldingi mavsum joriy mavsum o‘rniga qo‘yilmaydi.'}</p></details>}
       {loadError && <p role="alert" className="error-notice">{lang === 'ru' ? 'Не удалось загрузить данные. Выберите период ещё раз.' : 'Ma’lumot yuklanmadi. Davrni qayta tanlang.'}</p>}
       {saveError && <p role="alert" className="error-notice">{lang === 'ru' ? 'Не удалось прочитать или сохранить список в браузере. Существующее сохранение не перезаписано.' : 'Brauzerdagi ro‘yxatni o‘qish yoki saqlash imkoni bo‘lmadi. Mavjud saqlanma o‘zgartirilmagan.'}</p>}
-      {activeView==='team'&&<TeamWorkspace key={`${currentLeague}:${seasonMode}`} league={currentLeague} seasonMode={seasonMode} lang={lang}
-        onRecruit={pos=>{setRecruitmentPosition(pos);setRecruitmentDetailedPosition('all');setActiveView('recruitment');}}
+      {activeView==='team'&&<TeamWorkspace key={`${currentLeague}:${seasonMode}`} initialSelection={analysisSelection} league={currentLeague} seasonMode={seasonMode} lang={lang}
+        onRecruit={(pos,period,team)=>{setAnalysisSelection(null);setRecruitmentPosition(pos);setRecruitmentDetailedPosition('all');setSeasonMode(period);setRecruitmentContext(team);setActiveView('recruitment');if(pos==='GK'){setRecruitmentMinAttackScore('');setRecruitmentMinGoals90('');setRecruitmentMinAssists90('');setRecruitmentMinShots90('');setRecruitmentMinKeyPasses90('');setRecruitmentMinDribble('');}}}
         onPlayer={(player,pool)=>{setInspectionPlayers(pool);setSelectedPlayer(player);}}/>}
       {activeView === 'saved' && <section className="saved-workspace"><div className="section-heading"><h2>{lang === 'ru' ? 'Ваш список' : 'Sizning ro‘yxatingiz'}</h2><span>{savedCandidates.length}</span></div>{!savedCandidates.length ? <div className="workspace-empty"><Bookmark size={30} /><h3>{lang === 'ru' ? 'Здесь появятся сохранённые игроки' : 'Saqlangan futbolchilar shu yerda ko‘rinadi'}</h3><p>{lang === 'ru' ? 'Откройте профиль и нажмите «Сохранить».' : 'Profilni oching va «Saqlash»ni bosing.'}</p><button className="action-primary" onClick={() => setActiveView('players')}>{lang === 'ru' ? 'Посмотреть игроков' : 'Futbolchilarni ko‘rish'}<ArrowRight size={16} /></button></div> : <div className="saved-grid">{savedCandidates.map(saved => { const player = players.find(p => p.id === saved.id); return <article className="saved-card" key={saved.id}><div className="saved-card-main">{player ? <PlayerAvatar player={player} lang={lang} /> : <span className="player-avatar"><Bookmark size={18} /></span>}<div><h3>{saved.name[lang]}</h3><p>{player ? player.club[lang] : (lang === 'ru' ? 'Нет данных в выбранной лиге и периоде' : 'Tanlangan liga va davrda ma’lumot yo‘q')}</p></div></div><div className="saved-card-actions"><button className="action-secondary" disabled={!player} onClick={() => { if(player) setSelectedPlayer(player); }}>{lang === 'ru' ? 'Открыть профиль' : 'Profilni ochish'}<ChevronRight size={15} /></button><button className="icon-button" aria-label={`${lang === 'ru' ? 'Удалить из сохранённых:' : 'Saqlanganlardan o‘chirish:'} ${saved.name[lang]}`} onClick={() => setSavedCandidates(items => items.filter(p => p.id !== saved.id))}><X size={16} /></button></div></article>; })}</div>}</section>}
       {activeView === 'players' && (<>
@@ -1049,6 +1052,7 @@ export default function Dashboard() {
       {activeView === 'recruitment' && (
       <>
       {/* RECRUITMENT */}
+      {recruitmentContext&&<div className="recruitment-context"><span>{lang==='ru'?'Усиление для':'Kuchaytirish uchun'}: <strong>{recruitmentContext}</strong></span><button className="text-link" onClick={()=>{setAnalysisSelection(null);setActiveView('team');}}>← {lang==='ru'?'К команде':'Jamoaga'}</button><button className="icon-button" aria-label={lang==='ru'?'Убрать контекст команды':'Jamoa kontekstini olib tashlash'} onClick={()=>setRecruitmentContext('')}><X size={14}/></button></div>}
       <section className="recruitment-panel max-w-7xl mx-auto mb-5 rounded-xl border border-zinc-800 bg-zinc-900/70 p-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-zinc-800 pb-4 mb-4">
           <div className="flex items-start gap-2.5">
@@ -1240,10 +1244,10 @@ export default function Dashboard() {
                     <span className="text-zinc-500 text-[11px]">({player.minutesPlayed}')</span>
                   </td>
                   <td className="py-3 px-3 font-mono">
-                    <strong className="text-white text-sm">{player.goals ?? '—'}</strong><CoverageLabel player={player} metric="goals" lang={lang}/>
+                    <strong className="text-white text-sm">{player.goals ?? '—'}</strong>{player.statsMetricDetails?.goals?.status==='partial'&&<small className="metric-coverage partial">{lang==='ru'?'Частично':'Qisman'}</small>}
                   </td>
                   <td className="py-3 px-3 font-mono">
-                    <strong className="text-white text-sm">{player.assists ?? '—'}</strong><CoverageLabel player={player} metric="assists" lang={lang}/>
+                    <strong className="text-white text-sm">{player.assists ?? '—'}</strong>{player.statsMetricDetails?.assists?.status==='partial'&&<small className="metric-coverage partial">{lang==='ru'?'Частично':'Qisman'}</small>}
                   </td>
                   <td><strong className="table-index">{player.scoutingEngine.roleScore??'—'}</strong><small className="metric-coverage">{player.scoutingEngine.metricCoverage} / {player.scoutingEngine.totalRoleMetrics} {lang==='ru'?'метрик':'ko‘rsatkich'}</small>{player.scoutingEngine.confidence==='low'&&<small className="metric-coverage partial">{lang==='ru'?'Предварительно':'Dastlabki'}</small>}</td><td><button className="icon-button" aria-label={`${lang === 'ru' ? 'Открыть профиль:' : 'Profilni ochish:'} ${player.name[lang]}`} onClick={e => {e.stopPropagation(); setSelectedPlayer(player);}}><ChevronRight size={18} /></button></td>
                 </tr>
@@ -1377,6 +1381,7 @@ export default function Dashboard() {
       {selectedPlayer && <PlayerDossier key={selectedPlayer.id} player={selectedPlayer} players={[...players,...inspectionPlayers.filter(p=>!players.some(x=>x.id===p.id&&JSON.stringify(x.statsSeasonIds)===JSON.stringify(p.statsSeasonIds)))]} lang={lang}
         saved={savedCandidates.some(p => p.id === selectedPlayer.id)} canSave={savedReady} onSave={() => saveCandidates([selectedPlayer])}
         onCompare={() => handleOpenPicker(selectedPlayer)} onCompareReplacement={handleCompareWithReplacement}
+        onOpenMatch={location=>{setSelectedPlayer(null);setCurrentLeague(location.league);setAnalysisSelection(location);setActiveView('team');}}
         onPrint={() => handlePrintPdf(selectedPlayer)} onClose={() => setSelectedPlayer(null)}
         detailedLabel={getDetailedPositionName(selectedPlayer.detailedPosition)} footLabel={getFootName(selectedPlayer.preferredFoot)} />}
       {pickingOpponentFor && <PlayerPicker player={pickingOpponentFor} players={[...players,...inspectionPlayers.filter(p=>!players.some(x=>x.id===p.id&&JSON.stringify(x.statsSeasonIds)===JSON.stringify(p.statsSeasonIds)))]} lang={lang} onChoose={handleSelectOpponent}

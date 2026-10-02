@@ -42,7 +42,7 @@ test('profile does not turn missing raw statistics into zero or a percentile', a
   for (const lang of ['ru', 'uz']) {
     const html = render(ui.MetricProfile, {player: missing, lang});
     assert.ok(html.includes('—'));
-    assert.ok(!html.includes('width:0%'));
+    for (const row of html.split('class="metric-line primary"').slice(1)) assert.ok(!row.split('class="metric-line mean"')[0].includes('style="width:'));
     assert.ok(!html.includes('N='));
     assert.ok(!/P\d{1,3}/.test(html));
     assert.ok(!/<details[^>]* open/.test(html));
@@ -74,5 +74,21 @@ test('all real source-backed player positions render with missing fields safely'
 
 test('zero assists give an empty actual bar despite tied nonzero percentile',async()=>{
 const p=(await sourcePlayers()).find(p=>p.position==='MF'&&p.assists===0&&p.radar.m2>0);assert.ok(p);
-const html=render(ui.MetricProfile,{player:p,lang:'ru'}),row=html.split('Голевые передачи')[1].split('profile-row')[0];assert.ok(row.includes('0.00'));assert.ok(row.includes('width:0%'));assert.ok(!row.includes(`width:${p.radar.m2}%`));assert.ok(html.includes('Фактические показатели'));assert.equal(ui.formatValue(0.0001,2),'<0.01');
+const html=render(ui.MetricProfile,{player:p,lang:'ru'}),row=html.split('data-metric="assistsPer90"')[1].split('class="metric-line mean"')[0];assert.ok(row.includes('0.00'));assert.ok(row.includes('width:0%'));assert.ok(!row.includes(`width:${p.radar.m2}%`));assert.ok(html.includes('Сравнение со средним'));assert.equal(ui.formatValue(0.0001,2),'<0.01');
+});
+
+
+test('equal player values use the group scale and show the actual mean', async () => {
+  const source = (await sourcePlayers()).find(p => p.position === 'MF');
+  const player = {...source, roleMetrics: {...source.roleMetrics, keyPassesPer90: 1},
+    roleBenchmarks: {...source.roleBenchmarks, keyPassesPer90: {count: 10, mean: 1.5, max: 4}}};
+  const other = {...player, id: 'render-other'};
+  const html = render(ui.MetricProfile, {player, comparison: other, lang: 'ru'});
+  const row = html.split('data-metric="keyPassesPer90"')[1].split('data-metric=')[0];
+  assert.equal((row.match(/width:25%/g) || []).length, 2);
+  assert.ok(row.includes('width:37.5%'));
+  assert.ok(row.includes('1.50'));
+  assert.ok(row.includes('0–4.00'));
+  assert.ok(!row.includes('width:100%'));
+  assert.ok(!html.includes('Место в группе'));
 });

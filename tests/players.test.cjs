@@ -97,3 +97,28 @@ const s=(await get('UZB','previous')).players.find(p=>p.position==='GK'&&p.radar
 const target={...s,id:'target',rawMarketValueEUR:null},same={...s,id:'same',rawMarketValueEUR:null};
 const result=recruitment.getSimilarPlayers(target,[same,{...same,id:'other',statsSeasonIds:[-1]},{...same,id:'missing',radar:{...same.radar,m2:null}}]);assert.equal(result.length,1);assert.equal(result[0].similarity,100);assert.equal(result[0].player.id,'same');
 });
+
+
+test('group mean uses eligible raw metrics within one league, position and period', async () => {
+  const all = (await get('all', 'previous')).players;
+  for (const league of ['UZB', 'KAZ']) {
+    const list = (await get(league, 'previous')).players;
+    for (const p of list) {
+      assert.deepEqual(all.find(a => a.id === p.id).roleBenchmarks, p.roleBenchmarks);
+      for (const [key, benchmark] of Object.entries(p.roleBenchmarks)) {
+        const values = list.filter(q => q.position === p.position).filter(q => {
+          const coverage = q.roleMetricCoverage[key];
+          return coverage.minutes >= 450 && coverage.totalMinutes > 0 && coverage.minutes / coverage.totalMinutes >= 0.8;
+        }).map(q => q.roleMetrics[key]).filter(Number.isFinite);
+        assert.equal(benchmark.count, values.length);
+        if (values.length < 3) {
+          assert.equal(benchmark.mean, null);
+          assert.equal(benchmark.max, null);
+        } else {
+          assert.ok(Math.abs(benchmark.mean - values.reduce((a,b) => a+b,0) / values.length) < 1e-9);
+          assert.equal(benchmark.max, Math.max(...values));
+        }
+      }
+    }
+  }
+});

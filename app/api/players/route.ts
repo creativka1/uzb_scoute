@@ -173,6 +173,13 @@ export async function GET(req: NextRequest) {
         );
       });
 
+      const roleBenchmarks = Object.fromEntries(keys.map(key => {
+        const values = distributions[key].filter((v): v is number => v !== null && Number.isFinite(v));
+        return [key, { count: values.length,
+          mean: values.length >= 3 ? values.reduce((a,b) => a+b,0) / values.length : null,
+          max: values.length >= 3 ? Math.max(...values) : null }];
+      }));
+
       group.forEach((p) => {
         const hasReliableSample = safeNumber(p.stats?.minutesPlayed) !== null && p.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES;
 
@@ -362,6 +369,7 @@ export async function GET(req: NextRequest) {
           interceptions: observed(p.stats, 'interceptions'),
           saves: observed(p.stats, 'saves'),
           roleMetrics: p.roleMetrics,
+          roleBenchmarks,
           radar,
         });
       });

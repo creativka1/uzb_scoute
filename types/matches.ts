@@ -17,3 +17,4 @@ export interface MatchCore {
   seasons: Record<League, CoreSeason[]>; teams: CoreTeam[]; players: CorePlayer[];
   matches: CoreMatch[]; appearances: Appearance[]; unlinkedEventIds: number[]; unconfirmedEventIds: number[];
 }
+export interface AnalysisLocation { league: League; teamId: number; seasonId: number; matchId: number }
