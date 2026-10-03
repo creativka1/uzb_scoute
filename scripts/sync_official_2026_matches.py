@@ -169,7 +169,8 @@ def parse_kff(html: str, source_id: int) -> dict | None:
         return None
 
     segment = parts[marker_index:marker_index + 22]
-    date_index = next((i for i, s in enumerate(segment) if "2026" in s and "г" in s), None)
+    date_index = next((i for i, s in enumerate(segment) if re.search(
+        r"\d{1,2}\s+[а-яё]+\.?\s+2026\s*г\.?", s.casefold())), None)
     if date_index is None:
         return None
     time_index = next((i for i in range(date_index + 1, min(len(segment), date_index + 5))
