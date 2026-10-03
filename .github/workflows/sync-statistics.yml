@@ -1,11 +1,24 @@
 name: Sync verified match statistics
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - data/.sync-2026-request
   workflow_dispatch:
     inputs:
       max_requests:
         description: Maximum HTTP requests including retries (uses RapidAPI quota)
         default: '1500'
         required: true
+      season_year:
+        description: Optional season year to sync, e.g. 2026
+        default: ''
+        required: false
+      league:
+        description: Optional league code (UZB or KAZ); blank means both
+        default: ''
+        required: false
 permissions:
   contents: write
 concurrency:
@@ -23,11 +36,17 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install curl_cffi
-      - name: Download both competitions
+      - name: Download selected competitions
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-          MAX_REQUESTS: ${{ inputs.max_requests }}
-        run: python app/api/players/scripts/sync_sofascore.py --max-requests "$MAX_REQUESTS"
+          MAX_REQUESTS: ${{ github.event_name == 'push' && '1500' || inputs.max_requests }}
+          SEASON_YEAR: ${{ github.event_name == 'push' && '2026' || inputs.season_year }}
+          LEAGUE: ${{ inputs.league }}
+        run: |
+          args=(--max-requests "$MAX_REQUESTS")
+          if [ -n "$SEASON_YEAR" ]; then args+=(--season-year "$SEASON_YEAR"); fi
+          if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
+          python app/api/players/scripts/sync_sofascore.py "${args[@]}"
       - name: Rebuild evidence and partial-cache coverage
         if: always()
         run: |
