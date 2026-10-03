@@ -36,7 +36,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install curl_cffi
-      - name: Download selected competitions
+      - name: Download selected competitions through provider
+        id: provider_sync
+        continue-on-error: true
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           MAX_REQUESTS: ${{ github.event_name == 'push' && '1500' || inputs.max_requests }}
@@ -47,6 +49,23 @@ jobs:
           if [ -n "$SEASON_YEAR" ]; then args+=(--season-year "$SEASON_YEAR"); fi
           if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
           python app/api/players/scripts/sync_sofascore.py "${args[@]}"
+
+      - name: Install public browser fallback
+        if: steps.provider_sync.outcome == 'failure'
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Fetch public 2026 match lists in browser
+        if: steps.provider_sync.outcome == 'failure'
+        env:
+          SEASON_YEAR: ${{ github.event_name == 'push' && '2026' || inputs.season_year }}
+          LEAGUE: ${{ inputs.league }}
+        run: |
+          args=(--season-year "${SEASON_YEAR:-2026}")
+          if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
+          python scripts/sync_public_matchlists.py "${args[@]}"
+
       - name: Rebuild evidence and partial-cache coverage
         if: always()
         run: |
