@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "UzStat Talent Tracker | Футбольная аналитика",
-  description: "Скаутинг и сравнение игроков Узбекистана и Казахстана по данным SofaScore с указанием сезона и покрытия.",
+  description: "Скаутинг и сравнение игроков Узбекистана и Казахстана по подтверждённым матчевым данным с указанием источника, сезона и покрытия.",
 };
 
 export default function RootLayout({

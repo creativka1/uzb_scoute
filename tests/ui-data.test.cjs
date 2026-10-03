@@ -70,7 +70,7 @@ test('all real source-backed player positions render with missing fields safely'
     const html = render(ui.PlayerDossier, {player, players: [], lang: 'ru', saved: false, canSave: true,
       onSave(){},onCompare(){},onCompareReplacement(){},onPrint(){},onClose(){}, detailedLabel:'—', footLabel:'—'});
     assert.ok(html.includes('Профиль игрока'));
-    assert.ok(html.includes('Источник и надёжность данных'));
+    assert.ok(html.includes('Качество данных'));
     assert.ok(!html.includes('NaN'));
     assert.ok(!html.includes('undefined'));
   }
