@@ -72,11 +72,19 @@ export function PlayerMatchHistory({player,lang,onOpenMatch}: {player:Player;lan
   const [season,setSeason]=useState(''), [metric,setMetric]=useState('goals');
   if(error)return <p role="alert">{tr(lang,'История матчей не загрузилась.','O‘yinlar tarixi yuklanmadi.')} <button onClick={refresh}>{tr(lang,'Повторить','Qayta urinish')}</button></p>;
   if(!data)return <p className="muted">{tr(lang,'Загрузка матчей…','O‘yinlar yuklanmoqda…')}</p>;
-  const seasons=data.seasons[player.league];
-  const chosen=season||String(player.statsSeasonIds?.[0]||seasons.find(s=>data.matches.some(m=>m.seasonId===s.id))?.id||seasons[0].id);
+  const playerNumericId=Number(player.id.split('-')[1]);
+  const seasonIdsWithPlayer=new Set(
+    data.appearances.filter(a=>a.playerId===playerNumericId)
+      .map(a=>data.matches.find(m=>m.id===a.matchId)?.seasonId)
+      .filter((id): id is number=>typeof id==='number')
+  );
+  const seasons=data.seasons[player.league].filter(s=>seasonIdsWithPlayer.has(s.id));
+  if(!seasons.length)return <p className="empty-inline">{tr(lang,'Нет загруженной истории матчей этого игрока.','Bu futbolchining yuklangan o‘yin tarixi yo‘q.')}</p>;
+  const preferredId=player.statsSeasonIds?.find(id=>seasonIdsWithPlayer.has(id));
+  const chosen=season||String(preferredId||seasons[0].id);
   const events=data.matches.filter(m=>m.seasonId===Number(chosen));
   const map=new Map(events.map(m=>[m.id,m]));
-  const rows=data.appearances.filter(a=>map.has(a.matchId)&&a.playerId===Number(player.id.split('-')[1])).sort((a,b)=>map.get(b.matchId)!.date-map.get(a.matchId)!.date);
+  const rows=data.appearances.filter(a=>map.has(a.matchId)&&a.playerId===playerNumericId).sort((a,b)=>map.get(b.matchId)!.date-map.get(a.matchId)!.date);
   const teams=new Map(data.teams.map(t=>[t.id,t.name]));
   const last=observedMetric(rows.slice(0,5),metric), previous=observedMetric(rows.slice(5,10),metric);
   return <div className="player-history"><button className="text-link" onClick={refresh}>{tr(lang,'Перечитать данные','Ma’lumotni qayta o‘qish')}</button><div className="analysis-controls"><label>{tr(lang,'Сезон истории','Tarix mavsumi')}<select value={chosen} onChange={e=>setSeason(e.target.value)}>{seasons.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label><label>{tr(lang,'Показатель','Ko‘rsatkich')}<select value={metric} onChange={e=>setMetric(e.target.value)}>{Object.keys(labels).map(k=><option value={k} key={k}>{metricName(k,lang)}</option>)}</select></label></div>
@@ -114,8 +122,12 @@ export function TeamWorkspace({league,seasonMode,lang,onRecruit,onPlayer,initial
   },[league,initialSelection,seasonMode]);
   if(error)return <p role="alert" className="error-notice">{tr(lang,'Матчи не загрузились.','O‘yinlar yuklanmadi.')} <button onClick={refresh}>{tr(lang,'Повторить','Qayta urinish')}</button></p>;
   if(!data)return <p className="muted">{tr(lang,'Загрузка команд…','Jamoalar yuklanmoqda…')}</p>;
-  const seasons=data.seasons[league];
-  const defaultSeason=seasonMode==='current'?seasons[0]:seasonMode==='previous'?seasons[1]:seasons.find(s=>data.matches.some(m=>m.seasonId===s.id))||seasons[0];
+  const allSeasons=data.seasons[league];
+  const seasons=allSeasons.filter(s=>data.matches.some(m=>m.seasonId===s.id));
+  if(!seasons.length)return <div className="workspace-empty"><h3>{tr(lang,'Матчи этой лиги ещё не загружены','Bu liga o‘yinlari hali yuklanmagan')}</h3></div>;
+  const currentWithData=allSeasons.find(s=>s.id===seasons[0].id);
+  const previousWithData=seasons[1]||seasons[0];
+  const defaultSeason=seasonMode==='previous' ? previousWithData : currentWithData||seasons[0];
   const selectedSeason=seasons.find(s=>s.id===Number(season))||defaultSeason;
   const seasonMatches=data.matches.filter(m=>m.seasonId===selectedSeason.id);
   const teamIds=new Set(seasonMatches.flatMap(m=>[m.homeTeamId,m.awayTeamId]));
@@ -149,7 +161,7 @@ export function TeamWorkspace({league,seasonMode,lang,onRecruit,onPlayer,initial
     <div className="section-heading"><h2>{teamName}</h2><button className="text-link" onClick={refresh}>{tr(lang,'Перечитать данные','Ma’lumotni qayta o‘qish')}</button><span className="context-chip">{selectedSeason.complete?tr(lang,'Загруженный сезон','Yuklangan mavsum'):tr(lang,'Неполные данные','To‘liq bo‘lmagan ma’lumot')}</span></div>
     <nav className="dossier-tabs" aria-label={tr(lang,'Анализ команды','Jamoa tahlili')}>{(['overview','matches','roster','notes'] as const).map((key,i)=><button key={key} aria-pressed={tab===key} onClick={()=>{setTab(key);setMatch(null);setQuery('');}}>{[tr(lang,'Обзор','Umumiy'),tr(lang,'Матчи','O‘yinlar'),tr(lang,'Состав','Tarkib'),tr(lang,'Выводы','Xulosalar')][i]}</button>)}</nav>
     {profileError&&<p role="alert" className="error-notice">{tr(lang,'Не удалось открыть профиль. Попробуйте ещё раз.','Profil ochilmadi. Qayta urinib ko‘ring.')}</p>}{opening&&<p role="status" className="muted">{tr(lang,'Открываю профиль…','Profil ochilmoqda…')}</p>}
-    {!matches.length?<div className="workspace-empty"><h3>{tr(lang,'Матчи этого сезона ещё не загружены','Bu mavsum o‘yinlari hali yuklanmagan')}</h3><p>{tr(lang,'Выберите доступный сезон выше.','Yuqorida mavjud mavsumni tanlang.')}</p></div>:<>
+    {!teamId?<div className="workspace-empty"><h3>{tr(lang,'Выберите команду','Jamoani tanlang')}</h3></div>:!matches.length?<div className="workspace-empty"><h3>{tr(lang,'Для выбранной команды нет загруженных матчей','Tanlangan jamoa uchun yuklangan o‘yinlar yo‘q')}</h3></div>:<>
       {tab==='overview'&&<>
         <div className="section-heading"><h3>{tr(lang,'Как меняются результаты','Natijalar qanday o‘zgarmoqda')}</h3><label className="inline-select">{tr(lang,'Отрезок','Davr')}<select value={windowSize} onChange={e=>setWindowSize(Number(e.target.value))}><option value={5}>5 {tr(lang,'матчей','o‘yin')}</option><option value={10}>10 {tr(lang,'матчей','o‘yin')}</option></select></label></div>
         <p className="muted">{tr(lang,'Сравнение последних доступных игр с предыдущим отрезком.','Oxirgi mavjud o‘yinlar oldingi davr bilan taqqoslanadi.')}</p>
