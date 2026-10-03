@@ -169,16 +169,6 @@ def parse_kff(html: str, source_id: int) -> dict | None:
         return None
 
     segment = parts[marker_index:marker_index + 22]
-    score_index = next((i for i, s in enumerate(segment) if re.fullmatch(
-        r"(?:\d+\s*:\s*\d+|-\s*:\s*-)", s)), None)
-    if score_index is None or score_index == 0 or score_index + 1 >= len(segment):
-        return None
-
-    home = normalize_team(segment[score_index - 1])
-    away = normalize_team(segment[score_index + 1])
-    if not home or not away or home == away:
-        return None
-
     date_index = next((i for i, s in enumerate(segment) if "2026" in s and "г" in s), None)
     if date_index is None:
         return None
@@ -189,6 +179,18 @@ def parse_kff(html: str, source_id: int) -> dict | None:
         return None
     kickoff = parse_ru_date(segment[date_index], segment[time_index])
     if kickoff is None:
+        return None
+
+    # Search only after the kickoff time so a value such as 16:00 is never
+    # mistaken for the football score 0:1.
+    score_index = next((i for i in range(time_index + 1, len(segment)) if re.fullmatch(
+        r"(?:\d+\s*:\s*\d+|-\s*:\s*-)", segment[i])), None)
+    if score_index is None or score_index == 0 or score_index + 1 >= len(segment):
+        return None
+
+    home = normalize_team(segment[score_index - 1])
+    away = normalize_team(segment[score_index + 1])
+    if not home or not away or home == away:
         return None
 
     score = re.fullmatch(r"(\d+)\s*:\s*(\d+)", segment[score_index])
