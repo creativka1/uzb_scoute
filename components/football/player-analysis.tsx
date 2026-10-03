@@ -66,7 +66,13 @@ export function AnalysisDialog({ title, children, onClose, lang, narrow = false 
 export function CoverageLabel({player,metric,lang,role=false}: {player:Player;metric:string;lang:Language;role?:boolean}) {
   const d=(role?player.roleMetricCoverage:player.statsMetricDetails)?.[metric];
   if(!d)return null;
-  return <small className={`metric-coverage ${d.status}`}>{d.reason==='no_attempts' ? text(lang,'Нет попыток: процент не определён','Urinishlar yo‘q: foiz aniqlanmagan') : `${text(lang,'Данные','Ma’lumot')}: ${d.matches} / ${d.totalMatches} ${text(lang,'матчей','o‘yin')} · ${d.minutes} ${text(lang,'мин','daq')}${d.status==='partial'?text(lang,' · частично',' · qisman'):''}`}</small>;
+  const full=d.reason==='no_attempts'
+    ? text(lang,'Нет попыток: процент не определён','Urinishlar yo‘q: foiz aniqlanmagan')
+    : `${text(lang,'Данные','Ma’lumot')}: ${d.matches} / ${d.totalMatches} ${text(lang,'матчей','o‘yin')} · ${d.minutes} ${text(lang,'мин','daq')}${d.status==='partial'?text(lang,' · частично',' · qisman'):''}`;
+  const compact=d.reason==='no_attempts'
+    ? text(lang,'Нет попыток','Urinishlar yo‘q')
+    : `${d.matches}/${d.totalMatches} · ${d.minutes} ${text(lang,'мин','daq')}${d.status==='partial'?text(lang,' · частично',' · qisman'):''}`;
+  return <small className={`metric-coverage ${d.status}`} title={full} aria-label={full}>{compact}</small>;
 }
 export function ScoutBadge({player,lang}: {player:Player;lang:Language}) {
   return <div className="scout-pill"><span>{text(lang,'Скаутский индекс','Skaut indeksi')}</span><strong>{formatValue(player.scoutingEngine.roleScore)}<small> / 100</small></strong>{player.scoutingEngine.confidence==='low'&&<span className="subtle-warning">{text(lang,'Предварительно','Dastlabki')}</span>}</div>;
@@ -126,7 +132,7 @@ function statRows(player: Player, lang: Language): { label: string; value: strin
 
 function DataContext({ player, lang }: {player: Player; lang: Language}) {
   return <details className="analysis-card explanation data-context"><summary>{text(lang, 'Источник и надёжность данных', 'Manba va ma’lumot ishonchliligi')}</summary>
-    <p>{text(lang, 'SofaScore · только загруженные подтверждённые матчи. Прочерк означает отсутствие данных, а не нулевой результат.', 'SofaScore · faqat yuklangan, tasdiqlangan o‘yinlar. Tire — nol natija emas, ma’lumot yo‘qligi.')}</p>
+    <p>{text(lang, 'Текущий рабочий источник матчевых показателей — SofaScore. FootyStats и Opta пока не подключены к расчётам. Прочерк означает отсутствие данных, а не нулевой результат.', 'O‘yin ko‘rsatkichlarining hozirgi ishchi manbasi — SofaScore. FootyStats va Opta hali hisob-kitoblarga ulanmagan. Tire — nol natija emas, ma’lumot yo‘qligi.')}</p>
     <dl className="facts"><div><dt>{text(lang, 'Период наблюдений', 'Kuzatuv davri')}</dt><dd>{new Date(player.statsDateFrom * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')} — {new Date(player.statsDateTo * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')}</dd></div>
       <div><dt>{text(lang, 'Покрытие сезона', 'Mavsum qamrovi')}</dt><dd>{player.statsCoverageComplete ? text(lang, 'Матчи загружены', 'O‘yinlar yuklangan') : text(lang, 'Неполное', 'To‘liq emas')}</dd></div>
     </dl>
@@ -145,7 +151,7 @@ export function PlayerDossier({ player, players, lang, saved, canSave, onSave, o
   return <AnalysisDialog title={ru ? 'Профиль игрока' : 'Futbolchi profili'} onClose={onClose} lang={lang}>
     <div className="dossier-heading"><PlayerAvatar player={player} lang={lang} large /><div><span className="eyebrow">{player.statsSeasonLabel}</span><h2>{player.name[lang]}</h2><p>{player.club[lang]} <span>·</span> {player.detailedPosition ? detailedLabel : positionLabel(player.position, lang)} <span>·</span> {player.age ?? '—'} {ru ? 'лет' : 'yosh'}</p></div></div>
     <ScoutBadge player={player} lang={lang} /><div className="dossier-actions"><button className="action-primary" onClick={onCompare}><ArrowRightLeft size={16} />{ru ? 'Сравнить игрока' : 'Futbolchini taqqoslash'}</button><button className="action-secondary" disabled={!canSave} onClick={onSave}>{saved ? <Check size={16} /> : <Bookmark size={16} />}{saved ? (ru ? 'В сохранённых' : 'Saqlangan') : (ru ? 'Сохранить' : 'Saqlash')}</button><button className="action-secondary print-action" onClick={onPrint}><Printer size={16} />{ru ? 'Отчёт PDF' : 'PDF hisobot'}</button></div>
-    <div className="dossier-notice">{player.statsCoverageComplete ? (ru ? 'Показатели по загруженным матчам сезона.' : 'Yuklangan mavsum o‘yinlari ko‘rsatkichlari.') : (ru ? 'Данные сезона неполные.' : 'Mavsum ma’lumotlari to‘liq emas.')}</div>
+    <div className={`dossier-notice ${player.statsCoverageComplete ? 'complete' : 'partial'}`}><span>SofaScore</span>{player.statsCoverageComplete ? (ru ? 'период загружен' : 'davr yuklangan') : (ru ? 'покрытие неполное' : 'qamrov to‘liq emas')}</div>
     <div className="dossier-tabs" role="group" aria-label={ru ? 'Раздел профиля' : 'Profil bo‘limi'}><button aria-pressed={view === 'overview'} onClick={() => setView('overview')}>{ru ? 'Обзор' : 'Umumiy'}</button><button aria-pressed={view === 'stats'} onClick={() => setView('stats')}>{ru ? 'Вся статистика' : 'Barcha statistika'}</button><button aria-pressed={view === 'matches'} onClick={()=>setView('matches')}>{ru ? 'Матчи и динамика' : 'O‘yinlar va dinamika'}</button></div>
     {view === 'matches' ? <PlayerMatchHistory key={player.id} player={player} lang={lang} onOpenMatch={onOpenMatch}/> : view === 'overview' ? <>
       <div className="dossier-summary"><div><span>{ru ? 'Игры в выборке' : 'Tanlovdagi o‘yinlar'}</span><strong>{formatValue(player.matchesPlayed)}</strong><p>{formatValue(player.minutesPlayed)} {ru ? 'минут' : 'daqiqa'}</p></div><div><span>{player.position === 'GK' ? (ru ? 'Сейвы' : 'Seyvlar') : (ru ? 'Голы' : 'Gollar')}</span><strong>{formatValue(player.position === 'GK' ? player.saves : player.goals)}</strong><CoverageLabel player={player} metric={player.position === 'GK'?'saves':'goals'} lang={lang}/></div><div><span>{player.position === 'GK' ? (ru ? 'Точность передач' : 'Pas aniqligi') : (ru ? 'Голевые передачи' : 'Golli uzatmalar')}</span><strong>{formatValue(player.position === 'GK' ? player.passAccPct : player.assists, player.position === 'GK' ? 1 : 0, player.position === 'GK' ? '%' : '')}</strong><CoverageLabel player={player} metric={player.position === 'GK'?'passAccPct':'assists'} lang={lang}/></div></div>
