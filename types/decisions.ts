@@ -1,0 +1,8 @@
+import type { DetailedPosition, League, Position } from './players';
+export type ReviewMetric = 'teamPoints'|'teamGoals'|'teamConceded'|'goals'|'assists'|'shots'|'keyPasses'|'tackles'|'interceptions'|'saves'|'xG'|'xA';
+export interface ReviewTarget { league:League; seasonId:number; teamId?:number; playerId?:number }
+export interface MetricSnapshot { value:number|null; covered:number; total:number; minutes:number; matchIds:number[]; sourceHashes:Record<string,string>; from:number|null; to:number|null }
+export interface CandidateLink { playerId:number; name:string; position:Position; addedAt:string; reason:string; metrics:Record<string,number|null>; seasonIds:number[]; matchIds:number[] }
+export interface TeamNeed { id:string; league:League; teamId:number; teamName:string; seasonId:number; seasonName:string; position:Position; detailedPosition:DetailedPosition|null; observation:string; requirement:string; evidence:string; matchIds:number[]; createdAt:string; status:'open'|'closed'; candidates:CandidateLink[] }
+export interface TrackedDecision { id:string; needId:string|null; clubTeamId:number; target:ReviewTarget; subjectName:string; observation:string; action:string; metric:ReviewMetric; direction:'atLeast'|'atMost'; threshold:number; window:number; minCoverage:number; cutoff:number; retrospective:boolean; baseline:MetricSnapshot; createdAt:string; version:'decision-v1'; review?:{at:string; result:'met'|'missed'|'insufficient'; snapshot:MetricSnapshot; comment:string} }
+export interface DecisionStore { version:1; needs:TeamNeed[]; decisions:TrackedDecision[] }

@@ -1,5 +1,7 @@
 'use client';
 
+import {CandidateLinkButton} from '@/components/football/decision-workspace';
+import {useDecisionStore} from '@/hooks/use-decision-store';
 import { PlayerDossier, PlayerPicker, PlayerComparison, PlayerAvatar, AnalysisDialog, CoverageLabel } from '@/components/football/player-analysis';
 import { TeamWorkspace } from '@/components/football/match-workspace';
 import React, { useState, useMemo, useEffect } from 'react';
@@ -530,6 +532,9 @@ export default function Dashboard() {
 
   const [analysisSelection,setAnalysisSelection]=useState<AnalysisLocation|null>(null);
   const [recruitmentContext,setRecruitmentContext]=useState('');
+  const [activeNeedId,setActiveNeedId]=useState<string|null>(null);
+  const {store:decisionStore}=useDecisionStore();
+  const activeNeed=decisionStore.needs.find(n=>n.id===activeNeedId);
   const [inspectionPlayers,setInspectionPlayers]=useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [pickingOpponentFor, setPickingOpponentFor] = useState<Player | null>(null);
@@ -1030,7 +1035,7 @@ export default function Dashboard() {
         </div>
       </section>
       <div className="scope-toolbar">
-        <label>{lang === 'ru' ? 'Чемпионат' : 'Chempionat'}<select value={currentLeague} onChange={e => { setCurrentLeague(e.target.value as League);setAnalysisSelection(null);setRecruitmentContext(''); setFilterClub('all'); }}><option value="UZB">{t.leagueUZB}</option><option value="KAZ">{t.leagueKAZ}</option></select></label>
+        <label>{lang === 'ru' ? 'Чемпионат' : 'Chempionat'}<select value={currentLeague} onChange={e => { setCurrentLeague(e.target.value as League);setAnalysisSelection(null);setRecruitmentContext('');setActiveNeedId(null); setFilterClub('all'); }}><option value="UZB">{t.leagueUZB}</option><option value="KAZ">{t.leagueKAZ}</option></select></label>
         {activeView!=='team'&&<label>{lang === 'ru' ? 'Период' : 'Davr'}<select value={seasonMode} onChange={e => setSeasonMode(e.target.value as SeasonMode)}><option value="latest">{lang === 'ru' ? 'Последний доступный сезон' : 'Oxirgi mavjud mavsum'}</option><option value="current">{t.statsCurrentSeason}</option><option value="previous">{t.statsPreviousSeason}</option><option value="two">{t.statsTwoSeasons}</option></select></label>}
         {activeView!=='team'&&<div className="scope-summary"><strong>{isLoading ? '…' : periodLabel || '—'}</strong><span>{isLoading ? t.loading : `${players.length} ${lang === 'ru' ? 'игроков с данными' : 'futbolchida ma’lumot bor'}`}</span></div>}
       </div>
@@ -1038,7 +1043,7 @@ export default function Dashboard() {
       {loadError && <p role="alert" className="error-notice">{lang === 'ru' ? 'Не удалось загрузить данные. Выберите период ещё раз.' : 'Ma’lumot yuklanmadi. Davrni qayta tanlang.'}</p>}
       {saveError && <p role="alert" className="error-notice">{lang === 'ru' ? 'Не удалось прочитать или сохранить список в браузере. Существующее сохранение не перезаписано.' : 'Brauzerdagi ro‘yxatni o‘qish yoki saqlash imkoni bo‘lmadi. Mavjud saqlanma o‘zgartirilmagan.'}</p>}
       {activeView==='team'&&<TeamWorkspace key={`${currentLeague}:${seasonMode}`} initialSelection={analysisSelection} league={currentLeague} seasonMode={seasonMode} lang={lang}
-        onRecruit={(pos,period,team)=>{setAnalysisSelection(null);setRecruitmentPosition(pos);setRecruitmentDetailedPosition('all');setSeasonMode(period);setRecruitmentContext(team);setActiveView('recruitment');if(pos==='GK'){setRecruitmentMinAttackScore('');setRecruitmentMinGoals90('');setRecruitmentMinAssists90('');setRecruitmentMinShots90('');setRecruitmentMinKeyPasses90('');setRecruitmentMinDribble('');}}}
+        onRecruit={(pos,period,team,need)=>{setActiveNeedId(need?.id||null);setAnalysisSelection(null);setRecruitmentPosition(pos);setRecruitmentDetailedPosition(need?.detailedPosition||'all');setSeasonMode(period);setRecruitmentContext(team);setActiveView('recruitment');if(pos==='GK'){setRecruitmentMinAttackScore('');setRecruitmentMinGoals90('');setRecruitmentMinAssists90('');setRecruitmentMinShots90('');setRecruitmentMinKeyPasses90('');setRecruitmentMinDribble('');}}}
         onPlayer={(player,pool)=>{setInspectionPlayers(pool);setSelectedPlayer(player);}}/>}
       {activeView === 'saved' && <section className="saved-workspace"><div className="section-heading"><h2>{lang === 'ru' ? 'Ваш список' : 'Sizning ro‘yxatingiz'}</h2><span>{savedCandidates.length}</span></div>{!savedCandidates.length ? <div className="workspace-empty"><Bookmark size={30} /><h3>{lang === 'ru' ? 'Здесь появятся сохранённые игроки' : 'Saqlangan futbolchilar shu yerda ko‘rinadi'}</h3><p>{lang === 'ru' ? 'Откройте профиль и нажмите «Сохранить».' : 'Profilni oching va «Saqlash»ni bosing.'}</p><button className="action-primary" onClick={() => setActiveView('players')}>{lang === 'ru' ? 'Посмотреть игроков' : 'Futbolchilarni ko‘rish'}<ArrowRight size={16} /></button></div> : <div className="saved-grid">{savedCandidates.map(saved => { const player = players.find(p => p.id === saved.id); return <article className="saved-card" key={saved.id}><div className="saved-card-main">{player ? <PlayerAvatar player={player} lang={lang} /> : <span className="player-avatar"><Bookmark size={18} /></span>}<div><h3>{saved.name[lang]}</h3><p>{player ? player.club[lang] : (lang === 'ru' ? 'Нет данных в выбранной лиге и периоде' : 'Tanlangan liga va davrda ma’lumot yo‘q')}</p></div></div><div className="saved-card-actions"><button className="action-secondary" disabled={!player} onClick={() => { if(player) setSelectedPlayer(player); }}>{lang === 'ru' ? 'Открыть профиль' : 'Profilni ochish'}<ChevronRight size={15} /></button><button className="icon-button" aria-label={`${lang === 'ru' ? 'Удалить из сохранённых:' : 'Saqlanganlardan o‘chirish:'} ${saved.name[lang]}`} onClick={() => setSavedCandidates(items => items.filter(p => p.id !== saved.id))}><X size={16} /></button></div></article>; })}</div>}</section>}
       {activeView === 'players' && (<>
@@ -1052,7 +1057,8 @@ export default function Dashboard() {
       {activeView === 'recruitment' && (
       <>
       {/* RECRUITMENT */}
-      {recruitmentContext&&<div className="recruitment-context"><span>{lang==='ru'?'Усиление для':'Kuchaytirish uchun'}: <strong>{recruitmentContext}</strong></span><button className="text-link" onClick={()=>{setAnalysisSelection(null);setActiveView('team');}}>← {lang==='ru'?'К команде':'Jamoaga'}</button><button className="icon-button" aria-label={lang==='ru'?'Убрать контекст команды':'Jamoa kontekstini olib tashlash'} onClick={()=>setRecruitmentContext('')}><X size={14}/></button></div>}
+      {activeNeed&&<div className="analysis-card recruitment-need"><strong>{activeNeed.observation}</strong><p>{activeNeed.requirement}</p><small>{activeNeed.detailedPosition||activeNeed.position} · {activeNeed.seasonName}</small></div>}
+      {recruitmentContext&&<div className="recruitment-context"><span>{lang==='ru'?'Усиление для':'Kuchaytirish uchun'}: <strong>{recruitmentContext}</strong></span><button className="text-link" onClick={()=>{setAnalysisSelection(null);setActiveView('team');}}>← {lang==='ru'?'К команде':'Jamoaga'}</button><button className="icon-button" aria-label={lang==='ru'?'Убрать контекст команды':'Jamoa kontekstini olib tashlash'} onClick={()=>{setRecruitmentContext('');setActiveNeedId(null);}}><X size={14}/></button></div>}
       <section className="recruitment-panel max-w-7xl mx-auto mb-5 rounded-xl border border-zinc-800 bg-zinc-900/70 p-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-zinc-800 pb-4 mb-4">
           <div className="flex items-start gap-2.5">
@@ -1132,10 +1138,9 @@ export default function Dashboard() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
               {recruitmentCandidates.map(({ player, reasons }) => (
-                <button
-                  key={player.id}
+                <article key={player.id} className="recruitment-result"><button
                   onClick={() => { setSelectedPlayer(player); }}
-                  className="text-left rounded-xl border border-zinc-800 bg-zinc-950/60 p-3 hover:border-sky-500/40 hover:bg-zinc-900 transition"
+                  className="w-full text-left rounded-xl border border-zinc-800 bg-zinc-950/60 p-3 hover:border-sky-500/40 hover:bg-zinc-900 transition"
                 >
                   <div className="flex items-center gap-3">
                     <PlayerHeadshot url={player.photoUrl} name={player.name[lang]} initials={player.initials} size="sm" />
@@ -1164,7 +1169,7 @@ export default function Dashboard() {
                       ))}
                     </div>
                   </div>
-                </button>
+                </button>{activeNeedId&&<CandidateLinkButton needId={activeNeedId} player={player} lang={lang}/>}</article>
               ))}
             </div>
           )}

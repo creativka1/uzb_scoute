@@ -14,7 +14,11 @@ function load(file) {
   const code = ts.transpileModule(fs.readFileSync(path.join(root, file), 'utf8'), {
     compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true, jsx: ts.JsxEmit.ReactJSX},
   }).outputText;
-  const imports = name => name.startsWith('@/') ? load(name.slice(2) + (fs.existsSync(path.join(root, name.slice(2) + '.tsx')) ? '.tsx' : '.ts')) : require(name);
+  const imports = name => {
+    if (!name.startsWith('@/') && !name.startsWith('.')) return require(name);
+    const base = name.startsWith('@/') ? name.slice(2) : path.join(path.dirname(file), name);
+    return load(base + (fs.existsSync(path.join(root, base + '.tsx')) ? '.tsx' : '.ts'));
+  };
   vm.runInNewContext(code, {exports, require: imports, console, process: {cwd: () => root}, URL, Date, Object, Number});
   cache.set(file, exports);
   return exports;

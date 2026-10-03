@@ -1,8 +1,13 @@
 'use client';
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import type { Language, League, Player, Position, SeasonMode } from '@/types/players';
 import type { Appearance, CoreMatch, MatchCore, AnalysisLocation } from '@/types/matches';
-import { observedMetric, teamRoster, teamWindow } from '@/lib/match-analysis';
+import { observedMetric, teamWindow, metricCoverage, minuteDistribution } from '@/lib/match-analysis';
+
+import {DecisionWorkspace,NeedForm} from './decision-workspace';
+import type {NeedSeed} from './decision-workspace';
+import type {TeamNeed} from '@/types/decisions';
+import {SquadDepth} from './squad-depth';
 
 const tr = (lang: Language, ru: string, uz: string) => lang === 'ru' ? ru : uz;
 const fmt = (n: number | null | undefined, decimals = 0) => typeof n === 'number' && Number.isFinite(n) ? n.toFixed(decimals) : '—';
@@ -11,14 +16,15 @@ const labels: Record<string, [string,string]> = {goals:['Голы','Gollar'],ass
 const metricName = (key: string, lang: Language) => labels[key]?.[lang === 'ru' ? 0 : 1] || key;
 function useCore(league: League, playerId?: number) {
   const [data,setData] = useState<MatchCore | null>(null);
-  const [error,setError] = useState(false);
-  useEffect(() => { const controller = new AbortController(); setData(null); setError(false);
-    fetch(`/api/analysis?league=${league}${playerId ? `&playerId=${playerId}` : ''}`, {signal:controller.signal})
-      .then(async r => {if(!r.ok) throw Error('load'); return r.json();}).then(setData)
-      .catch(e => {if(e.name !== 'AbortError') setError(true);});
-    return () => controller.abort();
-  },[league,playerId]);
-  return {data,error};
+  const [error,setError] = useState(false),[revision,setRevision]=useState(0);
+  useEffect(() => { const controller = new AbortController(); let active=true; setData(null); setError(false);
+    const timer=setTimeout(()=>{if(active){controller.abort();setError(true);}},15000);
+    fetch(`/api/analysis?league=${league}${playerId ? `&playerId=${playerId}` : ''}`, {signal:controller.signal,cache:'no-store'})
+      .then(async r => {if(!r.ok) throw Error('load'); return r.json();}).then(value=>{if(active)setData(value);})
+      .catch(()=>{if(active)setError(true);}).finally(()=>clearTimeout(timer));
+    return () => {active=false;clearTimeout(timer);controller.abort();};
+  },[league,playerId,revision]);
+  return {data,error,refresh:()=>setRevision(v=>v+1)};
 }
 
 interface Note { id: string; createdAt: string; updatedAt: string; context: string; matchIds: number[]; calculationVersion: string; evidence: string; observation: string; decision: string; review: string; status: 'open'|'confirmed'|'rejected'|'inconclusive' }
@@ -62,49 +68,51 @@ function Trend({rows, metric, lang, data}: {rows:Appearance[];metric:string;lang
 }
 
 export function PlayerMatchHistory({player,lang,onOpenMatch}: {player:Player;lang:Language;onOpenMatch?:(location:AnalysisLocation)=>void}) {
-  const {data,error}=useCore(player.league,Number(player.id.split('-')[1]));
+  const {data,error,refresh}=useCore(player.league);
   const [season,setSeason]=useState(''), [metric,setMetric]=useState('goals');
-  if(error)return <p role="alert">{tr(lang,'История матчей не загрузилась.','O‘yinlar tarixi yuklanmadi.')}</p>;
+  if(error)return <p role="alert">{tr(lang,'История матчей не загрузилась.','O‘yinlar tarixi yuklanmadi.')} <button onClick={refresh}>{tr(lang,'Повторить','Qayta urinish')}</button></p>;
   if(!data)return <p className="muted">{tr(lang,'Загрузка матчей…','O‘yinlar yuklanmoqda…')}</p>;
   const seasons=data.seasons[player.league];
   const chosen=season||String(player.statsSeasonIds?.[0]||seasons.find(s=>data.matches.some(m=>m.seasonId===s.id))?.id||seasons[0].id);
   const events=data.matches.filter(m=>m.seasonId===Number(chosen));
   const map=new Map(events.map(m=>[m.id,m]));
-  const rows=data.appearances.filter(a=>map.has(a.matchId)).sort((a,b)=>map.get(b.matchId)!.date-map.get(a.matchId)!.date);
+  const rows=data.appearances.filter(a=>map.has(a.matchId)&&a.playerId===Number(player.id.split('-')[1])).sort((a,b)=>map.get(b.matchId)!.date-map.get(a.matchId)!.date);
   const teams=new Map(data.teams.map(t=>[t.id,t.name]));
   const last=observedMetric(rows.slice(0,5),metric), previous=observedMetric(rows.slice(5,10),metric);
-  return <div className="player-history"><div className="analysis-controls"><label>{tr(lang,'Сезон истории','Tarix mavsumi')}<select value={chosen} onChange={e=>setSeason(e.target.value)}>{seasons.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label><label>{tr(lang,'Показатель','Ko‘rsatkich')}<select value={metric} onChange={e=>setMetric(e.target.value)}>{Object.keys(labels).map(k=><option value={k} key={k}>{metricName(k,lang)}</option>)}</select></label></div>
+  return <div className="player-history"><button className="text-link" onClick={refresh}>{tr(lang,'Перечитать данные','Ma’lumotni qayta o‘qish')}</button><div className="analysis-controls"><label>{tr(lang,'Сезон истории','Tarix mavsumi')}<select value={chosen} onChange={e=>setSeason(e.target.value)}>{seasons.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label><label>{tr(lang,'Показатель','Ko‘rsatkich')}<select value={metric} onChange={e=>setMetric(e.target.value)}>{Object.keys(labels).map(k=><option value={k} key={k}>{metricName(k,lang)}</option>)}</select></label></div>
     <p className="muted">{tr(lang,'Доступные матчи сезона. Нажмите дату, чтобы открыть матч.','Mavsumning mavjud o‘yinlari. O‘yinni ochish uchun sanani bosing.')}</p>
     {!rows.length ? <p className="empty-inline">{tr(lang,'Нет подтверждённых матчей этого сезона.','Bu mavsumda tasdiqlangan o‘yinlar yo‘q.')}</p> : <>
     <Trend rows={rows} metric={metric} lang={lang} data={data}/>
     <div className="window-cards">{[[tr(lang,'Последние 5 доступных','Oxirgi 5 mavjud'),last],[tr(lang,'Предыдущие 5 доступных','Oldingi 5 mavjud'),previous]].map(([label,stat])=>{const s=stat as typeof last;return <article key={String(label)} className="analysis-card"><h4>{String(label)}</h4><strong>{fmt(s.per90,2)} <small>/ 90 {tr(lang,'мин','daq')}</small></strong><p className="muted">{s.matches} / {s.totalMatches} {tr(lang,'участий с показателем','ko‘rsatkichli ishtirok')} · {s.minutes} {tr(lang,'покрытых минут','qamrab olingan daqiqa')}</p></article>;})}</div>
     <div className="table-scroll"><table className="analysis-table"><thead><tr>{[tr(lang,'Дата / матч','Sana / o‘yin'),tr(lang,'Команда','Jamoa'),tr(lang,'Позиция','Pozitsiya'),tr(lang,'Минуты','Daqiqalar'),metricName(metric,lang)].map(x=><th key={x}>{x}</th>)}</tr></thead><tbody>{rows.map(a=>{const m=map.get(a.matchId)!;return <tr key={a.id}><td>{onOpenMatch?<button className="text-link" onClick={()=>onOpenMatch({league:player.league,teamId:a.teamId,seasonId:m.seasonId,matchId:m.id})}>{date(m.date,lang)} ↗</button>:date(m.date,lang)}<small>{teams.get(m.homeTeamId)} {fmt(m.homeScore)} : {fmt(m.awayScore)} {teams.get(m.awayTeamId)}</small></td><td>{teams.get(a.teamId)||'—'}</td><td>{a.position||'—'}</td><td>{a.minutes}</td><td>{fmt(a.stats[metric],metric==='xG'||metric==='xA'?2:0)}</td></tr>;})}</tbody></table></div></>}
-    <details className="analysis-card explanation"><summary>{tr(lang,'Сравнение сезонов и позиций','Mavsumlar va pozitsiyalar taqqoslovi')}</summary><p>{tr(lang,'Роли здесь — широкие позиции источника. Смена позиции не доказывает причину изменения показателя.','Bu yerda rollar — manbaning umumiy pozitsiyalari. Pozitsiya o‘zgarishi ko‘rsatkich o‘zgarishining sababini isbotlamaydi.')}</p><div className="table-scroll"><table className="analysis-table"><thead><tr><th>{tr(lang,'Период / позиция','Davr / pozitsiya')}</th><th>{tr(lang,'Значение / 90','Qiymat / 90')}</th><th>{tr(lang,'Покрытие','Qamrov')}</th></tr></thead><tbody>{seasons.flatMap(s=>{const ids=new Set(data.matches.filter(m=>m.seasonId===s.id).map(m=>m.id));const seasonRows=data.appearances.filter(a=>ids.has(a.matchId));return [null,...new Set(seasonRows.map(a=>a.position||'UNKNOWN'))].map(pos=>{const subset=pos?seasonRows.filter(a=>(a.position||'UNKNOWN')===pos):seasonRows;const stat=observedMetric(subset,metric);return <tr key={`${s.id}:${pos}`}><td>{s.name} · {pos||tr(lang,'Все позиции','Barcha pozitsiyalar')}</td><td>{fmt(stat.per90,2)}</td><td>{stat.matches} / {stat.totalMatches} · {stat.minutes} {tr(lang,'мин','daq')}</td></tr>;});})}</tbody></table></div></details>
+    <details className="analysis-card explanation"><summary>{tr(lang,'Сравнение сезонов и позиций','Mavsumlar va pozitsiyalar taqqoslovi')}</summary><p>{tr(lang,'Роли здесь — широкие позиции источника. Смена позиции не доказывает причину изменения показателя.','Bu yerda rollar — manbaning umumiy pozitsiyalari. Pozitsiya o‘zgarishi ko‘rsatkich o‘zgarishining sababini isbotlamaydi.')}</p><div className="table-scroll"><table className="analysis-table"><thead><tr><th>{tr(lang,'Период / позиция','Davr / pozitsiya')}</th><th>{tr(lang,'Значение / 90','Qiymat / 90')}</th><th>{tr(lang,'Покрытие','Qamrov')}</th></tr></thead><tbody>{seasons.flatMap(s=>{const ids=new Set(data.matches.filter(m=>m.seasonId===s.id).map(m=>m.id));const seasonRows=data.appearances.filter(a=>ids.has(a.matchId)&&a.playerId===Number(player.id.split('-')[1]));return [null,...new Set(seasonRows.map(a=>a.position||'UNKNOWN'))].map(pos=>{const subset=pos?seasonRows.filter(a=>(a.position||'UNKNOWN')===pos):seasonRows;const stat=observedMetric(subset,metric);return <tr key={`${s.id}:${pos}`}><td>{s.name} · {pos||tr(lang,'Все позиции','Barcha pozitsiyalar')}</td><td>{fmt(stat.per90,2)}</td><td>{stat.matches} / {stat.totalMatches} · {stat.minutes} {tr(lang,'мин','daq')}</td></tr>;});})}</tbody></table></div></details>
+    {rows.length>0&&<details className="analysis-card explanation"><summary>{tr(lang,'Решения и проверка по новым матчам','Qarorlar va yangi o‘yinlar bo‘yicha tekshiruv')}</summary><DecisionWorkspace key={`player-decisions:${player.id}:${chosen}`} core={data} teamId={rows[0].teamId} seasonId={Number(chosen)} lang={lang} playerId={Number(player.id.split('-')[1])}/></details>}
     <AnalysisNotebook key={`${player.id}:${chosen}`} scope={`player:${player.id}:${chosen}`} context={`${player.name[lang]} · ${seasons.find(s=>String(s.id)===chosen)?.name}`} matchIds={rows.map(a=>a.matchId)} evidence={`${metricName(metric,lang)} /90: ${fmt(last.per90,2)} (${last.matches}/${last.totalMatches}); previous: ${fmt(previous.per90,2)} (${previous.matches}/${previous.totalMatches})`} lang={lang}/>
   </div>;
 }
 
 export function TeamWorkspace({league,seasonMode,lang,onRecruit,onPlayer,initialSelection}: {
   league:League;seasonMode:SeasonMode;lang:Language;
-  onRecruit:(position:Position,season:SeasonMode,team:string)=>void;
+  onRecruit:(position:Position,season:SeasonMode,team:string,need?:TeamNeed)=>void;
   onPlayer:(player:Player,pool:Player[])=>void;initialSelection?:AnalysisLocation|null;
 }) {
-  const {data,error}=useCore(league);
+  const {data,error,refresh}=useCore(league);
   const [team,setTeam]=useState(''),[season,setSeason]=useState('');
   const [match,setMatch]=useState<number|null>(null),[tab,setTab]=useState<'overview'|'matches'|'roster'|'notes'>('overview');
+  const [needSeed,setNeedSeed]=useState<NeedSeed|null>(null);
   const [query,setQuery]=useState(''),[position,setPosition]=useState<Position|'all'>('all');
   const [windowSize,setWindowSize]=useState(5),[side,setSide]=useState<'home'|'away'>('home');
   const [metric,setMetric]=useState('shots'),[profileError,setProfileError]=useState(false),[opening,setOpening]=useState(false);
   const request=useRef<AbortController|null>(null);
   useEffect(()=>()=>request.current?.abort(),[]);
-  useEffect(()=>{request.current?.abort();setOpening(false);setProfileError(false);},[team,season]);
+  useEffect(()=>{request.current?.abort();setOpening(false);setProfileError(false);setNeedSeed(null);},[team,season]);
   useEffect(()=>{
     if(initialSelection?.league===league){setTeam(String(initialSelection.teamId));setSeason(String(initialSelection.seasonId));setMatch(initialSelection.matchId);setTab('matches');return;}
     try{const saved=JSON.parse(localStorage.getItem(`uzstat.analysis.team.${league}`)||'null');
       if(saved&&Number.isInteger(saved.teamId)&&Number.isInteger(saved.seasonId)){setTeam(String(saved.teamId));if(seasonMode==='latest'||seasonMode==='two')setSeason(String(saved.seasonId));}
     }catch{/* Preference is optional; source data remains available. */}
   },[league,initialSelection,seasonMode]);
-  if(error)return <p role="alert" className="error-notice">{tr(lang,'Матчи не загрузились. Обновите страницу.','O‘yinlar yuklanmadi. Sahifani yangilang.')}</p>;
+  if(error)return <p role="alert" className="error-notice">{tr(lang,'Матчи не загрузились.','O‘yinlar yuklanmadi.')} <button onClick={refresh}>{tr(lang,'Повторить','Qayta urinish')}</button></p>;
   if(!data)return <p className="muted">{tr(lang,'Загрузка команд…','Jamoalar yuklanmoqda…')}</p>;
   const seasons=data.seasons[league];
   const defaultSeason=seasonMode==='current'?seasons[0]:seasonMode==='previous'?seasons[1]:seasons.find(s=>data.matches.some(m=>m.seasonId===s.id))||seasons[0];
@@ -117,11 +125,12 @@ export function TeamWorkspace({league,seasonMode,lang,onRecruit,onPlayer,initial
   const teamName=teams.get(teamId)||'—';
   const matches=seasonMatches.filter(m=>m.homeTeamId===teamId||m.awayTeamId===teamId);
   const ids=new Set(matches.map(m=>m.id)), rows=data.appearances.filter(a=>ids.has(a.matchId)&&a.teamId===teamId);
-  const roster=teamRoster(rows), selected=matches.find(m=>m.id===match);
+  const roster=minuteDistribution(rows), selected=matches.find(m=>m.id===match);
   const latestMatches=matches.slice(0,windowSize),previousMatches=matches.slice(windowSize,windowSize*2);
   const latest=teamWindow(latestMatches,teamId),previous=teamWindow(previousMatches,teamId);
   const mode:SeasonMode=selectedSeason.id===seasons[0].id?'current':'previous';
   const remember=(tid:number,sid:number)=>{try{localStorage.setItem(`uzstat.analysis.team.${league}`,JSON.stringify({teamId:tid,seasonId:sid}));}catch{}};
+  const recruitNeed=(need:TeamNeed)=>{remember(teamId,selectedSeason.id);onRecruit(need.position,mode,teamName,need);};
   const chooseTeam=(id:number)=>{setTeam(String(id));setMatch(null);remember(id,selectedSeason.id);};
   const openMatch=(m:CoreMatch)=>{setMatch(m.id);setSide('home');setTab('matches');};
   const openPlayer=async(id:number)=>{
@@ -137,7 +146,7 @@ export function TeamWorkspace({league,seasonMode,lang,onRecruit,onPlayer,initial
   const noteProps={scope:`team:${league}:${teamId}:${selectedSeason.id}`,context:`${teamName} · ${selectedSeason.name}`,matchIds:matches.map(m=>m.id),evidence:`Points per available match: ${fmt(latest.pointsPerMatch,2)} (${latest.scored}/${latest.played}); previous ${fmt(previous.pointsPerMatch,2)} (${previous.scored}/${previous.played})`,lang};
   return <section className="team-workspace focused-team">
     <div className="analysis-controls"><label>{tr(lang,'Команда','Jamoa')}<select value={teamId||''} onChange={e=>chooseTeam(Number(e.target.value))}>{!options.length&&<option value="">—</option>}{options.map(t=><option key={t.id} value={t.id}>{t.name||t.id}</option>)}</select></label><label>{tr(lang,'Сезон','Mavsum')}<select value={selectedSeason.id} onChange={e=>{const id=Number(e.target.value);setSeason(String(id));setTeam('');setMatch(null);setQuery('');if(teamId)remember(teamId,id);}}>{seasons.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label></div>
-    <div className="section-heading"><h2>{teamName}</h2><span className="context-chip">{selectedSeason.complete?tr(lang,'Загруженный сезон','Yuklangan mavsum'):tr(lang,'Неполные данные','To‘liq bo‘lmagan ma’lumot')}</span></div>
+    <div className="section-heading"><h2>{teamName}</h2><button className="text-link" onClick={refresh}>{tr(lang,'Перечитать данные','Ma’lumotni qayta o‘qish')}</button><span className="context-chip">{selectedSeason.complete?tr(lang,'Загруженный сезон','Yuklangan mavsum'):tr(lang,'Неполные данные','To‘liq bo‘lmagan ma’lumot')}</span></div>
     <nav className="dossier-tabs" aria-label={tr(lang,'Анализ команды','Jamoa tahlili')}>{(['overview','matches','roster','notes'] as const).map((key,i)=><button key={key} aria-pressed={tab===key} onClick={()=>{setTab(key);setMatch(null);setQuery('');}}>{[tr(lang,'Обзор','Umumiy'),tr(lang,'Матчи','O‘yinlar'),tr(lang,'Состав','Tarkib'),tr(lang,'Выводы','Xulosalar')][i]}</button>)}</nav>
     {profileError&&<p role="alert" className="error-notice">{tr(lang,'Не удалось открыть профиль. Попробуйте ещё раз.','Profil ochilmadi. Qayta urinib ko‘ring.')}</p>}{opening&&<p role="status" className="muted">{tr(lang,'Открываю профиль…','Profil ochilmoqda…')}</p>}
     {!matches.length?<div className="workspace-empty"><h3>{tr(lang,'Матчи этого сезона ещё не загружены','Bu mavsum o‘yinlari hali yuklanmagan')}</h3><p>{tr(lang,'Выберите доступный сезон выше.','Yuqorida mavjud mavsumni tanlang.')}</p></div>:<>
@@ -156,15 +165,18 @@ export function TeamWorkspace({league,seasonMode,lang,onRecruit,onPlayer,initial
         <div className="section-heading"><div className="side-switch" role="group" aria-label={tr(lang,'Сторона матча','O‘yin tomoni')}>{(['home','away'] as const).map(s=><button key={s} aria-pressed={side===s} onClick={()=>setSide(s)}>{teams.get(s==='home'?selected.homeTeamId:selected.awayTeamId)}</button>)}</div><label className="inline-select">{tr(lang,'Показатель','Ko‘rsatkich')}<select value={metric} onChange={e=>setMetric(e.target.value)}>{Object.keys(labels).filter(k=>!['goals','assists'].includes(k)).map(k=><option value={k} key={k}>{metricName(k,lang)}</option>)}</select></label></div>
         <p className="muted">{tr(lang,'Схема','Sxema')}: {(side==='home'?selected.homeFormation:selected.awayFormation)||'—'}{(side==='home'?selected.homeTeamId:selected.awayTeamId)!==teamId&&<> · <button className="text-link" onClick={()=>{chooseTeam(side==='home'?selected.homeTeamId:selected.awayTeamId);setTab('overview');}}>{tr(lang,'Разобрать соперника','Raqibni tahlil qilish')} →</button></>}</p>
         {!selected.lineupAvailable?<p className="empty-inline">{tr(lang,'Подтверждённый состав не загружен.','Tasdiqlangan tarkib yuklanmagan.')}</p>:<div className="table-scroll"><table className="analysis-table"><thead><tr><th>{tr(lang,'Игрок','Futbolchi')}</th><th>{tr(lang,'Минуты','Daqiqalar')}</th><th>{metricName('goals',lang)}</th><th>{metricName('assists',lang)}</th><th>{metricName(metric,lang)}</th></tr></thead><tbody>{data.appearances.filter(a=>a.matchId===selected.id&&a.teamId===(side==='home'?selected.homeTeamId:selected.awayTeamId)).sort((a,b)=>(Number(a.substitute)-Number(b.substitute))||b.minutes-a.minutes).map(a=><tr key={a.id}><td><button className="text-link" disabled={opening} onClick={()=>openPlayer(a.playerId)}>{names.get(a.playerId)||a.playerId}</button><small>{a.position||'—'}{a.substitute===true?' · '+tr(lang,'Вышел на замену','Zaxiradan tushgan'):''}</small></td><td>{a.minutes}</td><td>{fmt(a.stats.goals)}</td><td>{fmt(a.stats.assists)}</td><td>{fmt(a.stats[metric],metric==='xG'||metric==='xA'?2:0)}</td></tr>)}</tbody></table></div>}
+        <details className="explanation match-coverage"><summary>{tr(lang,'Покрытие показателей состава','Tarkib ko‘rsatkichlari qamrovi')}</summary><p className="muted">{tr(lang,'Известные значения / загруженные участия. Сейвы — только вратари. Это не полнота сезона и не официальная командная сумма.','Ma’lum qiymatlar / yuklangan ishtiroklar. Seyvlar — faqat darvozabonlar. Bu mavsum to‘liqligi yoki rasmiy jamoa yig‘indisi emas.')}</p><div className="table-scroll"><table className="analysis-table"><thead><tr><th>{tr(lang,'Показатель','Ko‘rsatkich')}</th><th>{tr(lang,'Игроки с данными','Ma’lumotli futbolchilar')}</th><th>{tr(lang,'Минуты с данными','Ma’lumotli daqiqalar')}</th></tr></thead><tbody>{Object.keys(labels).map(k=>{const c=metricCoverage(data.appearances.filter(a=>a.matchId===selected.id&&a.teamId===(side==='home'?selected.homeTeamId:selected.awayTeamId)),k);return <tr key={k}><td>{metricName(k,lang)}</td><td>{c.known}/{c.total}</td><td>{c.minutes}/{c.totalMinutes}</td></tr>;})}</tbody></table></div></details>
         <AnalysisNotebook key={`match:${selected.id}`} scope={`match:${selected.id}`} context={`${teams.get(selected.homeTeamId)} — ${teams.get(selected.awayTeamId)} · ${selected.seasonName}`} matchIds={[selected.id]} evidence={`SofaScore #${selected.id}; ${fmt(selected.homeScore)}:${fmt(selected.awayScore)}; event ${selected.eventHash}; lineup ${selected.lineupHash||'missing'}`} lang={lang}/>
         <details className="explanation workspace-method"><summary>{tr(lang,'Источник матча','O‘yin manbasi')}</summary><p>SofaScore #{selected.id} · {tr(lang,'Прочерк — нет данных.','Tire — ma’lumot yo‘q.')}</p><p>{selected.sourcePath||'—'}</p><p className="source-hash">{selected.eventHash}<br/>{selected.lineupHash}</p></details>
       </section>}
       {tab==='roster'&&<>
-        <div className="roster-controls"><label className="search-field"><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={tr(lang,'Имя игрока','Futbolchi ismi')} aria-label={tr(lang,'Поиск по составу','Tarkibdan qidirish')}/></label><label className="inline-select">{tr(lang,'Позиция','Pozitsiya')}<select value={position} onChange={e=>setPosition(e.target.value as Position|'all')}><option value="all">{tr(lang,'Все','Barchasi')}</option>{(['GK','DF','MF','FW'] as Position[]).map(p=><option value={p} key={p}>{p}</option>)}</select></label>{position!=='all'&&<button className="action-secondary" onClick={()=>{remember(teamId,selectedSeason.id);onRecruit(position,mode,teamName);}}>{tr(lang,'Найти усиление','Kuchaytirish qidirish')} →</button>}</div>
-        <p className="muted">{tr(lang,'Игроки, участвовавшие в загруженных матчах команды.','Jamoaning yuklangan o‘yinlarida qatnashgan futbolchilar.')}</p>
-        <div className="table-scroll"><table className="analysis-table"><thead><tr><th>{tr(lang,'Игрок','Futbolchi')}</th><th>{tr(lang,'Игры / минуты','O‘yinlar / daqiqalar')}</th><th>{tr(lang,'В старте','Startda')}</th></tr></thead><tbody>{rosterFiltered.map(p=><tr key={p.id}><td><button className="text-link" disabled={opening} onClick={()=>openPlayer(p.id)}>{names.get(p.id)||p.id}</button><small>{p.positions.join(' / ')||'—'}</small></td><td><strong>{p.appearances}</strong><small>{p.minutes} {tr(lang,'мин','daq')}</small></td><td>{p.startsCovered===p.appearances?fmt(p.starts):'—'}</td></tr>)}</tbody></table>{!rosterFiltered.length&&<p className="empty-inline">{tr(lang,'Игроки не найдены','Futbolchilar topilmadi')}</p>}</div>
+        <SquadDepth rows={rows} league={league} seasonId={selectedSeason.id} mode={mode} lang={lang} onNeed={setNeedSeed}/>
+        {needSeed&&<><NeedForm key={`${needSeed.position}:${needSeed.detailedPosition}`} core={data} teamId={teamId} seasonId={selectedSeason.id} seed={needSeed} lang={lang} onDone={recruitNeed}/><button className="text-link" onClick={()=>setNeedSeed(null)}>{tr(lang,'Отмена','Bekor qilish')}</button></>}
+        <div className="roster-controls"><label className="search-field"><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={tr(lang,'Имя игрока','Futbolchi ismi')} aria-label={tr(lang,'Поиск по составу','Tarkibdan qidirish')}/></label><label className="inline-select">{tr(lang,'Позиция','Pozitsiya')}<select value={position} onChange={e=>setPosition(e.target.value as Position|'all')}><option value="all">{tr(lang,'Все','Barchasi')}</option>{(['GK','DF','MF','FW'] as Position[]).map(p=><option value={p} key={p}>{p}</option>)}</select></label>{position!=='all'&&<button className="action-secondary" onClick={()=>setNeedSeed({position,detailedPosition:null,evidence:`${teamName} · ${selectedSeason.name}; ${rows.filter(a=>a.position===position).reduce((sum,a)=>sum+a.minutes,0)} ${tr(lang,'минут на позиции в загруженных матчах','yuklangan o‘yinlarda pozitsiyadagi daqiqa')}`})}>{tr(lang,'Найти усиление','Kuchaytirish qidirish')} →</button>}</div>
+        <p className="muted">{tr(lang,'Игроки, участвовавшие в загруженных матчах команды. Доля минут — от суммы минут всех игроков этой выборки.','Jamoaning yuklangan o‘yinlarida qatnashgan futbolchilar. Daqiqalar ulushi — tanlovdagi barcha futbolchilar daqiqalari yig‘indisidan.')}</p>
+        <div className="table-scroll"><table className="analysis-table"><thead><tr><th>{tr(lang,'Игрок','Futbolchi')}</th><th>{tr(lang,'Игры / минуты','O‘yinlar / daqiqalar')}</th><th>{tr(lang,'Доля минут','Daqiqalar ulushi')}</th><th>{tr(lang,'В старте','Startda')}</th></tr></thead><tbody>{rosterFiltered.map(p=><tr key={p.id}><td><button className="text-link" disabled={opening} onClick={()=>openPlayer(p.id)}>{names.get(p.id)||p.id}</button><small>{p.positions.join(' / ')||'—'}</small></td><td><strong>{p.appearances}</strong><small>{p.minutes} {tr(lang,'мин','daq')}</small></td><td><span>{fmt(p.share,1)}%</span><div className="minute-share"><i style={{width:`${p.share||0}%`}}/></div></td><td>{p.startsCovered===p.appearances?fmt(p.starts):'—'}</td></tr>)}</tbody></table>{!rosterFiltered.length&&<p className="empty-inline">{tr(lang,'Игроки не найдены','Futbolchilar topilmadi')}</p>}</div>
       </>}
-      <div hidden={tab!=='notes'}><AnalysisNotebook key={noteProps.scope} {...noteProps} expanded/></div>
+      <div hidden={tab!=='notes'}><DecisionWorkspace key={`decisions:${teamId}:${selectedSeason.id}`} core={data} teamId={teamId} seasonId={selectedSeason.id} lang={lang} onRecruit={recruitNeed}/><AnalysisNotebook key={noteProps.scope} {...noteProps} expanded/></div>
     </>}
   </section>;
 }

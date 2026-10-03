@@ -388,3 +388,35 @@ select option { background: #172023; color: var(--ink); }
 .metric-mean-caption { margin-top:7px; color:var(--muted); font-size:11px; }
 .participation-stack { display:grid; gap:3px; margin-top:8px; font-size:12px; }
 .participation-stack small { color:var(--muted); font-size:11px; }
+
+.decision-workspace { display:grid; gap:18px; margin:22px 0; }
+.decision-form { display:grid; gap:16px; margin:16px 0; }
+.decision-form label, .decision-card label { display:grid; gap:7px; font-size:12px; color:var(--muted); }
+.decision-form input, .decision-form select, .decision-form textarea, .decision-card textarea { border:1px solid var(--line); border-radius:7px; padding:10px; background:#10191d; color:var(--ink); width:100%; min-width:0; }
+.decision-form textarea, .decision-card textarea { min-height:70px; resize:vertical; }
+.decision-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; }
+.decision-comparison { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin:18px 0; }
+.decision-comparison>div { display:grid; gap:8px; }
+.decision-comparison strong { font-size:25px; color:var(--accent); }
+.decision-comparison small { color:var(--muted); font-size:11px; }
+.decision-card details, .need-card details { margin:12px 0; font-size:12px; }
+.need-candidate { display:grid; gap:8px; padding:14px 0; border-top:1px solid var(--line); margin-top:14px; }
+.need-candidate>span { font-size:12px; color:var(--muted); }
+.candidate-link { padding:8px 0; display:grid; gap:6px; }
+.candidate-link small { font-size:11px; color:var(--muted); }
+.recruitment-need { margin-bottom:16px; }
+.recruitment-need p { font-size:13px; margin:8px 0; }
+.recruitment-need small { color:var(--muted); }
+.minute-share { height:4px; width:100px; max-width:100%; background:#2a363a; margin-top:6px; }
+.minute-share i { display:block; height:100%; background:var(--accent); }
+.squad-depth { margin-bottom:20px; }
+.squad-depth>summary { cursor:pointer; font-weight:600; }
+.squad-depth .side-switch { margin:16px 0; }
+.depth-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:16px; margin-top:16px; }
+.depth-grid>article { border:1px solid var(--line); border-radius:8px; padding:14px; }
+.depth-grid h4 { font-size:14px; margin-bottom:12px; }
+.depth-grid article>div { display:flex; justify-content:space-between; gap:12px; font-size:12px; padding:7px 0; }
+.depth-grid small { color:var(--muted); text-align:right; white-space:nowrap; }
+.depth-grid button { margin-top:12px; font-size:12px; }
+.match-coverage { margin:20px 0; }
+@media(max-width:600px){.decision-comparison{gap:8px;}.decision-comparison strong{font-size:20px;}.decision-workspace .section-heading{flex-wrap:wrap;gap:12px;}}

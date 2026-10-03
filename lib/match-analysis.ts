@@ -28,3 +28,21 @@ export function teamRoster(rows: Appearance[]) {
     positions: [...new Set(list.map(a => a.position).filter(Boolean))],
   })).sort((a,b) => b.minutes-a.minutes);
 }
+
+export function metricCoverage(rows:Appearance[],key:string){
+  const eligible=rows.filter(a=>key!=='saves'||a.position==='GK');
+  const known=eligible.filter(a=>typeof a.stats[key]==='number'&&Number.isFinite(a.stats[key]));
+  return {known:known.length,total:eligible.length,minutes:known.reduce((s,a)=>s+a.minutes,0),totalMinutes:eligible.reduce((s,a)=>s+a.minutes,0)};
+}
+
+export function minuteDistribution(rows:Appearance[]){
+  const roster=teamRoster(rows),total=roster.reduce((n,p)=>n+p.minutes,0);
+  return roster.map(p=>({...p,share:total>0?p.minutes/total*100:null}));
+}
+export function confirmedDepth(rows:Appearance[],profiles:import('../types/players').Player[],seasonId:number,league:string){
+  const roster=minuteDistribution(rows);
+  return roster.map(p=>{const source=profiles.find(x=>x.id===`${league}-${p.id}`&&x.statsSeasonIds?.length===1&&x.statsSeasonIds[0]===seasonId);
+    const detailed=source?.detailedPosition&&source.detailedPositionMethod?.includes('player.positionsDetailed')?source.detailedPosition:null;
+    return {...p,detailed,sourceMethod:detailed?source!.detailedPositionMethod:null};
+  });
+}
