@@ -41,9 +41,18 @@ SCAN = {
 TEAM_PREFIX = {"UZB": 100_000_000, "KAZ": 300_000_000}
 MATCH_PREFIX = {"UZB": 30_000_000, "KAZ": 40_000_000}
 RU_MONTHS = {
-    "янв": 1, "фев": 2, "мар": 3, "апр": 4, "май": 5, "мая": 5,
-    "июн": 6, "июл": 7, "авг": 8, "сен": 9, "сент": 9,
-    "окт": 10, "ноя": 11, "дек": 12,
+    "янв": 1, "января": 1,
+    "фев": 2, "февраля": 2,
+    "мар": 3, "марта": 3,
+    "апр": 4, "апреля": 4,
+    "май": 5, "мая": 5,
+    "июн": 6, "июня": 6,
+    "июл": 7, "июля": 7,
+    "авг": 8, "августа": 8,
+    "сен": 9, "сент": 9, "сентября": 9,
+    "окт": 10, "октября": 10,
+    "ноя": 11, "ноября": 11,
+    "дек": 12, "декабря": 12,
 }
 
 
@@ -117,19 +126,29 @@ def parse_pfl(html: str, source_id: int) -> dict | None:
 
     home = normalize_team(segment[score_index - 1])
     finished = "Finished" in segment[score_index + 1:score_index + 5]
+    technical_defeat = False
     if finished:
         finished_index = segment.index("Finished", score_index + 1)
         if finished_index + 1 >= len(segment):
             return None
-        away = normalize_team(segment[finished_index + 1])
+        next_value = normalize_team(segment[finished_index + 1])
+        if next_value.casefold() == "technical defeat":
+            technical_defeat = True
+            if finished_index + 2 >= len(segment):
+                return None
+            away = normalize_team(segment[finished_index + 2])
+        else:
+            away = next_value
     else:
         away = normalize_team(segment[score_index + 1])
 
     if not home or not away or home == away:
         return None
     score = re.fullmatch(r"(\d+)\s*-\s*(\d+)", segment[score_index])
-    home_score = int(score.group(1)) if finished and score else None
-    away_score = int(score.group(2)) if finished and score else None
+    # A technical defeat page can display a placeholder score. Keep the teams
+    # but do not turn that placeholder into a sporting result.
+    home_score = int(score.group(1)) if finished and score and not technical_defeat else None
+    away_score = int(score.group(2)) if finished and score and not technical_defeat else None
 
     return {
         "sourceId": source_id,
@@ -158,56 +177,102 @@ def parse_ru_date(value: str, time_value: str) -> int | None:
     return int(datetime(2026, month, day, hour, minute, tzinfo=ZoneInfo("Asia/Almaty")).timestamp())
 
 
+def kff_completed_from_title(parts: list[str]) -> tuple[str, int, int, str, str] | None:
+    """Return home, homeScore, awayScore, away, dateText from KFF SEO title."""
+    for value in parts:
+        if "КПЛ" not in value or "2026" not in value or ":" not in value:
+            continue
+        match = re.search(
+            r"^(.+?)\s+(\d+)\s*:\s*(\d+)\s+(.+?)\s+[—–-]\s+КПЛ,\s+(.+?2026\s*г\.?)",
+            value,
+        )
+        if match:
+            return (
+                normalize_team(match.group(1)),
+                int(match.group(2)),
+                int(match.group(3)),
+                normalize_team(match.group(4)),
+                match.group(5),
+            )
+    return None
+
+
 def parse_kff(html: str, source_id: int) -> dict | None:
     parts = text_parts(html)
-    marker_index = next((i for i, s in enumerate(parts) if re.fullmatch(
-        r"Премьер-Лига 2026, \d+ тур", s)), None)
-    if marker_index is None:
-        return None
-    marker = re.fullmatch(r"Премьер-Лига 2026, (\d+) тур", parts[marker_index])
-    if not marker:
+
+    marker = next((re.fullmatch(r"Премьер-Лига 2026, (\d+) тур", s) for s in parts
+                   if re.fullmatch(r"Премьер-Лига 2026, \d+ тур", s)), None)
+    title_match = kff_completed_from_title(parts)
+    if marker is None and title_match is None:
         return None
 
-    segment = parts[marker_index:marker_index + 22]
-    date_index = next((i for i, s in enumerate(segment) if re.search(
-        r"\d{1,2}\s+[а-яё]+\.?\s+2026\s*г\.?", s.casefold())), None)
-    if date_index is None:
-        return None
-    time_index = next((i for i in range(date_index + 1, min(len(segment), date_index + 5))
-                       if re.fullmatch(r"\d{1,2}:\d{2}", segment[i])), None)
-    # Far-future KFF fixtures sometimes have no confirmed kickoff time. We do not invent one.
-    if time_index is None:
-        return None
-    kickoff = parse_ru_date(segment[date_index], segment[time_index])
+    # Find a visible body date + kickoff time. The SEO title has a date but no
+    # kickoff time, so never manufacture a time from the title.
+    date_indices = [
+        i for i, value in enumerate(parts)
+        if re.search(r"\d{1,2}\s+[а-яё]+\.?\s+2026\s*г\.?", value.casefold())
+        and "КПЛ," not in value
+    ]
+    kickoff = None
+    for date_index in date_indices:
+        time_index = next((
+            i for i in range(date_index + 1, min(len(parts), date_index + 7))
+            if re.fullmatch(r"\d{1,2}:\d{2}", parts[i])
+        ), None)
+        if time_index is not None:
+            kickoff = parse_ru_date(parts[date_index], parts[time_index])
+            if kickoff is not None:
+                break
     if kickoff is None:
         return None
 
-    # Search only after the kickoff time so a value such as 16:00 is never
-    # mistaken for the football score 0:1.
-    score_index = next((i for i in range(time_index + 1, len(segment)) if re.fullmatch(
-        r"(?:\d+\s*:\s*\d+|-\s*:\s*-)", segment[i])), None)
+    if title_match is not None:
+        home, home_score, away_score, away, _ = title_match
+        if not home or not away or home == away:
+            return None
+        return {
+            "sourceId": source_id,
+            "round": int(marker.group(1)) if marker else 0,
+            "date": kickoff,
+            "home": home,
+            "away": away,
+            "homeScore": home_score,
+            "awayScore": away_score,
+            "finished": True,
+            "url": SCAN["KAZ"]["base"].format(source_id),
+        }
+
+    # Upcoming match: use the visible body block and keep the score unknown.
+    marker_index = next(i for i, s in enumerate(parts)
+                        if re.fullmatch(r"Премьер-Лига 2026, \d+ тур", s))
+    segment = parts[marker_index:marker_index + 24]
+    local_date_index = next((i for i, s in enumerate(segment) if re.search(
+        r"\d{1,2}\s+[а-яё]+\.?\s+2026\s*г\.?", s.casefold())), None)
+    if local_date_index is None:
+        return None
+    local_time_index = next((i for i in range(local_date_index + 1, min(len(segment), local_date_index + 7))
+                             if re.fullmatch(r"\d{1,2}:\d{2}", segment[i])), None)
+    if local_time_index is None:
+        return None
+    score_index = next((i for i in range(local_time_index + 1, len(segment))
+                        if re.fullmatch(r"-\s*:\s*-", segment[i])), None)
     if score_index is None or score_index == 0 or score_index + 1 >= len(segment):
         return None
-
     home = normalize_team(segment[score_index - 1])
     away = normalize_team(segment[score_index + 1])
     if not home or not away or home == away:
         return None
-
-    score = re.fullmatch(r"(\d+)\s*:\s*(\d+)", segment[score_index])
-    upcoming = any(s == "Предстоящий" for s in segment[:score_index + 1]) or score is None
     return {
         "sourceId": source_id,
         "round": int(marker.group(1)),
         "date": kickoff,
         "home": home,
         "away": away,
-        "homeScore": None if upcoming else int(score.group(1)),
-        "awayScore": None if upcoming else int(score.group(2)),
-        "finished": not upcoming,
+        "homeScore": None,
+        "awayScore": None,
+        "finished": False,
         "url": SCAN["KAZ"]["base"].format(source_id),
     }
-
 
 def scan_one(league: str, source_id: int) -> dict | None:
     html = fetch(SCAN[league]["base"].format(source_id))
