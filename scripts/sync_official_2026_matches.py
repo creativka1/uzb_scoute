@@ -178,22 +178,39 @@ def parse_ru_date(value: str, time_value: str) -> int | None:
 
 
 def kff_completed_from_title(parts: list[str]) -> tuple[str, int, int, str, str] | None:
-    """Return home, homeScore, awayScore, away, dateText from KFF SEO title."""
+    """Return home, homeScore, awayScore, away, dateText from KFF SEO title.
+
+    KFF can embed the title inside a Next.js script payload. Restrict team
+    captures to normal football-name characters so script syntax can never
+    become part of a team name.
+    """
+    team_chars = r"[A-Za-zА-Яа-яЁёӘәҒғҚқҢңӨөҰұҮүІі0-9 .'’-]+"
+    pattern = re.compile(
+        rf"({team_chars}?)\s+(\d+)\s*:\s*(\d+)\s+({team_chars}?)\s+[—–-]\s+КПЛ,\s+"
+        r"([^\"\\]+?2026\s*г\.?)"
+    )
     for value in parts:
         if "КПЛ" not in value or "2026" not in value or ":" not in value:
             continue
-        match = re.search(
-            r"^(.+?)\s+(\d+)\s*:\s*(\d+)\s+(.+?)\s+[—–-]\s+КПЛ,\s+(.+?2026\s*г\.?)",
-            value,
+        matches = list(pattern.finditer(value))
+        if not matches:
+            continue
+        match = matches[-1]
+        home = normalize_team(match.group(1))
+        away = normalize_team(match.group(4))
+        # Defensive sanity checks against labels or malformed captures.
+        if not home or not away or len(home) > 60 or len(away) > 60:
+            continue
+        if any(token in home.casefold() or token in away.casefold()
+               for token in ("self.__next", "metadata", "children", "http", "www.")):
+            continue
+        return (
+            home,
+            int(match.group(2)),
+            int(match.group(3)),
+            away,
+            match.group(5),
         )
-        if match:
-            return (
-                normalize_team(match.group(1)),
-                int(match.group(2)),
-                int(match.group(3)),
-                normalize_team(match.group(4)),
-                match.group(5),
-            )
     return None
 
 
