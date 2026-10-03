@@ -62,6 +62,43 @@ class OfficialMatchParserTests(unittest.TestCase):
         self.assertEqual((row["homeScore"], row["awayScore"]), (0, 1))
         self.assertTrue(row["finished"])
 
+    def test_kff_completed_match_from_seo_title_with_full_month(self):
+        html = """
+        <html>
+          <head><title>Астана 3:2 Актобе — КПЛ, 12 июля 2026 г. | Казахстанская Премьер-Лига</title></head>
+          <body>
+            <div>Премьер-Лига 2026, 17 тур</div>
+            <div>вс, 12 июл. 2026 г.</div>
+            <div>19:00</div>
+            <div>Астана</div><div>3:2</div><div>Актобе</div>
+          </body>
+        </html>
+        """
+        row = official_sync.parse_kff(html, 1013)
+        self.assertIsNotNone(row)
+        self.assertEqual(row["round"], 17)
+        self.assertEqual(row["home"], "Астана")
+        self.assertEqual(row["away"], "Актобе")
+        self.assertEqual((row["homeScore"], row["awayScore"]), (3, 2))
+        self.assertTrue(row["finished"])
+
+    def test_pfl_technical_defeat_is_not_a_team_or_score(self):
+        html = """
+        <html><body>
+          <div>Superleague MW15</div>
+          <div>Kick-off time 31.07.2026, 19:00</div>
+          <a>Yoshlar SC</a><a>Qizilqum</a><h1>0-0</h1>
+          <div>Finished</div><div>Technical defeat</div><a>Bunyodkor</a>
+        </body></html>
+        """
+        row = official_sync.parse_pfl(html, 3853)
+        self.assertIsNotNone(row)
+        self.assertEqual(row["home"], "Qizilqum")
+        self.assertEqual(row["away"], "Bunyodkor")
+        self.assertIsNone(row["homeScore"])
+        self.assertIsNone(row["awayScore"])
+        self.assertTrue(row["finished"])
+
     def test_kff_unconfirmed_time_is_skipped(self):
         html = """
         <html><body>
