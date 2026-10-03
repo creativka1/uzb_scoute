@@ -15,7 +15,7 @@ from data_integrity import TOURNAMENTS, load, atomic_json, rebuild
 HOST = 'sofascore.p.rapidapi.com'
 
 
-def sync(max_requests=1500, delay=1.0):
+def sync(max_requests=1500, delay=1.0, league_filter=None, season_year=None):
     key = os.environ.get('RAPIDAPI_KEY', '').strip()
     if not key:
         raise RuntimeError('RAPIDAPI_KEY is not configured')
@@ -44,13 +44,30 @@ def sync(max_requests=1500, delay=1.0):
         raise RuntimeError('Provider retry limit reached')
 
     now = datetime.now(timezone.utc).isoformat()
-    for league, tid in TOURNAMENTS.items():
+    selected_tournaments = {
+        league: tid for league, tid in TOURNAMENTS.items()
+        if not league_filter or league == league_filter
+    }
+    if not selected_tournaments:
+        raise RuntimeError(f'Unknown league filter: {league_filter}')
+
+    for league, tid in selected_tournaments.items():
         base = ROOT / 'data/cache/seasons'
         seasons = fetch('tournaments/get-seasons', {'tournamentId': tid})
         if len(seasons.get('seasons', [])) < 2:
             raise RuntimeError(f'Incomplete season response for {league}')
         atomic_json(base / f'{league}_{tid}_seasons.json', seasons)
-        for season in seasons['seasons'][:2]:
+
+        target_seasons = seasons['seasons'][:2]
+        if season_year is not None:
+            target_seasons = [
+                season for season in seasons['seasons']
+                if str(season.get('year')) == str(season_year)
+            ]
+            if not target_seasons:
+                raise RuntimeError(f'Season {season_year} not found for {league}')
+
+        for season in target_seasons:
             sid = season['id']
             seen = set()
             # Invalidate old completeness before fetching: a failed refresh must
@@ -102,9 +119,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--max-requests', type=int, default=1500)
     parser.add_argument('--delay', type=float, default=1)
+    parser.add_argument('--league', choices=sorted(TOURNAMENTS), default=None,
+                        help='Optional league code, e.g. UZB or KAZ')
+    parser.add_argument('--season-year', type=int, default=None,
+                        help='Optional season year, e.g. 2026')
     args = parser.parse_args()
     try:
-        sync(args.max_requests, max(0, args.delay))
+        sync(args.max_requests, max(0, args.delay), args.league, args.season_year)
     except Exception as error:
         atomic_json(ROOT / 'data/audits/statistics_sync_status.json', {
             'status': 'failed', 'updatedAt': datetime.now(timezone.utc).isoformat(),
