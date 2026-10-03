@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "UzStat Talent Tracker | Платформа скаутинга Узбекистана",
-  description: "Продвинутая аналитика и скаутинг молодых талантов Суперлиги Узбекистана (xG, xA, Shot Maps, Radars)",
+  title: "UzStat Talent Tracker | Футбольная аналитика",
+  description: "Скаутинг и сравнение игроков Узбекистана и Казахстана по данным SofaScore с указанием сезона и покрытия.",
 };
 
 export default function RootLayout({

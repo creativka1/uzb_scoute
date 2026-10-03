@@ -8,14 +8,15 @@ on:
       - ".github/workflows/build-detailed-positions.yml"
       - "data/cache/lineups/*.json"
       - "data/cache/heatmaps/*.json"
+      - "data/cache/players/*.json"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: build-detailed-positions
-  cancel-in-progress: true
+  group: source-data-updates
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -26,6 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Python

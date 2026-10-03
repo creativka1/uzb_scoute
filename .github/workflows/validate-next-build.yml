@@ -1,10 +1,16 @@
 name: Validate Next Build
 
 on:
+  pull_request:
   push:
     branches: [main]
     paths:
       - "app/**"
+      - "lib/**"
+      - "hooks/**"
+      - "scripts/**"
+      - "tests/**"
+      - "data/**"
       - "components/**"
       - "types/**"
       - "package.json"
@@ -18,7 +24,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: validate-next-build
+  group: validate-next-build-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -38,6 +44,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Data and API regression tests
+        run: npm test
 
       - name: Build
         run: npm run build

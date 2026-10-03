@@ -1,10 +1,11 @@
 import { NextResponse, NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { gunzipSync } from 'zlib';
 
 export const dynamic = 'force-dynamic';
 
-export type Position = 'FW' | 'MF' | 'DF' | 'GK';
+import type { Position } from '@/types/players';
 
 const MIN_PERCENTILE_MINUTES = 450;
 
@@ -33,36 +34,42 @@ function percentileRank(values: (number | null)[], value: number | null): number
   return Math.max(0, Math.min(100, Math.round(percentile)));
 }
 
-function roleMetrics(pos: Position, stats: any): Record<string, number | null> {
-  const minutes = stats?.minutesPlayed;
-  return {
-    savesPer90: per90(stats?.saves, minutes),
-    aerialWinPct: safeNumber(stats?.aerialWinPct),
-    passAccPct: safeNumber(stats?.passAccPct),
-    duelWinPct: safeNumber(stats?.duelWinPct),
-    tacklesPer90: per90(stats?.tackles, minutes),
-    interceptionsPer90: per90(stats?.interceptions, minutes),
-    keyPassesPer90: per90(stats?.keyPasses, minutes),
-    assistsPer90: per90(stats?.assists, minutes),
-    dribbleSuccessPct: safeNumber(stats?.dribbleSuccessRate),
-    goalsPer90: per90(stats?.goals, minutes),
-    shotsPer90: per90(stats?.shots, minutes),
+const roleSources: Record<string, string> = {
+  savesPer90: 'saves', tacklesPer90: 'tackles', interceptionsPer90: 'interceptions',
+  keyPassesPer90: 'keyPasses', assistsPer90: 'assists', goalsPer90: 'goals', shotsPer90: 'shots',
+  passAccPct: 'passAccPct', dribbleSuccessPct: 'dribbleSuccessRate', aerialWinPct: 'aerialWinPct', duelWinPct: 'duelWinPct',
+};
+function observed(stats: any, key: string): number | null {
+  return safeNumber(stats.metricDetails?.[key]?.value ?? stats[key]);
+}
+function metricDetail(stats: any, key: string) {
+  return stats.metricDetails?.[roleSources[key] || key] ?? {
+    matches: stats.matchesPlayed, totalMatches: stats.matchesPlayed, minutes: stats.minutesPlayed,
+    totalMinutes: stats.minutesPlayed, status: 'complete',
   };
 }
-
-function scaleMetric(values: number[]): number[] {
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  if (max === min) return values.map(() => 50);
-  return values.map((v) => Math.round(28 + ((v - min) / (max - min)) * 66));
+function eligibleMetric(stats: any, key: string, benchmark = false): boolean {
+  const d = metricDetail(stats, key);
+  // Explicit analytical policy, not an assertion of source completeness.
+  return d.minutes >= (benchmark ? 450 : 90) && d.totalMinutes > 0 &&
+    d.minutes / d.totalMinutes >= (benchmark ? 0.8 : 0.6);
+}
+function observedPer90(stats: any, key: string): number | null {
+  if (stats.metricDetails?.[key]) return safeNumber(stats.metricDetails[key].per90);
+  return per90(stats[key], stats.minutesPlayed);
+}
+function roleMetrics(pos: Position, stats: any): Record<string, number | null> {
+  return Object.fromEntries(Object.entries(roleSources).map(([key, source]) =>
+    [key, key.endsWith('Per90') ? observedPer90(stats, source) : observed(stats, source)]));
 }
 
-type AnalyticalRole = 'GOALKEEPER' | 'DEFENDER' | 'MIDFIELDER' | 'ATTACKING_MIDFIELDER' | 'FORWARD';
+type AnalyticalRole = 'UNKNOWN' | 'GOALKEEPER' | 'DEFENDER' | 'MIDFIELDER' | 'ATTACKING_MIDFIELDER' | 'FORWARD';
 
 function deriveAnalyticalRole(pos: Position, attackingScore: number | null): {
   role: AnalyticalRole;
   basis: string;
 } {
+  if (pos === 'UNKNOWN') return { role: 'UNKNOWN', basis: 'Нет подтверждённой позиции' };
   if (pos === 'GK') return { role: 'GOALKEEPER', basis: 'Позиция источника: GK' };
   if (pos === 'DF') return { role: 'DEFENDER', basis: 'Позиция источника: DF' };
   if (pos === 'FW') return { role: 'FORWARD', basis: 'Позиция источника: FW' };
@@ -78,10 +85,10 @@ function deriveAnalyticalRole(pos: Position, attackingScore: number | null): {
 }
 
 function formatMarketValue(valEUR: number | null): { formatted: string; raw: number | null } {
-  if (valEUR === null || valEUR <= 0) return { formatted: '—', raw: null };
+  if (valEUR === null || valEUR < 0) return { formatted: '—', raw: null };
 
   const formatted = valEUR >= 1000000
-    ? `€${(valEUR / 1000000).toFixed(valEUR % 1000000 === 0 ? 0 : 2).replace(/0+$/, '').replace(/\.$/, '')}m`
+    ? `€${Number((valEUR / 1000000).toFixed(2)).toString()}m`
     : `€${Math.round(valEUR / 1000)}k`;
 
   return { formatted, raw: valEUR };
@@ -90,59 +97,54 @@ function formatMarketValue(valEUR: number | null): { formatted: string; raw: num
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const requestedTwoSeasons = searchParams.get('season') === 'two';
-    const leagueFilter = searchParams.get('league') || 'all';
-
+    const requestedSeason = searchParams.get('season') || 'latest';
+    const leagueFilter = (searchParams.get('league') || 'all').toUpperCase();
+    if (!['latest', 'current', 'previous', 'two'].includes(requestedSeason) || !['ALL', 'UZB', 'KAZ'].includes(leagueFilter)) {
+      return NextResponse.json({ error: 'INVALID_FILTER' }, { status: 400 });
+    }
     const filePath = path.join(process.cwd(), 'data', 'superliga_stats.json');
-    if (!fs.existsSync(filePath)) {
-      return NextResponse.json([], { status: 200 });
+    const auditPath = path.join(process.cwd(), 'data', 'audits', 'data_integrity.json');
+    if (!fs.existsSync(filePath) || !fs.existsSync(auditPath)) {
+      return NextResponse.json({ error: 'DATA_UNAVAILABLE' }, { status: 503 });
     }
-
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    const rawPlayers = JSON.parse(fileContent);
-
+    const rawPlayers = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const observationPath = path.join(process.cwd(), 'data/metric_observations.json.gz');
+    if (!fs.existsSync(observationPath)) return NextResponse.json({error:'METRIC_OBSERVATIONS_UNAVAILABLE'}, {status:503});
+    const observations = JSON.parse(gunzipSync(fs.readFileSync(observationPath)).toString('utf8'));
+    for (const p of rawPlayers) for (const period of ['currentSeason','previousSeason','twoSeasons']) {
+      if (p[period]) p[period].metricDetails = observations[`${p.league}-${p.sofaId}`]?.[period] || {};
+    }
+    const audit = JSON.parse(fs.readFileSync(auditPath, 'utf-8'));
+    if (!Array.isArray(rawPlayers) || audit.schemaVersion !== 2 || rawPlayers.some((p: any) => p.schemaVersion !== 2)) {
+      throw new Error('Unverified dataset schema');
+    }
     const detailedPositionsPath = path.join(process.cwd(), 'data', 'detailed_positions.json');
-    let detailedPositions: Record<string, any> = {};
-    if (fs.existsSync(detailedPositionsPath)) {
-      try {
-        const detailedPayload = JSON.parse(fs.readFileSync(detailedPositionsPath, 'utf-8'));
-        detailedPositions = detailedPayload?.players || {};
-      } catch {
-        detailedPositions = {};
-      }
+    const detailedPayload = fs.existsSync(detailedPositionsPath)
+      ? JSON.parse(fs.readFileSync(detailedPositionsPath, 'utf-8')) : {};
+    // Never serve the old, unscoped formation-order inference as an exact position.
+    const detailedPositions = detailedPayload.schemaVersion === 2 ? detailedPayload.players || {} : {};
+    const selectedLeagues = leagueFilter === 'ALL' ? ['UZB', 'KAZ'] : [leagueFilter];
+    const periods: Record<string, any> = {};
+    for (const league of selectedLeagues) {
+      const seasons = audit.leagues[league];
+      const mode = requestedSeason === 'latest'
+        ? (seasons[0].cachedMatches > 0 ? 'current' : 'previous') : requestedSeason;
+      const selected = mode === 'two' ? seasons : [seasons[mode === 'current' ? 0 : 1]];
+      periods[league] = {
+        mode, label: selected.map((s: any) => s.name).join(' + '),
+        seasons: selected, complete: selected.every((s: any) => s.complete),
+      };
     }
-
-    const playersByPos: Record<Position, any[]> = { FW: [], MF: [], DF: [], GK: [] };
-
+    const playersByPos: Record<string, any[]> = {};
     rawPlayers.forEach((p: any) => {
-      const playerLeague = (p.league || '').toUpperCase();
-      const filterLeague = (leagueFilter || '').toUpperCase();
-      if (filterLeague !== 'ALL' && playerLeague !== filterLeague) return;
-
-      let stats: any = null;
-      let statsSeasonType: 'current' | 'previous' | 'two' = 'current';
-
-      if (requestedTwoSeasons) {
-        stats = p.twoSeasons;
-        statsSeasonType = 'two';
-      } else if (p.currentSeason?.minutesPlayed > 0) {
-        stats = p.currentSeason;
-        statsSeasonType = 'current';
-      } else if (p.previousSeason?.minutesPlayed > 0) {
-        stats = p.previousSeason;
-        statsSeasonType = 'previous';
-      } else if (p.twoSeasons?.minutesPlayed > 0) {
-        // Backward-compatible fallback for existing data files that only store
-        // currentSeason + twoSeasons. If currentSeason is empty, the two-season
-        // aggregate contains only the previous season.
-        stats = p.twoSeasons;
-        statsSeasonType = 'previous';
-      }
-
-      if (!stats || !stats.minutesPlayed) return;
-
-      const pos: Position = p.position || 'MF';
-      playersByPos[pos].push({ ...p, stats, statsSeasonType, roleMetrics: roleMetrics(pos, stats) });
+      const period = periods[p.league];
+      if (!period) return;
+      const stats = period.mode === 'two' ? p.twoSeasons : period.mode === 'previous' ? p.previousSeason : p.currentSeason;
+      if (!stats || safeNumber(stats.minutesPlayed) === null || stats.minutesPlayed <= 0) return;
+      const pos: Position = ['GK', 'DF', 'MF', 'FW'].includes(p.position) ? p.position : 'UNKNOWN';
+      const key = `${p.league}:${pos}`;
+      (playersByPos[key] ||= []).push({ ...p, position: pos, stats,
+        statsSeasonType: period.mode, period, roleMetrics: roleMetrics(pos, stats) });
     });
 
     const enrichedPlayers: any[] = [];
@@ -151,24 +153,32 @@ export async function GET(req: NextRequest) {
       // Only metrics currently backed by the dataset are used in role profiles.
       // duelWinPct / aerialWinPct stay available as raw fields when a source
       // provides them, but they are not part of the score until coverage exists.
+      UNKNOWN: [],
       GK: ['savesPer90', 'passAccPct'],
       DF: ['tacklesPer90', 'interceptionsPer90', 'passAccPct', 'dribbleSuccessPct', 'keyPassesPer90'],
       MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct'],
       FW: ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90', 'dribbleSuccessPct'],
     };
 
-    (Object.keys(playersByPos) as Position[]).forEach((pos) => {
-      const group = playersByPos[pos];
+    Object.values(playersByPos).forEach((group) => {
+      const pos = group[0].position as Position;
       if (!group.length) return;
       const keys = roleKeys[pos];
       const distributions: Record<string, (number | null)[]> = {};
       keys.forEach((key) => {
         distributions[key] = group.map((item) =>
-          safeNumber(item.stats?.minutesPlayed) !== null && item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+          eligibleMetric(item.stats, key, true)
             ? item.roleMetrics[key]
             : null
         );
       });
+
+      const roleBenchmarks = Object.fromEntries(keys.map(key => {
+        const values = distributions[key].filter((v): v is number => v !== null && Number.isFinite(v));
+        return [key, { count: values.length,
+          mean: values.length >= 3 ? values.reduce((a,b) => a+b,0) / values.length : null,
+          max: values.length >= 3 ? Math.max(...values) : null }];
+      }));
 
       group.forEach((p) => {
         const hasReliableSample = safeNumber(p.stats?.minutesPlayed) !== null && p.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES;
@@ -179,7 +189,7 @@ export async function GET(req: NextRequest) {
         // from the percentile calculation.
         const values = keys.map((key) => {
           const benchmark = distributions[key].filter((v): v is number => v !== null && Number.isFinite(v));
-          if (benchmark.length < 3) return null;
+          if (benchmark.length < 3 || !eligibleMetric(p.stats, key)) return null;
           return percentileRank(benchmark, p.roleMetrics[key]);
         });
 
@@ -194,8 +204,8 @@ export async function GET(req: NextRequest) {
         // percentiles are shrunk toward the neutral 50th percentile.
         // At 450+ minutes, adjusted percentile equals the raw Stage 2 percentile.
         const sampleWeight = Math.min(1, Math.max(0, p.stats.minutesPlayed / MIN_PERCENTILE_MINUTES));
-        const adjustedValues = values.map((v) =>
-          v === null ? null : Math.round(50 + (v - 50) * sampleWeight)
+        const adjustedValues = values.map((v, i) =>
+          v === null ? null : Math.round(50 + (v - 50) * Math.min(1, metricDetail(p.stats, keys[i]).minutes / MIN_PERCENTILE_MINUTES))
         );
         const adjustedAvailable = adjustedValues.filter((v): v is number => v !== null);
         const adjustedRoleScore = adjustedAvailable.length >= minRoleMetrics
@@ -205,7 +215,8 @@ export async function GET(req: NextRequest) {
         const metricSignals = keys.map((key, index) => ({
           key,
           value: p.roleMetrics[key] ?? null,
-          percentile: adjustedValues[index] ?? null,
+          percentile: values[index] ?? null,
+          adjustedScore: adjustedValues[index] ?? null,
           rawPercentile: values[index] ?? null,
         }));
 
@@ -213,13 +224,12 @@ export async function GET(req: NextRequest) {
         const attackingPercentiles = (pos === 'FW' || pos === 'MF') ? attackingKeys.map((key) => {
           const benchmark = group
             .filter((item) =>
-              safeNumber(item.stats?.minutesPlayed) !== null &&
-              item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+              eligibleMetric(item.stats, key, true)
             )
             .map((item) => item.roleMetrics[key])
             .filter((v): v is number => v !== null && Number.isFinite(v));
 
-          if (benchmark.length < 3) return null;
+          if (benchmark.length < 3 || !eligibleMetric(p.stats, key)) return null;
           return percentileRank(benchmark, p.roleMetrics[key]);
         }) : [];
         const attackingAvailable = attackingPercentiles.filter((v): v is number => v !== null);
@@ -233,7 +243,7 @@ export async function GET(req: NextRequest) {
         const analyticalRole = deriveAnalyticalRole(pos, attackingScore);
 
         const rankedSignals = metricSignals
-          .filter((item): item is { key: string; value: number; percentile: number; rawPercentile: number | null } =>
+          .filter((item): item is { key: string; value: number; percentile: number; rawPercentile: number | null; adjustedScore: number | null } =>
             item.value !== null && item.percentile !== null
           )
           .sort((a, b) => b.percentile - a.percentile);
@@ -244,14 +254,14 @@ export async function GET(req: NextRequest) {
           .sort((a, b) => a.percentile - b.percentile);
 
         const benchmarkPlayers = group.filter((item) =>
-          safeNumber(item.stats?.minutesPlayed) !== null && item.stats.minutesPlayed >= MIN_PERCENTILE_MINUTES
+          keys.some(key => eligibleMetric(item.stats, key, true) && item.roleMetrics[key] !== null)
         ).length;
 
         const metricCoverage = available.length;
         const mediumCoverageThreshold = pos === 'GK' ? 2 : 4;
         const highCoverageThreshold = pos === 'GK' ? 2 : 5;
         const confidence =
-          !hasReliableSample || metricCoverage < mediumCoverageThreshold
+          !p.period.complete || !hasReliableSample || metricCoverage < mediumCoverageThreshold || keys.some(key => metricDetail(p.stats, key).status !== 'complete')
             ? 'low'
             : p.stats.minutesPlayed >= 900 && metricCoverage >= highCoverageThreshold
               ? 'high'
@@ -261,23 +271,31 @@ export async function GET(req: NextRequest) {
         const adjustedRadar = { m1: adjustedValues[0] ?? null, m2: adjustedValues[1] ?? null, m3: adjustedValues[2] ?? null, m4: adjustedValues[3] ?? null, m5: adjustedValues[4] ?? null, m6: adjustedValues[5] ?? null };
         const marketVal = formatMarketValue(safeNumber(p.marketValueCurrency));
         const detailed = detailedPositions[String(p.sofaId)] || null;
+        const birth = typeof p.dateOfBirthTimestamp === 'number' ? new Date(p.dateOfBirthTimestamp * 1000) : null;
+        const now = new Date();
+        const age = birth && Number.isFinite(birth.getTime()) && birth <= now
+          ? now.getUTCFullYear() - birth.getUTCFullYear() - (now.getUTCMonth() < birth.getUTCMonth() || (now.getUTCMonth() === birth.getUTCMonth() && now.getUTCDate() < birth.getUTCDate()) ? 1 : 0)
+          : null;
 
         enrichedPlayers.push({
           id: `${p.league || 'UZB'}-${p.sofaId}`,
           league: p.league || 'UZB',
-          countryCode: p.countryCode || '',
+          countryCode: p.countryCode ?? null,
           name: { uz: p.name, ru: p.name },
-          age: p.age,
-          isU21: p.age <= 21,
-          isLegionnaire: p.isLegionnaire || false,
+          age,
+          isU21: age === null ? null : age <= 21,
+          isLegionnaire: p.isLegionnaire ?? null,
           isEstimatedMarketValue: false,
           club: /^no team$/i.test(String(p.club || '').trim())
             ? { uz: 'Jamoasiz', ru: 'Без клуба' }
-            : { uz: p.club, ru: p.club },
+            : { uz: p.club ?? '—', ru: p.club ?? '—' },
+          clubSource: p.clubSource,
+          clubObservedAt: p.clubObservedAt,
+          profileObservedAt: p.profileObservedAt,
           position: pos,
           sourcePosition: pos,
           analyticalRole: analyticalRole.role,
-          analyticalRoleIsCalculated: analyticalRole.role !== 'GOALKEEPER' && analyticalRole.role !== 'DEFENDER' && analyticalRole.role !== 'FORWARD' && analyticalRole.role !== 'MIDFIELDER',
+          analyticalRoleIsCalculated: analyticalRole.role === 'ATTACKING_MIDFIELDER',
           analyticalRoleBasis: analyticalRole.basis,
           detailedPosition: detailed?.detailedPosition ?? null,
           detailedPositionConfidence: detailed?.confidence ?? null,
@@ -293,13 +311,22 @@ export async function GET(req: NextRequest) {
           preferredFoot: p.preferredFoot || 'Unknown',
           contractUntil: p.contractUntil || '—',
           statsSeasonType: p.statsSeasonType,
+          statsSeasonLabel: p.period.label,
+          statsCoverageComplete: p.period.complete,
+          statsDateFrom: p.stats.dateFrom,
+          statsDateTo: p.stats.dateTo,
+          statsEventIds: p.stats.eventIds,
+          statsMetricCoverage: p.stats.metricCoverage,
+          statsMetricDetails: p.stats.metricDetails || {},
+          statsSeasonIds: p.period.seasons.map((s: any) => s.id),
+          roleMetricCoverage: Object.fromEntries(Object.keys(roleSources).map(key => [key, metricDetail(p.stats, key)])),
           marketValue: marketVal.formatted,
           rawMarketValueEUR: marketVal.raw,
           photoUrl: `https://img.sofascore.com/api/v1/player/${p.sofaId}/image`,
           initials: (p.shortName || p.name || 'UZ').split(' ').map((n: string) => n[0]).join('').slice(0, 2),
-          scoutIndex,
+          scoutIndex: adjustedRoleScore,
           scoutIndexIsCalculated: scoutIndex !== null,
-          scoutIndexBasis: 'Среднее доступных ролевых процентилей по метрикам с реальным покрытием данных; база сравнения — игроки с минимум 450 минутами',
+          scoutIndexBasis: 'Среднее ролевых процентилей с поправкой на покрытые минуты. База: ≥450 покрытых минут и ≥80% минут выборки; оценка игрока: ≥90 минут и ≥60%. Набор метрик может различаться.',
           scoutingEngine: {
             rawRoleScore: scoutIndex,
             roleScore: adjustedRoleScore,
@@ -311,36 +338,38 @@ export async function GET(req: NextRequest) {
             metricCoverage,
             totalRoleMetrics: keys.length,
             benchmarkPlayers,
+            benchmarkByMetric: Object.fromEntries(keys.map(key => [key, distributions[key].filter(v => v !== null).length])),
             benchmarkMinMinutes: MIN_PERCENTILE_MINUTES,
             isLowSample: !hasReliableSample,
             strengths: strengths.slice(0, 3),
             watchouts: watchouts.slice(0, 3),
             missingMetrics: metricSignals.filter((item) => item.value === null).map((item) => item.key),
           },
-          tags: [p.club, pos, p.isLegionnaire ? 'Legioner' : 'Local'],
+          tags: [p.club, pos, p.isLegionnaire === null ? null : p.isLegionnaire ? 'Legioner' : 'Local'].filter(Boolean),
           minutesPlayed: p.stats.minutesPlayed,
           matchesPlayed: p.stats.matchesPlayed,
-          goals: p.stats.goals ?? 0,
-          assists: p.stats.assists ?? 0,
-          xG: null,
-          xA: null,
-          shots: p.stats.shots ?? 0,
-          keyPasses: p.stats.keyPasses ?? 0,
-          goalsPer90: per90(p.stats.goals, p.stats.minutesPlayed),
-          assistsPer90: per90(p.stats.assists, p.stats.minutesPlayed),
-          shotsPer90: per90(p.stats.shots, p.stats.minutesPlayed),
-          keyPassesPer90: per90(p.stats.keyPasses, p.stats.minutesPlayed),
-          passAccPct: safeNumber(p.stats.passAccPct),
-          dribbleSuccessRate: pos === 'GK' ? null : safeNumber(p.stats.dribbleSuccessRate),
-          dribbleWon: p.stats.dribbleWon ?? 0,
-          dribbleTotal: p.stats.dribbleTotal ?? 0,
-          duelWinRate: safeNumber(p.stats.duelWinPct),
+          goals: observed(p.stats, 'goals'),
+          assists: observed(p.stats, 'assists'),
+          xG: observed(p.stats, 'xG'),
+          xA: observed(p.stats, 'xA'),
+          shots: observed(p.stats, 'shots'),
+          keyPasses: observed(p.stats, 'keyPasses'),
+          goalsPer90: observedPer90(p.stats, 'goals'),
+          assistsPer90: observedPer90(p.stats, 'assists'),
+          shotsPer90: observedPer90(p.stats, 'shots'),
+          keyPassesPer90: observedPer90(p.stats, 'keyPasses'),
+          passAccPct: observed(p.stats, 'passAccPct'),
+          dribbleSuccessRate: pos === 'GK' ? null : observed(p.stats, 'dribbleSuccessRate'),
+          dribbleWon: observed(p.stats, 'dribbleWon'),
+          dribbleTotal: observed(p.stats, 'dribbleTotal'),
+          duelWinRate: observed(p.stats, 'duelWinPct'),
           progressiveRuns: null,
-          aerialWinRate: safeNumber(p.stats.aerialWinPct),
-          tackles: p.stats.tackles ?? 0,
-          interceptions: p.stats.interceptions ?? 0,
-          saves: p.stats.saves ?? 0,
+          aerialWinRate: observed(p.stats, 'aerialWinPct'),
+          tackles: observed(p.stats, 'tackles'),
+          interceptions: observed(p.stats, 'interceptions'),
+          saves: observed(p.stats, 'saves'),
           roleMetrics: p.roleMetrics,
+          roleBenchmarks,
           radar,
         });
       });
@@ -350,10 +379,11 @@ export async function GET(req: NextRequest) {
       status: 200,
       headers: {
         'Cache-Control': 'no-store, max-age=0',
+        'X-Data-Metadata': JSON.stringify({ periods, unlinkedLineups: audit.unlinkedLineups }),
       },
     });
   } catch (error: any) {
     console.error('Ошибка в route.ts:', error.message);
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json({ error: 'DATA_READ_FAILED' }, { status: 500 });
   }
 }

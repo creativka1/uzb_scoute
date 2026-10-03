@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 """
-Build conservative detailed football positions from SofaScore source data already
-cached in this repository.
+Build detailed-position evidence from cached SofaScore payloads.
 
-The model never invents a position from preferred foot or player statistics.
-Each match position comes from a confirmed SofaScore starting XI + team
-formation. The starting-XI order is interpreted with explicit templates for
-formations observed in the dataset. When a whole formation line has cached
-SofaScore heatmaps, lateral heatmap medians are used to order that line from
-right to left; otherwise the confirmed SofaScore lineup order is preserved.
-Heatmaps never create a position without formation/lineup evidence.
+Only one unambiguous player.positionsDetailed value, compatible with the source
+broad position, is exposed as a detailed position. Profile snapshot dates may
+be unknown. Formation/order and heatmap calculations remain audit candidates;
+array order and pitch orientation are not verified contracts.
 
 Output:
   data/detailed_positions.json
@@ -19,6 +15,7 @@ from __future__ import annotations
 
 import json
 import statistics
+import hashlib
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -30,7 +27,7 @@ HEATMAPS_DIR = ROOT / "data" / "cache" / "heatmaps"
 OUTPUT = ROOT / "data" / "detailed_positions.json"
 
 # Explicit templates only. We do not guess unsupported formations.
-# SofaScore confirmed starting-XI order is right-to-left inside each line.
+# Historical candidate model assumes right-to-left order; this is NOT verified.
 FORMATION_TEMPLATES: dict[str, list[list[str]]] = {
     "4-2-3-1": [
         ["RB", "CB", "CB", "LB"],
@@ -338,8 +335,12 @@ def main() -> None:
         ]
 
         output_players[str(player_id)] = {
-            "detailedPosition": detailed_position,
-            "confidence": confidence,
+            "detailedPosition": None,
+            "confidence": None,
+            "candidateDetailedPosition": detailed_position,
+            "candidateConfidence": confidence,
+            "status": "unverified_lineup_order",
+            "sourcePositions": [],
             "startsUsed": total,
             "primaryStarts": primary_count,
             "primaryShare": round(share, 3),
@@ -357,12 +358,45 @@ def main() -> None:
             "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available",
         }
 
+    # Confirmed arrays do not guarantee a documented spatial order. Keep the
+    # old inference as an auditable candidate, never as an exact source fact.
+    aliases = {"GK": "GK", "DC": "CB", "DR": "RB", "DL": "LB", "DM": "DM",
+               "MC": "CM", "AM": "AM", "MR": "RM", "ML": "LM", "RW": "RW",
+               "LW": "LW", "ST": "ST", "RWB": "RWB", "LWB": "LWB"}
+    allowed = {"G": {"GK"}, "D": {"CB", "RB", "LB", "RWB", "LWB"},
+               "M": {"DM", "CM", "AM", "RM", "LM", "RW", "LW", "RWB", "LWB"},
+               "F": {"ST", "RW", "LW", "AM"}}
+    for file in sorted((ROOT / "data/cache/players").glob("*.json")):
+        profile = json.loads(file.read_text(encoding="utf-8")).get("player") or {}
+        pid = profile.get("id")
+        if not isinstance(pid, int):
+            continue
+        raw = profile.get("positionsDetailed")
+        if not isinstance(raw, list) or not raw:
+            continue
+        positions = list(dict.fromkeys(aliases[p] for p in raw if p in aliases))
+        row = output_players.setdefault(str(pid), {"startsUsed": 0, "positionDistribution": {},
+            "secondaryPositions": [], "heatmapMatchesAvailable": 0, "heatmapMatchesValidated": 0,
+            "detailedPosition": None, "confidence": None})
+        row["sourcePositions"] = positions
+        row["method"] = "SofaScore cached player.positionsDetailed; snapshot date may be unknown"
+        conflict = any(p not in aliases for p in raw) or any(p not in allowed.get(profile.get("position"), set()) for p in positions)
+        row["status"] = "source_conflict" if conflict else "source_multiple" if len(positions) > 1 else "source"
+        row["detailedPosition"] = positions[0] if len(positions) == 1 and not conflict else None
+        # This label describes source agreement only, not verified match usage.
+        row["confidence"] = "low" if row["detailedPosition"] else None
+    fingerprint = hashlib.sha256()
+    for folder in (LINEUPS_DIR, HEATMAPS_DIR, ROOT / "data/cache/players"):
+        for file in sorted(folder.glob("*.json")):
+            fingerprint.update(file.name.encode())
+            fingerprint.update(file.read_bytes())
     report = {
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "schemaVersion": 2,
+        "sourceFingerprint": fingerprint.hexdigest(),
         "method": {
-            "source": "SofaScore confirmed match lineups and formations",
-            "heatmapRole": "lateral ordering and validation inside a formation line; never used alone to invent a position",
-            "minimumEvidence": "at least 2 usable starts and >=60% consensus; stronger thresholds for medium/high confidence",
+            "source": "SofaScore player.positionsDetailed; only unambiguous compatible source positions",
+            "heatmapRole": "supporting unverified candidate evidence only; pitch orientation is not verified",
+            "candidateEvidence": "at least 2 usable starts and >=60% consensus; never promoted to source fact",
             "unsupportedFormationsAreIgnored": True,
         },
         "summary": {
