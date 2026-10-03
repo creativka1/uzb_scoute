@@ -12,12 +12,10 @@ import {
   X,
   ChevronRight,
   Loader2,
-  ShieldCheck,
   Activity,
   BarChart3,
   SlidersHorizontal,
   RotateCcw,
-  Globe,
   Bookmark,
   ArrowRight,
 } from 'lucide-react';
@@ -39,8 +37,8 @@ const TRANSLATIONS = {
     topScorer: 'Yetakchi to‘purar',
     topScoutIndex: 'Eng yuqori rol reytingi',
     filtersBtn: 'Filtrlar',
-    filterPanelTitle: 'Qidiruv va skauting filtrlari',
-    filterPanelSub: 'Parametrlarni birlashtirib mos futbolchilarni toping',
+    filterPanelTitle: 'Futbolchilar bazasi filtrlari',
+    filterPanelSub: 'Tez ko‘rish uchun oddiy filtrlar. Aniq tanlov uchun “Vazifa uchun qidiruv”dan foydalaning.',
     seasonSelectorLabel: 'Statistika davri:',
     seasonCurrentOption: '1 mavsum (Joriy mavsum)',
     seasonTwoOption: '2 mavsum (Oxirgi 2 mavsum)',
@@ -220,7 +218,7 @@ const TRANSLATIONS = {
     statsCurrentSeason: 'Joriy mavsum',
     statsPreviousSeason: 'O‘tgan mavsum',
     statsTwoSeasons: '2 mavsum',
-    profileSourceNote: 'SofaScore ma’lumotlari asosidagi rol profili',
+    profileSourceNote: 'Tasdiqlangan o‘yin ma’lumotlari asosidagi rol profili',
     directCompareHint: 'To‘g‘ridan-to‘g‘ri taqqoslash uchun bosing',
     roleRatingComparisonLabel: 'Rol reytingi (0–100, mutlaq baho emas)',
   },
@@ -237,8 +235,8 @@ const TRANSLATIONS = {
     topScorer: 'Топ-бомбардир',
     topScoutIndex: 'Высший ролевой рейтинг',
     filtersBtn: 'Фильтры',
-    filterPanelTitle: 'Параметры и фильтры скаутинга',
-    filterPanelSub: 'Комбинируйте параметры для точного поиска кандидатов',
+    filterPanelTitle: 'Фильтры базы игроков',
+    filterPanelSub: 'Простые фильтры для просмотра базы. Для точного подбора используйте «Поиск под задачу».',
     seasonSelectorLabel: 'Выбор сезона статистики:',
     seasonCurrentOption: '1 сезон (Текущий сезон)',
     seasonTwoOption: '2 сезона (Суммарно за 2 сезона)',
@@ -262,7 +260,7 @@ const TRANSLATIONS = {
     colPosition: 'Позиция',
     colMatchesAndMin: 'Игры (Мин.)',
     colGoals: 'Голы',
-    colAssists: 'Пасы',
+    colAssists: 'Ассисты',
     colDribbling: 'Дриблинг %',
     colScoutIndex: 'Ролевой рейтинг',
     posFW: 'Нападающий',
@@ -290,7 +288,7 @@ const TRANSLATIONS = {
     xgLabel: 'Острота моментов (xG)',
     xaLabel: 'Ожидаемые ассисты (xA)',
     shotsSeason: 'Всего ударов',
-    keyPassesSeason: 'Острые передачи',
+    keyPassesSeason: 'Ключевые передачи',
     dribbleDetailed: 'Дриблинг (Успешные / Попытки)',
     duelPct: 'Выигранные единоборства %',
     aerialPct: 'Верховые дуэли %',
@@ -319,7 +317,7 @@ const TRANSLATIONS = {
     footUnknown: 'Нет данных',
     matchWord: 'матчей',
     goalWord: 'гол',
-    assistWord: 'пас',
+    assistWord: 'ассист',
     legionerBadge: 'Легионер',
     scoutingEngineTitle: 'Скаутский профиль',
     scoutingEngineSub: 'Роль игрока, атакующий вклад и ключевые сигналы для скаута',
@@ -418,7 +416,7 @@ const TRANSLATIONS = {
     statsCurrentSeason: 'Текущий сезон',
     statsPreviousSeason: 'Прошлый сезон',
     statsTwoSeasons: '2 сезона',
-    profileSourceNote: 'Ролевой профиль на основе данных SofaScore',
+    profileSourceNote: 'Ролевой профиль по подтверждённым матчевым данным',
     directCompareHint: 'Нажмите для прямого сравнения',
     roleRatingComparisonLabel: 'Ролевой рейтинг (0–100, не абсолютная оценка)',
   },
@@ -520,10 +518,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [visibleCount, setVisibleCount] = useState(40);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [filterLegionnaire, setFilterLegionnaire] = useState(false);
   const [filterU21, setFilterU21] = useState(false);
-  const [filterContract, setFilterContract] = useState(false);
-  const [filterMinMinutes, setFilterMinMinutes] = useState(false);
   const [filterClub, setFilterClub] = useState('all');
   const [filterPosition, setFilterPosition] = useState('all');
 
@@ -662,20 +657,14 @@ export default function Dashboard() {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (filterLegionnaire) count++;
     if (filterU21) count++;
-    if (filterContract) count++;
-    if (filterMinMinutes) count++;
     if (filterClub !== 'all') count++;
     if (filterPosition !== 'all') count++;
     return count;
-  }, [seasonMode, filterLegionnaire, filterU21, filterContract, filterMinMinutes, filterClub, filterPosition]);
+  }, [filterU21, filterClub, filterPosition]);
 
   const handleResetAllFilters = () => {
-    setFilterLegionnaire(false);
     setFilterU21(false);
-    setFilterContract(false);
-    setFilterMinMinutes(false);
     setFilterClub('all');
     setFilterPosition('all');
     setSearchQuery('');
@@ -688,19 +677,11 @@ export default function Dashboard() {
       const q = searchQuery.toLowerCase();
       const matchSearch = pName.includes(q) || pClub.includes(q);
 
-      const leagueCountry = currentLeague === 'KAZ' ? 'KZ' : 'UZ';
-      const matchLegion =
-        !filterLegionnaire ||
-        player.isLegionnaire ||
-        (!!player.countryCode && player.countryCode.toUpperCase() !== leagueCountry);
-
       const matchU21 = !filterU21 || player.isU21;
-      const matchContract = !filterContract || isContractExpiring(player.contractUntil);
-      const matchMinutes = !filterMinMinutes || player.minutesPlayed >= 450;
       const matchClub = filterClub === 'all' || player.club?.[lang] === filterClub;
       const matchPos = filterPosition === 'all' || player.position === filterPosition;
 
-      return matchSearch && matchLegion && matchU21 && matchContract && matchMinutes && matchClub && matchPos;
+      return matchSearch && matchU21 && matchClub && matchPos;
     });
 
     if (sortField) {
@@ -714,9 +695,9 @@ export default function Dashboard() {
     }
 
     return list;
-  }, [players, searchQuery, filterLegionnaire, filterU21, filterContract, filterMinMinutes, filterClub, filterPosition, sortField, sortOrder, lang]);
+  }, [players, searchQuery, filterU21, filterClub, filterPosition, sortField, sortOrder, lang]);
 
-  useEffect(() => setVisibleCount(40), [players, searchQuery, filterClub, filterPosition, filterLegionnaire, filterU21, filterContract, filterMinMinutes, sortField, sortOrder]);
+  useEffect(() => setVisibleCount(40), [players, searchQuery, filterClub, filterPosition, filterU21, sortField, sortOrder]);
 
   const hasRecruitmentCriteria = useMemo(() => {
     return (
@@ -1039,7 +1020,7 @@ export default function Dashboard() {
         {activeView!=='team'&&<label>{lang === 'ru' ? 'Период' : 'Davr'}<select value={seasonMode} onChange={e => setSeasonMode(e.target.value as SeasonMode)}><option value="latest">{lang === 'ru' ? 'Последний доступный сезон' : 'Oxirgi mavjud mavsum'}</option><option value="current">{t.statsCurrentSeason}</option><option value="previous">{t.statsPreviousSeason}</option><option value="two">{t.statsTwoSeasons}</option></select></label>}
         {activeView!=='team'&&<div className="scope-summary"><strong>{isLoading ? '…' : periodLabel || '—'}</strong><span>{isLoading ? t.loading : `${players.length} ${lang === 'ru' ? 'игроков с данными' : 'futbolchida ma’lumot bor'}`}</span></div>}
       </div>
-      {activeView!=='team' && !isLoading && !loadError && <details className={`coverage-note ${coverageComplete ? 'complete' : ''}`}><summary>{coverageComplete ? (lang === 'ru' ? 'Данные по загруженным матчам' : 'Yuklangan o‘yinlar ma’lumotlari') : (lang === 'ru' ? 'Данные сезона неполные' : 'Mavsum ma’lumotlari to‘liq emas')}<span>{lang === 'ru' ? 'Что это значит?' : 'Bu nimani anglatadi?'}</span></summary><p>{lang === 'ru' ? 'Показатели рассчитаны только по подтверждённым загруженным матчам SofaScore. Пропущенные значения обозначены прочерком. Прошлый сезон никогда не подставляется в текущий.' : 'Ko‘rsatkichlar faqat SofaScore’dan yuklangan tasdiqlangan o‘yinlardan hisoblangan. Yetishmayotgan qiymatlar tire bilan belgilangan. Oldingi mavsum joriy mavsum o‘rniga qo‘yilmaydi.'}</p></details>}
+      {activeView!=='team' && !isLoading && !loadError && <details className={`coverage-note source-status ${coverageComplete ? 'complete' : ''}`}><summary><strong>{lang === 'ru' ? 'Матчевые данные: SofaScore' : 'O‘yin ma’lumotlari: SofaScore'}</strong><span>{coverageComplete ? (lang === 'ru' ? 'загруженный период' : 'yuklangan davr') : (lang === 'ru' ? 'неполное покрытие' : 'to‘liq bo‘lmagan qamrov')}</span></summary><p>{lang === 'ru' ? 'Сейчас в расчёты входят только подтверждённые загруженные матчи SofaScore. FootyStats и Opta пока не подключены к рабочему пайплайну и не смешиваются с этими значениями. Пропуски показываются прочерком.' : 'Hozir hisob-kitoblarga faqat SofaScore’dan yuklangan tasdiqlangan o‘yinlar kiradi. FootyStats va Opta hali ishchi ma’lumot oqimiga ulanmagan va bu qiymatlar bilan aralashtirilmaydi. Yetishmayotgan qiymatlar tire bilan ko‘rsatiladi.'}</p></details>}
       {loadError && <p role="alert" className="error-notice">{lang === 'ru' ? 'Не удалось загрузить данные. Выберите период ещё раз.' : 'Ma’lumot yuklanmadi. Davrni qayta tanlang.'}</p>}
       {saveError && <p role="alert" className="error-notice">{lang === 'ru' ? 'Не удалось прочитать или сохранить список в браузере. Существующее сохранение не перезаписано.' : 'Brauzerdagi ro‘yxatni o‘qish yoki saqlash imkoni bo‘lmadi. Mavjud saqlanma o‘zgartirilmagan.'}</p>}
       {activeView==='team'&&<TeamWorkspace key={`${currentLeague}:${seasonMode}`} initialSelection={analysisSelection} league={currentLeague} seasonMode={seasonMode} lang={lang}
@@ -1270,24 +1251,8 @@ export default function Dashboard() {
       {isFilterOpen && (
         <AnalysisDialog title={t.filterPanelTitle} lang={lang} onClose={() => setIsFilterOpen(false)} narrow>
           <div className="filter-dialog-content">
+            <p className="filter-dialog-hint">{t.filterPanelSub}</p>
             <div className="space-y-4">
-              {/* ЛЕГИОНЕРЫ */}
-              <label className="flex items-start gap-3 p-3 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-900 cursor-pointer transition">
-                <input
-                  type="checkbox"
-                  checked={filterLegionnaire}
-                  onChange={(e) => setFilterLegionnaire(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
-                />
-                <div>
-                  <span className="text-sm font-semibold text-white flex items-center gap-1.5">
-                    <Globe className="h-4 w-4 text-sky-400" />
-                    {t.filterLegionnaire}
-                  </span>
-                  <p className="text-xs text-zinc-400 mt-0.5">{t.filterLegionnaireDesc}</p>
-                </div>
-              </label>
-
               {/* ТОЛЬКО U21 */}
               <label className="flex items-center gap-3 p-3 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-900 cursor-pointer transition">
                 <input
@@ -1299,34 +1264,6 @@ export default function Dashboard() {
                 <span className="text-sm font-semibold text-white flex items-center gap-1.5">
                   <Sparkles className="h-4 w-4 text-emerald-400" />
                   {t.filterU21}
-                </span>
-              </label>
-
-              {/* ИСТЕКАЮЩИЕ КОНТРАКТЫ */}
-              <label className="flex items-center gap-3 p-3 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-900 cursor-pointer transition">
-                <input
-                  type="checkbox"
-                  checked={filterContract}
-                  onChange={(e) => setFilterContract(e.target.checked)}
-                  className="h-4 w-4 rounded border-zinc-700 bg-zinc-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
-                />
-                <span className="text-sm font-semibold text-white flex items-center gap-1.5">
-                  <Activity className="h-4 w-4 text-amber-400" />
-                  {t.filterExpiringContract}
-                </span>
-              </label>
-
-              {/* ОСНОВНОЙ СОСТАВ (>450 МИНУТ) */}
-              <label className="flex items-center gap-3 p-3 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-900 cursor-pointer transition">
-                <input
-                  type="checkbox"
-                  checked={filterMinMinutes}
-                  onChange={(e) => setFilterMinMinutes(e.target.checked)}
-                  className="h-4 w-4 rounded border-zinc-700 bg-zinc-950 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
-                />
-                <span className="text-sm font-semibold text-white flex items-center gap-1.5">
-                  <ShieldCheck className="h-4 w-4 text-emerald-400" />
-                  {t.filterMinMinutes}
                 </span>
               </label>
 
