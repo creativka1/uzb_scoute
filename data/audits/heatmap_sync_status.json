@@ -1,6 +1,8 @@
 {
-  "generatedAt": "2026-10-02T08:52:30.449206+00:00",
-  "requestsMadeThisRun": 1,
+  "generatedAt": "2026-10-03T06:29:26.602454+00:00",
+  "status": "failed",
+  "failedResponsesThisRun": 1,
+  "requestsMadeThisRun": 3,
   "heatmapsSavedThisRun": 0,
   "emptyResponsesThisRun": 0,
   "rateLimited": true,
