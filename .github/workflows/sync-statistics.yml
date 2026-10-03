@@ -50,21 +50,13 @@ jobs:
           if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
           python app/api/players/scripts/sync_sofascore.py "${args[@]}"
 
-      - name: Install public browser fallback
-        if: steps.provider_sync.outcome == 'failure'
-        run: |
-          pip install playwright
-          python -m playwright install --with-deps chromium
-
-      - name: Fetch public 2026 match lists in browser
-        if: steps.provider_sync.outcome == 'failure'
+      - name: Sync official 2026 match centre
         env:
-          SEASON_YEAR: ${{ github.event_name == 'push' && '2026' || inputs.season_year }}
           LEAGUE: ${{ inputs.league }}
         run: |
-          args=(--season-year "${SEASON_YEAR:-2026}")
+          args=()
           if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
-          python scripts/sync_public_matchlists.py "${args[@]}"
+          python scripts/sync_official_2026_matches.py "${args[@]}"
 
       - name: Rebuild evidence and partial-cache coverage
         if: always()
@@ -78,5 +70,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
-          git commit -m "data: checkpoint verified SofaScore source data"
+          git commit -m "data: checkpoint verified football source data"
           git push

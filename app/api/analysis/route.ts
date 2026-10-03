@@ -2,8 +2,86 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { gunzipSync } from 'zlib';
-import type { MatchCore } from '@/types/matches';
+import type { MatchCore, CoreMatch, CoreSeason, CoreTeam } from '@/types/matches';
 export const dynamic = 'force-dynamic';
+
+type OfficialMatchCore = {
+  schemaVersion: number;
+  generatedAt: string;
+  source: string;
+  seasons: Partial<Record<'UZB'|'KAZ', CoreSeason[]>>;
+  teams: CoreTeam[];
+  matches: CoreMatch[];
+};
+
+function normalizeTeamName(value: string | null | undefined) {
+  return (value || '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLocaleLowerCase()
+    .replace(/[^a-z0-9а-яёқғҳў]+/giu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function mergeOfficialMatchCore(base: MatchCore): MatchCore {
+  const file = path.join(process.cwd(), 'data', 'official_match_core_2026.json');
+  if (!fs.existsSync(file)) return base;
+
+  const official: OfficialMatchCore = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (official.schemaVersion !== 1 || !Array.isArray(official.matches) || !Array.isArray(official.teams)) {
+    throw new Error('Invalid official match core');
+  }
+
+  const baseTeams = new Map(base.teams.map(team => [team.id, team.name]));
+  const officialTeams = new Map(official.teams.map(team => [team.id, team.name]));
+
+  const isDuplicate = (candidate: CoreMatch) => {
+    const home = normalizeTeamName(officialTeams.get(candidate.homeTeamId));
+    const away = normalizeTeamName(officialTeams.get(candidate.awayTeamId));
+    return base.matches.some(existing => {
+      if (existing.league !== candidate.league || existing.seasonId !== candidate.seasonId) return false;
+      if (Math.abs(existing.date - candidate.date) > 18 * 3600) return false;
+      return normalizeTeamName(baseTeams.get(existing.homeTeamId)) === home &&
+        normalizeTeamName(baseTeams.get(existing.awayTeamId)) === away;
+    });
+  };
+
+  const officialMatches = official.matches.filter(match => !isDuplicate(match));
+  const teamIdsUsed = new Set(officialMatches.flatMap(match => [match.homeTeamId, match.awayTeamId]));
+  const mergedTeams = [...base.teams];
+  const knownTeamIds = new Set(mergedTeams.map(team => team.id));
+  for (const team of official.teams) {
+    if (teamIdsUsed.has(team.id) && !knownTeamIds.has(team.id)) {
+      mergedTeams.push(team);
+      knownTeamIds.add(team.id);
+    }
+  }
+
+  const mergedSeasons = {...base.seasons};
+  for (const league of ['UZB','KAZ'] as const) {
+    const extras = official.seasons?.[league] || [];
+    const byId = new Map<number, CoreSeason>(base.seasons[league].map(season => [season.id, season]));
+    for (const season of extras) {
+      const existing = byId.get(season.id);
+      byId.set(season.id, existing ? {
+        ...existing,
+        cachedMatches: Math.max(existing.cachedMatches || 0, season.cachedMatches || 0),
+        lastSyncedAt: season.lastSyncedAt || existing.lastSyncedAt,
+      } : season);
+    }
+    mergedSeasons[league] = Array.from(byId.values()).sort((a,b) => Number(b.year) - Number(a.year));
+  }
+
+  return {
+    ...base,
+    source: officialMatches.length ? 'mixed-match-core' : base.source,
+    seasons: mergedSeasons,
+    teams: mergedTeams,
+    matches: [...base.matches, ...officialMatches],
+  };
+}
+
 
 /** Explicit season IDs. No per-player or per-team season fallback. */
 export async function GET(req: NextRequest) {
@@ -17,8 +95,9 @@ export async function GET(req: NextRequest) {
   const file = path.join(process.cwd(), 'data/match_core.json.gz');
   if (!fs.existsSync(file)) return NextResponse.json({error:'DATA_UNAVAILABLE'}, {status:503});
   try {
-    const core: MatchCore = JSON.parse(gunzipSync(fs.readFileSync(file)).toString('utf8'));
-    if (core.schemaVersion !== 1 || !Array.isArray(core.matches) || !Array.isArray(core.appearances)) throw Error('Invalid core');
+    const baseCore: MatchCore = JSON.parse(gunzipSync(fs.readFileSync(file)).toString('utf8'));
+    if (baseCore.schemaVersion !== 1 || !Array.isArray(baseCore.matches) || !Array.isArray(baseCore.appearances)) throw Error('Invalid core');
+    const core = mergeOfficialMatchCore(baseCore);
     const seasons = core.seasons[league as 'UZB'|'KAZ'];
     if (season && !seasons.some(s => s.id === Number(season))) return NextResponse.json({error:'UNKNOWN_SEASON'}, {status:400});
     let matches = core.matches.filter(m => m.league === league && (!season || m.seasonId === Number(season)) && (!team || m.homeTeamId === Number(team) || m.awayTeamId === Number(team)));
