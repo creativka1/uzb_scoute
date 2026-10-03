@@ -242,10 +242,11 @@ def parse_kff(html: str, source_id: int) -> dict | None:
             "url": SCAN["KAZ"]["base"].format(source_id),
         }
 
-    # Upcoming match: use the visible body block and keep the score unknown.
+    # Body fallback: supports both completed and upcoming matches. Search after
+    # the kickoff time so values such as 16:00 can never be mistaken for 0:1.
     marker_index = next(i for i, s in enumerate(parts)
                         if re.fullmatch(r"Премьер-Лига 2026, \d+ тур", s))
-    segment = parts[marker_index:marker_index + 24]
+    segment = parts[marker_index:marker_index + 26]
     local_date_index = next((i for i, s in enumerate(segment) if re.search(
         r"\d{1,2}\s+[а-яё]+\.?\s+2026\s*г\.?", s.casefold())), None)
     if local_date_index is None:
@@ -254,23 +255,28 @@ def parse_kff(html: str, source_id: int) -> dict | None:
                              if re.fullmatch(r"\d{1,2}:\d{2}", segment[i])), None)
     if local_time_index is None:
         return None
+
     score_index = next((i for i in range(local_time_index + 1, len(segment))
-                        if re.fullmatch(r"-\s*:\s*-", segment[i])), None)
+                        if re.fullmatch(r"(?:\d+\s*:\s*\d+|-\s*:\s*-)", segment[i])), None)
     if score_index is None or score_index == 0 or score_index + 1 >= len(segment):
         return None
+
     home = normalize_team(segment[score_index - 1])
     away = normalize_team(segment[score_index + 1])
     if not home or not away or home == away:
         return None
+
+    score = re.fullmatch(r"(\d+)\s*:\s*(\d+)", segment[score_index])
+    upcoming = score is None or any(s == "Предстоящий" for s in segment[:score_index + 1])
     return {
         "sourceId": source_id,
         "round": int(marker.group(1)),
         "date": kickoff,
         "home": home,
         "away": away,
-        "homeScore": None,
-        "awayScore": None,
-        "finished": False,
+        "homeScore": None if upcoming else int(score.group(1)),
+        "awayScore": None if upcoming else int(score.group(2)),
+        "finished": not upcoming,
         "url": SCAN["KAZ"]["base"].format(source_id),
     }
 
