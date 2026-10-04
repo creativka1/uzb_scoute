@@ -2,13 +2,22 @@
 import React,{useState} from 'react';
 import type {Language,Player,Position,DetailedPosition,SeasonMode} from '@/types/players';
 import type {MatchCore} from '@/types/matches';
-import type {TeamNeed,ReviewMetric,ReviewTarget,TrackedDecision} from '@/types/decisions';
+import type {TeamNeed,ReviewMetric,ReviewTarget,TrackedDecision,CandidateBoardStatus,CandidateLink} from '@/types/decisions';
 import {useDecisionStore} from '@/hooks/use-decision-store';
 import {evaluateDecision,metricSnapshot,parseDecisionStore,targetMatches} from '@/lib/decisions';
 const tr=(l:Language,r:string,u:string)=>l==='ru'?r:u;
 const fmt=(v:number|null)=>v===null?'—':v.toFixed(2);
 export const reviewLabels:Record<ReviewMetric,[string,string]>={teamPoints:['Очки / матч','Ochko / o‘yin'],teamGoals:['Забито / матч','Urilgan gol / o‘yin'],teamConceded:['Пропущено / матч','O‘tkazilgan gol / o‘yin'],goals:['Голы / 90','Gollar / 90'],assists:['Ассисты / 90','Assistlar / 90'],shots:['Удары / 90','Zarbalar / 90'],keyPasses:['Передачи под удар / 90','Zarbaga pas / 90'],tackles:['Отборы / 90','To‘p qaytarish / 90'],interceptions:['Перехваты / 90','To‘pni to‘xtatish / 90'],saves:['Сейвы / 90','Seyvlar / 90'],xG:['xG / 90','xG / 90'],xA:['xA / 90','xA / 90']};
 const storageError=(lang:Language)=>tr(lang,'Не удалось прочитать или сохранить записи. Существующие данные не перезаписаны.','Yozuvlarni o‘qish yoki saqlash imkoni yo‘q. Mavjud ma’lumot o‘zgarmadi.');
+const candidateStatusLabels:Record<CandidateBoardStatus,[string,string]>={
+  watching:['Наблюдать','Kuzatish'],
+  shortlist:['Shortlist','Shortlist'],
+  priority:['Приоритет','Ustuvor'],
+  rejected:['Отказ','Rad etildi'],
+};
+const candidateStatusRank:Record<CandidateBoardStatus,number>={priority:0,shortlist:1,watching:2,rejected:3};
+const candidateStatus=(candidate:CandidateLink):CandidateBoardStatus=>candidate.boardStatus||'watching';
+const metricLabel=(key:string)=>key.replace(/Per90$/,' / 90').replace(/Pct$/,' %').replace(/([a-z])([A-Z])/g,'$1 $2');
 export interface NeedSeed {position:Position;detailedPosition:DetailedPosition|null;evidence:string}
 export function NeedForm({core,teamId,seasonId,seed,lang,onDone}:{core:MatchCore;teamId:number;seasonId:number;seed:NeedSeed;lang:Language;onDone:(need:TeamNeed)=>void}){
   const {ready,error,update}=useDecisionStore();const [observation,setObservation]=useState(''),[requirement,setRequirement]=useState('');
@@ -25,7 +34,7 @@ export function CandidateLinkButton({needId,player,lang,fitScore,fitReasons=[]}:
   const {store,ready,error,update}=useDecisionStore();const need=store.needs.find(n=>n.id===needId);
   if(!need)return null;const linked=need.candidates.some(c=>c.playerId===Number(player.id.split('-')[1]));
   const compatible=need.status==='open'&&need.league===player.league&&player.statsSeasonIds?.length===1&&player.statsSeasonIds[0]===need.seasonId&&player.position===need.position&&(!need.detailedPosition||need.detailedPosition===player.detailedPosition);
-  return <div className="candidate-link"><button className="action-secondary" disabled={!ready||linked||!compatible} onClick={()=>update(s=>({...s,needs:s.needs.map(n=>n.id===needId?{...n,candidates:[...n.candidates.filter(c=>c.playerId!==Number(player.id.split('-')[1])),{playerId:Number(player.id.split('-')[1]),name:player.name[lang],position:player.position,addedAt:new Date().toISOString(),reason:need.requirement,metrics:player.roleMetrics||{},seasonIds:player.statsSeasonIds||[],matchIds:[...new Set(Object.values(player.statsMetricDetails||{}).flatMap(d=>d.eventIds||[]))],fitScore,fitReasons}]}:n)}))}>{linked?tr(lang,'В потребности команды ✓','Jamoa ehtiyojida ✓'):tr(lang,'Добавить к потребности','Ehtiyojga qo‘shish')}</button>{!compatible&&!linked&&<small>{tr(lang,'Нужны позиция и сезон этой потребности.','Shu ehtiyoj pozitsiyasi va mavsumi kerak.')}</small>}{error&&<p role="alert">{storageError(lang)}</p>}</div>;
+  return <div className="candidate-link"><button className="action-secondary" disabled={!ready||linked||!compatible} onClick={()=>update(s=>({...s,needs:s.needs.map(n=>n.id===needId?{...n,candidates:[...n.candidates.filter(c=>c.playerId!==Number(player.id.split('-')[1])),{playerId:Number(player.id.split('-')[1]),name:player.name[lang],position:player.position,addedAt:new Date().toISOString(),reason:need.requirement,metrics:player.roleMetrics||{},seasonIds:player.statsSeasonIds||[],matchIds:[...new Set(Object.values(player.statsMetricDetails||{}).flatMap(d=>d.eventIds||[]))],fitScore,fitReasons,boardStatus:'watching' as const,scoutNote:''}]}:n)}))}>{linked?tr(lang,'В потребности команды ✓','Jamoa ehtiyojida ✓'):tr(lang,'Добавить к потребности','Ehtiyojga qo‘shish')}</button>{!compatible&&!linked&&<small>{tr(lang,'Нужны позиция и сезон этой потребности.','Shu ehtiyoj pozitsiyasi va mavsumi kerak.')}</small>}{error&&<p role="alert">{storageError(lang)}</p>}</div>;
 }
 function DecisionForm({core,clubTeamId,seasonId,lang,need,initialPlayerId,onSaved}:{core:MatchCore;clubTeamId:number;seasonId:number;lang:Language;need?:TeamNeed;initialPlayerId?:number;onSaved:()=>void}){
   const {ready,error,update}=useDecisionStore();const [subject,setSubject]=useState(initialPlayerId?String(initialPlayerId):'team'),[metric,setMetric]=useState<ReviewMetric>(initialPlayerId?'keyPasses':'teamPoints');
@@ -54,6 +63,18 @@ function DecisionForm({core,clubTeamId,seasonId,lang,need,initialPlayerId,onSave
     {error&&<p role="alert">{storageError(lang)}</p>}<button className="action-primary" disabled={!ready||!baseline.total}>{tr(lang,'Зафиксировать решение','Qarorni qayd etish')}</button>
   </form>;
 }
+function NeedCandidateBoard({need,lang,onDecision,onStatus,onNote,onRecommend,onRemove}:{need:TeamNeed;lang:Language;onDecision:(playerId:number)=>void;onStatus:(playerId:number,status:CandidateBoardStatus)=>void;onNote:(playerId:number,note:string)=>void;onRecommend:(playerId:number|null)=>void;onRemove:(playerId:number)=>void}){
+  const candidates=need.candidates.slice().sort((a,b)=>candidateStatusRank[candidateStatus(a)]-candidateStatusRank[candidateStatus(b)]||(b.fitScore??-1)-(a.fitScore??-1)||a.name.localeCompare(b.name));
+  const comparison=candidates.filter(c=>candidateStatus(c)!=='rejected').slice(0,5);
+  const frequency=new Map<string,number>();
+  for(const candidate of comparison)for(const [key,value] of Object.entries(candidate.metrics))if(typeof value==='number'&&Number.isFinite(value))frequency.set(key,(frequency.get(key)||0)+1);
+  const metricKeys=[...frequency.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).slice(0,4).map(([key])=>key);
+  return <>
+    {!!comparison.length&&<div className="need-compare"><div className="section-heading"><h4>{tr(lang,'Сравнение shortlist','Shortlist taqqoslovi')}</h4><small>{tr(lang,'Снимок показателей на момент добавления','Qo‘shilgan paytdagi ko‘rsatkichlar')}</small></div><div className="table-scroll"><table className="analysis-table need-compare-table"><thead><tr><th>{tr(lang,'Показатель','Ko‘rsatkich')}</th>{comparison.map(candidate=><th key={candidate.playerId}>{candidate.name}{need.recommendedPlayerId===candidate.playerId&&<small>★ {tr(lang,'Рекомендация','Tavsiya')}</small>}</th>)}</tr></thead><tbody><tr><td>Fit</td>{comparison.map(candidate=><td key={candidate.playerId}><strong>{candidate.fitScore??'—'}</strong></td>)}</tr>{metricKeys.map(key=><tr key={key}><td>{metricLabel(key)}</td>{comparison.map(candidate=><td key={candidate.playerId}>{fmt(candidate.metrics[key])}</td>)}</tr>)}</tbody></table></div></div>}
+    <div className="candidate-board">{candidates.map(candidate=>{const status=candidateStatus(candidate),recommended=need.recommendedPlayerId===candidate.playerId;return <article key={candidate.playerId} className={`need-candidate board-${status}${recommended?' recommended':''}`}><div className="candidate-board-head"><div><strong>{candidate.name}</strong>{typeof candidate.fitScore==='number'&&<span className="context-chip">Fit {candidate.fitScore}/100</span>}{recommended&&<span className="recommended-chip">★ {tr(lang,'Финальная рекомендация','Yakuniy tavsiya')}</span>}</div><label>{tr(lang,'Статус','Holat')}<select value={status} onChange={e=>onStatus(candidate.playerId,e.target.value as CandidateBoardStatus)}>{(Object.keys(candidateStatusLabels) as CandidateBoardStatus[]).map(value=><option key={value} value={value}>{candidateStatusLabels[value][lang==='ru'?0:1]}</option>)}</select></label></div><span>{candidate.reason}</span><label className="candidate-note">{tr(lang,'Заметка скаута','Skaut izohi')}<textarea defaultValue={candidate.scoutNote||''} maxLength={1500} placeholder={tr(lang,'Что проверить в видео / на стадионе…','Video / stadionda nimani tekshirish…')} onBlur={e=>onNote(candidate.playerId,e.currentTarget.value.trim())}/></label><div className="need-candidate-actions"><button className="action-secondary" onClick={()=>onDecision(candidate.playerId)}>{tr(lang,'Зафиксировать решение','Qarorni qayd etish')}</button><button className={recommended?'action-primary':'action-secondary'} disabled={status==='rejected'} onClick={()=>onRecommend(recommended?null:candidate.playerId)}>{recommended?tr(lang,'Рекомендован ✓','Tavsiya qilindi ✓'):tr(lang,'Сделать рекомендацией','Tavsiya sifatida tanlash')}</button><button className="text-link" onClick={()=>onRemove(candidate.playerId)}>{tr(lang,'Убрать','Olib tashlash')}</button></div><details><summary>{tr(lang,'Почему подходит','Nega mos keladi')}</summary>{candidate.fitReasons?.length?<p>{candidate.fitReasons.join(' · ')}</p>:null}<p>{Object.entries(candidate.metrics).map(([key,value])=>`${metricLabel(key)}: ${fmt(value)}`).join(' · ')}</p></details></article>;})}</div>
+  </>;
+}
+
 function printNeedReport(need:TeamNeed, decisions:TrackedDecision[], lang:Language){
   const w=window.open('', '_blank', 'width=900,height=1000');
   if(!w)return;
