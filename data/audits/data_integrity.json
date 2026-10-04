@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "source": "SofaScore cached payloads",
-  "scope": "statistics describe source-linked cached matches only",
+  "scope": "match history uses source-linked matches; current-season aggregates may also use league-inferred unlinked lineup payloads",
   "leagues": {
     "UZB": [
       {
@@ -44,9 +44,14 @@
       }
     ]
   },
-  "players": 895,
+  "players": 1115,
   "linkedLineups": 185,
   "unlinkedLineups": 254,
+  "inferredCurrentSeasonLineups": {
+    "UZB": 166,
+    "KAZ": 79
+  },
+  "unresolvedUnlinkedLineups": 9,
   "unlinkedEventIds": [
     15462156,
     15462157,
@@ -330,6 +335,10 @@
     15462274
   ],
   "unverifiedLegacyAggregatesExcluded": true,
-  "playersWithCurrentStats": 0,
+  "playersWithCurrentStats": 810,
+  "playersWithCurrentStatsByLeague": {
+    "UZB": 453,
+    "KAZ": 357
+  },
   "playersWithPreviousStats": 722
 }
