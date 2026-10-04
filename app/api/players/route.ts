@@ -127,8 +127,9 @@ export async function GET(req: NextRequest) {
     const periods: Record<string, any> = {};
     for (const league of selectedLeagues) {
       const seasons = audit.leagues[league];
+      const currentPlayers = audit.playersWithCurrentStatsByLeague?.[league] ?? 0;
       const mode = requestedSeason === 'latest'
-        ? (seasons[0].cachedMatches > 0 ? 'current' : 'previous') : requestedSeason;
+        ? (currentPlayers > 0 ? 'current' : 'previous') : requestedSeason;
       const selected = mode === 'two' ? seasons : [seasons[mode === 'current' ? 0 : 1]];
       periods[league] = {
         mode, label: selected.map((s: any) => s.name).join(' + '),
