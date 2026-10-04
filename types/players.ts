@@ -87,8 +87,8 @@ export interface Player {
   statsCoverageComplete: boolean;
   clubSource: 'profile' | 'last_match' | null;
   clubObservedAt: number | null;
-  statsDateFrom: number;
-  statsDateTo: number;
+  statsDateFrom: number | null;
+  statsDateTo: number | null;
   photoUrl: string;
   initials: string;
   scoutIndex: number | null;
