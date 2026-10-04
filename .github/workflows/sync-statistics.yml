@@ -58,6 +58,10 @@ jobs:
           if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
           python scripts/sync_official_2026_matches.py "${args[@]}"
 
+      - name: Link cached 2026 lineups to official matches
+        if: always()
+        run: python scripts/link_2026_lineups.py
+
       - name: Rebuild evidence and partial-cache coverage
         if: always()
         run: |

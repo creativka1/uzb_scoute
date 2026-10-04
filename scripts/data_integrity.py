@@ -221,6 +221,24 @@ def rebuild(root=ROOT):
     legacy = load(data / "superliga_stats.json", [])
     events = cached_events(root)
 
+    official_core = load(data / "official_match_core_2026.json", {}) or {}
+    official_matches = {
+        match["id"]: match
+        for match in official_core.get("matches", [])
+        if isinstance(match.get("id"), int)
+    }
+    official_teams = {
+        team["id"]: team
+        for team in official_core.get("teams", [])
+        if isinstance(team.get("id"), int)
+    }
+    link_payload = load(data / "event_links_2026.json", {}) or {}
+    official_links = {
+        int(link["eventId"]): link
+        for link in link_payload.get("links", [])
+        if isinstance(link.get("eventId"), int) and isinstance(link.get("officialMatchId"), int)
+    }
+
     season_contract = {}
     for league, tid in TOURNAMENTS.items():
         seasons = load(data / f"cache/seasons/{league}_{tid}_seasons.json", {}).get("seasons", [])[:2]
@@ -252,6 +270,7 @@ def rebuild(root=ROOT):
     unlinked, missing_lineups, unconfirmed = [], [], []
     inferred_unlinked, unresolved_unlinked = defaultdict(set), []
     linked = set()
+    official_linked = set()
     for path in sorted((data / "cache/lineups").glob("*.json")):
         event_id = int(path.stem)
         lineup = load(path)
@@ -259,8 +278,16 @@ def rebuild(root=ROOT):
             unconfirmed.append(event_id)
             continue
         event = events.get(event_id)
+        official_link = official_links.get(event_id)
+        official_event = official_matches.get(official_link["officialMatchId"]) if official_link else None
         inferred_league = None
-        if event is None:
+        if event is None and official_event is not None:
+            if official_event.get("league") != official_link.get("league"):
+                raise ValueError(f"Official link league mismatch for event {event_id}")
+            if official_event.get("seasonId") != official_link.get("seasonId"):
+                raise ValueError(f"Official link season mismatch for event {event_id}")
+            official_linked.add(event_id)
+        elif event is None:
             unlinked.append(event_id)
             inferred_league = infer_unlinked_lineup_league(lineup, known_team_leagues, legacy_player_leagues)
             if inferred_league:
@@ -275,7 +302,8 @@ def rebuild(root=ROOT):
                 pid = player.get("id")
                 if not isinstance(pid, int):
                     continue
-                observations[pid].append((event.get("startTimestamp") if event else None, player))
+                observed_at = event.get("startTimestamp") if event else official_event.get("date") if official_event else None
+                observations[pid].append((observed_at, player))
                 stats = item.get("statistics") or {}
                 minutes = number(stats.get("minutesPlayed"))
                 if minutes is None or minutes <= 0:
@@ -287,8 +315,20 @@ def rebuild(root=ROOT):
                     if not team.get("id") or not team.get("name"):
                         raise ValueError(f"Missing event team: {event_id}/{side}")
                     appearances[(event["league"], pid)].append({
-                        "eventId": event_id, "seasonId": event["season"]["id"],
+                        "eventId": event_id, "matchId": event_id, "seasonId": event["season"]["id"],
                         "date": event["startTimestamp"], "team": team,
+                        "player": player, "statistics": stats,
+                        "position": POSITION.get(item.get("position") or player.get("position")),
+                        "substitute": item.get("substitute") if isinstance(item.get("substitute"), bool) else None,
+                    })
+                elif official_event is not None:
+                    team_id = official_event.get("homeTeamId") if side == "home" else official_event.get("awayTeamId")
+                    team = official_teams.get(team_id) or {}
+                    if not isinstance(team_id, int) or not team.get("name"):
+                        raise ValueError(f"Missing official team for event {event_id}/{side}")
+                    appearances[(official_event["league"], pid)].append({
+                        "eventId": event_id, "matchId": official_event["id"], "seasonId": official_event["seasonId"],
+                        "date": official_event["date"], "team": team,
                         "player": player, "statistics": stats,
                         "position": POSITION.get(item.get("position") or player.get("position")),
                         "substitute": item.get("substitute") if isinstance(item.get("substitute"), bool) else None,
@@ -369,7 +409,8 @@ def rebuild(root=ROOT):
         "schemaVersion": 2, "source": "SofaScore cached payloads",
         "scope": "match history uses source-linked matches; current-season aggregates may also use league-inferred unlinked lineup payloads",
         "leagues": season_meta, "players": len(output),
-        "linkedLineups": len(linked), "unlinkedLineups": len(unlinked),
+        "linkedLineups": len(linked), "officialLinkedLineups": len(official_linked),
+        "unlinkedLineups": len(unlinked),
         "inferredCurrentSeasonLineups": {league: len(ids) for league, ids in inferred_unlinked.items()},
         "unresolvedUnlinkedLineups": len(unresolved_unlinked),
         "unlinkedEventIds": unlinked, "missingLineupEventIds": missing_lineups,
@@ -410,13 +451,15 @@ def rebuild(root=ROOT):
     seen = set()
     for (league, pid), rows in sorted(appearances.items()):
         for a in rows:
-            key = (a["eventId"], pid)
+            match_id = a.get("matchId", a["eventId"])
+            key = (match_id, pid)
             if key in seen:
                 raise ValueError(f"Duplicate appearance {key}")
             seen.add(key)
             core_players[pid] = {"id": pid, "name": a["player"].get("name")}
             core_appearances.append({
-                "id": f"{a['eventId']}:{pid}", "matchId": a["eventId"], "playerId": pid,
+                "id": f"{match_id}:{pid}", "matchId": match_id, "playerId": pid,
+                "sourceEventId": a["eventId"],
                 "teamId": a["team"]["id"], "minutes": a["statistics"]["minutesPlayed"],
                 "position": a["position"], "substitute": a["substitute"],
                 "stats": {target: number(a["statistics"].get(source)) for target, source in METRICS.items()},
@@ -424,6 +467,7 @@ def rebuild(root=ROOT):
     core = {"schemaVersion": 1, "calculationVersion": "observed-v1", "source": "SofaScore",
             "seasons": season_meta, "teams": list(teams.values()), "players": list(core_players.values()),
             "matches": core_matches, "appearances": core_appearances,
+            "officialLinkedEventIds": sorted(official_linked),
             "unlinkedEventIds": sorted(unlinked), "unconfirmedEventIds": sorted(unconfirmed)}
     # Compact derived store avoids duplicating the large provider payloads.
     atomic_gzip(data / "match_core.json.gz", core)
