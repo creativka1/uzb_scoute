@@ -841,9 +841,9 @@ export default function Dashboard() {
         if (recruitmentExpiring) reasons.push(lang === 'ru' ? 'Контракт ≤ 12 мес.' : 'Shartnoma ≤ 12 oy');
         if (recruitmentReliableOnly) reasons.push(`${t.confidenceLabel}: ${p.scoutingEngine?.confidence === 'high' ? t.confidenceHigh : t.confidenceMedium}`);
 
-        return { player: p, reasons, fitScore: needFit?.fitScore ?? null, fitReasons: needFit?.reasons ?? [] };
+        return { player: p, reasons, fitScore: needFit?.fitScore ?? null, fitReasons: needFit?.reasons ?? [], fitVersion: needFit?.fitVersion ?? null };
       })
-      .filter((item): item is {player: Player; reasons: string[]; fitScore: number|null; fitReasons: string[]} => item !== null)
+      .filter((item): item is {player: Player; reasons: string[]; fitScore: number|null; fitReasons: string[]; fitVersion: string|null} => item !== null)
       .sort((a, b) => {
         if (activeNeed) {
           const fitDiff = (b.fitScore ?? -1) - (a.fitScore ?? -1);
@@ -1147,7 +1147,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-              {recruitmentCandidates.map(({ player, reasons, fitScore, fitReasons }) => (
+              {recruitmentCandidates.map(({ player, reasons, fitScore, fitReasons, fitVersion }) => (
                 <article key={player.id} className="recruitment-result"><button
                   onClick={() => { setSelectedPlayer(player); }}
                   className="w-full text-left rounded-xl border border-zinc-800 bg-zinc-950/60 p-3 hover:border-sky-500/40 hover:bg-zinc-900 transition"
@@ -1179,7 +1179,7 @@ export default function Dashboard() {
                       ))}
                     </div>
                   </div>
-                </button>{activeNeedId&&<CandidateLinkButton needId={activeNeedId} player={player} lang={lang} fitScore={fitScore ?? undefined} fitReasons={fitReasons}/>}</article>
+                </button>{activeNeedId&&<CandidateLinkButton needId={activeNeedId} player={player} lang={lang} fitScore={fitScore ?? undefined} fitReasons={fitReasons} fitVersion={fitVersion ?? undefined}/>}</article>
               ))}
             </div>
           )}
