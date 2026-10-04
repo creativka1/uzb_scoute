@@ -102,9 +102,19 @@ def dominant_team_id(side: dict) -> tuple[int | None, int, int]:
     ids = [item.get("teamId") for item in players if isinstance(item.get("teamId"), int)]
     if not ids:
         return None, 0, 0
-    team_id, count = Counter(ids).most_common(1)[0]
-    # Transfers can leave one or two players carrying another current-team ID.
-    if count < 5 or count / len(ids) < 0.60:
+    ranked = Counter(ids).most_common()
+    team_id, count = ranked[0]
+    runner_up = ranked[1][1] if len(ranked) > 1 else 0
+    ratio = count / len(ids)
+
+    # Cached lineups can contain transferred players whose current registration
+    # teamId differs from the team they represented in this match. Accept either
+    # a clear absolute majority OR a strong 10+ player plurality that is at least
+    # twice the runner-up. The latter covers historical-transfer noise without
+    # guessing between similarly sized team groups.
+    clear_majority = count >= 5 and ratio >= 0.60
+    strong_plurality = count >= 10 and (runner_up == 0 or count >= 2 * runner_up)
+    if not (clear_majority or strong_plurality):
         return None, count, len(ids)
     return team_id, count, len(ids)
 
