@@ -51,7 +51,8 @@ export interface MetricDetail {
 }
 export interface ValidatedSupplement {
   source: 'FootyStats';
-  footystatsPlayerId: number;
+  footystatsPlayerId: number | null;
+  sourcePlayerKey?: string | null;
   validation: { comparable: number; aligned: number };
   metrics: Record<string, number | null>;
 }
