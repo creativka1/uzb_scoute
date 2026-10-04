@@ -43,6 +43,26 @@
       "scoreMismatch": false
     },
     {
+      "eventId": 15462158,
+      "league": "UZB",
+      "officialMatchId": 30003805,
+      "seasonId": 89354,
+      "date": 1772181900,
+      "homeSofaTeamId": 40267,
+      "awaySofaTeamId": 48614,
+      "homeOfficialTeamId": 156870734,
+      "awayOfficialTeamId": 163768414,
+      "homeName": "Andijan",
+      "awayName": "Sogdiyona",
+      "homeScore": 4,
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        4,
+        0
+      ],
+      "scoreMismatch": false
+    },
+    {
       "eventId": 15462159,
       "league": "UZB",
       "officialMatchId": 30003808,
@@ -103,6 +123,26 @@
       "scoreMismatch": false
     },
     {
+      "eventId": 15462162,
+      "league": "UZB",
+      "officialMatchId": 30003807,
+      "seasonId": 89354,
+      "date": 1772268300,
+      "homeSofaTeamId": 36256,
+      "awaySofaTeamId": 40264,
+      "homeOfficialTeamId": 220098339,
+      "awayOfficialTeamId": 206299813,
+      "homeName": "Neftchi",
+      "awayName": "Mashal",
+      "homeScore": 3,
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
+    },
+    {
       "eventId": 15462163,
       "league": "UZB",
       "officialMatchId": 30003804,
@@ -119,6 +159,26 @@
       "inferredPlayerGoalScore": [
         3,
         1
+      ],
+      "scoreMismatch": false
+    },
+    {
+      "eventId": 15462164,
+      "league": "UZB",
+      "officialMatchId": 30003865,
+      "seasonId": 89354,
+      "date": 1772788500,
+      "homeSofaTeamId": 48614,
+      "awaySofaTeamId": 34017,
+      "homeOfficialTeamId": 163768414,
+      "awayOfficialTeamId": 187746261,
+      "homeName": "Sogdiyona",
+      "awayName": "Nasaf",
+      "homeScore": 0,
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
       ],
       "scoreMismatch": false
     },
@@ -643,6 +703,26 @@
       "scoreMismatch": false
     },
     {
+      "eventId": 15462193,
+      "league": "UZB",
+      "officialMatchId": 30003888,
+      "seasonId": 89354,
+      "date": 1775206800,
+      "homeSofaTeamId": 40263,
+      "awaySofaTeamId": 40264,
+      "homeOfficialTeamId": 137457350,
+      "awayOfficialTeamId": 206299813,
+      "homeName": "Navbahor",
+      "awayName": "Mashal",
+      "homeScore": 2,
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
+    },
+    {
       "eventId": 15462195,
       "league": "UZB",
       "officialMatchId": 30003882,
@@ -758,6 +838,26 @@
       "awayScore": 1,
       "inferredPlayerGoalScore": [
         2,
+        1
+      ],
+      "scoreMismatch": false
+    },
+    {
+      "eventId": 15462201,
+      "league": "UZB",
+      "officialMatchId": 30003890,
+      "seasonId": 89354,
+      "date": 1775548800,
+      "homeSofaTeamId": 40264,
+      "awaySofaTeamId": 23481,
+      "homeOfficialTeamId": 206299813,
+      "awayOfficialTeamId": 104360888,
+      "homeName": "Mashal",
+      "awayName": "Bunyodkor",
+      "homeScore": 0,
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
         1
       ],
       "scoreMismatch": false
@@ -903,6 +1003,26 @@
       "scoreMismatch": false
     },
     {
+      "eventId": 15462209,
+      "league": "UZB",
+      "officialMatchId": 30003903,
+      "seasonId": 89354,
+      "date": 1776070800,
+      "homeSofaTeamId": 34310,
+      "awaySofaTeamId": 40264,
+      "homeOfficialTeamId": 114251942,
+      "awayOfficialTeamId": 206299813,
+      "homeName": "Pakhtakor",
+      "awayName": "Mashal",
+      "homeScore": 2,
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
+    },
+    {
       "eventId": 15462210,
       "league": "UZB",
       "officialMatchId": 30003900,
@@ -979,6 +1099,26 @@
       "inferredPlayerGoalScore": [
         1,
         2
+      ],
+      "scoreMismatch": false
+    },
+    {
+      "eventId": 15462214,
+      "league": "UZB",
+      "officialMatchId": 30003906,
+      "seasonId": 89354,
+      "date": 1776502800,
+      "homeSofaTeamId": 40264,
+      "awaySofaTeamId": 40260,
+      "homeOfficialTeamId": 206299813,
+      "awayOfficialTeamId": 152529930,
+      "homeName": "Mashal",
+      "awayName": "Xorazm",
+      "homeScore": 0,
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
       ],
       "scoreMismatch": false
     },
@@ -1263,6 +1403,26 @@
       "scoreMismatch": false
     },
     {
+      "eventId": 15462230,
+      "league": "UZB",
+      "officialMatchId": 30003923,
+      "seasonId": 89354,
+      "date": 1777280400,
+      "homeSofaTeamId": 40264,
+      "awaySofaTeamId": 48613,
+      "homeOfficialTeamId": 206299813,
+      "awayOfficialTeamId": 122375632,
+      "homeName": "Mashal",
+      "awayName": "Bukhoro",
+      "homeScore": 0,
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
+    },
+    {
       "eventId": 15462231,
       "league": "UZB",
       "officialMatchId": 30003925,
@@ -1419,6 +1579,26 @@
       "inferredPlayerGoalScore": [
         0,
         3
+      ],
+      "scoreMismatch": false
+    },
+    {
+      "eventId": 15462239,
+      "league": "UZB",
+      "officialMatchId": 30003824,
+      "seasonId": 89354,
+      "date": 1777712400,
+      "homeSofaTeamId": 40259,
+      "awaySofaTeamId": 40264,
+      "homeOfficialTeamId": 120427223,
+      "awayOfficialTeamId": 206299813,
+      "homeName": "Dinamo",
+      "awayName": "Mashal",
+      "homeScore": 3,
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
       ],
       "scoreMismatch": false
     },

@@ -1,73 +1,73 @@
 {
   "UZB": {
-    "appearances": 8243,
+    "appearances": 8520,
     "metrics": {
       "goals": {
-        "known": 8243,
+        "known": 8520,
         "missing": 0
       },
       "assists": {
-        "known": 8243,
+        "known": 8520,
         "missing": 0
       },
       "shots": {
-        "known": 8243,
+        "known": 8520,
         "missing": 0
       },
       "keyPasses": {
-        "known": 2646,
-        "missing": 5597
+        "known": 2739,
+        "missing": 5781
       },
       "tackles": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "interceptions": {
-        "known": 4140,
-        "missing": 4103
+        "known": 4288,
+        "missing": 4232
       },
       "saves": {
-        "known": 541,
-        "missing": 7702
+        "known": 559,
+        "missing": 7961
       },
       "dribbleWon": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "dribbleTotal": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "totalPass": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "accuratePass": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "duelWon": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "duelLost": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "aerialWon": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "aerialLost": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "xG": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       },
       "xA": {
-        "known": 8153,
+        "known": 8430,
         "missing": 90
       }
     }

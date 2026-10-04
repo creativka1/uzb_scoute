@@ -46,23 +46,13 @@
   },
   "players": 1115,
   "linkedLineups": 185,
-  "officialLinkedLineups": 243,
-  "unlinkedLineups": 11,
+  "officialLinkedLineups": 252,
+  "unlinkedLineups": 2,
   "inferredCurrentSeasonLineups": {
-    "UZB": 9,
     "KAZ": 2
   },
   "unresolvedUnlinkedLineups": 0,
   "unlinkedEventIds": [
-    15462158,
-    15462162,
-    15462164,
-    15462193,
-    15462201,
-    15462209,
-    15462214,
-    15462230,
-    15462239,
     15635638,
     15635673
   ],

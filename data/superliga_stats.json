@@ -83463,7 +83463,7 @@
     "clubSource": "last_match",
     "clubObservedAt": 1761472800,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1776844800,
+    "profileObservedAt": 1777280400,
     "isLegionnaire": true,
     "currentSeasonId": 90730,
     "previousSeasonId": 72733,
@@ -102105,8 +102105,8 @@
         15462307,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -102283,8 +102283,8 @@
         15462307,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -102411,8 +102411,8 @@
         15462222,
         15462243
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1777799700,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -102489,8 +102489,8 @@
         15462222,
         15462243
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1777799700,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -104166,8 +104166,8 @@
         15462310,
         15462316
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1788512400,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -104334,8 +104334,8 @@
         15462310,
         15462316
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755784800,
+      "dateTo": 1788512400,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -104791,8 +104791,8 @@
         15462241,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -104869,8 +104869,8 @@
         15462241,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -104975,8 +104975,8 @@
         15462315,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -105142,8 +105142,8 @@
         15462315,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755959400,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -105859,8 +105859,8 @@
         15462316,
         15462321
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1788944400,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -106036,8 +106036,8 @@
         15462316,
         15462321
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1788944400,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -106407,8 +106407,8 @@
         15462241,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -106486,8 +106486,8 @@
         15462241,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -107039,8 +107039,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -107128,8 +107128,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -107234,8 +107234,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773908100,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -107317,8 +107317,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773908100,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -107869,8 +107869,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -108040,8 +108040,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -108872,8 +108872,8 @@
         15462259,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773825300,
+      "dateTo": 1784628000,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -109022,8 +109022,8 @@
         15462259,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1760788800,
+      "dateTo": 1784628000,
       "metricCoverage": {
         "goals": 13,
         "assists": 13,
@@ -109699,8 +109699,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -109789,8 +109789,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -110118,8 +110118,8 @@
         15462322,
         15462334
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -110288,8 +110288,8 @@
         15462322,
         15462334
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -110575,8 +110575,8 @@
         15462282,
         15462292
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1786701600,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -110748,8 +110748,8 @@
         15462282,
         15462292
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1786701600,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -110859,8 +110859,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -111037,8 +111037,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -111149,8 +111149,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772613900,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -111326,8 +111326,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -111636,8 +111636,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -111815,8 +111815,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -111895,9 +111895,9 @@
     "sourceDetailedPositions": [],
     "club": "Dinamo",
     "clubSource": "last_match",
-    "clubObservedAt": 1777366800,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1777366800,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": true,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -111915,8 +111915,8 @@
         15462233,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 9,
         "assists": 9,
@@ -111992,8 +111992,8 @@
         15462233,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 9,
         "assists": 9,
@@ -112128,8 +112128,8 @@
         15462296,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -112302,8 +112302,8 @@
         15462296,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -113410,8 +113410,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -113500,8 +113500,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -113624,8 +113624,8 @@
         15462235,
         15462241
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
@@ -113698,8 +113698,8 @@
         15462235,
         15462241
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
@@ -113809,8 +113809,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -113977,8 +113977,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -114837,8 +114837,8 @@
         15462316,
         15462325
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1788948000,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -115014,8 +115014,8 @@
         15462316,
         15462325
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1788948000,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -115698,8 +115698,8 @@
         15462164,
         15462186
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1773990000,
       "metricCoverage": {
         "goals": 2,
         "assists": 2,
@@ -115768,8 +115768,8 @@
         15462164,
         15462186
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1773990000,
       "metricCoverage": {
         "goals": 2,
         "assists": 2,
@@ -116302,8 +116302,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -116473,8 +116473,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -116586,8 +116586,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -116766,8 +116766,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 34,
         "assists": 34,
@@ -116871,8 +116871,8 @@
         15462262,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1785060000,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -117041,8 +117041,8 @@
         15462262,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1785060000,
       "metricCoverage": {
         "goals": 25,
         "assists": 25,
@@ -117430,8 +117430,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -117608,8 +117608,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 33,
         "assists": 33,
@@ -118076,8 +118076,8 @@
         15462248,
         15462258
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1784628000,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -118244,8 +118244,8 @@
         15462248,
         15462258
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1784628000,
       "metricCoverage": {
         "goals": 23,
         "assists": 23,
@@ -118606,8 +118606,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -118778,8 +118778,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -119858,8 +119858,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -120028,8 +120028,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -121105,8 +121105,8 @@
         15462326,
         15462330
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -121276,8 +121276,8 @@
         15462326,
         15462330
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -121388,8 +121388,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -121477,8 +121477,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -121584,8 +121584,8 @@
         15462294,
         15462318
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1788595200,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -121760,8 +121760,8 @@
         15462294,
         15462318
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1788595200,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -123319,9 +123319,9 @@
     "sourceDetailedPositions": [],
     "club": "Dinamo",
     "clubSource": "last_match",
-    "clubObservedAt": 1777366800,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1777366800,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": true,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -123340,8 +123340,8 @@
         15462233,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -123418,8 +123418,8 @@
         15462233,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -123526,8 +123526,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -123611,8 +123611,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -123922,8 +123922,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -124011,8 +124011,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -124091,9 +124091,9 @@
     "sourceDetailedPositions": [],
     "club": "Dinamo",
     "clubSource": "last_match",
-    "clubObservedAt": 1777366800,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1777366800,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": true,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -124111,8 +124111,8 @@
         15462233,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 9,
         "assists": 9,
@@ -124188,8 +124188,8 @@
         15462233,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 9,
         "assists": 9,
@@ -124459,8 +124459,8 @@
         15462285,
         15462294
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772702100,
+      "dateTo": 1786703400,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -124538,8 +124538,8 @@
         15462285,
         15462294
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772702100,
+      "dateTo": 1786703400,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -125304,8 +125304,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -125393,8 +125393,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -126308,8 +126308,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -126480,8 +126480,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -126881,8 +126881,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -127062,8 +127062,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 34,
         "assists": 34,
@@ -127407,8 +127407,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -127586,8 +127586,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755788400,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 31,
         "assists": 31,
@@ -127880,8 +127880,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -128035,8 +128035,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -128488,8 +128488,8 @@
         15462237,
         15462240
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1777795200,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -128654,8 +128654,8 @@
         15462237,
         15462240
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1777795200,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -128767,8 +128767,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -128939,8 +128939,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -129214,8 +129214,8 @@
         15462326,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789117200,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -129385,8 +129385,8 @@
         15462326,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1789117200,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -130692,8 +130692,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -130866,8 +130866,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -131431,8 +131431,8 @@
         15462322,
         15462334
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -131599,8 +131599,8 @@
         15462322,
         15462334
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -131710,8 +131710,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -131798,8 +131798,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -131910,8 +131910,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -131999,8 +131999,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -132107,8 +132107,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -132280,8 +132280,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -132650,8 +132650,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -132826,8 +132826,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -133229,8 +133229,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -133318,8 +133318,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -134242,8 +134242,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -134415,8 +134415,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -135179,8 +135179,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -135358,8 +135358,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 33,
         "assists": 33,
@@ -135466,8 +135466,8 @@
         15462327,
         15462333
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789891200,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -135551,8 +135551,8 @@
         15462327,
         15462333
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789891200,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -135661,8 +135661,8 @@
         15462300,
         15462307
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1787648400,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -135748,8 +135748,8 @@
         15462300,
         15462307
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1787648400,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -136080,8 +136080,8 @@
         15462315,
         15462324
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1788942600,
       "metricCoverage": {
         "goals": 13,
         "assists": 13,
@@ -136245,8 +136245,8 @@
         15462315,
         15462324
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1788942600,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -136616,8 +136616,8 @@
         15462286,
         15462334
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 9,
         "assists": 9,
@@ -136779,8 +136779,8 @@
         15462286,
         15462334
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -137022,9 +137022,9 @@
     "sourceDetailedPositions": [],
     "club": "Dinamo",
     "clubSource": "last_match",
-    "clubObservedAt": 1777366800,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1777366800,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": true,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -137041,8 +137041,8 @@
         15462233,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 8,
         "assists": 8,
@@ -137117,8 +137117,8 @@
         15462233,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 8,
         "assists": 8,
@@ -137229,8 +137229,8 @@
         15462315,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -137318,8 +137318,8 @@
         15462315,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -137412,8 +137412,8 @@
         15462214,
         15462228
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1777021200,
       "metricCoverage": {
         "goals": 3,
         "assists": 3,
@@ -137563,8 +137563,8 @@
         15462214,
         15462228
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1758369600,
+      "dateTo": 1777021200,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -137666,8 +137666,8 @@
         15462295,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1786617000,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -137746,8 +137746,8 @@
         15462295,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1786617000,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -138216,8 +138216,8 @@
         15462316,
         15462321
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1788944400,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -138391,8 +138391,8 @@
         15462316,
         15462321
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1788944400,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -138496,8 +138496,8 @@
         15462285,
         15462318
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1788595200,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -138664,8 +138664,8 @@
         15462285,
         15462318
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1788595200,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -138744,9 +138744,9 @@
     "sourceDetailedPositions": [],
     "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1776844800,
+    "clubObservedAt": 1777280400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1776844800,
+    "profileObservedAt": 1777280400,
     "isLegionnaire": true,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -138759,8 +138759,8 @@
         15462226,
         15462230
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772702100,
+      "dateTo": 1777280400,
       "metricCoverage": {
         "goals": 4,
         "assists": 4,
@@ -138831,8 +138831,8 @@
         15462226,
         15462230
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772702100,
+      "dateTo": 1777280400,
       "metricCoverage": {
         "goals": 4,
         "assists": 4,
@@ -138941,8 +138941,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -139116,8 +139116,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -139779,8 +139779,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -139957,8 +139957,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -140521,8 +140521,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772787600,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -140691,8 +140691,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 26,
         "assists": 26,
@@ -141571,8 +141571,8 @@
         15462315,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -141750,8 +141750,8 @@
         15462315,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -144048,8 +144048,8 @@
         15462322,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789034400,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -144223,8 +144223,8 @@
         15462322,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789034400,
       "metricCoverage": {
         "goals": 31,
         "assists": 31,
@@ -144333,8 +144333,8 @@
         15462316,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -144500,8 +144500,8 @@
         15462316,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755955800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 26,
         "assists": 26,
@@ -144757,9 +144757,9 @@
     "sourceDetailedPositions": [],
     "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1776844800,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1776844800,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": true,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -144778,8 +144778,8 @@
         15462230,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -144856,8 +144856,8 @@
         15462230,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -145162,8 +145162,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -145330,8 +145330,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755955800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -145441,8 +145441,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -145619,8 +145619,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -145724,8 +145724,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -145894,8 +145894,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 25,
         "assists": 25,
@@ -146168,8 +146168,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -146340,8 +146340,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -146610,8 +146610,8 @@
         15462299,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773825300,
+      "dateTo": 1787216400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -146688,8 +146688,8 @@
         15462299,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773825300,
+      "dateTo": 1787216400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -147685,8 +147685,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -147847,8 +147847,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 23,
         "assists": 23,
@@ -147956,8 +147956,8 @@
         15462329,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -148132,8 +148132,8 @@
         15462329,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -148438,8 +148438,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -148615,8 +148615,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755784800,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 31,
         "assists": 31,
@@ -148725,8 +148725,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -148904,8 +148904,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -149010,8 +149010,8 @@
         15462317,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1788426000,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -149185,8 +149185,8 @@
         15462317,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1788426000,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -149284,8 +149284,8 @@
         15462319,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775203200,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 8,
         "assists": 8,
@@ -149434,8 +149434,8 @@
         15462319,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -149974,8 +149974,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772701200,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -150133,8 +150133,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755871200,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 23,
         "assists": 23,
@@ -151117,8 +151117,8 @@
         15462170,
         15462249
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1784282400,
       "metricCoverage": {
         "goals": 3,
         "assists": 3,
@@ -151276,8 +151276,8 @@
         15462170,
         15462249
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1784282400,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -151687,8 +151687,8 @@
         15462266,
         15462323
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789030800,
       "metricCoverage": {
         "goals": 8,
         "assists": 8,
@@ -151763,8 +151763,8 @@
         15462266,
         15462323
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789030800,
       "metricCoverage": {
         "goals": 8,
         "assists": 8,
@@ -153691,8 +153691,8 @@
         15462301,
         15462310
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1787475600,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -153856,8 +153856,8 @@
         15462301,
         15462310
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1787475600,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -153966,8 +153966,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -154143,8 +154143,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 31,
         "assists": 31,
@@ -155306,8 +155306,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -155481,8 +155481,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755871200,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -155947,9 +155947,9 @@
     "marketValueCurrency": 26000,
     "contractUntil": null,
     "sourceDetailedPositions": [],
-    "club": null,
-    "clubSource": null,
-    "clubObservedAt": null,
+    "club": "Mashal",
+    "clubSource": "last_match",
+    "clubObservedAt": 1775206800,
     "profileSource": "cached_match_player",
     "profileObservedAt": 1788595200,
     "isLegionnaire": false,
@@ -155961,8 +155961,8 @@
       "eventIds": [
         15462193
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775206800,
+      "dateTo": 1775206800,
       "metricCoverage": {
         "goals": 1,
         "assists": 1,
@@ -156030,8 +156030,8 @@
       "eventIds": [
         15462193
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775206800,
+      "dateTo": 1775206800,
       "metricCoverage": {
         "goals": 1,
         "assists": 1,
@@ -156317,8 +156317,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -156490,8 +156490,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754229600,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -156906,8 +156906,8 @@
         15462294,
         15462300
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1787133600,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -157067,8 +157067,8 @@
         15462294,
         15462300
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755784800,
+      "dateTo": 1787133600,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -157464,8 +157464,8 @@
         15462311,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -157633,8 +157633,8 @@
         15462311,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1757597400,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -157746,8 +157746,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -157926,8 +157926,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 34,
         "assists": 34,
@@ -158209,8 +158209,8 @@
         15462313,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1788603300,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -158296,8 +158296,8 @@
         15462313,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1788603300,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -159205,8 +159205,8 @@
         15462302,
         15462305
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1787652000,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -159377,8 +159377,8 @@
         15462302,
         15462305
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755871200,
+      "dateTo": 1787652000,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -159487,8 +159487,8 @@
         15462308,
         15462316
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1788512400,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -159646,8 +159646,8 @@
         15462308,
         15462316
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1788512400,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -159928,8 +159928,8 @@
         15462313,
         15462330
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775725200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -160096,8 +160096,8 @@
         15462313,
         15462330
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1757512800,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -160203,8 +160203,8 @@
         15462318,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1788595200,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -160373,8 +160373,8 @@
         15462318,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1788595200,
       "metricCoverage": {
         "goals": 26,
         "assists": 26,
@@ -160991,8 +160991,8 @@
         15462214,
         15462231
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1777453200,
       "metricCoverage": {
         "goals": 3,
         "assists": 3,
@@ -161150,8 +161150,8 @@
         15462214,
         15462231
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1777453200,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -161671,8 +161671,8 @@
         15462251,
         15462269
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1785232800,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -161751,8 +161751,8 @@
         15462251,
         15462269
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1785232800,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -162043,8 +162043,8 @@
         15462307,
         15462317
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1788426000,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -162211,8 +162211,8 @@
         15462307,
         15462317
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1788426000,
       "metricCoverage": {
         "goals": 25,
         "assists": 25,
@@ -162323,8 +162323,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -162498,8 +162498,8 @@
         15462321,
         15462335
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 31,
         "assists": 31,
@@ -162894,8 +162894,8 @@
         15462330,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -163050,8 +163050,8 @@
         15462330,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -163948,8 +163948,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -164119,8 +164119,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1757772000,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -164567,8 +164567,8 @@
         15462259,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1784628000,
       "metricCoverage": {
         "goals": 13,
         "assists": 13,
@@ -164728,8 +164728,8 @@
         15462259,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1784628000,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -164837,8 +164837,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -165013,8 +165013,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755788400,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -165093,7 +165093,7 @@
     "sourceDetailedPositions": [],
     "club": "Dinamo",
     "clubSource": "last_match",
-    "clubObservedAt": 1775203200,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
     "profileObservedAt": 1786701600,
     "isLegionnaire": false,
@@ -165106,8 +165106,8 @@
         15462189,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775203200,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 2,
         "assists": 2,
@@ -165248,8 +165248,8 @@
         15462189,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 5,
         "assists": 5,
@@ -165352,8 +165352,8 @@
         15462322,
         15462334
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 13,
         "assists": 13,
@@ -165503,8 +165503,8 @@
         15462322,
         15462334
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1760788800,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -165613,8 +165613,8 @@
         15462335,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -165780,8 +165780,8 @@
         15462335,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754575200,
+      "dateTo": 1789896600,
       "metricCoverage": {
         "goals": 26,
         "assists": 26,
@@ -165889,8 +165889,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -166065,8 +166065,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754229600,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -166497,8 +166497,8 @@
         15462326,
         15462330
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -166648,8 +166648,8 @@
         15462326,
         15462330
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755788400,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -167743,8 +167743,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -167923,8 +167923,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754229600,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 34,
         "assists": 34,
@@ -168003,9 +168003,9 @@
     "sourceDetailedPositions": [],
     "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1776844800,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1776844800,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": false,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -168025,8 +168025,8 @@
         15462230,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -168192,8 +168192,8 @@
         15462230,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -171841,8 +171841,8 @@
         15462315,
         15462327
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789030800,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -172018,8 +172018,8 @@
         15462315,
         15462327
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1789030800,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -172121,8 +172121,8 @@
         15462251,
         15462255
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1784628000,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -172201,8 +172201,8 @@
         15462251,
         15462255
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1784628000,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -172739,8 +172739,8 @@
         15462315,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772613900,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -172912,8 +172912,8 @@
         15462315,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -173508,8 +173508,8 @@
         15462241,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -173675,8 +173675,8 @@
         15462241,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755788400,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -174994,8 +174994,8 @@
         15462300,
         15462315
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1788516900,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -175161,8 +175161,8 @@
         15462300,
         15462315
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1788516900,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -175513,8 +175513,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772701200,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -175597,8 +175597,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772701200,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -176004,8 +176004,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772613900,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -176174,8 +176174,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -177019,8 +177019,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773994500,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -177190,8 +177190,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 26,
         "assists": 26,
@@ -177302,8 +177302,8 @@
         15462331,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -177479,8 +177479,8 @@
         15462331,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754229600,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -177771,8 +177771,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772701200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -177939,8 +177939,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -178035,8 +178035,8 @@
         15462209,
         15462243
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1777799700,
       "metricCoverage": {
         "goals": 5,
         "assists": 5,
@@ -178198,8 +178198,8 @@
         15462209,
         15462243
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1777799700,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -178307,8 +178307,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773825300,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -178467,8 +178467,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754229600,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -178739,8 +178739,8 @@
         15462320,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1788508800,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -178903,8 +178903,8 @@
         15462320,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1788508800,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -180726,8 +180726,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -180906,8 +180906,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 34,
         "assists": 34,
@@ -181763,8 +181763,8 @@
         15462300,
         15462307
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1787648400,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -181940,8 +181940,8 @@
         15462300,
         15462307
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1787648400,
       "metricCoverage": {
         "goals": 31,
         "assists": 31,
@@ -182047,8 +182047,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -182223,8 +182223,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -183820,8 +183820,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -183995,8 +183995,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 31,
         "assists": 31,
@@ -184447,8 +184447,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -184624,8 +184624,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -184733,8 +184733,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -184909,8 +184909,8 @@
         15462327,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754237700,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -186628,8 +186628,8 @@
         15462315,
         15462324
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1788942600,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -186801,8 +186801,8 @@
         15462315,
         15462324
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1788942600,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -186910,8 +186910,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -187080,8 +187080,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -187190,8 +187190,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -187365,8 +187365,8 @@
         15462326,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -187762,8 +187762,8 @@
         15462326,
         15462330
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775725200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -187844,8 +187844,8 @@
         15462326,
         15462330
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775725200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -187983,8 +187983,8 @@
         15462330,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -188160,8 +188160,8 @@
         15462330,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -188543,8 +188543,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -188721,8 +188721,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 31,
         "assists": 31,
@@ -188992,8 +188992,8 @@
         15462307,
         15462322
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772789400,
+      "dateTo": 1789034400,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -189161,8 +189161,8 @@
         15462307,
         15462322
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754237700,
+      "dateTo": 1789034400,
       "metricCoverage": {
         "goals": 25,
         "assists": 25,
@@ -189474,8 +189474,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -189563,8 +189563,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -189970,8 +189970,8 @@
         15462239,
         15462266
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1785319200,
       "metricCoverage": {
         "goals": 12,
         "assists": 12,
@@ -190140,8 +190140,8 @@
         15462239,
         15462266
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1785319200,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -190941,9 +190941,9 @@
     "sourceDetailedPositions": [],
     "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1776844800,
+    "clubObservedAt": 1777280400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1776844800,
+    "profileObservedAt": 1777280400,
     "isLegionnaire": true,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -190962,8 +190962,8 @@
         15462226,
         15462230
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1777280400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -191040,8 +191040,8 @@
         15462226,
         15462230
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1777280400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -191149,8 +191149,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -191315,8 +191315,8 @@
         15462330,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1758978000,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 25,
         "assists": 25,
@@ -191423,8 +191423,8 @@
         15462310,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1787475600,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -191584,8 +191584,8 @@
         15462310,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1787475600,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -192545,8 +192545,8 @@
         15462309,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1787734800,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -192713,8 +192713,8 @@
         15462309,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1759062600,
+      "dateTo": 1787734800,
       "metricCoverage": {
         "goals": 26,
         "assists": 26,
@@ -194233,8 +194233,8 @@
         15462329,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 20,
         "assists": 20,
@@ -194405,8 +194405,8 @@
         15462329,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -194506,8 +194506,8 @@
         15462294,
         15462318
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1788595200,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -194652,8 +194652,8 @@
         15462294,
         15462318
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1763730900,
+      "dateTo": 1788595200,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -195267,8 +195267,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -195439,8 +195439,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -195709,8 +195709,8 @@
         15462301,
         15462310
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1787475600,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -195883,8 +195883,8 @@
         15462301,
         15462310
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754237700,
+      "dateTo": 1787475600,
       "metricCoverage": {
         "goals": 28,
         "assists": 28,
@@ -195963,9 +195963,9 @@
     "sourceDetailedPositions": [],
     "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1776844800,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1776844800,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": true,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -195982,8 +195982,8 @@
         15462230,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 8,
         "assists": 8,
@@ -196058,8 +196058,8 @@
         15462230,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 8,
         "assists": 8,
@@ -196457,8 +196457,8 @@
         15462330,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772355600,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -196624,8 +196624,8 @@
         15462330,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755874800,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 25,
         "assists": 25,
@@ -196733,8 +196733,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772182800,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -196901,8 +196901,8 @@
         15462324,
         15462332
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754406000,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 26,
         "assists": 26,
@@ -198834,8 +198834,8 @@
         15462312,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1787562000,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -199010,8 +199010,8 @@
         15462312,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755788400,
+      "dateTo": 1787562000,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -200032,8 +200032,8 @@
         15462317,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -200199,8 +200199,8 @@
         15462317,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755959400,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -200300,8 +200300,8 @@
         15462330,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775548800,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -200378,8 +200378,8 @@
         15462330,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775548800,
+      "dateTo": 1789812900,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -200988,8 +200988,8 @@
         15462237,
         15462245
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777888800,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -201066,8 +201066,8 @@
         15462237,
         15462245
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772270100,
+      "dateTo": 1777888800,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -201329,8 +201329,8 @@
         15462311,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789117200,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -201408,8 +201408,8 @@
         15462311,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789117200,
       "metricCoverage": {
         "goals": 11,
         "assists": 11,
@@ -201509,8 +201509,8 @@
         15462241,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -201671,8 +201671,8 @@
         15462241,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -203436,8 +203436,8 @@
         15462304,
         15462308
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1787738400,
       "metricCoverage": {
         "goals": 19,
         "assists": 19,
@@ -203611,8 +203611,8 @@
         15462304,
         15462308
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1787738400,
       "metricCoverage": {
         "goals": 30,
         "assists": 30,
@@ -203887,8 +203887,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775977200,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -204059,8 +204059,8 @@
         15462323,
         15462329
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754151300,
+      "dateTo": 1789632000,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -204350,8 +204350,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -204517,8 +204517,8 @@
         15462334,
         16018569
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754146800,
+      "dateTo": 1789894800,
       "metricCoverage": {
         "goals": 27,
         "assists": 27,
@@ -204625,8 +204625,8 @@
         15462314,
         15462326
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772701200,
+      "dateTo": 1789117200,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -204786,8 +204786,8 @@
         15462314,
         15462326
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754229600,
+      "dateTo": 1789117200,
       "metricCoverage": {
         "goals": 22,
         "assists": 22,
@@ -204880,8 +204880,8 @@
         15462187,
         15462268
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1785146400,
       "metricCoverage": {
         "goals": 3,
         "assists": 3,
@@ -204951,8 +204951,8 @@
         15462187,
         15462268
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1785146400,
       "metricCoverage": {
         "goals": 3,
         "assists": 3,
@@ -206264,8 +206264,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -206441,8 +206441,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754233200,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 32,
         "assists": 32,
@@ -206521,9 +206521,9 @@
     "sourceDetailedPositions": [],
     "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1773135900,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1773135900,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": false,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -206534,8 +206534,8 @@
         15462174,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773135900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 2,
         "assists": 2,
@@ -206604,8 +206604,8 @@
         15462174,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773135900,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 2,
         "assists": 2,
@@ -206682,11 +206682,11 @@
     "marketValueCurrency": null,
     "contractUntil": null,
     "sourceDetailedPositions": [],
-    "club": "Mash Al Mubarek",
+    "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1763722800,
+    "clubObservedAt": 1776070800,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1763722800,
+    "profileObservedAt": 1776070800,
     "isLegionnaire": false,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -206696,8 +206696,8 @@
       "eventIds": [
         15462209
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1776070800,
+      "dateTo": 1776070800,
       "metricCoverage": {
         "goals": 1,
         "assists": 1,
@@ -206839,8 +206839,8 @@
         14606895,
         15462209
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1759672800,
+      "dateTo": 1776070800,
       "metricCoverage": {
         "goals": 5,
         "assists": 5,
@@ -208297,8 +208297,8 @@
         15462245,
         15462254
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1784714400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -208375,8 +208375,8 @@
         15462245,
         15462254
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1784714400,
       "metricCoverage": {
         "goals": 10,
         "assists": 10,
@@ -208482,8 +208482,8 @@
         15462287,
         15462304
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1787302800,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -208566,8 +208566,8 @@
         15462287,
         15462304
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1787302800,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -209421,8 +209421,8 @@
         15462201,
         15462208
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772787600,
+      "dateTo": 1776161700,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
@@ -209495,8 +209495,8 @@
         15462201,
         15462208
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772787600,
+      "dateTo": 1776161700,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
@@ -209589,8 +209589,8 @@
         15462195,
         15462207
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1775981700,
       "metricCoverage": {
         "goals": 3,
         "assists": 3,
@@ -209660,8 +209660,8 @@
         15462195,
         15462207
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772181900,
+      "dateTo": 1775981700,
       "metricCoverage": {
         "goals": 3,
         "assists": 3,
@@ -211255,11 +211255,11 @@
     "marketValueCurrency": 26000,
     "contractUntil": null,
     "sourceDetailedPositions": [],
-    "club": "FC Andijon",
+    "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1763204400,
+    "clubObservedAt": 1775548800,
     "profileSource": "cached_match_player",
-    "profileObservedAt": 1773900000,
+    "profileObservedAt": 1777712400,
     "isLegionnaire": false,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -211270,8 +211270,8 @@
         15462193,
         15462201
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775206800,
+      "dateTo": 1775548800,
       "metricCoverage": {
         "goals": 2,
         "assists": 2,
@@ -211410,8 +211410,8 @@
         15462193,
         15462201
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1761571800,
+      "dateTo": 1775548800,
       "metricCoverage": {
         "goals": 4,
         "assists": 4,
@@ -213012,8 +213012,8 @@
         15462301,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772179200,
+      "dateTo": 1787047200,
       "metricCoverage": {
         "goals": 18,
         "assists": 18,
@@ -213186,8 +213186,8 @@
         15462301,
         15948834
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755788400,
+      "dateTo": 1787047200,
       "metricCoverage": {
         "goals": 29,
         "assists": 29,
@@ -213733,7 +213733,7 @@
     "sourceDetailedPositions": [],
     "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1773900000,
+    "clubObservedAt": 1776502800,
     "profileSource": "cached_match_player",
     "profileObservedAt": 1784282400,
     "isLegionnaire": false,
@@ -213750,8 +213750,8 @@
         15462209,
         15462214
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1773135900,
+      "dateTo": 1776502800,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
@@ -213908,8 +213908,8 @@
         15462209,
         15462214
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755784800,
+      "dateTo": 1776502800,
       "metricCoverage": {
         "goals": 15,
         "assists": 15,
@@ -214591,8 +214591,8 @@
         15462292,
         15462303
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772789400,
+      "dateTo": 1787220000,
       "metricCoverage": {
         "goals": 13,
         "assists": 13,
@@ -214746,8 +214746,8 @@
         15462292,
         15462303
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1755959400,
+      "dateTo": 1787220000,
       "metricCoverage": {
         "goals": 17,
         "assists": 17,
@@ -215319,11 +215319,11 @@
     "marketValueCurrency": null,
     "contractUntil": null,
     "sourceDetailedPositions": [],
-    "club": null,
-    "clubSource": null,
-    "clubObservedAt": null,
-    "profileSource": "undated_source_consensus",
-    "profileObservedAt": null,
+    "club": "Mashal",
+    "clubSource": "last_match",
+    "clubObservedAt": 1777712400,
+    "profileSource": "cached_match_player",
+    "profileObservedAt": 1777712400,
     "isLegionnaire": false,
     "currentSeasonId": 89354,
     "previousSeasonId": 72383,
@@ -215333,8 +215333,8 @@
       "eventIds": [
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1777712400,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 1,
         "assists": 1,
@@ -215402,8 +215402,8 @@
       "eventIds": [
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1777712400,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 1,
         "assists": 1,
@@ -215680,8 +215680,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772268300,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 14,
         "assists": 14,
@@ -215848,8 +215848,8 @@
         15462332,
         15462337
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1754492400,
+      "dateTo": 1789804800,
       "metricCoverage": {
         "goals": 24,
         "assists": 24,
@@ -220998,8 +220998,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -221087,8 +221087,8 @@
         15462322,
         15462331
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772356500,
+      "dateTo": 1789985700,
       "metricCoverage": {
         "goals": 21,
         "assists": 21,
@@ -221756,7 +221756,7 @@
     "sourceDetailedPositions": [],
     "club": "Mashal",
     "clubSource": "last_match",
-    "clubObservedAt": 1776844800,
+    "clubObservedAt": 1777712400,
     "profileSource": "cached_match_player",
     "profileObservedAt": 1784714400,
     "isLegionnaire": null,
@@ -221773,8 +221773,8 @@
         15462226,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775206800,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
@@ -221847,8 +221847,8 @@
         15462226,
         15462239
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775206800,
+      "dateTo": 1777712400,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
@@ -223674,8 +223674,8 @@
         15462317,
         15462322
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775203200,
+      "dateTo": 1789034400,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -223758,8 +223758,8 @@
         15462317,
         15462322
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1775203200,
+      "dateTo": 1789034400,
       "metricCoverage": {
         "goals": 16,
         "assists": 16,
@@ -224020,8 +224020,8 @@
         15462164,
         15462187
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1773994500,
       "metricCoverage": {
         "goals": 2,
         "assists": 2,
@@ -224090,8 +224090,8 @@
         15462164,
         15462187
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1773994500,
       "metricCoverage": {
         "goals": 2,
         "assists": 2,
@@ -224859,8 +224859,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
@@ -224933,8 +224933,8 @@
         15462325,
         15462336
       ],
-      "dateFrom": null,
-      "dateTo": null,
+      "dateFrom": 1772788500,
+      "dateTo": 1789888500,
       "metricCoverage": {
         "goals": 6,
         "assists": 6,
