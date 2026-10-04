@@ -154,7 +154,7 @@ function calibratedRoleScore(player: Player, profile: NeedProfile) {
   };
 }
 
-export const NEED_FIT_VERSION = 'role-v2';
+export const NEED_FIT_VERSION = 'role-v2' as const;
 
 export interface NeedFitCandidate {
   player: Player;
