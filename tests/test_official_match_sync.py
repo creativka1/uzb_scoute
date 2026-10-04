@@ -99,6 +99,45 @@ class OfficialMatchParserTests(unittest.TestCase):
         self.assertIsNone(row["awayScore"])
         self.assertTrue(row["finished"])
 
+    def test_kff_round16_ordabasy_ulytau(self):
+        html = """
+        <html>
+          <head><title>Ордабасы 1:0 Улытау — КПЛ, 5 июля 2026 г. | Казахстанская Премьер-Лига</title></head>
+          <body>
+            <div>Премьер-Лига 2026, 16 тур</div>
+            <div>вс, 5 июл. 2026 г.</div>
+            <div>20:00</div>
+            <div>Ордабасы</div><div>1:0</div><div>Улытау</div>
+          </body>
+        </html>
+        """
+        row = official_sync.parse_kff(html, 1012)
+        self.assertIsNotNone(row)
+        self.assertEqual(row["round"], 16)
+        self.assertEqual((row["home"], row["away"]), ("Ордабасы", "Улытау"))
+        self.assertEqual((row["homeScore"], row["awayScore"]), (1, 0))
+
+    def test_kff_technical_result_without_score_in_title(self):
+        html = """
+        <html>
+          <head><title>Алтай – Кызылжар — КПЛ, 8 августа 2026 г. | Казахстанская Премьер-Лига</title></head>
+          <body>
+            <div>Премьер-Лига 2026, 21 тур</div>
+            <div>сб, 8 авг. 2026 г.</div>
+            <div>17:00</div>
+            <div>Алтай</div><div>3:0</div><div>Кызылжар</div>
+            <div>Матчу засчитано техническое поражение.</div>
+            <div>Техническая победа</div>
+          </body>
+        </html>
+        """
+        row = official_sync.parse_kff(html, 1046)
+        self.assertIsNotNone(row)
+        self.assertEqual(row["round"], 21)
+        self.assertEqual((row["home"], row["away"]), ("Алтай", "Кызылжар"))
+        self.assertEqual((row["homeScore"], row["awayScore"]), (3, 0))
+        self.assertTrue(row["finished"])
+
     def test_kff_unconfirmed_time_is_skipped(self):
         html = """
         <html><body>

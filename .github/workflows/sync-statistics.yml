@@ -35,6 +35,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - run: pip install curl_cffi
       - name: Download selected competitions through provider
         id: provider_sync
@@ -67,6 +70,14 @@ jobs:
         run: |
           python scripts/data_integrity.py
           python scripts/build_detailed_positions.py
+
+      - name: Validate season totals with FootyStats when configured
+        if: always()
+        env:
+          FOOTYSTATS_API_KEY: ${{ secrets.FOOTYSTATS_API_KEY }}
+          FOOTYSTATS_LEAGUES: UZB,KAZ
+          FOOTYSTATS_SEASON_YEAR: '2026'
+        run: node scripts/run_footystats_validation.mjs
       - name: Persist source checkpoints and status
         if: always()
         run: |

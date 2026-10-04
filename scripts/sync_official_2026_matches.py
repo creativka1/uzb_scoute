@@ -98,19 +98,28 @@ def event_hash(payload: dict) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
-def fetch(url: str, timeout: int = 15) -> str | None:
-    req = Request(url, headers={
+def fetch(url: str, timeout: int = 15, attempts: int = 3) -> str | None:
+    headers = {
         "User-Agent": "UzStatMatchSync/1.0 (+https://github.com/creativka1/uzb_scoute)",
         "Accept": "text/html,application/xhtml+xml",
         "Accept-Language": "en-US,en;q=0.9,ru;q=0.8",
-    })
-    try:
-        with urlopen(req, timeout=timeout) as response:
-            if response.status != 200:
+    }
+    for attempt in range(attempts):
+        req = Request(url, headers=headers)
+        try:
+            with urlopen(req, timeout=timeout) as response:
+                if response.status == 200:
+                    return response.read().decode("utf-8", errors="replace")
+                if response.status not in {429, 500, 502, 503, 504}:
+                    return None
+        except HTTPError as error:
+            if error.code not in {429, 500, 502, 503, 504}:
                 return None
-            return response.read().decode("utf-8", errors="replace")
-    except (HTTPError, URLError, TimeoutError):
-        return None
+        except (URLError, TimeoutError):
+            pass
+        if attempt + 1 < attempts:
+            time.sleep(0.35 * (attempt + 1))
+    return None
 
 
 def parse_pfl(html: str, source_id: int) -> dict | None:
@@ -294,22 +303,40 @@ def scan_one(league: str, source_id: int) -> dict | None:
     html = fetch(SCAN[league]["base"].format(source_id))
     if not html:
         return None
-    return parse_pfl(html, source_id) if league == "UZB" else parse_kff(html, source_id)
+    parsed = parse_pfl(html, source_id) if league == "UZB" else parse_kff(html, source_id)
+    if parsed is not None:
+        return parsed
+
+    parts = text_parts(html)
+    if league == "KAZ":
+        has_marker = any(re.fullmatch(r"Премьер-Лига 2026, \d+ тур", part) for part in parts)
+        has_date = any(re.search(r"\d{1,2}\s+[а-яё]+\.?\s+2026\s*г\.?", part.casefold()) for part in parts)
+        has_time = any(re.fullmatch(r"\d{1,2}:\d{2}", part) for part in parts)
+        if has_marker and has_date and has_time:
+            raise RuntimeError(f"Could not parse confirmed KFF 2026 match page {source_id}")
+    return None
 
 
 def scan_league(league: str, workers: int) -> list[dict]:
     cfg = SCAN[league]
     results: list[dict] = []
+    parse_errors: list[str] = []
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {pool.submit(scan_one, league, source_id): source_id
                    for source_id in range(cfg["start"], cfg["end"] + 1)}
         for future in as_completed(futures):
+            source_id = futures[future]
             try:
                 item = future.result()
-            except Exception:
-                item = None
+            except Exception as error:
+                parse_errors.append(f"{source_id}: {error}")
+                continue
             if item:
                 results.append(item)
+    if parse_errors:
+        raise RuntimeError(
+            f"Official {league} pages could not be parsed: " + "; ".join(parse_errors[:20])
+        )
     return sorted(results, key=lambda x: (x["date"], x["sourceId"]))
 
 
