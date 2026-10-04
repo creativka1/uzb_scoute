@@ -77,8 +77,8 @@ def aggregate(appearances):
         "matchesPlayed": count,
         "minutesPlayed": sum(a["statistics"]["minutesPlayed"] for a in appearances),
         "eventIds": sorted(a["eventId"] for a in appearances),
-        "dateFrom": min(dates) if dates else None,
-        "dateTo": max(dates) if dates else None,
+        "dateFrom": min(dates) if len(dates) == count else None,
+        "dateTo": max(dates) if len(dates) == count else None,
         "metricCoverage": {}, "observedTotals": {}, "metricDetails": {},
     }
     for target, source in METRICS.items():
@@ -376,6 +376,10 @@ def rebuild(root=ROOT):
         "unconfirmedLineupEventIds": unconfirmed,
         "unverifiedLegacyAggregatesExcluded": True,
         "playersWithCurrentStats": sum(p["currentSeason"] is not None for p in output),
+        "playersWithCurrentStatsByLeague": {
+            league: sum(p["league"] == league and p["currentSeason"] is not None for p in output)
+            for league in TOURNAMENTS
+        },
         "playersWithPreviousStats": sum(p["previousSeason"] is not None for p in output),
     }
     # Source caches are never deleted or rewritten by the recovery operation.
