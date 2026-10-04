@@ -98,19 +98,28 @@ def event_hash(payload: dict) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
-def fetch(url: str, timeout: int = 15) -> str | None:
-    req = Request(url, headers={
+def fetch(url: str, timeout: int = 15, attempts: int = 3) -> str | None:
+    headers = {
         "User-Agent": "UzStatMatchSync/1.0 (+https://github.com/creativka1/uzb_scoute)",
         "Accept": "text/html,application/xhtml+xml",
         "Accept-Language": "en-US,en;q=0.9,ru;q=0.8",
-    })
-    try:
-        with urlopen(req, timeout=timeout) as response:
-            if response.status != 200:
+    }
+    for attempt in range(attempts):
+        req = Request(url, headers=headers)
+        try:
+            with urlopen(req, timeout=timeout) as response:
+                if response.status == 200:
+                    return response.read().decode("utf-8", errors="replace")
+                if response.status not in {429, 500, 502, 503, 504}:
+                    return None
+        except HTTPError as error:
+            if error.code not in {429, 500, 502, 503, 504}:
                 return None
-            return response.read().decode("utf-8", errors="replace")
-    except (HTTPError, URLError, TimeoutError):
-        return None
+        except (URLError, TimeoutError):
+            pass
+        if attempt + 1 < attempts:
+            time.sleep(0.35 * (attempt + 1))
+    return None
 
 
 def parse_pfl(html: str, source_id: int) -> dict | None:
