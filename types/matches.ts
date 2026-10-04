@@ -8,7 +8,7 @@ export interface CoreMatch {
   source: string; sourceEventId: number; eventHash: string; lineupHash: string | null; sourcePath: string | null;
 }
 export interface Appearance {
-  id: string; matchId: number; playerId: number; teamId: number; minutes: number;
+  id: string; matchId: number; sourceEventId: number; playerId: number; teamId: number; minutes: number;
   position: Position | null; substitute: boolean | null; stats: Record<string, number | null>;
 }
 export interface CoreSeason { id: number; name: string; year: string; cachedMatches: number; complete: boolean; lastSyncedAt: string | null }
