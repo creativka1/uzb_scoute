@@ -303,7 +303,18 @@ def scan_one(league: str, source_id: int) -> dict | None:
     html = fetch(SCAN[league]["base"].format(source_id))
     if not html:
         return None
-    return parse_pfl(html, source_id) if league == "UZB" else parse_kff(html, source_id)
+    parsed = parse_pfl(html, source_id) if league == "UZB" else parse_kff(html, source_id)
+    if parsed is not None:
+        return parsed
+
+    parts = text_parts(html)
+    if league == "KAZ":
+        has_marker = any(re.fullmatch(r"Премьер-Лига 2026, \d+ тур", part) for part in parts)
+        has_date = any(re.search(r"\d{1,2}\s+[а-яё]+\.?\s+2026\s*г\.?", part.casefold()) for part in parts)
+        has_time = any(re.fullmatch(r"\d{1,2}:\d{2}", part) for part in parts)
+        if has_marker and has_date and has_time:
+            raise RuntimeError(f"Could not parse confirmed KFF 2026 match page {source_id}")
+    return None
 
 
 def scan_league(league: str, workers: int) -> list[dict]:
