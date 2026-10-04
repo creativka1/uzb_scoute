@@ -60,8 +60,19 @@ class TextExtractor(HTMLParser):
     def __init__(self):
         super().__init__()
         self.parts: list[str] = []
+        self._ignored_depth = 0
+
+    def handle_starttag(self, tag: str, attrs):
+        if tag.lower() in {"script", "style"}:
+            self._ignored_depth += 1
+
+    def handle_endtag(self, tag: str):
+        if tag.lower() in {"script", "style"} and self._ignored_depth:
+            self._ignored_depth -= 1
 
     def handle_data(self, data: str):
+        if self._ignored_depth:
+            return
         value = html_lib.unescape(data).strip()
         if value:
             self.parts.append(re.sub(r"\s+", " ", value))

@@ -133,9 +133,10 @@ function statRows(player: Player, lang: Language): { label: string; value: strin
 function DataContext({ player, lang }: {player: Player; lang: Language}) {
   return <details className="analysis-card explanation data-context"><summary>{text(lang, 'Качество данных', 'Ma’lumot sifati')}</summary>
     <p>{text(lang, 'Прочерк означает отсутствие данных, а не нулевой результат.', 'Tire — nol natija emas, ma’lumot yo‘qligi.')}</p>
-    <dl className="facts"><div><dt>{text(lang, 'Период наблюдений', 'Kuzatuv davri')}</dt><dd>{new Date(player.statsDateFrom * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')} — {new Date(player.statsDateTo * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')}</dd></div>
+    <dl className="facts"><div><dt>{text(lang, 'Период наблюдений', 'Kuzatuv davri')}</dt><dd>{player.statsDateFrom !== null && player.statsDateTo !== null ? `${new Date(player.statsDateFrom * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')} — ${new Date(player.statsDateTo * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')}` : '—'}</dd></div>
       <div><dt>{text(lang, 'Покрытие сезона', 'Mavsum qamrovi')}</dt><dd>{player.statsCoverageComplete ? text(lang, 'Матчи загружены', 'O‘yinlar yuklangan') : text(lang, 'Неполное', 'To‘liq emas')}</dd></div>
     </dl>
+    {player.statsDateFrom === null && <p>{text(lang, 'Сезонные показатели доступны, но часть событий ещё не привязана к конкретным матчам и датам; поэтому вкладка динамики может содержать меньше матчей, чем сезонная сумма.', 'Mavsum ko‘rsatkichlari mavjud, ammo ayrim voqealar hali aniq o‘yin va sanalarga bog‘lanmagan; shu sabab dinamika bo‘limida mavsum yig‘indisidan kamroq o‘yin bo‘lishi mumkin.')}</p>}
     <p>{text(lang, 'Рейтинг — среднее доступных ролевых процентилей с поправкой на минуты. Это вспомогательный расчёт, а не общая оценка качества игрока.', 'Reyting — mavjud rol percentillarining daqiqalarga moslashtirilgan o‘rtachasi. Bu yordamchi hisob, futbolchining umumiy sifat bahosi emas.')}</p>
     <p>{text(lang, 'Точная позиция показывается только при однозначном подтверждении в профиле источника. Клуб может относиться к последнему известному матчу.', 'Aniq pozitsiya faqat manba profilida bir ma’noli tasdiqlangan bo‘lsa ko‘rsatiladi. Klub oxirgi ma’lum o‘yinga tegishli bo‘lishi mumkin.')}</p>
   </details>;

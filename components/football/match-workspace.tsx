@@ -135,10 +135,14 @@ export function TeamWorkspace({league,seasonMode,lang,onRecruit,onPlayer,initial
   const teamId=options.find(t=>t.id===Number(team))?.id||options[0]?.id;
   const teams=new Map(data.teams.map(t=>[t.id,t.name])), names=new Map(data.players.map(p=>[p.id,p.name]));
   const teamName=teams.get(teamId)||'—';
-  const matches=seasonMatches.filter(m=>m.homeTeamId===teamId||m.awayTeamId===teamId);
+  const matches=seasonMatches
+    .filter(m=>m.homeTeamId===teamId||m.awayTeamId===teamId)
+    .slice()
+    .sort((a,b)=>b.date-a.date);
   const ids=new Set(matches.map(m=>m.id)), rows=data.appearances.filter(a=>ids.has(a.matchId)&&a.teamId===teamId);
   const roster=minuteDistribution(rows), selected=matches.find(m=>m.id===match);
-  const latestMatches=matches.slice(0,windowSize),previousMatches=matches.slice(windowSize,windowSize*2);
+  const completedMatches=matches.filter(m=>m.homeScore!==null&&m.awayScore!==null);
+  const latestMatches=completedMatches.slice(0,windowSize),previousMatches=completedMatches.slice(windowSize,windowSize*2);
   const latest=teamWindow(latestMatches,teamId),previous=teamWindow(previousMatches,teamId);
   const mode:SeasonMode=selectedSeason.id===seasons[0].id?'current':'previous';
   const remember=(tid:number,sid:number)=>{try{localStorage.setItem(`uzstat.analysis.team.${league}`,JSON.stringify({teamId:tid,seasonId:sid}));}catch{}};
@@ -164,9 +168,9 @@ export function TeamWorkspace({league,seasonMode,lang,onRecruit,onPlayer,initial
     {!teamId?<div className="workspace-empty"><h3>{tr(lang,'Выберите команду','Jamoani tanlang')}</h3></div>:!matches.length?<div className="workspace-empty"><h3>{tr(lang,'Для выбранной команды нет загруженных матчей','Tanlangan jamoa uchun yuklangan o‘yinlar yo‘q')}</h3></div>:<>
       {tab==='overview'&&<>
         <div className="section-heading"><h3>{tr(lang,'Как меняются результаты','Natijalar qanday o‘zgarmoqda')}</h3><label className="inline-select">{tr(lang,'Отрезок','Davr')}<select value={windowSize} onChange={e=>setWindowSize(Number(e.target.value))}><option value={5}>5 {tr(lang,'матчей','o‘yin')}</option><option value={10}>10 {tr(lang,'матчей','o‘yin')}</option></select></label></div>
-        <p className="muted">{tr(lang,'Сравнение последних доступных игр с предыдущим отрезком.','Oxirgi mavjud o‘yinlar oldingi davr bilan taqqoslanadi.')}</p>
+        <p className="muted">{tr(lang,'Сравниваются только завершённые матчи: последние игры против предыдущего отрезка.','Faqat yakunlangan o‘yinlar taqqoslanadi: oxirgi o‘yinlar oldingi davrga qarshi.')}</p>
         <div className="form-comparison"><div/><span>{tr(lang,'Последние','Oxirgi')} {latest.played}</span><span>{tr(lang,'Предыдущие','Oldingi')} {previous.played}</span>{[[tr(lang,'Очки за матч','O‘yindagi ochko'),fmt(latest.pointsPerMatch,2),fmt(previous.pointsPerMatch,2)],[tr(lang,'Забито за матч','O‘yinda urilgan gol'),fmt(latest.scored?latest.goalsFor!/latest.scored:null,2),fmt(previous.scored?previous.goalsFor!/previous.scored:null,2)],[tr(lang,'Пропущено за матч','O‘yinda o‘tkazilgan gol'),fmt(latest.scored?latest.goalsAgainst!/latest.scored:null,2),fmt(previous.scored?previous.goalsAgainst!/previous.scored:null,2)]].map(([label,a,b])=><React.Fragment key={label}><span>{label}</span><strong>{a}</strong><strong className="muted-value">{b}</strong></React.Fragment>)}</div>
-        <div className="section-heading"><h3>{tr(lang,'Последние доступные матчи','Oxirgi mavjud o‘yinlar')}</h3><button className="text-link" onClick={()=>setTab('matches')}>{tr(lang,'Все матчи','Barcha o‘yinlar')} →</button></div>
+        <div className="section-heading"><h3>{tr(lang,'Последние завершённые матчи','Oxirgi yakunlangan o‘yinlar')}</h3><button className="text-link" onClick={()=>setTab('matches')}>{tr(lang,'Все матчи','Barcha o‘yinlar')} →</button></div>
         <div className="match-summary-list">{latestMatches.map(matchButton)}</div>
         <details className="explanation workspace-method"><summary>{tr(lang,'Покрытие и методика','Qamrov va usul')}</summary><p>{tr(lang,'Известен счёт','Hisob ma’lum')}: {latest.scored}/{latest.played} · {previous.scored}/{previous.played}. {tr(lang,'Последние — по загруженной истории, она может быть неполной. Значения получены из счёта матчей, а не суммы статистики игроков.','Oxirgi — yuklangan tarix bo‘yicha, u to‘liq bo‘lmasligi mumkin. Qiymatlar futbolchilar yig‘indisidan emas, o‘yin hisobidan olingan.')}</p><p>{tr(lang,'Составов','Tarkiblar')}: {matches.filter(m=>m.lineupAvailable).length}/{matches.length}. {selectedSeason.lastSyncedAt||tr(lang,'Дата обновления неизвестна','Yangilanish sanasi noma’lum')}.</p></details>
       </>}

@@ -4,7 +4,7 @@ import sys
 import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-from data_integrity import aggregate, profile_fields, number, ratio
+from data_integrity import aggregate, profile_fields, number, ratio, infer_unlinked_lineup_league
 
 
 def appearance(event, stats):
@@ -47,6 +47,43 @@ class DataIntegrityTests(unittest.TestCase):
             self.assertIsNone(profile[key], key)
         self.assertIsNone(profile_fields({'proposedMarketValueRaw': {'value': 12, 'currency': 'USD'}})['marketValueCurrency'])
         self.assertEqual(profile_fields({'jerseyNumber': '0'})['jerseyNumber'], 0)
+
+    def test_aggregate_allows_unknown_observation_dates(self):
+        row = appearance(1, {'goals': 1})
+        row['date'] = None
+        stats = aggregate([row])
+        self.assertIsNone(stats['dateFrom'])
+        self.assertIsNone(stats['dateTo'])
+        self.assertEqual(stats['matchesPlayed'], 1)
+        self.assertEqual(stats['goals'], 1)
+
+    def test_unlinked_lineup_league_requires_unambiguous_evidence(self):
+        lineup = {
+            'home': {'players': [
+                {'teamId': 10, 'player': {'id': 1}},
+                {'teamId': 10, 'player': {'id': 2}},
+                {'teamId': 10, 'player': {'id': 3}},
+            ]},
+            'away': {'players': [
+                {'teamId': 20, 'player': {'id': 4}},
+                {'teamId': 20, 'player': {'id': 5}},
+                {'teamId': 20, 'player': {'id': 6}},
+            ]},
+        }
+        self.assertEqual(
+            infer_unlinked_lineup_league(lineup, {10: {'UZB'}, 20: {'UZB'}}, {}),
+            'UZB'
+        )
+        self.assertIsNone(
+            infer_unlinked_lineup_league(lineup, {10: {'UZB'}, 20: {'KAZ'}}, {})
+        )
+        self.assertEqual(
+            infer_unlinked_lineup_league(
+                lineup, {},
+                {1: {'KAZ'}, 2: {'KAZ'}, 3: {'KAZ'}, 4: {'KAZ'}, 5: {'KAZ'}, 6: {'UZB'}}
+            ),
+            'KAZ'
+        )
 
     def test_bad_numbers_rejected(self):
         for value in [True, False, '10', float('nan'), float('inf'), -1]:

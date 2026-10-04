@@ -72,12 +72,13 @@ def aggregate(appearances):
     if not appearances:
         return None
     count = len(appearances)
+    dates = [a.get("date") for a in appearances if isinstance(a.get("date"), (int, float))]
     result = {
         "matchesPlayed": count,
         "minutesPlayed": sum(a["statistics"]["minutesPlayed"] for a in appearances),
         "eventIds": sorted(a["eventId"] for a in appearances),
-        "dateFrom": min(a["date"] for a in appearances),
-        "dateTo": max(a["date"] for a in appearances),
+        "dateFrom": min(dates) if len(dates) == count else None,
+        "dateTo": max(dates) if len(dates) == count else None,
         "metricCoverage": {}, "observedTotals": {}, "metricDetails": {},
     }
     for target, source in METRICS.items():
@@ -172,10 +173,73 @@ def cached_events(root=ROOT):
     return events
 
 
+def infer_unlinked_lineup_league(lineup, known_team_leagues, legacy_player_leagues):
+    """Infer league only when cached evidence is unambiguous.
+
+    Team IDs from previously verified matches are strongest. If neither team is
+    known, require a strong majority of previously classified players. This is
+    used only for season-level aggregation; it never links the payload to a
+    concrete match in match_core.
+    """
+    team_candidates = set()
+    for side in ("home", "away"):
+        ids = {
+            item.get("teamId")
+            for item in (lineup.get(side) or {}).get("players", [])
+            if isinstance(item.get("teamId"), int)
+        }
+        for team_id in ids:
+            leagues = known_team_leagues.get(team_id, set())
+            if len(leagues) == 1:
+                team_candidates.update(leagues)
+    if len(team_candidates) == 1:
+        return next(iter(team_candidates))
+    if len(team_candidates) > 1:
+        return None
+
+    votes = defaultdict(int)
+    total = 0
+    for side in ("home", "away"):
+        for item in (lineup.get(side) or {}).get("players", []):
+            pid = (item.get("player") or {}).get("id")
+            leagues = legacy_player_leagues.get(pid, set())
+            if len(leagues) == 1:
+                votes[next(iter(leagues))] += 1
+                total += 1
+    if total < 5 or not votes:
+        return None
+    ranked = sorted(votes.items(), key=lambda item: item[1], reverse=True)
+    league, count = ranked[0]
+    runner_up = ranked[1][1] if len(ranked) > 1 else 0
+    if count >= 5 and count / total >= 0.75 and count > runner_up:
+        return league
+    return None
+
+
 def rebuild(root=ROOT):
     data = root / "data"
     legacy = load(data / "superliga_stats.json", [])
     events = cached_events(root)
+
+    season_contract = {}
+    for league, tid in TOURNAMENTS.items():
+        seasons = load(data / f"cache/seasons/{league}_{tid}_seasons.json", {}).get("seasons", [])[:2]
+        if len(seasons) < 2:
+            raise ValueError(f"Two explicit seasons required for {league}")
+        season_contract[league] = seasons
+
+    known_team_leagues = defaultdict(set)
+    for event in events.values():
+        for side in ("home", "away"):
+            team_id = (event.get(side + "Team") or {}).get("id")
+            if isinstance(team_id, int):
+                known_team_leagues[team_id].add(event["league"])
+
+    legacy_player_leagues = defaultdict(set)
+    for player in legacy:
+        if player.get("league") in TOURNAMENTS and isinstance(player.get("sofaId"), int):
+            legacy_player_leagues[player["sofaId"]].add(player["league"])
+
     profiles = {}
     for path in sorted((data / "cache/players").glob("*.json")):
         payload = load(path)
@@ -183,8 +247,10 @@ def rebuild(root=ROOT):
         if profile.get("id"):
             profiles[profile["id"]] = payload
     appearances = defaultdict(list)
+    orphan_current = defaultdict(list)
     observations = defaultdict(list)
     unlinked, missing_lineups, unconfirmed = [], [], []
+    inferred_unlinked, unresolved_unlinked = defaultdict(set), []
     linked = set()
     for path in sorted((data / "cache/lineups").glob("*.json")):
         event_id = int(path.stem)
@@ -193,8 +259,14 @@ def rebuild(root=ROOT):
             unconfirmed.append(event_id)
             continue
         event = events.get(event_id)
+        inferred_league = None
         if event is None:
             unlinked.append(event_id)
+            inferred_league = infer_unlinked_lineup_league(lineup, known_team_leagues, legacy_player_leagues)
+            if inferred_league:
+                inferred_unlinked[inferred_league].add(event_id)
+            else:
+                unresolved_unlinked.append(event_id)
         else:
             linked.add(event_id)
         for side in ("home", "away"):
@@ -206,31 +278,38 @@ def rebuild(root=ROOT):
                 observations[pid].append((event.get("startTimestamp") if event else None, player))
                 stats = item.get("statistics") or {}
                 minutes = number(stats.get("minutesPlayed"))
-                if not event or minutes is None or minutes <= 0:
+                if minutes is None or minutes <= 0:
                     continue
-                team = event.get(side + "Team") or {}
-                # The player-level teamId can refer to a later registration.
-                # Historical membership comes from the event's home/away side.
-                if not team.get("id") or not team.get("name"):
-                    raise ValueError(f"Missing event team: {event_id}/{side}")
-                appearances[(event["league"], pid)].append({
-                    "eventId": event_id, "seasonId": event["season"]["id"],
-                    "date": event["startTimestamp"], "team": team,
-                    "player": player, "statistics": stats,
-                    "position": POSITION.get(item.get("position") or player.get("position")),
-                    "substitute": item.get("substitute") if isinstance(item.get("substitute"), bool) else None,
-                })
+                if event:
+                    team = event.get(side + "Team") or {}
+                    # The player-level teamId can refer to a later registration.
+                    # Historical membership comes from the event's home/away side.
+                    if not team.get("id") or not team.get("name"):
+                        raise ValueError(f"Missing event team: {event_id}/{side}")
+                    appearances[(event["league"], pid)].append({
+                        "eventId": event_id, "seasonId": event["season"]["id"],
+                        "date": event["startTimestamp"], "team": team,
+                        "player": player, "statistics": stats,
+                        "position": POSITION.get(item.get("position") or player.get("position")),
+                        "substitute": item.get("substitute") if isinstance(item.get("substitute"), bool) else None,
+                    })
+                elif inferred_league:
+                    team_id = item.get("teamId")
+                    orphan_current[(inferred_league, pid)].append({
+                        "eventId": event_id, "seasonId": season_contract[inferred_league][0]["id"],
+                        "date": None, "team": {"id": team_id if isinstance(team_id, int) else None, "name": None},
+                        "player": player, "statistics": stats,
+                        "position": POSITION.get(item.get("position") or player.get("position")),
+                        "substitute": item.get("substitute") if isinstance(item.get("substitute"), bool) else None,
+                    })
     missing_lineups = sorted(set(events) - linked)
     # Keep identities even when their historical aggregate cannot be verified.
     identities = {(p["league"], p["sofaId"]): p.get("name") for p in legacy if p.get("league") in TOURNAMENTS}
     identities.update({key: rows[-1]["player"].get("name") for key, rows in appearances.items()})
+    identities.update({key: rows[-1]["player"].get("name") for key, rows in orphan_current.items()})
     season_meta = {}
     for league, tid in TOURNAMENTS.items():
-        seasons = load(data / f"cache/seasons/{league}_{tid}_seasons.json", {}).get("seasons", [])
-        # The provider's season list is the explicit contract, never match ID order.
-        selected = seasons[:2]
-        if len(selected) < 2:
-            raise ValueError(f"Two explicit seasons required for {league}")
+        selected = season_contract[league]
         meta = []
         for season in selected:
             sid = season["id"]
@@ -270,7 +349,9 @@ def rebuild(root=ROOT):
         observed_team = rows[-1]["team"] if rows else {}
         team = current_team or observed_team
         current_id, previous_id = (s["id"] for s in season_meta[league])
-        current = [a for a in rows if a["seasonId"] == current_id]
+        current_linked = [a for a in rows if a["seasonId"] == current_id]
+        current_orphan = orphan_current.get((league, pid), [])
+        current = current_linked + current_orphan
         previous = [a for a in rows if a["seasonId"] == previous_id]
         country = fields["countryCode"]
         output.append({
@@ -286,13 +367,19 @@ def rebuild(root=ROOT):
         })
     report = {
         "schemaVersion": 2, "source": "SofaScore cached payloads",
-        "scope": "statistics describe source-linked cached matches only",
+        "scope": "match history uses source-linked matches; current-season aggregates may also use league-inferred unlinked lineup payloads",
         "leagues": season_meta, "players": len(output),
         "linkedLineups": len(linked), "unlinkedLineups": len(unlinked),
+        "inferredCurrentSeasonLineups": {league: len(ids) for league, ids in inferred_unlinked.items()},
+        "unresolvedUnlinkedLineups": len(unresolved_unlinked),
         "unlinkedEventIds": unlinked, "missingLineupEventIds": missing_lineups,
         "unconfirmedLineupEventIds": unconfirmed,
         "unverifiedLegacyAggregatesExcluded": True,
         "playersWithCurrentStats": sum(p["currentSeason"] is not None for p in output),
+        "playersWithCurrentStatsByLeague": {
+            league: sum(p["league"] == league and p["currentSeason"] is not None for p in output)
+            for league in TOURNAMENTS
+        },
         "playersWithPreviousStats": sum(p["previousSeason"] is not None for p in output),
     }
     # Source caches are never deleted or rewritten by the recovery operation.

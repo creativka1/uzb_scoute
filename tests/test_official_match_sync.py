@@ -110,6 +110,23 @@ class OfficialMatchParserTests(unittest.TestCase):
         """
         self.assertIsNone(official_sync.parse_kff(html, 1124))
 
+    def test_script_payload_is_not_visible_text(self):
+        html = """
+        <html><body>
+          <script>self.__next_f.push([1,"garbage team name"])</script>
+          <style>.hidden{display:none}</style>
+          <div>Премьер-Лига 2026, 1 тур</div>
+          <div>сб, 7 мар. 2026 г.</div>
+          <div>16:00</div>
+          <a>Алтай</a><div>0:1</div><a>Кайрат</a>
+        </body></html>
+        """
+        parts = official_sync.text_parts(html)
+        self.assertFalse(any("self.__next_f.push" in value for value in parts))
+        row = official_sync.parse_kff(html, 885)
+        self.assertEqual(row["home"], "Алтай")
+        self.assertEqual(row["away"], "Кайрат")
+
     def test_team_ids_are_stable_and_league_scoped(self):
         uz = official_sync.stable_team_id("UZB", "Nasaf")
         kz = official_sync.stable_team_id("KAZ", "Nasaf")
