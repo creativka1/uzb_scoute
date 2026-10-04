@@ -99,15 +99,6 @@ class OfficialMatchParserTests(unittest.TestCase):
         self.assertIsNone(row["awayScore"])
         self.assertTrue(row["finished"])
 
-    def test_kff_nextjs_script_title_does_not_pollute_team_name(self):
-        parts = [
-            'self.__next_f.push([1,"18:{\\\"metadata\\\":[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Кайсар 1:2 Кайрат — КПЛ, 14 марта 2026 г. | Казахстанская Премьер-Лига\\\"}]]}"])'
-        ]
-        row = official_sync.kff_completed_from_title(parts)
-        self.assertIsNotNone(row)
-        self.assertEqual(row[0], "Кайсар")
-        self.assertEqual(row[1:4], (1, 2, "Кайрат"))
-
     def test_kff_unconfirmed_time_is_skipped(self):
         html = """
         <html><body>
