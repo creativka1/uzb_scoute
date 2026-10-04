@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
-  "lineupRecordsConsidered": 263,
-  "linked": 250,
+  "lineupRecordsConsidered": 245,
+  "linked": 243,
   "ambiguous": 0,
-  "unmatched": 13,
+  "unmatched": 2,
+  "scoreMismatches": 1,
   "teamMapping": {
     "UZB": [
       {
@@ -371,196 +372,6 @@
   "ambiguousEvents": [],
   "unmatchedEvents": [
     {
-      "eventId": 13547947,
-      "league": "KAZ",
-      "homeSofaTeamId": 5172,
-      "awaySofaTeamId": 36155,
-      "homeDominance": [
-        14,
-        23
-      ],
-      "awayDominance": [
-        14,
-        22
-      ],
-      "score": [
-        1,
-        1
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14178340,
-      "league": "UZB",
-      "homeSofaTeamId": 34310,
-      "awaySofaTeamId": 40268,
-      "homeDominance": [
-        12,
-        20
-      ],
-      "awayDominance": [
-        14,
-        20
-      ],
-      "score": [
-        1,
-        2
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14479211,
-      "league": "UZB",
-      "homeSofaTeamId": 48614,
-      "awaySofaTeamId": 40268,
-      "homeDominance": [
-        12,
-        20
-      ],
-      "awayDominance": [
-        14,
-        20
-      ],
-      "score": [
-        4,
-        1
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14606844,
-      "league": "UZB",
-      "homeSofaTeamId": 48614,
-      "awaySofaTeamId": 36256,
-      "homeDominance": [
-        12,
-        20
-      ],
-      "awayDominance": [
-        14,
-        19
-      ],
-      "score": [
-        0,
-        1
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14606859,
-      "league": "UZB",
-      "homeSofaTeamId": 34310,
-      "awaySofaTeamId": 40265,
-      "homeDominance": [
-        13,
-        19
-      ],
-      "awayDominance": [
-        13,
-        20
-      ],
-      "score": [
-        3,
-        0
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14606862,
-      "league": "UZB",
-      "homeSofaTeamId": 40265,
-      "awaySofaTeamId": 40259,
-      "homeDominance": [
-        13,
-        20
-      ],
-      "awayDominance": [
-        13,
-        20
-      ],
-      "score": [
-        2,
-        0
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14606874,
-      "league": "UZB",
-      "homeSofaTeamId": 48614,
-      "awaySofaTeamId": 40265,
-      "homeDominance": [
-        12,
-        20
-      ],
-      "awayDominance": [
-        13,
-        20
-      ],
-      "score": [
-        3,
-        0
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14606885,
-      "league": "UZB",
-      "homeSofaTeamId": 191273,
-      "awaySofaTeamId": 34310,
-      "homeDominance": [
-        12,
-        20
-      ],
-      "awayDominance": [
-        12,
-        20
-      ],
-      "score": [
-        0,
-        0
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14606894,
-      "league": "UZB",
-      "homeSofaTeamId": 40259,
-      "awaySofaTeamId": 191273,
-      "homeDominance": [
-        14,
-        20
-      ],
-      "awayDominance": [
-        13,
-        20
-      ],
-      "score": [
-        0,
-        0
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 14606898,
-      "league": "UZB",
-      "homeSofaTeamId": 36256,
-      "awaySofaTeamId": 40265,
-      "homeDominance": [
-        15,
-        20
-      ],
-      "awayDominance": [
-        14,
-        20
-      ],
-      "score": [
-        4,
-        1
-      ],
-      "reason": "no-official-match"
-    },
-    {
       "eventId": 15635638,
       "league": "KAZ",
       "homeSofaTeamId": 5366,
@@ -595,25 +406,6 @@
       "score": [
         2,
         2
-      ],
-      "reason": "no-official-match"
-    },
-    {
-      "eventId": 16023570,
-      "league": "KAZ",
-      "homeSofaTeamId": 36688,
-      "awaySofaTeamId": 5172,
-      "homeDominance": [
-        18,
-        19
-      ],
-      "awayDominance": [
-        17,
-        19
-      ],
-      "score": [
-        0,
-        0
       ],
       "reason": "no-official-match"
     }

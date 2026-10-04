@@ -3,126 +3,6 @@
   "generatedFrom": "cached-lineups + official-match-core",
   "links": [
     {
-      "eventId": 14178323,
-      "league": "UZB",
-      "officialMatchId": 30003957,
-      "seasonId": 89354,
-      "date": 1792072800,
-      "homeSofaTeamId": 191273,
-      "awaySofaTeamId": 36256,
-      "homeOfficialTeamId": 122786876,
-      "awayOfficialTeamId": 220098339,
-      "homeName": "Qo'qon-1912",
-      "awayName": "Neftchi",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "eventId": 14178352,
-      "league": "UZB",
-      "officialMatchId": 30004003,
-      "seasonId": 89354,
-      "date": 1793887200,
-      "homeSofaTeamId": 48614,
-      "awaySofaTeamId": 40259,
-      "homeOfficialTeamId": 163768414,
-      "awayOfficialTeamId": 120427223,
-      "homeName": "Sogdiyona",
-      "awayName": "Dinamo",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "eventId": 14479210,
-      "league": "UZB",
-      "officialMatchId": 30003981,
-      "seasonId": 89354,
-      "date": 1793282400,
-      "homeSofaTeamId": 191273,
-      "awaySofaTeamId": 40265,
-      "homeOfficialTeamId": 122786876,
-      "awayOfficialTeamId": 115050304,
-      "homeName": "Qo'qon-1912",
-      "awayName": "Qizilqum",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "eventId": 14479213,
-      "league": "UZB",
-      "officialMatchId": 30003976,
-      "seasonId": 89354,
-      "date": 1792677600,
-      "homeSofaTeamId": 34310,
-      "awaySofaTeamId": 36256,
-      "homeOfficialTeamId": 114251942,
-      "awayOfficialTeamId": 220098339,
-      "homeName": "Pakhtakor",
-      "awayName": "Neftchi",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "eventId": 14479222,
-      "league": "UZB",
-      "officialMatchId": 30004048,
-      "seasonId": 89354,
-      "date": 1798639200,
-      "homeSofaTeamId": 36256,
-      "awaySofaTeamId": 40259,
-      "homeOfficialTeamId": 220098339,
-      "awayOfficialTeamId": 120427223,
-      "homeName": "Neftchi",
-      "awayName": "Dinamo",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "eventId": 14606846,
-      "league": "UZB",
-      "officialMatchId": 30003975,
-      "seasonId": 89354,
-      "date": 1792850400,
-      "homeSofaTeamId": 40268,
-      "awaySofaTeamId": 191273,
-      "homeOfficialTeamId": 178688690,
-      "awayOfficialTeamId": 122786876,
-      "homeName": "OKMK",
-      "awayName": "Qo'qon-1912",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "eventId": 14606860,
-      "league": "UZB",
-      "officialMatchId": 30003994,
-      "seasonId": 89354,
-      "date": 1794060000,
-      "homeSofaTeamId": 36256,
-      "awaySofaTeamId": 40268,
-      "homeOfficialTeamId": 220098339,
-      "awayOfficialTeamId": 178688690,
-      "homeName": "Neftchi",
-      "awayName": "OKMK",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
-      "eventId": 14606899,
-      "league": "UZB",
-      "officialMatchId": 30004037,
-      "seasonId": 89354,
-      "date": 1798639200,
-      "homeSofaTeamId": 191273,
-      "awaySofaTeamId": 48614,
-      "homeOfficialTeamId": 122786876,
-      "awayOfficialTeamId": 163768414,
-      "homeName": "Qo'qon-1912",
-      "awayName": "Sogdiyona",
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
       "eventId": 15462156,
       "league": "UZB",
       "officialMatchId": 30003809,
@@ -135,7 +15,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Qizilqum",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462157,
@@ -150,7 +35,12 @@
       "homeName": "Bukhoro",
       "awayName": "Qo'qon-1912",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462159,
@@ -165,7 +55,12 @@
       "homeName": "OKMK",
       "awayName": "Bunyodkor",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462160,
@@ -180,7 +75,12 @@
       "homeName": "Nasaf",
       "awayName": "Xorazm",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462161,
@@ -195,7 +95,12 @@
       "homeName": "Dinamo",
       "awayName": "Navbahor",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462163,
@@ -210,7 +115,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Surkhon",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462165,
@@ -225,7 +135,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Pakhtakor",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462166,
@@ -240,7 +155,12 @@
       "homeName": "Xorazm",
       "awayName": "OKMK",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462167,
@@ -255,7 +175,12 @@
       "homeName": "Qizilqum",
       "awayName": "Andijan",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462168,
@@ -270,7 +195,12 @@
       "homeName": "Surkhon",
       "awayName": "Neftchi",
       "homeScore": 0,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        0,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462169,
@@ -285,7 +215,12 @@
       "homeName": "Navbahor",
       "awayName": "Bukhoro",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462170,
@@ -300,7 +235,12 @@
       "homeName": "Mashal",
       "awayName": "Lokomotiv",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462171,
@@ -315,7 +255,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Dinamo",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462172,
@@ -330,7 +275,12 @@
       "homeName": "OKMK",
       "awayName": "Sogdiyona",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462173,
@@ -345,7 +295,12 @@
       "homeName": "Bukhoro",
       "awayName": "Xorazm",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462174,
@@ -360,7 +315,12 @@
       "homeName": "Mashal",
       "awayName": "Qizilqum",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462175,
@@ -375,7 +335,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Navbahor",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462176,
@@ -390,7 +355,12 @@
       "homeName": "Neftchi",
       "awayName": "Andijan",
       "homeScore": 3,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462177,
@@ -405,7 +375,12 @@
       "homeName": "Surkhon",
       "awayName": "Bunyodkor",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462178,
@@ -420,7 +395,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Qo'qon-1912",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462179,
@@ -435,7 +415,12 @@
       "homeName": "Dinamo",
       "awayName": "Nasaf",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462180,
@@ -450,7 +435,12 @@
       "homeName": "Xorazm",
       "awayName": "Bunyodkor",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462181,
@@ -465,7 +455,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Navbahor",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462182,
@@ -480,7 +475,12 @@
       "homeName": "Qizilqum",
       "awayName": "OKMK",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462183,
@@ -495,7 +495,12 @@
       "homeName": "Andijan",
       "awayName": "Mashal",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462184,
@@ -510,7 +515,12 @@
       "homeName": "Bukhoro",
       "awayName": "Dinamo",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462185,
@@ -525,7 +535,12 @@
       "homeName": "Neftchi",
       "awayName": "Lokomotiv",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462186,
@@ -540,7 +555,12 @@
       "homeName": "Nasaf",
       "awayName": "Surkhon",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462187,
@@ -555,7 +575,12 @@
       "homeName": "Sogdiyona",
       "awayName": "Pakhtakor",
       "homeScore": 2,
-      "awayScore": 4
+      "awayScore": 4,
+      "inferredPlayerGoalScore": [
+        2,
+        4
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462188,
@@ -570,7 +595,12 @@
       "homeName": "Sogdiyona",
       "awayName": "Qo'qon-1912",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462189,
@@ -585,7 +615,12 @@
       "homeName": "Xorazm",
       "awayName": "Dinamo",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462191,
@@ -600,7 +635,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Lokomotiv",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462195,
@@ -615,7 +655,12 @@
       "homeName": "Nasaf",
       "awayName": "Andijan",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462196,
@@ -630,7 +675,12 @@
       "homeName": "Pakhtakor",
       "awayName": "OKMK",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462197,
@@ -645,7 +695,12 @@
       "homeName": "Qizilqum",
       "awayName": "Neftchi",
       "homeScore": 0,
-      "awayScore": 4
+      "awayScore": 4,
+      "inferredPlayerGoalScore": [
+        0,
+        4
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462198,
@@ -660,7 +715,12 @@
       "homeName": "Andijan",
       "awayName": "Navbahor",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462199,
@@ -675,7 +735,12 @@
       "homeName": "OKMK",
       "awayName": "Surkhon",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462200,
@@ -690,7 +755,12 @@
       "homeName": "Dinamo",
       "awayName": "Sogdiyona",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462202,
@@ -705,7 +775,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Nasaf",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462203,
@@ -720,7 +795,12 @@
       "homeName": "Neftchi",
       "awayName": "Pakhtakor",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462204,
@@ -735,7 +815,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Xorazm",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462205,
@@ -750,7 +835,12 @@
       "homeName": "Bukhoro",
       "awayName": "Qizilqum",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462206,
@@ -765,7 +855,12 @@
       "homeName": "Xorazm",
       "awayName": "Qo'qon-1912",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462207,
@@ -780,7 +875,12 @@
       "homeName": "Andijan",
       "awayName": "OKMK",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462208,
@@ -795,7 +895,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Neftchi",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462210,
@@ -810,7 +915,12 @@
       "homeName": "Qizilqum",
       "awayName": "Sogdiyona",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462211,
@@ -825,7 +935,12 @@
       "homeName": "Navbahor",
       "awayName": "Surkhon",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462212,
@@ -840,7 +955,12 @@
       "homeName": "Nasaf",
       "awayName": "Bukhoro",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462213,
@@ -855,7 +975,12 @@
       "homeName": "Dinamo",
       "awayName": "Lokomotiv",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462215,
@@ -870,7 +995,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Dinamo",
       "homeScore": 4,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        4,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462216,
@@ -885,7 +1015,12 @@
       "homeName": "Neftchi",
       "awayName": "Nasaf",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462217,
@@ -900,7 +1035,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Andijan",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462218,
@@ -915,7 +1055,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Navbahor",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462220,
@@ -930,7 +1075,12 @@
       "homeName": "Surkhon",
       "awayName": "Qizilqum",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462221,
@@ -945,7 +1095,12 @@
       "homeName": "OKMK",
       "awayName": "Bukhoro",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462222,
@@ -960,7 +1115,12 @@
       "homeName": "Bukhoro",
       "awayName": "Pakhtakor",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462223,
@@ -975,7 +1135,12 @@
       "homeName": "Dinamo",
       "awayName": "OKMK",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462224,
@@ -990,7 +1155,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Andijan",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462225,
@@ -1005,7 +1175,12 @@
       "homeName": "Nasaf",
       "awayName": "Lokomotiv",
       "homeScore": 2,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        2,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462226,
@@ -1020,7 +1195,12 @@
       "homeName": "Surkhon",
       "awayName": "Mashal",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462227,
@@ -1035,7 +1215,12 @@
       "homeName": "Navbahor",
       "awayName": "Sogdiyona",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462228,
@@ -1050,7 +1235,12 @@
       "homeName": "Xorazm",
       "awayName": "Neftchi",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462229,
@@ -1065,7 +1255,12 @@
       "homeName": "Qizilqum",
       "awayName": "Qo'qon-1912",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462231,
@@ -1080,7 +1275,12 @@
       "homeName": "Qizilqum",
       "awayName": "Xorazm",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462232,
@@ -1095,7 +1295,12 @@
       "homeName": "OKMK",
       "awayName": "Lokomotiv",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462233,
@@ -1110,7 +1315,12 @@
       "homeName": "Andijan",
       "awayName": "Dinamo",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462234,
@@ -1125,7 +1335,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Nasaf",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462235,
@@ -1140,7 +1355,12 @@
       "homeName": "Sogdiyona",
       "awayName": "Surkhon",
       "homeScore": 5,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        5,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462236,
@@ -1155,7 +1375,12 @@
       "homeName": "Neftchi",
       "awayName": "Qo'qon-1912",
       "homeScore": 4,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        4,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462237,
@@ -1170,7 +1395,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Navbahor",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462238,
@@ -1185,7 +1415,12 @@
       "homeName": "Xorazm",
       "awayName": "Andijan",
       "homeScore": 0,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        0,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462240,
@@ -1200,7 +1435,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Bunyodkor",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462241,
@@ -1215,7 +1455,12 @@
       "homeName": "Bukhoro",
       "awayName": "Sogdiyona",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462242,
@@ -1230,7 +1475,12 @@
       "homeName": "OKMK",
       "awayName": "Neftchi",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462243,
@@ -1245,7 +1495,12 @@
       "homeName": "Surkhon",
       "awayName": "Pakhtakor",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462244,
@@ -1260,7 +1515,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Qizilqum",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462245,
@@ -1275,7 +1535,12 @@
       "homeName": "Nasaf",
       "awayName": "Navbahor",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462246,
@@ -1290,7 +1555,12 @@
       "homeName": "Navbahor",
       "awayName": "OKMK",
       "homeScore": 2,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        2,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462247,
@@ -1305,7 +1575,12 @@
       "homeName": "Qizilqum",
       "awayName": "Dinamo",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462248,
@@ -1320,7 +1595,12 @@
       "homeName": "Neftchi",
       "awayName": "Bukhoro",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462249,
@@ -1335,7 +1615,12 @@
       "homeName": "Mashal",
       "awayName": "Qo'qon-1912",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462250,
@@ -1350,7 +1635,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Nasaf",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462251,
@@ -1365,7 +1655,12 @@
       "homeName": "Sogdiyona",
       "awayName": "Xorazm",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462252,
@@ -1380,7 +1675,12 @@
       "homeName": "Andijan",
       "awayName": "Surkhon",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462253,
@@ -1395,7 +1695,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Lokomotiv",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462254,
@@ -1410,7 +1715,12 @@
       "homeName": "Mashal",
       "awayName": "Nasaf",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462255,
@@ -1425,7 +1735,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Xorazm",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462256,
@@ -1440,7 +1755,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Andijan",
       "homeScore": 3,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        3,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462257,
@@ -1455,7 +1775,12 @@
       "homeName": "Surkhon",
       "awayName": "Dinamo",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462258,
@@ -1470,7 +1795,12 @@
       "homeName": "Sogdiyona",
       "awayName": "Neftchi",
       "homeScore": 1,
-      "awayScore": 5
+      "awayScore": 5,
+      "inferredPlayerGoalScore": [
+        1,
+        5
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462259,
@@ -1485,7 +1815,12 @@
       "homeName": "Bukhoro",
       "awayName": "Bunyodkor",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462260,
@@ -1500,7 +1835,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "OKMK",
       "homeScore": 1,
-      "awayScore": 4
+      "awayScore": 4,
+      "inferredPlayerGoalScore": [
+        1,
+        4
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462261,
@@ -1515,7 +1855,12 @@
       "homeName": "Navbahor",
       "awayName": "Qizilqum",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462262,
@@ -1530,7 +1875,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Pakhtakor",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462263,
@@ -1545,7 +1895,12 @@
       "homeName": "Andijan",
       "awayName": "Bukhoro",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462265,
@@ -1560,7 +1915,12 @@
       "homeName": "Nasaf",
       "awayName": "Qizilqum",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462266,
@@ -1575,7 +1935,12 @@
       "homeName": "Dinamo",
       "awayName": "Qo'qon-1912",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462267,
@@ -1590,7 +1955,12 @@
       "homeName": "OKMK",
       "awayName": "Mashal",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462268,
@@ -1605,7 +1975,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Sogdiyona",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462269,
@@ -1620,7 +1995,12 @@
       "homeName": "Xorazm",
       "awayName": "Surkhon",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462270,
@@ -1635,7 +2015,12 @@
       "homeName": "Neftchi",
       "awayName": "Navbahor",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462271,
@@ -1650,7 +2035,12 @@
       "homeName": "Andijan",
       "awayName": "Pakhtakor",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462272,
@@ -1665,7 +2055,12 @@
       "homeName": "OKMK",
       "awayName": "Nasaf",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462273,
@@ -1680,7 +2075,12 @@
       "homeName": "Bukhoro",
       "awayName": "Lokomotiv",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462275,
@@ -1695,7 +2095,12 @@
       "homeName": "Mashal",
       "awayName": "Sogdiyona",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462276,
@@ -1710,7 +2115,12 @@
       "homeName": "Dinamo",
       "awayName": "Neftchi",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462277,
@@ -1725,7 +2135,12 @@
       "homeName": "Navbahor",
       "awayName": "Xorazm",
       "homeScore": 5,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        5,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462279,
@@ -1740,7 +2155,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Surkhon",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462280,
@@ -1755,7 +2175,12 @@
       "homeName": "Neftchi",
       "awayName": "Qizilqum",
       "homeScore": 5,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        5,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462282,
@@ -1770,7 +2195,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Dinamo",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462283,
@@ -1785,7 +2215,12 @@
       "homeName": "Bunyodkor",
       "awayName": "OKMK",
       "homeScore": 2,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        2,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462284,
@@ -1800,7 +2235,12 @@
       "homeName": "Surkhon",
       "awayName": "Navbahor",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462285,
@@ -1815,7 +2255,12 @@
       "homeName": "Xorazm",
       "awayName": "Mashal",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462286,
@@ -1830,7 +2275,12 @@
       "homeName": "Sogdiyona",
       "awayName": "Andijan",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462287,
@@ -1845,7 +2295,12 @@
       "homeName": "Nasaf",
       "awayName": "Qo'qon-1912",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462288,
@@ -1860,7 +2315,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Bukhoro",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462289,
@@ -1875,7 +2335,12 @@
       "homeName": "Navbahor",
       "awayName": "Bunyodkor",
       "homeScore": 4,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        4,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462290,
@@ -1890,7 +2355,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Lokomotiv",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462291,
@@ -1905,7 +2375,12 @@
       "homeName": "Nasaf",
       "awayName": "Pakhtakor",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462292,
@@ -1920,7 +2395,12 @@
       "homeName": "Dinamo",
       "awayName": "Xorazm",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462293,
@@ -1935,7 +2415,12 @@
       "homeName": "Surkhon",
       "awayName": "Sogdiyona",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462294,
@@ -1950,7 +2435,12 @@
       "homeName": "Qizilqum",
       "awayName": "Mashal",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462295,
@@ -1965,7 +2455,12 @@
       "homeName": "Bukhoro",
       "awayName": "OKMK",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462296,
@@ -1980,7 +2475,12 @@
       "homeName": "Andijan",
       "awayName": "Neftchi",
       "homeScore": 0,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        0,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462297,
@@ -1995,7 +2495,12 @@
       "homeName": "OKMK",
       "awayName": "Dinamo",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462298,
@@ -2010,7 +2515,12 @@
       "homeName": "Sogdiyona",
       "awayName": "Qizilqum",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462299,
@@ -2025,7 +2535,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Qo'qon-1912",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462300,
@@ -2040,7 +2555,12 @@
       "homeName": "Mashal",
       "awayName": "Andijan",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462301,
@@ -2055,7 +2575,12 @@
       "homeName": "Bukhoro",
       "awayName": "Neftchi",
       "homeScore": 4,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        4,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462302,
@@ -2070,7 +2595,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Surkhon",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462303,
@@ -2085,7 +2615,12 @@
       "homeName": "Xorazm",
       "awayName": "Lokomotiv",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462304,
@@ -2100,7 +2635,12 @@
       "homeName": "Navbahor",
       "awayName": "Nasaf",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462305,
@@ -2115,7 +2655,12 @@
       "homeName": "Dinamo",
       "awayName": "Pakhtakor",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462306,
@@ -2130,7 +2675,12 @@
       "homeName": "Surkhon",
       "awayName": "OKMK",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462307,
@@ -2145,7 +2695,12 @@
       "homeName": "Andijan",
       "awayName": "Xorazm",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462308,
@@ -2160,7 +2715,12 @@
       "homeName": "Qizilqum",
       "awayName": "Nasaf",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462309,
@@ -2175,7 +2735,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Bunyodkor",
       "homeScore": 4,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        4,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462310,
@@ -2190,7 +2755,12 @@
       "homeName": "Neftchi",
       "awayName": "Sogdiyona",
       "homeScore": 3,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462311,
@@ -2205,7 +2775,12 @@
       "homeName": "Mashal",
       "awayName": "Navbahor",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462312,
@@ -2220,7 +2795,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Bukhoro",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462313,
@@ -2235,7 +2815,12 @@
       "homeName": "Qizilqum",
       "awayName": "Bukhoro",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462314,
@@ -2250,7 +2835,12 @@
       "homeName": "Navbahor",
       "awayName": "Lokomotiv",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462315,
@@ -2265,7 +2855,12 @@
       "homeName": "Pakhtakor",
       "awayName": "Andijan",
       "homeScore": 3,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462316,
@@ -2280,7 +2875,12 @@
       "homeName": "Nasaf",
       "awayName": "Neftchi",
       "homeScore": 6,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        6,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462317,
@@ -2295,7 +2895,12 @@
       "homeName": "OKMK",
       "awayName": "Xorazm",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462318,
@@ -2310,7 +2915,12 @@
       "homeName": "Sogdiyona",
       "awayName": "Mashal",
       "homeScore": 5,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        5,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462319,
@@ -2325,7 +2935,12 @@
       "homeName": "Qo'qon-1912",
       "awayName": "Dinamo",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462320,
@@ -2340,7 +2955,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Surkhon",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462321,
@@ -2355,7 +2975,12 @@
       "homeName": "Neftchi",
       "awayName": "Surkhon",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462322,
@@ -2370,7 +2995,12 @@
       "homeName": "Xorazm",
       "awayName": "Sogdiyona",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462323,
@@ -2385,7 +3015,12 @@
       "homeName": "Dinamo",
       "awayName": "Qizilqum",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462324,
@@ -2400,7 +3035,12 @@
       "homeName": "OKMK",
       "awayName": "Pakhtakor",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462325,
@@ -2415,7 +3055,12 @@
       "homeName": "Nasaf",
       "awayName": "Bunyodkor",
       "homeScore": 3,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462326,
@@ -2430,7 +3075,12 @@
       "homeName": "Bukhoro",
       "awayName": "Navbahor",
       "homeScore": 1,
-      "awayScore": 4
+      "awayScore": 4,
+      "inferredPlayerGoalScore": [
+        1,
+        4
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462327,
@@ -2445,7 +3095,12 @@
       "homeName": "Andijan",
       "awayName": "Qo'qon-1912",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462329,
@@ -2460,7 +3115,12 @@
       "homeName": "Navbahor",
       "awayName": "Dinamo",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462330,
@@ -2475,7 +3135,12 @@
       "homeName": "Bunyodkor",
       "awayName": "Bukhoro",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462331,
@@ -2490,7 +3155,12 @@
       "homeName": "Xorazm",
       "awayName": "Qizilqum",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462332,
@@ -2505,7 +3175,12 @@
       "homeName": "Mashal",
       "awayName": "Pakhtakor",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462333,
@@ -2520,7 +3195,12 @@
       "homeName": "Surkhon",
       "awayName": "Qo'qon-1912",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462334,
@@ -2535,7 +3215,12 @@
       "homeName": "Sogdiyona",
       "awayName": "OKMK",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462335,
@@ -2550,7 +3235,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Neftchi",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462336,
@@ -2565,7 +3255,12 @@
       "homeName": "Andijan",
       "awayName": "Nasaf",
       "homeScore": 1,
-      "awayScore": 4
+      "awayScore": 4,
+      "inferredPlayerGoalScore": [
+        1,
+        4
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15462337,
@@ -2580,7 +3275,12 @@
       "homeName": "Lokomotiv",
       "awayName": "Mashal",
       "homeScore": 3,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635632,
@@ -2595,7 +3295,12 @@
       "homeName": "Актобе",
       "awayName": "Жетысу",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635636,
@@ -2610,7 +3315,12 @@
       "homeName": "Астана",
       "awayName": "Актобе",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635640,
@@ -2625,7 +3335,12 @@
       "homeName": "Каспий",
       "awayName": "Ордабасы",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635641,
@@ -2640,7 +3355,12 @@
       "homeName": "Иртыш",
       "awayName": "Женис",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635642,
@@ -2655,7 +3375,12 @@
       "homeName": "Кайсар",
       "awayName": "Иртыш",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635643,
@@ -2670,7 +3395,12 @@
       "homeName": "Жетысу",
       "awayName": "Алтай",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635645,
@@ -2685,7 +3415,12 @@
       "homeName": "Тобыл",
       "awayName": "Окжетпес",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635647,
@@ -2700,7 +3435,12 @@
       "homeName": "Улытау",
       "awayName": "Кайсар",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635648,
@@ -2715,7 +3455,12 @@
       "homeName": "Атырау",
       "awayName": "Кайрат",
       "homeScore": 1,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        1,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635649,
@@ -2730,7 +3475,12 @@
       "homeName": "Алтай",
       "awayName": "Актобе",
       "homeScore": 2,
-      "awayScore": 4
+      "awayScore": 4,
+      "inferredPlayerGoalScore": [
+        2,
+        4
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635651,
@@ -2745,7 +3495,12 @@
       "homeName": "Женис",
       "awayName": "Улытау",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635652,
@@ -2760,7 +3515,12 @@
       "homeName": "Кайсар",
       "awayName": "Каспий",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635653,
@@ -2775,7 +3535,12 @@
       "homeName": "Кызылжар",
       "awayName": "Тобыл",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635654,
@@ -2790,7 +3555,12 @@
       "homeName": "Окжетпес",
       "awayName": "Жетысу",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635655,
@@ -2805,7 +3575,12 @@
       "homeName": "Каспий",
       "awayName": "Женис",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635656,
@@ -2820,7 +3595,12 @@
       "homeName": "Актобе",
       "awayName": "Окжетпес",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635657,
@@ -2835,7 +3615,12 @@
       "homeName": "Ордабасы",
       "awayName": "Елимай",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635658,
@@ -2850,7 +3635,12 @@
       "homeName": "Астана",
       "awayName": "Алтай",
       "homeScore": 4,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        4,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635659,
@@ -2865,7 +3655,12 @@
       "homeName": "Елимай",
       "awayName": "Кайсар",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635660,
@@ -2880,7 +3675,12 @@
       "homeName": "Тобыл",
       "awayName": "Атырау",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635661,
@@ -2895,7 +3695,12 @@
       "homeName": "Жетысу",
       "awayName": "Кызылжар",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635662,
@@ -2910,7 +3715,12 @@
       "homeName": "Кайрат",
       "awayName": "Ордабасы",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635663,
@@ -2925,7 +3735,12 @@
       "homeName": "Кызылжар",
       "awayName": "Актобе",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635664,
@@ -2940,7 +3755,12 @@
       "homeName": "Женис",
       "awayName": "Елимай",
       "homeScore": 0,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635665,
@@ -2955,7 +3775,12 @@
       "homeName": "Атырау",
       "awayName": "Жетысу",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635666,
@@ -2970,7 +3795,12 @@
       "homeName": "Улытау",
       "awayName": "Иртыш",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635667,
@@ -2985,7 +3815,12 @@
       "homeName": "Окжетпес",
       "awayName": "Алтай",
       "homeScore": 4,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        4,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635668,
@@ -3000,7 +3835,12 @@
       "homeName": "Иртыш",
       "awayName": "Каспий",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635669,
@@ -3015,7 +3855,12 @@
       "homeName": "Ордабасы",
       "awayName": "Тобыл",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635671,
@@ -3030,7 +3875,12 @@
       "homeName": "Каспий",
       "awayName": "Улытау",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635672,
@@ -3045,7 +3895,12 @@
       "homeName": "Улытау",
       "awayName": "Астана",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635675,
@@ -3060,7 +3915,12 @@
       "homeName": "Жетысу",
       "awayName": "Ордабасы",
       "homeScore": 0,
-      "awayScore": 4
+      "awayScore": 4,
+      "inferredPlayerGoalScore": [
+        0,
+        4
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635676,
@@ -3075,7 +3935,12 @@
       "homeName": "Астана",
       "awayName": "Окжетпес",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635677,
@@ -3090,7 +3955,12 @@
       "homeName": "Каспий",
       "awayName": "Елимай",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635679,
@@ -3105,7 +3975,12 @@
       "homeName": "Тобыл",
       "awayName": "Кайсар",
       "homeScore": 3,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        3,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635680,
@@ -3120,7 +3995,12 @@
       "homeName": "Атырау",
       "awayName": "Окжетпес",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635681,
@@ -3135,7 +4015,12 @@
       "homeName": "Кызылжар",
       "awayName": "Астана",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635682,
@@ -3150,7 +4035,12 @@
       "homeName": "Елимай",
       "awayName": "Иртыш",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635683,
@@ -3165,7 +4055,12 @@
       "homeName": "Женис",
       "awayName": "Жетысу",
       "homeScore": 4,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        4,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635686,
@@ -3180,7 +4075,12 @@
       "homeName": "Иртыш",
       "awayName": "Тобыл",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635687,
@@ -3195,7 +4095,12 @@
       "homeName": "Кайсар",
       "awayName": "Актобе",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635695,
@@ -3210,7 +4115,12 @@
       "homeName": "Атырау",
       "awayName": "Астана",
       "homeScore": 2,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        2,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635696,
@@ -3225,7 +4135,12 @@
       "homeName": "Ордабасы",
       "awayName": "Алтай",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635697,
@@ -3240,7 +4155,12 @@
       "homeName": "Каспий",
       "awayName": "Тобыл",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635698,
@@ -3255,7 +4175,12 @@
       "homeName": "Иртыш",
       "awayName": "Актобе",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635699,
@@ -3270,7 +4195,12 @@
       "homeName": "Елимай",
       "awayName": "Кайрат",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635700,
@@ -3285,7 +4215,12 @@
       "homeName": "Кайсар",
       "awayName": "Окжетпес",
       "homeScore": 2,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        2,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635701,
@@ -3300,7 +4235,12 @@
       "homeName": "Женис",
       "awayName": "Алтай",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635702,
@@ -3315,7 +4255,12 @@
       "homeName": "Ордабасы",
       "awayName": "Кызылжар",
       "homeScore": 3,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635703,
@@ -3330,7 +4275,12 @@
       "homeName": "Алтай",
       "awayName": "Кайсар",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        2,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635704,
@@ -3345,7 +4295,12 @@
       "homeName": "Астана",
       "awayName": "Елимай",
       "homeScore": 4,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        4,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635705,
@@ -3360,7 +4315,12 @@
       "homeName": "Улытау",
       "awayName": "Жетысу",
       "homeScore": 3,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635706,
@@ -3375,7 +4335,12 @@
       "homeName": "Актобе",
       "awayName": "Женис",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635707,
@@ -3390,7 +4355,12 @@
       "homeName": "Кызылжар",
       "awayName": "Атырау",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635709,
@@ -3405,7 +4375,12 @@
       "homeName": "Жетысу",
       "awayName": "Иртыш",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635710,
@@ -3420,7 +4395,12 @@
       "homeName": "Тобыл",
       "awayName": "Улытау",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635711,
@@ -3435,7 +4415,12 @@
       "homeName": "Окжетпес",
       "awayName": "Ордабасы",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635712,
@@ -3450,7 +4435,12 @@
       "homeName": "Кайрат",
       "awayName": "Тобыл",
       "homeScore": 1,
-      "awayScore": 4
+      "awayScore": 4,
+      "inferredPlayerGoalScore": [
+        1,
+        4
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635713,
@@ -3465,7 +4455,12 @@
       "homeName": "Каспий",
       "awayName": "Актобе",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635714,
@@ -3480,7 +4475,12 @@
       "homeName": "Иртыш",
       "awayName": "Окжетпес",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635715,
@@ -3495,7 +4495,12 @@
       "homeName": "Елимай",
       "awayName": "Жетысу",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        2,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635716,
@@ -3510,7 +4515,12 @@
       "homeName": "Улытау",
       "awayName": "Алтай",
       "homeScore": 0,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        0,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635717,
@@ -3525,7 +4535,12 @@
       "homeName": "Кайсар",
       "awayName": "Атырау",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635718,
@@ -3540,7 +4555,12 @@
       "homeName": "Атырау",
       "awayName": "Ордабасы",
       "homeScore": 0,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        0,
+        3
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635719,
@@ -3555,7 +4575,12 @@
       "homeName": "Алтай",
       "awayName": "Иртыш",
       "homeScore": 1,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        1,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635720,
@@ -3570,7 +4595,12 @@
       "homeName": "Ордабасы",
       "awayName": "Астана",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635721,
@@ -3585,7 +4615,12 @@
       "homeName": "Кызылжар",
       "awayName": "Кайсар",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635722,
@@ -3600,7 +4635,12 @@
       "homeName": "Жетысу",
       "awayName": "Каспий",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        0,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635723,
@@ -3615,7 +4655,12 @@
       "homeName": "Актобе",
       "awayName": "Улытау",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        2,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635724,
@@ -3630,7 +4675,12 @@
       "homeName": "Женис",
       "awayName": "Кызылжар",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635725,
@@ -3645,7 +4695,12 @@
       "homeName": "Тобыл",
       "awayName": "Елимай",
       "homeScore": 0,
-      "awayScore": 2
+      "awayScore": 2,
+      "inferredPlayerGoalScore": [
+        0,
+        2
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635726,
@@ -3660,7 +4715,12 @@
       "homeName": "Окжетпес",
       "awayName": "Женис",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15635727,
@@ -3675,7 +4735,12 @@
       "homeName": "Астана",
       "awayName": "Кайрат",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        1,
+        0
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 15948834,
@@ -3690,7 +4755,12 @@
       "homeName": "Surkhon",
       "awayName": "Bukhoro",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 16018569,
@@ -3705,7 +4775,32 @@
       "homeName": "Sogdiyona",
       "awayName": "Bunyodkor",
       "homeScore": 2,
-      "awayScore": 3
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        2,
+        3
+      ],
+      "scoreMismatch": false
+    },
+    {
+      "eventId": 16023570,
+      "league": "KAZ",
+      "officialMatchId": 40000926,
+      "seasonId": 90730,
+      "date": 1788609600,
+      "homeSofaTeamId": 36688,
+      "awaySofaTeamId": 5172,
+      "homeOfficialTeamId": 431815032,
+      "awayOfficialTeamId": 414542844,
+      "homeName": "Каспий",
+      "awayName": "Кайрат",
+      "homeScore": 0,
+      "awayScore": 3,
+      "inferredPlayerGoalScore": [
+        0,
+        0
+      ],
+      "scoreMismatch": true
     },
     {
       "eventId": 16106037,
@@ -3720,7 +4815,12 @@
       "homeName": "Кайрат",
       "awayName": "Улытау",
       "homeScore": 3,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        3,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 16173318,
@@ -3735,7 +4835,12 @@
       "homeName": "Атырау",
       "awayName": "Актобе",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "inferredPlayerGoalScore": [
+        1,
+        1
+      ],
+      "scoreMismatch": false
     },
     {
       "eventId": 16921300,
@@ -3750,7 +4855,12 @@
       "homeName": "Кайрат",
       "awayName": "Женис",
       "homeScore": 3,
-      "awayScore": 0
+      "awayScore": 0,
+      "inferredPlayerGoalScore": [
+        3,
+        0
+      ],
+      "scoreMismatch": false
     }
   ]
 }

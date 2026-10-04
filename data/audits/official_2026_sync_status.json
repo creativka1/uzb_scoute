@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "generatedAt": "2026-10-04T10:08:00.411315+00:00",
+  "generatedAt": "2026-10-04T10:18:27.218440+00:00",
   "leagues": {
     "UZB": {
       "matches": 240,
@@ -11,8 +11,8 @@
       "sourceIdMax": 4222
     },
     "KAZ": {
-      "matches": 237,
-      "finished": 203,
+      "matches": 236,
+      "finished": 202,
       "scheduledWithConfirmedTime": 34,
       "teams": 16,
       "sourceIdMin": 884,
