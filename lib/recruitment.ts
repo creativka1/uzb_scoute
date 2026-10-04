@@ -154,9 +154,12 @@ function calibratedRoleScore(player: Player, profile: NeedProfile) {
   };
 }
 
+export const NEED_FIT_VERSION = 'role-v2';
+
 export interface NeedFitCandidate {
   player: Player;
   fitScore: number;
+  fitVersion: typeof NEED_FIT_VERSION;
   profileKey: NeedProfileKey;
   profileScore: number;
   profileCoverage: number;
@@ -221,6 +224,7 @@ export function rankPlayersForNeed(need: TeamNeed | null | undefined, players: P
       return {
         player,
         fitScore: Math.max(0, Math.min(100, fitScore)),
+        fitVersion: NEED_FIT_VERSION,
         profileKey: profile.key,
         profileScore: calibrated.score,
         profileCoverage: Math.round(calibrated.coverage*100),
