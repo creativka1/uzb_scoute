@@ -118,17 +118,6 @@ export async function GET(req: NextRequest) {
     if (!Array.isArray(rawPlayers) || audit.schemaVersion !== 2 || rawPlayers.some((p: any) => p.schemaVersion !== 2)) {
       throw new Error('Unverified dataset schema');
     }
-    const validatedPath = path.join(process.cwd(), 'data', 'footystats_validated.json');
-    const validatedPayload = fs.existsSync(validatedPath)
-      ? JSON.parse(fs.readFileSync(validatedPath, 'utf-8')) : null;
-    const validatedByPlayer = new Map<string, any>();
-    if (validatedPayload?.schemaVersion === 1) {
-      for (const league of ['UZB', 'KAZ']) {
-        for (const row of validatedPayload.leagues?.[league] || []) {
-          if (Number.isInteger(row.sofaId)) validatedByPlayer.set(`${league}-${row.sofaId}`, row);
-        }
-      }
-    }
     const detailedPositionsPath = path.join(process.cwd(), 'data', 'detailed_positions.json');
     const detailedPayload = fs.existsSync(detailedPositionsPath)
       ? JSON.parse(fs.readFileSync(detailedPositionsPath, 'utf-8')) : {};
@@ -382,18 +371,6 @@ export async function GET(req: NextRequest) {
           saves: observed(p.stats, 'saves'),
           roleMetrics: p.roleMetrics,
           roleBenchmarks,
-          validatedSupplement: (() => {
-            const supplemental = validatedByPlayer.get(`${p.league}-${p.sofaId}`);
-            return supplemental ? {
-              source: 'FootyStats',
-              footystatsPlayerId: supplemental.footystatsPlayerId,
-              validation: {
-                comparable: supplemental.validation?.comparable ?? 0,
-                aligned: supplemental.validation?.aligned ?? 0,
-              },
-              metrics: supplemental.metrics || {},
-            } : null;
-          })(),
           radar,
         });
       });
@@ -406,7 +383,6 @@ export async function GET(req: NextRequest) {
         'X-Data-Metadata': JSON.stringify({
           periods,
           unlinkedLineups: audit.unlinkedLineups,
-          footyStatsValidatedPlayers: validatedByPlayer.size,
         }),
       },
     });

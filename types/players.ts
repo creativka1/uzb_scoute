@@ -49,13 +49,6 @@ export interface MetricDetail {
   minutes: number; totalMinutes: number; eventIds: number[];
   status: 'missing' | 'partial' | 'complete'; reason?: string | null;
 }
-export interface ValidatedSupplement {
-  source: 'FootyStats';
-  footystatsPlayerId: number;
-  validation: { comparable: number; aligned: number };
-  metrics: Record<string, number | null>;
-}
-
 export interface Player {
   id: string;
   league: League;
@@ -126,7 +119,6 @@ export interface Player {
   saves: number | null;
   roleMetrics?: Record<string, number | null>;
   roleBenchmarks?: Record<string, {mean:number|null;max:number|null;count:number}>;
-  validatedSupplement?: ValidatedSupplement | null;
   radar: RoleRadarMetrics;
 }
 

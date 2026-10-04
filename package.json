@@ -8,10 +8,7 @@
     "start": "next start",
     "lint": "npm run typecheck",
     "test": "python -B -m unittest discover -s tests -p \"test_*.py\" && node --test tests/*.test.cjs",
-    "typecheck": "tsc --noEmit --incremental false",
-    "sync:footystats": "node scripts/sync_footystats.mjs",
-    "audit:sources": "node scripts/audit_data_sources.mjs",
-    "validate:footystats": "node scripts/run_footystats_validation.mjs"
+    "typecheck": "tsc --noEmit --incremental false"
   },
   "dependencies": {
     "clsx": "^2.1.1",

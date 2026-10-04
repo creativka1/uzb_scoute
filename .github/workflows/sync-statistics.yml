@@ -71,28 +71,6 @@ jobs:
           python scripts/data_integrity.py
           python scripts/build_detailed_positions.py
 
-      - name: Sync and validate FootyStats 2026
-        if: always()
-        env:
-          FOOTYSTATS_API_KEY: ${{ secrets.FOOTYSTATS_API_KEY }}
-          FOOTYSTATS_LEAGUES: UZB,KAZ
-          FOOTYSTATS_SEASON_YEAR: '2026'
-        run: |
-          if [ -z "$FOOTYSTATS_API_KEY" ]; then
-            node -e "const fs=require('fs');fs.mkdirSync('data/audits',{recursive:true});fs.writeFileSync('data/audits/footystats_status.json',JSON.stringify({status:'not_configured',updatedAt:new Date().toISOString(),reason:'FOOTYSTATS_API_KEY secret is not configured'},null,2)+'\n')"
-            exit 0
-          fi
-          npm run sync:footystats
-          npm run audit:sources
-          node -e "const fs=require('fs');const a=JSON.parse(fs.readFileSync('data/audits/source_reconciliation.json','utf8'));fs.writeFileSync('data/audits/footystats_status.json',JSON.stringify({status:'success',updatedAt:new Date().toISOString(),leagues:Object.fromEntries(Object.entries(a.leagues||{}).map(([k,v])=>[k,{matched:v.matched,aligned:v.aligned,conflicts:v.conflicts,unmatched:v.unmatched,ambiguous:v.ambiguous}]))},null,2)+'\n')"
-
-      - name: Validate season totals with FootyStats when configured
-        if: always()
-        env:
-          FOOTYSTATS_API_KEY: ${{ secrets.FOOTYSTATS_API_KEY }}
-          FOOTYSTATS_LEAGUES: UZB,KAZ
-          FOOTYSTATS_SEASON_YEAR: '2026'
-        run: node scripts/run_footystats_validation.mjs
       - name: Persist source checkpoints and status
         if: always()
         run: |
