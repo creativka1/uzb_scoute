@@ -843,7 +843,7 @@ export default function Dashboard() {
 
         return { player: p, reasons, fitScore: needFit?.fitScore ?? null, fitReasons: needFit?.reasons ?? [], fitVersion: needFit?.fitVersion ?? null };
       })
-      .filter((item): item is {player: Player; reasons: string[]; fitScore: number|null; fitReasons: string[]; fitVersion: string|null} => item !== null)
+      .filter((item): item is {player: Player; reasons: string[]; fitScore: number|null; fitReasons: string[]; fitVersion: 'role-v2'|null} => item !== null)
       .sort((a, b) => {
         if (activeNeed) {
           const fitDiff = (b.fitScore ?? -1) - (a.fitScore ?? -1);
