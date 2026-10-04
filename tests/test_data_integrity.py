@@ -124,8 +124,9 @@ class MatchObservationTests(unittest.TestCase):
 
     def test_core_provenance_matches_original_payloads(self):
         import gzip,hashlib
-        from data_integrity import METRICS
+        from data_integrity import METRICS, rebuild
         root=Path(__file__).resolve().parents[1]
+        rebuild(root)
         core=json.loads(gzip.decompress((root/'data/match_core.json.gz').read_bytes()))
         matches={m['id']:m for m in core['matches']}
         self.assertEqual(len(core['appearances']),len({a['id'] for a in core['appearances']}))
@@ -134,12 +135,14 @@ class MatchObservationTests(unittest.TestCase):
             m=matches[a['matchId']]
             self.assertIn(a['teamId'],[m['homeTeamId'],m['awayTeamId']])
             self.assertTrue(m['lineupAvailable'])
-            if m['id'] not in payloads:
-                raw=(root/m['sourcePath']).read_bytes()
+            source_event_id=a['sourceEventId']
+            if source_event_id not in payloads:
+                lineup_path=root/'data/cache/lineups'/f'{source_event_id}.json'
+                raw=lineup_path.read_bytes()
                 self.assertEqual(hashlib.sha256(raw).hexdigest(),m['lineupHash'])
-                payloads[m['id']]=json.loads(raw)
+                payloads[source_event_id]=json.loads(raw)
             side='home' if a['teamId']==m['homeTeamId'] else 'away'
-            original=next(p for p in payloads[m['id']][side]['players'] if p['player']['id']==a['playerId'])
+            original=next(p for p in payloads[source_event_id][side]['players'] if p['player']['id']==a['playerId'])
             for key,src in METRICS.items():
                 self.assertEqual(a['stats'][key],number(original.get('statistics',{}).get(src)))
 

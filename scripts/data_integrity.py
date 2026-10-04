@@ -424,7 +424,7 @@ def rebuild(root=ROOT):
         "playersWithPreviousStats": sum(p["previousSeason"] is not None for p in output),
     }
     # Source caches are never deleted or rewritten by the recovery operation.
-    # A normalized, reproducible first match store. Raw cache is immutable here.
+    # A normalized, reproducible match store. Raw cache is immutable here.
     core_matches, core_appearances, teams, core_players = [], [], {}, {}
     for event_id, event in sorted(events.items()):
         for side in ("home", "away"):
@@ -448,6 +448,34 @@ def rebuild(root=ROOT):
             "lineupHash": hashlib.sha256(lineup_path.read_bytes()).hexdigest() if event_id in linked else None,
             "sourcePath": f"data/cache/lineups/{event_id}.json" if event_id in linked else None,
         })
+
+    # Official 2026 matches are part of the canonical core too. This keeps the
+    # store internally consistent: every appearance.matchId resolves to a match
+    # without relying on an API-time merge.
+    official_link_by_match = {
+        link["officialMatchId"]: event_id
+        for event_id, link in official_links.items()
+        if event_id in official_linked
+    }
+    existing_match_ids = {match["id"] for match in core_matches}
+    for team_id, team in official_teams.items():
+        teams[team_id] = {"id": team_id, "name": team.get("name")}
+    for official in sorted(official_matches.values(), key=lambda m: (m.get("date", 0), m["id"])):
+        if official["id"] in existing_match_ids:
+            continue
+        sofa_event_id = official_link_by_match.get(official["id"])
+        lineup_path = data / "cache/lineups" / f"{sofa_event_id}.json" if sofa_event_id else None
+        lineup = load(lineup_path, {}) if lineup_path and lineup_path.exists() else {}
+        core_matches.append({
+            **official,
+            "lineupAvailable": sofa_event_id is not None,
+            "homeFormation": (lineup.get("home") or {}).get("formation"),
+            "awayFormation": (lineup.get("away") or {}).get("formation"),
+            "lineupSourceEventId": sofa_event_id,
+            "lineupHash": hashlib.sha256(lineup_path.read_bytes()).hexdigest() if lineup_path and lineup_path.exists() else None,
+        })
+        existing_match_ids.add(official["id"])
+
     seen = set()
     for (league, pid), rows in sorted(appearances.items()):
         for a in rows:
