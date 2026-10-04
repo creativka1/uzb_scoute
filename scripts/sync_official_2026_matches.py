@@ -320,16 +320,23 @@ def scan_one(league: str, source_id: int) -> dict | None:
 def scan_league(league: str, workers: int) -> list[dict]:
     cfg = SCAN[league]
     results: list[dict] = []
+    parse_errors: list[str] = []
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {pool.submit(scan_one, league, source_id): source_id
                    for source_id in range(cfg["start"], cfg["end"] + 1)}
         for future in as_completed(futures):
+            source_id = futures[future]
             try:
                 item = future.result()
-            except Exception:
-                item = None
+            except Exception as error:
+                parse_errors.append(f"{source_id}: {error}")
+                continue
             if item:
                 results.append(item)
+    if parse_errors:
+        raise RuntimeError(
+            f"Official {league} pages could not be parsed: " + "; ".join(parse_errors[:20])
+        )
     return sorted(results, key=lambda x: (x["date"], x["sourceId"]))
 
 
