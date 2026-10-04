@@ -432,3 +432,34 @@ select option { background: #172023; color: var(--ink); }
 .depth-grid button { margin-top:12px; font-size:12px; }
 .match-coverage { margin:20px 0; }
 @media(max-width:600px){.decision-comparison{gap:8px;}.decision-comparison strong{font-size:20px;}.decision-workspace .section-heading{flex-wrap:wrap;gap:12px;}}
+
+
+/* Need-driven recruitment workflow */
+.decision-funnel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+.decision-funnel > div {
+  min-height: 72px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #101719;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.decision-funnel small { color: var(--muted); font-size: 10px; line-height: 1.3; }
+.decision-funnel strong { font-size: 22px; font-weight: 650; color: #e7efef; }
+.need-heading-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
+.need-candidate > div:first-child { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.need-candidate-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.recruitment-need .section-heading { align-items: flex-start; }
+.recruitment-result .candidate-link { margin-top: 8px; }
+.recruitment-result .candidate-link .action-secondary { width: 100%; justify-content: center; }
+
+@media (max-width: 760px) {
+  .decision-funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
