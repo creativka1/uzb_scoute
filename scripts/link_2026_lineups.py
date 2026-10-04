@@ -68,6 +68,18 @@ def norm(value: str | None) -> str:
     return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9а-яёқғҳў]+", " ", (value or "").lower())).strip()
 
 
+def cached_event_ids():
+    ids = set()
+    seasons_dir = ROOT / "data" / "cache" / "seasons"
+    for league in TOURNAMENTS:
+        for path in sorted(seasons_dir.glob(f"matches_{league}_*.json")):
+            payload = load(path, {})
+            for event in payload.get("events", payload.get("matches", [])):
+                if isinstance(event.get("id"), int):
+                    ids.add(event["id"])
+    return ids
+
+
 def cached_team_names():
     result = defaultdict(dict)
     seasons_dir = ROOT / "data" / "cache" / "seasons"
@@ -146,11 +158,13 @@ def initial_team_mapping(known_names: dict, official_teams: dict):
     return mapping, evidence
 
 
-def lineup_records(team_mapping, known_team_names):
+def lineup_records(team_mapping, known_team_names, existing_event_ids):
     records = []
     lineup_dir = ROOT / "data" / "cache" / "lineups"
     for path in sorted(lineup_dir.glob("*.json")):
         event_id = int(path.stem)
+        if event_id in existing_event_ids:
+            continue
         lineup = load(path, {})
         if lineup.get("confirmed") is not True:
             continue
@@ -203,14 +217,22 @@ def candidate_matches(record, official_matches, mapping, used_official_names=Non
     away_name = mapping[league].get(record["awaySofaTeamId"])
     home_score, away_score = record["score"]
 
+    # Once both teams are mapped, the ordered home/away pair is the primary
+    # identity. In these league seasons that pair occurs only once. Player-goal
+    # totals are retained as a QA signal because lineup payloads can omit an
+    # own goal or other scoring detail.
+    if home_name and away_name:
+        return [
+            match for match in official_matches[league]
+            if match["homeName"] == home_name and match["awayName"] == away_name
+        ]
+
     candidates = []
     for match in official_matches[league]:
         if home_name and match["homeName"] != home_name:
             continue
         if away_name and match["awayName"] != away_name:
             continue
-        # A lineup with player statistics is a played match. If the official
-        # source has a score, require it to agree with the player-goal total.
         if match.get("homeScore") is not None and match.get("awayScore") is not None:
             if [match["homeScore"], match["awayScore"]] != [home_score, away_score]:
                 continue
@@ -311,6 +333,12 @@ def link_events(records, official_matches, mapping):
         if len(candidates) == 1:
             match = candidates[0]
             used_match_ids.add(match["id"])
+            official_score = [match.get("homeScore"), match.get("awayScore")]
+            inferred_score = record["score"]
+            score_mismatch = (
+                official_score[0] is not None and official_score[1] is not None
+                and official_score != inferred_score
+            )
             links.append({
                 "eventId": record["eventId"],
                 "league": league,
@@ -325,6 +353,8 @@ def link_events(records, official_matches, mapping):
                 "awayName": match["awayName"],
                 "homeScore": match.get("homeScore"),
                 "awayScore": match.get("awayScore"),
+                "inferredPlayerGoalScore": inferred_score,
+                "scoreMismatch": score_mismatch,
             })
         elif len(candidates) > 1:
             ambiguous.append({
@@ -343,8 +373,9 @@ def main():
 
     official_teams, official_matches = official_index(official)
     known_names = cached_team_names()
+    existing_event_ids = cached_event_ids()
     mapping, mapping_evidence = initial_team_mapping(known_names, official_teams)
-    records = lineup_records(mapping, known_names)
+    records = lineup_records(mapping, known_names, existing_event_ids)
     mapping = infer_missing_team_mappings(records, official_matches, mapping)
     links, ambiguous, unmatched = link_events(records, official_matches, mapping)
 
@@ -359,6 +390,7 @@ def main():
         "linked": len(links),
         "ambiguous": len(ambiguous),
         "unmatched": len(unmatched),
+        "scoreMismatches": sum(1 for link in links if link.get("scoreMismatch") is True),
         "teamMapping": {
             league: [
                 {
@@ -381,6 +413,7 @@ def main():
         "linked": len(links),
         "ambiguous": len(ambiguous),
         "unmatched": len(unmatched),
+        "scoreMismatches": sum(1 for link in links if link.get("scoreMismatch") is True),
         "mappedTeams": {league: len(values) for league, values in mapping.items()},
     }, ensure_ascii=False))
 
