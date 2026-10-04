@@ -30,6 +30,7 @@ test('GK profile prioritises shot stopping over distribution when broad role sco
  ]);
  assert.equal(rows[0].player.id,'UZB-10');
  assert.equal(rows[0].profileKey,'GK');
+ assert.equal(rows[0].fitVersion,'role-v2');
  assert.ok(rows[0].reasons.some(x=>x.startsWith('metric:savesPer90:90:')));
 });
 
