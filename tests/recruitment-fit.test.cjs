@@ -30,7 +30,7 @@ test('GK profile prioritises shot stopping over distribution when broad role sco
  ]);
  assert.equal(rows[0].player.id,'UZB-10');
  assert.equal(rows[0].profileKey,'GK');
- assert.equal(rows[0].fitVersion,'role-v2');
+ assert.equal(rows[0].fitVersion,'role-v3');
  assert.ok(rows[0].reasons.some(x=>x.startsWith('metric:savesPer90:90:')));
 });
 
@@ -79,4 +79,23 @@ test('missing role metric is renormalized rather than treated as zero',()=>{
  assert.equal(rows[0].player.id,'UZB-60');
  assert.ok(rows[0].profileCoverage<100);
  assert.ok(rows[0].profileScore>=85);
+});
+
+test('winger recruitment accepts confirmed right midfielders in MF without moving them to FW',()=>{
+ const p=rolePlayer({id:71,position:'MF',detailed:'RM',radar:{m1:80,m2:75,m3:90,m4:35,m5:65,m6:null}});
+ const rows=lib.rankPlayersForNeed(roleNeed('FW','RW'),[p]);assert.equal(rows.length,1);assert.equal(rows[0].player.position,'MF');assert.equal(rows[0].positionConfirmed,true);
+});
+test('unconfirmed detailed positions are opt-in and always identified as preliminary',()=>{
+ const p=rolePlayer({id:72,position:'DF',detailed:null,radar:{m1:70,m2:75,m3:80,m4:40,m5:30,m6:null}});
+ assert.equal(lib.rankPlayersForNeed(roleNeed('DF','CB'),[p]).length,0);
+ const rows=lib.rankPlayersForNeed(roleNeed('DF','CB'),[p],{allowUnconfirmedPosition:true});assert.equal(rows.length,1);assert.equal(rows[0].positionConfirmed,false);assert.ok(rows[0].reasons.includes('position:unconfirmed'));
+});
+test('small samples use the API adjusted percentiles rather than extreme raw values',()=>{
+ const p=rolePlayer({id:73,position:'FW',detailed:'ST',minutes:100,radar:{m1:100,m2:100,m3:100,m4:100,m5:100,m6:null}});
+ p.scoutingEngine.adjustedRadar={m1:60,m2:60,m3:60,m4:60,m5:60,m6:null};
+ const row=lib.rankPlayersForNeed(roleNeed('FW','ST'),[p])[0];assert.equal(row.profileScore,60);
+});
+test('no usable profile or broad score never becomes a numeric zero recommendation',()=>{
+ const p=rolePlayer({id:74,position:'DF',detailed:'CB',role:null,radar:{m1:null,m2:null,m3:null,m4:null,m5:null,m6:null}});
+ assert.equal(lib.rankPlayersForNeed(roleNeed('DF','CB'),[p]).length,0);
 });

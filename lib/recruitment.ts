@@ -116,7 +116,9 @@ function percentileByMetric(player: Player): Record<string, number> {
   const axes: (keyof RoleRadarMetrics)[] = ['m1','m2','m3','m4','m5','m6'];
   const result: Record<string, number> = {};
   keys.forEach((key,index)=>{
-    const value = player.radar?.[axes[index]];
+    const value = player.scoutingEngine?.adjustedRadar
+      ? player.scoutingEngine.adjustedRadar[axes[index]]
+      : player.radar?.[axes[index]];
     if (typeof value === 'number' && Number.isFinite(value)) result[key] = value;
   });
   return result;
@@ -136,7 +138,7 @@ function calibratedRoleScore(player: Player, profile: NeedProfile) {
   // explicit in the reasons.
   if (available.length < 2 || availableWeight <= 0) {
     return {
-      score: player.scoutingEngine?.roleScore ?? 0,
+      score: player.scoutingEngine?.roleScore ?? null,
       coverage,
       usedFallback: true,
       contributions: [] as {key:string;percentile:number;weight:number}[],
@@ -154,7 +156,7 @@ function calibratedRoleScore(player: Player, profile: NeedProfile) {
   };
 }
 
-export const NEED_FIT_VERSION = 'role-v2' as const;
+export const NEED_FIT_VERSION = 'role-v3' as const;
 
 export interface NeedFitCandidate {
   player: Player;
@@ -163,6 +165,8 @@ export interface NeedFitCandidate {
   profileKey: NeedProfileKey;
   profileScore: number;
   profileCoverage: number;
+  positionConfirmed: boolean;
+  usesBroadFallback: boolean;
   reasons: string[];
 }
 
@@ -174,7 +178,7 @@ export interface NeedFitCandidate {
  * the current dataset. Missing role metrics are excluded and the remaining
  * weights are renormalized; missing data is never converted to zero.
  */
-export function rankPlayersForNeed(need: TeamNeed | null | undefined, players: Player[]): NeedFitCandidate[] {
+export function rankPlayersForNeed(need: TeamNeed | null | undefined, players: Player[], options: {allowUnconfirmedPosition?: boolean} = {}): NeedFitCandidate[] {
   if (!need || need.status !== 'open' || need.position === 'UNKNOWN') return [];
 
   const normalizedTeam = need.teamName.trim().toLocaleLowerCase();
@@ -182,21 +186,29 @@ export function rankPlayersForNeed(need: TeamNeed | null | undefined, players: P
 
   return players
     .filter(player => player.league === need.league)
-    .filter(player => player.position === need.position)
-    .filter(player => !need.detailedPosition || player.detailedPosition === need.detailedPosition)
+    .filter(player => profile.key === 'WINGER' ? ['MF','FW'].includes(player.position) : player.position === need.position)
+    .filter(player => {
+      if (!need.detailedPosition) return true;
+      if (!player.detailedPosition) return !!options.allowUnconfirmedPosition;
+      const allowed = need.detailedPosition === 'RW' || need.detailedPosition === 'RM' ? ['RW','RM']
+        : need.detailedPosition === 'LW' || need.detailedPosition === 'LM' ? ['LW','LM'] : [need.detailedPosition];
+      return allowed.includes(player.detailedPosition);
+    })
     .filter(player => player.statsSeasonIds?.includes(need.seasonId))
     .filter(player => {
       const clubNames = [player.club?.ru, player.club?.uz].filter(Boolean).map(v => String(v).trim().toLocaleLowerCase());
       return !normalizedTeam || !clubNames.includes(normalizedTeam);
     })
-    .map(player => {
+    .flatMap(player => {
       const calibrated = calibratedRoleScore(player, profile);
+      if (calibrated.score === null) return [];
+      const positionConfirmed = !need.detailedPosition || !!player.detailedPosition;
       const minutesScore = Math.min(100, Math.max(0, (player.minutesPlayed / 900) * 100));
       const confidenceScore =
         player.scoutingEngine?.confidence === 'high' ? 100 :
         player.scoutingEngine?.confidence === 'medium' ? 72 : 42;
       const exactPositionScore = need.detailedPosition
-        ? player.detailedPosition === need.detailedPosition ? 100 : 0
+        ? positionConfirmed ? 100 : 0
         : 70;
 
       const fitScore = Math.round(
@@ -211,6 +223,7 @@ export function rankPlayersForNeed(need: TeamNeed | null | undefined, players: P
         `profileScore:${calibrated.score}`,
         `profileCoverage:${Math.round(calibrated.coverage*100)}`,
       ];
+      if (!positionConfirmed) reasons.push('position:unconfirmed');
       if (need.detailedPosition && player.detailedPosition === need.detailedPosition) reasons.push(`exact:${need.detailedPosition}`);
       if (player.scoutingEngine?.roleScore !== null) reasons.push(`role:${player.scoutingEngine.roleScore}`);
       reasons.push(`minutes:${player.minutesPlayed}`);
@@ -221,15 +234,17 @@ export function rankPlayersForNeed(need: TeamNeed | null | undefined, players: P
         reasons.push(`metric:${item.key}:${item.percentile}:${Math.round(item.weight*100)}`);
       }
 
-      return {
+      return [{
         player,
+        positionConfirmed,
+        usesBroadFallback: calibrated.usedFallback,
         fitScore: Math.max(0, Math.min(100, fitScore)),
         fitVersion: NEED_FIT_VERSION,
         profileKey: profile.key,
         profileScore: calibrated.score,
         profileCoverage: Math.round(calibrated.coverage*100),
         reasons,
-      };
+      }];
     })
     .sort((a,b) => b.fitScore - a.fitScore ||
       b.profileScore - a.profileScore ||

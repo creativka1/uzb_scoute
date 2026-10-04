@@ -1,0 +1,7 @@
+{
+  "leagues": {
+    "UZB": {"country": "Uzbekistan", "names": ["Super League", "Uzbekistan Super League", "Uzbekistan Superliga"], "seasonIds": {}},
+    "KAZ": {"country": "Kazakhstan", "names": ["Premier League", "Kazakhstan Premier League"], "seasonIds": {}}
+  },
+  "playerLinks": {}
+}

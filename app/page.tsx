@@ -3,8 +3,10 @@
 import {CandidateLinkButton} from '@/components/football/decision-workspace';
 import {useDecisionStore} from '@/hooks/use-decision-store';
 import { PlayerDossier, PlayerPicker, PlayerComparison, PlayerAvatar, AnalysisDialog, CoverageLabel } from '@/components/football/player-analysis';
+import { FootyStatsPanel } from '@/components/football/footystats-panel';
 import { TeamWorkspace } from '@/components/football/match-workspace';
-import { rankPlayersForNeed } from '@/lib/recruitment';
+import { RoleAudit } from '@/components/football/role-audit';
+import { rankPlayersForNeed, NEED_FIT_VERSION } from '@/lib/recruitment';
 import React, { useState, useMemo, useEffect } from 'react';
 import {
   Users,
@@ -763,8 +765,8 @@ export default function Dashboard() {
 
     return players
       .filter((p) => {
-        if (recruitmentPosition !== 'all' && p.sourcePosition !== recruitmentPosition) return false;
-        if (recruitmentDetailedPosition !== 'all' && p.detailedPosition !== recruitmentDetailedPosition) return false;
+        if (!activeNeed && recruitmentPosition !== 'all' && p.sourcePosition !== recruitmentPosition) return false;
+        if (!activeNeed && recruitmentDetailedPosition !== 'all' && p.detailedPosition !== recruitmentDetailedPosition) return false;
         if (recruitmentFoot !== 'all' && p.preferredFoot !== recruitmentFoot) return false;
         if (recruitmentNationality === 'local' && p.isLegionnaire !== false) return false;
         if (recruitmentNationality === 'legionnaire' && p.isLegionnaire !== true) return false;
@@ -843,7 +845,7 @@ export default function Dashboard() {
 
         return { player: p, reasons, fitScore: needFit?.fitScore ?? null, fitReasons: needFit?.reasons ?? [], fitVersion: needFit?.fitVersion ?? null };
       })
-      .filter((item): item is {player: Player; reasons: string[]; fitScore: number|null; fitReasons: string[]; fitVersion: 'role-v2'|null} => item !== null)
+      .filter((item): item is {player: Player; reasons: string[]; fitScore: number|null; fitReasons: string[]; fitVersion: typeof NEED_FIT_VERSION|null} => item !== null)
       .sort((a, b) => {
         if (activeNeed) {
           const fitDiff = (b.fitScore ?? -1) - (a.fitScore ?? -1);
@@ -1027,9 +1029,9 @@ export default function Dashboard() {
   };
 
   return (
-    <main className="football-workspace min-h-screen text-zinc-100 selection:bg-emerald-500 selection:text-black">
+    <main className="football-workspace min-h-screen selection:bg-emerald-500 selection:text-black">
       <header className="workspace-header">
-        <a href="#" className="brand" aria-label="UzStat"><span className="brand-mark"><BarChart3 size={23} /></span><span>UZSTAT<small>FOOTBALL INTELLIGENCE</small></span></a>
+        <a href="#" className="brand" aria-label="UzStat"><span className="brand-mark"><BarChart3 size={23} /></span><span>Uzstat<small>FOOTBALL INTELLIGENCE</small></span></a>
         <nav className="workspace-nav" aria-label={lang === 'ru' ? 'Основная навигация' : 'Asosiy navigatsiya'}>
           <button aria-current={activeView === 'players' ? 'page' : undefined} onClick={() => setActiveView('players')}><Users size={17} />{t.tabPlayers}</button>
           <button aria-current={activeView === 'recruitment' ? 'page' : undefined} onClick={() => setActiveView('recruitment')}><Search size={17} />{lang === 'ru' ? 'Поиск под задачу' : 'Vazifa uchun qidiruv'}</button>
@@ -1056,7 +1058,11 @@ export default function Dashboard() {
         onRecruit={(pos,period,team,need)=>{setActiveNeedId(need?.id||null);setAnalysisSelection(null);setRecruitmentPosition(pos);setRecruitmentDetailedPosition(need?.detailedPosition||'all');setSeasonMode(period);setRecruitmentContext(team);setActiveView('recruitment');if(pos==='GK'){setRecruitmentMinAttackScore('');setRecruitmentMinGoals90('');setRecruitmentMinAssists90('');setRecruitmentMinShots90('');setRecruitmentMinKeyPasses90('');setRecruitmentMinDribble('');}}}
         onPlayer={(player,pool)=>{setInspectionPlayers(pool);setSelectedPlayer(player);}}/>}
       {activeView === 'saved' && <section className="saved-workspace"><div className="section-heading"><h2>{lang === 'ru' ? 'Ваш список' : 'Sizning ro‘yxatingiz'}</h2><span>{savedCandidates.length}</span></div>{!savedCandidates.length ? <div className="workspace-empty"><Bookmark size={30} /><h3>{lang === 'ru' ? 'Здесь появятся сохранённые игроки' : 'Saqlangan futbolchilar shu yerda ko‘rinadi'}</h3><p>{lang === 'ru' ? 'Откройте профиль и нажмите «Сохранить».' : 'Profilni oching va «Saqlash»ni bosing.'}</p><button className="action-primary" onClick={() => setActiveView('players')}>{lang === 'ru' ? 'Посмотреть игроков' : 'Futbolchilarni ko‘rish'}<ArrowRight size={16} /></button></div> : <div className="saved-grid">{savedCandidates.map(saved => { const player = players.find(p => p.id === saved.id); return <article className="saved-card" key={saved.id}><div className="saved-card-main">{player ? <PlayerAvatar player={player} lang={lang} /> : <span className="player-avatar"><Bookmark size={18} /></span>}<div><h3>{saved.name[lang]}</h3><p>{player ? player.club[lang] : (lang === 'ru' ? 'Нет данных в выбранной лиге и периоде' : 'Tanlangan liga va davrda ma’lumot yo‘q')}</p></div></div><div className="saved-card-actions"><button className="action-secondary" disabled={!player} onClick={() => { if(player) setSelectedPlayer(player); }}>{lang === 'ru' ? 'Открыть профиль' : 'Profilni ochish'}<ChevronRight size={15} /></button><button className="icon-button" aria-label={`${lang === 'ru' ? 'Удалить из сохранённых:' : 'Saqlanganlardan o‘chirish:'} ${saved.name[lang]}`} onClick={() => setSavedCandidates(items => items.filter(p => p.id !== saved.id))}><X size={16} /></button></div></article>; })}</div>}</section>}
+      <FootyStatsPanel league={currentLeague} lang={lang}/>
+      {activeView==='recruitment'&&<RoleAudit players={players} lang={lang} onPlayer={setSelectedPlayer}/>}
       {activeView === 'players' && (<>
+      {!isLoading&&players.length>0&&<section className="featured-section"><div className="section-heading"><h2>{lang==='ru'?'Игроки в фокусе':'Diqqatdagi futbolchilar'}</h2><span>{periodLabel}</span></div><div className="featured-grid">{players.filter(p=>p.scoutingEngine.roleScore!==null&&p.minutesPlayed>=450).sort((a,b)=>(b.scoutingEngine.roleScore??0)-(a.scoutingEngine.roleScore??0)).slice(0,4).map(p=><button className="featured-player" key={p.id} onClick={()=>setSelectedPlayer(p)}><div className="featured-top"><PlayerAvatar player={p} lang={lang}/><span className="rating-tile">{p.scoutingEngine.roleScore}</span></div><h3>{p.name[lang]}</h3><p>{p.club[lang]}</p><div className="featured-meta"><span>{p.detailedPosition||p.position}</span><small>{p.age??'—'} · {p.matchesPlayed} {lang==='ru'?'игр':'o‘yin'}<br/>{p.minutesPlayed} {lang==='ru'?'мин':'daq'}</small></div></button>)}</div><p className="muted">{lang==='ru'?'По скаутскому индексу · минимум 450 минут · широкие позиции сравниваются в отдельных группах.':'Skaut indeksi bo‘yicha · kamida 450 daqiqa · umumiy pozitsiyalar alohida guruhlarda taqqoslanadi.'}</p></section>}
+      <div className="position-pills" role="group" aria-label={lang==='ru'?'Амплуа':'Amplua'}>{[['all',lang==='ru'?'Все':'Barchasi'],['FW',lang==='ru'?'Нападающие':'Hujumchilar'],['MF',lang==='ru'?'Полузащитники':'Yarim himoyachilar'],['DF',lang==='ru'?'Защитники':'Himoyachilar'],['GK',lang==='ru'?'Вратари':'Darvozabonlar']].map(([v,label])=><button key={v} aria-pressed={filterPosition===v} onClick={()=>setFilterPosition(v)}>{label}</button>)}</div>
       <div className="player-toolbar"><label className="search-field"><Search size={18} /><input type="search" placeholder={t.searchPlaceholder} aria-label={t.searchPlaceholder} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} /></label>
         <button className="action-secondary" onClick={() => setIsFilterOpen(true)}><SlidersHorizontal size={17} />{t.filtersBtn}{activeFiltersCount > 0 ? ` · ${activeFiltersCount}` : ''}</button>
         <label className="sort-select">{lang === 'ru' ? 'Порядок' : 'Tartib'}<select value={sortField ? `${sortField}:${sortOrder}` : 'default'} onChange={e => { if(e.target.value === 'default') setSortField(null); else {const [field,order] = e.target.value.split(':'); setSortField(field as SortField); setSortOrder(order as SortOrder);} }}><option value="default">{lang === 'ru' ? 'Исходный список' : 'Boshlang‘ich ro‘yxat'}</option><option value="age:asc">{lang === 'ru' ? 'Сначала младше' : 'Avval yoshlar'}</option><option value="value:asc">{lang === 'ru' ? 'Сначала дешевле' : 'Avval arzonroqlar'}</option><option value="value:desc">{lang === 'ru' ? 'Сначала дороже' : 'Avval qimmatroqlar'}</option><option value="scout:desc">{lang === 'ru' ? 'По скаутскому индексу' : 'Skaut indeksi bo‘yicha'}</option></select></label>

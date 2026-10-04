@@ -71,6 +71,13 @@ jobs:
           python scripts/data_integrity.py
           python scripts/build_detailed_positions.py
 
+      - name: Sync FootyStats season statistics
+        if: always()
+        env:
+          FOOTYSTATS_API_KEY: ${{ secrets.FOOTYSTATS_API_KEY }}
+          FOOTYSTATS_YEAR: ${{ inputs.season_year || '2026' }}
+        run: node scripts/sync_footystats.mjs
+
       - name: Persist source checkpoints and status
         if: always()
         run: |

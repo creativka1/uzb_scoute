@@ -1,0 +1,2307 @@
+{
+  "version": "role-v3",
+  "generatedAt": "2026-10-04T16:26:24.891Z",
+  "policy": "Committed current-season data; no fabricated candidates; deterministic ranking.",
+  "leagues": {
+    "UZB": {
+      "period": "Superliga 2026",
+      "seasonId": 89354,
+      "complete": false,
+      "playerCount": 455,
+      "roles": {
+        "GK": {
+          "preliminaryTop10": [
+            {
+              "id": "UZB-1019301",
+              "name": "Azizkhon Isokov",
+              "club": "Bukhoro",
+              "minutes": 532,
+              "fit": 75,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:91",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:92",
+                "minutes:532",
+                "confidence:low",
+                "metric:savesPer90:90:70",
+                "metric:passAccPct:94:30"
+              ]
+            },
+            {
+              "id": "UZB-2477862",
+              "name": "Samandar Jurabekov",
+              "club": "Mashal",
+              "minutes": 360,
+              "fit": 71,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:88",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:89",
+                "minutes:360",
+                "confidence:low",
+                "metric:savesPer90:87:70",
+                "metric:passAccPct:90:30"
+              ]
+            },
+            {
+              "id": "UZB-832385",
+              "name": "Umid Ergashev",
+              "club": "Xorazm",
+              "minutes": 630,
+              "fit": 71,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:84",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:75",
+                "minutes:630",
+                "confidence:low",
+                "metric:savesPer90:98:70",
+                "metric:passAccPct:52:30"
+              ]
+            },
+            {
+              "id": "UZB-155774",
+              "name": "Abdumavlon Abduzhalilov",
+              "club": "Bunyodkor",
+              "minutes": 990,
+              "fit": 70,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:77",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:78",
+                "minutes:990",
+                "confidence:low",
+                "metric:savesPer90:75:70",
+                "metric:passAccPct:81:30"
+              ]
+            },
+            {
+              "id": "UZB-1400086",
+              "name": "Farkhod Rakhmatov",
+              "club": "Qizilqum",
+              "minutes": 1890,
+              "fit": 67,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:72",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:63",
+                "minutes:1890",
+                "confidence:low",
+                "metric:savesPer90:85:70",
+                "metric:passAccPct:40:30"
+              ]
+            },
+            {
+              "id": "UZB-1012285",
+              "name": "Federico Botti",
+              "club": "Bunyodkor",
+              "minutes": 900,
+              "fit": 65,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:70",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:71",
+                "minutes:900",
+                "confidence:low",
+                "metric:savesPer90:69:70",
+                "metric:passAccPct:73:30"
+              ]
+            },
+            {
+              "id": "UZB-1034621",
+              "name": "Doston Tukhtaboev",
+              "club": "Mashal",
+              "minutes": 1306,
+              "fit": 64,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:68",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:50",
+                "minutes:1306",
+                "confidence:low",
+                "metric:savesPer90:94:70",
+                "metric:passAccPct:6:30"
+              ]
+            },
+            {
+              "id": "UZB-1000465",
+              "name": "Abduvokhid Nematov",
+              "club": "Nasaf",
+              "minutes": 1800,
+              "fit": 62,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:66",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:56",
+                "minutes:1800",
+                "confidence:low",
+                "metric:savesPer90:81:70",
+                "metric:passAccPct:31:30"
+              ]
+            },
+            {
+              "id": "UZB-1114417",
+              "name": "Otabek Boymurodov",
+              "club": "Surkhon Termez",
+              "minutes": 891,
+              "fit": 62,
+              "coverage": 100,
+              "positionConfirmed": true,
+              "reasons": [
+                "profile:GK",
+                "profileScore:54",
+                "profileCoverage:100",
+                "exact:GK",
+                "role:67",
+                "minutes:891",
+                "confidence:low",
+                "metric:savesPer90:35:70",
+                "metric:passAccPct:98:30"
+              ]
+            },
+            {
+              "id": "UZB-1403418",
+              "name": "Edem Nemanov",
+              "club": "Dinamo",
+              "minutes": 1800,
+              "fit": 58,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:60",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:63",
+                "minutes:1800",
+                "confidence:low",
+                "metric:savesPer90:56:70",
+                "metric:passAccPct:69:30"
+              ]
+            }
+          ],
+          "candidateCount": 1,
+          "confirmedRolePlayers": 1,
+          "top10": [
+            {
+              "id": "UZB-1114417",
+              "name": "Otabek Boymurodov",
+              "club": "Surkhon Termez",
+              "position": "GK",
+              "detailedPosition": "GK",
+              "minutes": 891,
+              "fit": 62,
+              "profile": 54,
+              "coverage": 100,
+              "reasons": [
+                "profile:GK",
+                "profileScore:54",
+                "profileCoverage:100",
+                "exact:GK",
+                "role:67",
+                "minutes:891",
+                "confidence:low",
+                "metric:savesPer90:35:70",
+                "metric:passAccPct:98:30"
+              ]
+            }
+          ],
+          "flags": []
+        },
+        "CB": {
+          "preliminaryTop10": [
+            {
+              "id": "UZB-1123592",
+              "name": "Mihail Stefan",
+              "club": "Dinamo",
+              "minutes": 990,
+              "fit": 71,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:78",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:80",
+                "minutes:990",
+                "confidence:low",
+                "metric:interceptionsPer90:99:33",
+                "metric:passAccPct:62:33",
+                "metric:tacklesPer90:70:28",
+                "metric:dribbleSuccessPct:88:6"
+              ]
+            },
+            {
+              "id": "UZB-1092814",
+              "name": "Shahzod Toirov",
+              "club": "OKMK",
+              "minutes": 709,
+              "fit": 70,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:82",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:69",
+                "minutes:709",
+                "confidence:low",
+                "metric:interceptionsPer90:95:33",
+                "metric:passAccPct:92:33",
+                "metric:tacklesPer90:67:28",
+                "metric:dribbleSuccessPct:22:6"
+              ]
+            },
+            {
+              "id": "UZB-978392",
+              "name": "Avazbek Ulmasaliyev",
+              "club": "OKMK",
+              "minutes": 1679,
+              "fit": 70,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:77",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:69",
+                "minutes:1679",
+                "confidence:low",
+                "metric:interceptionsPer90:88:33",
+                "metric:passAccPct:89:33",
+                "metric:tacklesPer90:56:28",
+                "metric:dribbleSuccessPct:44:6"
+              ]
+            },
+            {
+              "id": "UZB-793108",
+              "name": "Oleksandr Kucherenko",
+              "club": "Lokomotiv",
+              "minutes": 1665,
+              "fit": 69,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:76",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:73",
+                "minutes:1665",
+                "confidence:low",
+                "metric:interceptionsPer90:60:33",
+                "metric:passAccPct:96:33",
+                "metric:tacklesPer90:74:28",
+                "metric:dribbleSuccessPct:62:6"
+              ]
+            },
+            {
+              "id": "UZB-1150051",
+              "name": "Zaid Tahseen",
+              "club": "Pakhtakor",
+              "minutes": 1255,
+              "fit": 69,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:75",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:66",
+                "minutes:1255",
+                "confidence:low",
+                "metric:interceptionsPer90:76:33",
+                "metric:passAccPct:85:33",
+                "metric:tacklesPer90:72:28",
+                "metric:dribbleSuccessPct:31:6"
+              ]
+            },
+            {
+              "id": "UZB-1489504",
+              "name": "Muhammadrasul Abdumajidov",
+              "club": "Pakhtakor",
+              "minutes": 1620,
+              "fit": 67,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:72",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:61",
+                "minutes:1620",
+                "confidence:low",
+                "metric:interceptionsPer90:69:33",
+                "metric:passAccPct:90:33",
+                "metric:tacklesPer90:63:28",
+                "metric:dribbleSuccessPct:22:6"
+              ]
+            },
+            {
+              "id": "UZB-1501025",
+              "name": "Bekhruz Shukurullaev",
+              "club": "Surkhon Termez",
+              "minutes": 1148,
+              "fit": 66,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:71",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:58",
+                "minutes:1148",
+                "confidence:low",
+                "metric:interceptionsPer90:64:33",
+                "metric:passAccPct:95:33",
+                "metric:tacklesPer90:62:28",
+                "metric:dribbleSuccessPct:10:6"
+              ]
+            },
+            {
+              "id": "UZB-1000388",
+              "name": "Alibek Davronov",
+              "club": "Nasaf",
+              "minutes": 1035,
+              "fit": 66,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:70",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:64",
+                "minutes:1035",
+                "confidence:low",
+                "metric:interceptionsPer90:85:33",
+                "metric:passAccPct:83:33",
+                "metric:tacklesPer90:43:28",
+                "metric:dribbleSuccessPct:44:6"
+              ]
+            },
+            {
+              "id": "UZB-807596",
+              "name": "Filip Ivanović",
+              "club": "Sogdiyona",
+              "minutes": 1354,
+              "fit": 64,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:67",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:71",
+                "minutes:1354",
+                "confidence:low",
+                "metric:interceptionsPer90:90:33",
+                "metric:passAccPct:54:33",
+                "metric:tacklesPer90:51:28",
+                "metric:dribbleSuccessPct:88:6"
+              ]
+            },
+            {
+              "id": "UZB-2451745",
+              "name": "Kuvonchbek Khushvaktov",
+              "club": "Nasaf",
+              "minutes": 745,
+              "fit": 62,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:68",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:64",
+                "minutes:745",
+                "confidence:low",
+                "metric:interceptionsPer90:50:33",
+                "metric:passAccPct:68:33",
+                "metric:tacklesPer90:95:28",
+                "metric:dribbleSuccessPct:44:6"
+              ]
+            }
+          ],
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "DM": {
+          "preliminaryTop10": [
+            {
+              "id": "UZB-1156408",
+              "name": "Abdurauf Buriev",
+              "club": "Pakhtakor",
+              "minutes": 1363,
+              "fit": 75,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:86",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:1363",
+                "confidence:low",
+                "metric:tacklesPer90:97:41",
+                "metric:passAccPct:90:35",
+                "metric:assistsPer90:20:12",
+                "metric:dribbleSuccessPct:98:12"
+              ]
+            },
+            {
+              "id": "UZB-832251",
+              "name": "Kuvondik Ruziev",
+              "club": "Bukhoro",
+              "minutes": 957,
+              "fit": 74,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:85",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:81",
+                "minutes:957",
+                "confidence:low",
+                "metric:tacklesPer90:96:41",
+                "metric:passAccPct:80:35",
+                "metric:assistsPer90:55:12",
+                "metric:dribbleSuccessPct:94:12"
+              ]
+            },
+            {
+              "id": "UZB-965802",
+              "name": "Rasul Yuldashev",
+              "club": "Dinamo",
+              "minutes": 914,
+              "fit": 74,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:85",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:914",
+                "confidence:low",
+                "metric:tacklesPer90:90:41",
+                "metric:passAccPct:98:35",
+                "metric:assistsPer90:20:12",
+                "metric:dribbleSuccessPct:94:12"
+              ]
+            },
+            {
+              "id": "UZB-920742",
+              "name": "Oybek Rustamov",
+              "club": "Nasaf",
+              "minutes": 1797,
+              "fit": 73,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:83",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:78",
+                "minutes:1797",
+                "confidence:low",
+                "metric:tacklesPer90:82:41",
+                "metric:passAccPct:94:35",
+                "metric:assistsPer90:56:12",
+                "metric:dribbleSuccessPct:79:12"
+              ]
+            },
+            {
+              "id": "UZB-949426",
+              "name": "Ratinho",
+              "club": "Neftchi",
+              "minutes": 959,
+              "fit": 73,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:83",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:78",
+                "minutes:959",
+                "confidence:low",
+                "metric:tacklesPer90:86:41",
+                "metric:passAccPct:88:35",
+                "metric:assistsPer90:81:12",
+                "metric:dribbleSuccessPct:57:12"
+              ]
+            },
+            {
+              "id": "UZB-793883",
+              "name": "Ikram Alibaev",
+              "club": "Neftchi",
+              "minutes": 1066,
+              "fit": 73,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:82",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:1066",
+                "confidence:low",
+                "metric:tacklesPer90:93:41",
+                "metric:passAccPct:80:35",
+                "metric:assistsPer90:78:12",
+                "metric:dribbleSuccessPct:52:12"
+              ]
+            },
+            {
+              "id": "UZB-76429",
+              "name": "Dragan Ceran",
+              "club": "Andijan",
+              "minutes": 983,
+              "fit": 72,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:81",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:78",
+                "minutes:983",
+                "confidence:low",
+                "metric:tacklesPer90:92:41",
+                "metric:passAccPct:72:35",
+                "metric:assistsPer90:80:12",
+                "metric:dribbleSuccessPct:67:12"
+              ]
+            },
+            {
+              "id": "UZB-957543",
+              "name": "Tigran Avanesyan",
+              "club": "Dinamo",
+              "minutes": 555,
+              "fit": 69,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:86",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:91",
+                "minutes:555",
+                "confidence:low",
+                "metric:tacklesPer90:76:41",
+                "metric:passAccPct:91:35",
+                "metric:assistsPer90:97:12",
+                "metric:dribbleSuccessPct:98:12"
+              ]
+            },
+            {
+              "id": "UZB-1651894",
+              "name": "Sardorbek Bakhromov",
+              "club": "Nasaf",
+              "minutes": 1403,
+              "fit": 69,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:76",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:65",
+                "minutes:1403",
+                "confidence:low",
+                "metric:tacklesPer90:94:41",
+                "metric:passAccPct:78:35",
+                "metric:assistsPer90:44:12",
+                "metric:dribbleSuccessPct:43:12"
+              ]
+            },
+            {
+              "id": "UZB-975686",
+              "name": "Khumoyunmirzo Iminov",
+              "club": "Andijan",
+              "minutes": 805,
+              "fit": 67,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:76",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:75",
+                "minutes:805",
+                "confidence:low",
+                "metric:tacklesPer90:89:41",
+                "metric:passAccPct:63:35",
+                "metric:assistsPer90:62:12",
+                "metric:dribbleSuccessPct:86:12"
+              ]
+            }
+          ],
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "WINGER": {
+          "preliminaryTop10": [
+            {
+              "id": "UZB-957543",
+              "name": "Tigran Avanesyan",
+              "club": "Dinamo",
+              "minutes": 555,
+              "fit": 73,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:95",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:91",
+                "minutes:555",
+                "confidence:low",
+                "metric:dribbleSuccessPct:98:50",
+                "metric:assistsPer90:97:32",
+                "metric:passAccPct:91:11",
+                "metric:tacklesPer90:76:7"
+              ]
+            },
+            {
+              "id": "UZB-230166",
+              "name": "Vladimir Jovović",
+              "club": "Neftchi",
+              "minutes": 1003,
+              "fit": 71,
+              "coverage": 81,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:85",
+                "profileCoverage:81",
+                "position:unconfirmed",
+                "role:71",
+                "minutes:1003",
+                "confidence:low",
+                "metric:dribbleSuccessPct:83:35",
+                "metric:keyPassesPer90:94:31",
+                "metric:assistsPer90:100:22",
+                "metric:passAccPct:39:7"
+              ]
+            },
+            {
+              "id": "UZB-229426",
+              "name": "Temurkhuja Abdukholikov",
+              "club": "Lokomotiv",
+              "minutes": 1650,
+              "fit": 70,
+              "coverage": 65,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:83",
+                "profileCoverage:65",
+                "position:unconfirmed",
+                "role:83",
+                "minutes:1650",
+                "confidence:low",
+                "metric:dribbleSuccessPct:93:43",
+                "metric:assistsPer90:57:28",
+                "metric:shotsPer90:96:18",
+                "metric:goalsPer90:85:11"
+              ]
+            },
+            {
+              "id": "UZB-889274",
+              "name": "Imeda Ashortia",
+              "club": "Andijan",
+              "minutes": 900,
+              "fit": 69,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:81",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:67",
+                "minutes:900",
+                "confidence:low",
+                "metric:dribbleSuccessPct:91:50",
+                "metric:assistsPer90:83:32",
+                "metric:passAccPct:54:11",
+                "metric:tacklesPer90:41:7"
+              ]
+            },
+            {
+              "id": "UZB-832251",
+              "name": "Kuvondik Ruziev",
+              "club": "Bukhoro",
+              "minutes": 957,
+              "fit": 68,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:80",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:81",
+                "minutes:957",
+                "confidence:low",
+                "metric:dribbleSuccessPct:94:50",
+                "metric:assistsPer90:55:32",
+                "metric:passAccPct:80:11",
+                "metric:tacklesPer90:96:7"
+              ]
+            },
+            {
+              "id": "UZB-799181",
+              "name": "Jovan Đokić",
+              "club": "Neftchi",
+              "minutes": 1038,
+              "fit": 67,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:78",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:67",
+                "minutes:1038",
+                "confidence:low",
+                "metric:dribbleSuccessPct:83:50",
+                "metric:assistsPer90:79:32",
+                "metric:passAccPct:94:11",
+                "metric:tacklesPer90:11:7"
+              ]
+            },
+            {
+              "id": "UZB-1474712",
+              "name": "Asadbek Rakhimjonov",
+              "club": "Navbahor",
+              "minutes": 1346,
+              "fit": 66,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:77",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:68",
+                "minutes:1346",
+                "confidence:low",
+                "metric:dribbleSuccessPct:98:50",
+                "metric:assistsPer90:47:32",
+                "metric:passAccPct:97:11",
+                "metric:tacklesPer90:31:7"
+              ]
+            },
+            {
+              "id": "UZB-901590",
+              "name": "Haris Hajdarević",
+              "club": "Dinamo",
+              "minutes": 443,
+              "fit": 65,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:84",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:74",
+                "minutes:443",
+                "confidence:low",
+                "metric:dribbleSuccessPct:97:50",
+                "metric:assistsPer90:82:32",
+                "metric:passAccPct:33:11",
+                "metric:tacklesPer90:82:7"
+              ]
+            },
+            {
+              "id": "UZB-1030478",
+              "name": "Arihiro Sentoku",
+              "club": "OKMK",
+              "minutes": 1094,
+              "fit": 65,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:75",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:72",
+                "minutes:1094",
+                "confidence:low",
+                "metric:dribbleSuccessPct:74:50",
+                "metric:assistsPer90:77:32",
+                "metric:passAccPct:85:11",
+                "metric:tacklesPer90:51:7"
+              ]
+            },
+            {
+              "id": "UZB-831520",
+              "name": "Rafael Sabino",
+              "club": "Xorazm",
+              "minutes": 1411,
+              "fit": 65,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:75",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:71",
+                "minutes:1411",
+                "confidence:low",
+                "metric:dribbleSuccessPct:83:50",
+                "metric:assistsPer90:70:32",
+                "metric:passAccPct:52:11",
+                "metric:tacklesPer90:79:7"
+              ]
+            }
+          ],
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "ST": {
+          "preliminaryTop10": [
+            {
+              "id": "UZB-229426",
+              "name": "Temurkhuja Abdukholikov",
+              "club": "Lokomotiv",
+              "minutes": 1650,
+              "fit": 75,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:87",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:83",
+                "minutes:1650",
+                "confidence:low",
+                "metric:goalsPer90:85:39",
+                "metric:shotsPer90:96:28",
+                "metric:dribbleSuccessPct:93:22",
+                "metric:assistsPer90:57:11"
+              ]
+            },
+            {
+              "id": "UZB-1121169",
+              "name": "Khuisain Norchaev",
+              "club": "Navbahor",
+              "minutes": 792,
+              "fit": 71,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:82",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:72",
+                "minutes:792",
+                "confidence:low",
+                "metric:goalsPer90:96:39",
+                "metric:shotsPer90:99:28",
+                "metric:dribbleSuccessPct:65:22",
+                "metric:assistsPer90:28:11"
+              ]
+            },
+            {
+              "id": "UZB-878409",
+              "name": "Zoran Marušić",
+              "club": "Neftchi",
+              "minutes": 925,
+              "fit": 71,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:80",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:77",
+                "minutes:925",
+                "confidence:low",
+                "metric:goalsPer90:90:39",
+                "metric:shotsPer90:74:28",
+                "metric:dribbleSuccessPct:74:22",
+                "metric:assistsPer90:71:11"
+              ]
+            },
+            {
+              "id": "UZB-1201277",
+              "name": "Rustam Turdimurodov",
+              "club": "Andijan",
+              "minutes": 931,
+              "fit": 64,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:70",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:62",
+                "minutes:931",
+                "confidence:low",
+                "metric:goalsPer90:79:39",
+                "metric:shotsPer90:90:28",
+                "metric:dribbleSuccessPct:50:22",
+                "metric:assistsPer90:28:11"
+              ]
+            },
+            {
+              "id": "UZB-1035667",
+              "name": "Anvar Khozhimirzaev",
+              "club": "Dinamo",
+              "minutes": 1054,
+              "fit": 63,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:69",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:60",
+                "minutes:1054",
+                "confidence:low",
+                "metric:goalsPer90:93:39",
+                "metric:shotsPer90:63:28",
+                "metric:dribbleSuccessPct:56:22",
+                "metric:assistsPer90:28:11"
+              ]
+            },
+            {
+              "id": "UZB-999008",
+              "name": "Stephen Chinedu",
+              "club": "Pakhtakor",
+              "minutes": 1365,
+              "fit": 62,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:68",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:66",
+                "minutes:1365",
+                "confidence:low",
+                "metric:goalsPer90:82:39",
+                "metric:shotsPer90:85:28",
+                "metric:dribbleSuccessPct:19:22",
+                "metric:assistsPer90:76:11"
+              ]
+            },
+            {
+              "id": "UZB-284845",
+              "name": "Stipe Perica",
+              "club": "Neftchi",
+              "minutes": 1082,
+              "fit": 61,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:66",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:54",
+                "minutes:1082",
+                "confidence:low",
+                "metric:goalsPer90:99:39",
+                "metric:shotsPer90:82:28",
+                "metric:dribbleSuccessPct:7:22",
+                "metric:assistsPer90:28:11"
+              ]
+            },
+            {
+              "id": "UZB-234766",
+              "name": "Fejsal Mulić",
+              "club": "Sogdiyona",
+              "minutes": 830,
+              "fit": 59,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:65",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:67",
+                "minutes:830",
+                "confidence:low",
+                "metric:goalsPer90:71:39",
+                "metric:shotsPer90:68:28",
+                "metric:dribbleSuccessPct:35:22",
+                "metric:assistsPer90:93:11"
+              ]
+            },
+            {
+              "id": "UZB-823991",
+              "name": "Bobir Abdikholikov",
+              "club": "Nasaf",
+              "minutes": 1736,
+              "fit": 59,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:63",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:55",
+                "minutes:1736",
+                "confidence:low",
+                "metric:goalsPer90:74:39",
+                "metric:shotsPer90:79:28",
+                "metric:dribbleSuccessPct:40:22",
+                "metric:assistsPer90:28:11"
+              ]
+            },
+            {
+              "id": "UZB-1882073",
+              "name": "Kuvonch Abraev",
+              "club": "Lokomotiv",
+              "minutes": 564,
+              "fit": 57,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:67",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:57",
+                "minutes:564",
+                "confidence:low",
+                "metric:goalsPer90:88:39",
+                "metric:shotsPer90:93:28",
+                "metric:dribbleSuccessPct:19:22",
+                "metric:assistsPer90:28:11"
+              ]
+            }
+          ],
+          "candidateCount": 1,
+          "confirmedRolePlayers": 1,
+          "top10": [
+            {
+              "id": "UZB-1915912",
+              "name": "Farrukhjon Kodirov",
+              "club": "Surkhon Termez",
+              "position": "FW",
+              "detailedPosition": "ST",
+              "minutes": 699,
+              "fit": 36,
+              "profile": 19,
+              "coverage": 90,
+              "reasons": [
+                "profile:ST",
+                "profileScore:19",
+                "profileCoverage:90",
+                "exact:ST",
+                "role:21",
+                "minutes:699",
+                "confidence:low",
+                "metric:goalsPer90:13:39",
+                "metric:shotsPer90:32:28",
+                "metric:dribbleSuccessPct:10:22",
+                "metric:assistsPer90:28:11"
+              ]
+            }
+          ],
+          "flags": []
+        }
+      }
+    },
+    "KAZ": {
+      "period": "Premier League 2026",
+      "seasonId": 90730,
+      "complete": false,
+      "playerCount": 357,
+      "roles": {
+        "GK": {
+          "preliminaryTop10": [
+            {
+              "id": "KAZ-991896",
+              "name": "Aleksandr Zarutskiy",
+              "club": "Актобе",
+              "minutes": 900,
+              "fit": 69,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:76",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:80",
+                "minutes:900",
+                "confidence:low",
+                "metric:savesPer90:69:70",
+                "metric:passAccPct:91:30"
+              ]
+            },
+            {
+              "id": "KAZ-1116926",
+              "name": "Sultan Busurmanov",
+              "club": "Тобыл",
+              "minutes": 360,
+              "fit": 65,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:80",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:73",
+                "minutes:360",
+                "confidence:low",
+                "metric:savesPer90:90:70",
+                "metric:passAccPct:55:30"
+              ]
+            },
+            {
+              "id": "KAZ-887322",
+              "name": "Danil Ustimenko",
+              "club": "Тобыл",
+              "minutes": 540,
+              "fit": 65,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:76",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:63",
+                "minutes:540",
+                "confidence:low",
+                "metric:savesPer90:97:70",
+                "metric:passAccPct:28:30"
+              ]
+            },
+            {
+              "id": "KAZ-227444",
+              "name": "Miroslav Lobantsev",
+              "club": "Окжетпес",
+              "minutes": 900,
+              "fit": 65,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:69",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:54",
+                "minutes:900",
+                "confidence:low",
+                "metric:savesPer90:91:70",
+                "metric:passAccPct:16:30"
+              ]
+            },
+            {
+              "id": "KAZ-39562",
+              "name": "Dmytro Nepohodov",
+              "club": "Улытау",
+              "minutes": 900,
+              "fit": 64,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:68",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:68",
+                "minutes:900",
+                "confidence:low",
+                "metric:savesPer90:69:70",
+                "metric:passAccPct:66:30"
+              ]
+            },
+            {
+              "id": "KAZ-1112952",
+              "name": "Nurasyl Tokhtarov",
+              "club": "Атырау",
+              "minutes": 360,
+              "fit": 62,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:75",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:78",
+                "minutes:360",
+                "confidence:low",
+                "metric:savesPer90:70:70",
+                "metric:passAccPct:85:30"
+              ]
+            },
+            {
+              "id": "KAZ-61241",
+              "name": "Ștefan Sicaci",
+              "club": "Жетысу",
+              "minutes": 900,
+              "fit": 58,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:60",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:67",
+                "minutes:900",
+                "confidence:low",
+                "metric:savesPer90:50:70",
+                "metric:passAccPct:84:30"
+              ]
+            },
+            {
+              "id": "KAZ-149679",
+              "name": "Bogdan Sarnavskyi",
+              "club": "Иртыш",
+              "minutes": 360,
+              "fit": 57,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:68",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:60",
+                "minutes:360",
+                "confidence:low",
+                "metric:savesPer90:80:70",
+                "metric:passAccPct:40:30"
+              ]
+            },
+            {
+              "id": "KAZ-1159618",
+              "name": "Miras Rikhard",
+              "club": "Иртыш",
+              "minutes": 540,
+              "fit": 57,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:65",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:53",
+                "minutes:540",
+                "confidence:low",
+                "metric:savesPer90:84:70",
+                "metric:passAccPct:22:30"
+              ]
+            },
+            {
+              "id": "KAZ-841968",
+              "name": "Dumitru Celeadnic",
+              "club": "Кызылжар",
+              "minutes": 810,
+              "fit": 55,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:GK",
+                "profileScore:57",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:44",
+                "minutes:810",
+                "confidence:low",
+                "metric:savesPer90:78:70",
+                "metric:passAccPct:9:30"
+              ]
+            }
+          ],
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "CB": {
+          "preliminaryTop10": [
+            {
+              "id": "KAZ-1092361",
+              "name": "Ivan Kuzmichev",
+              "club": "Окжетпес",
+              "minutes": 786,
+              "fit": 75,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:87",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:77",
+                "minutes:786",
+                "confidence:low",
+                "metric:interceptionsPer90:99:33",
+                "metric:passAccPct:92:33",
+                "metric:tacklesPer90:76:28",
+                "metric:dribbleSuccessPct:42:6"
+              ]
+            },
+            {
+              "id": "KAZ-76522",
+              "name": "Sergey Maliy",
+              "club": "Ордабасы",
+              "minutes": 797,
+              "fit": 72,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:82",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:67",
+                "minutes:797",
+                "confidence:low",
+                "metric:interceptionsPer90:90:33",
+                "metric:passAccPct:85:33",
+                "metric:tacklesPer90:85:28",
+                "metric:dribbleSuccessPct:7:6"
+              ]
+            },
+            {
+              "id": "KAZ-878939",
+              "name": "Diego Luna",
+              "club": "Жетысу",
+              "minutes": 806,
+              "fit": 67,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:74",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:67",
+                "minutes:806",
+                "confidence:low",
+                "metric:interceptionsPer90:84:33",
+                "metric:passAccPct:69:33",
+                "metric:tacklesPer90:73:28",
+                "metric:dribbleSuccessPct:42:6"
+              ]
+            },
+            {
+              "id": "KAZ-1462685",
+              "name": "Klaidher Macedo",
+              "club": "Кайсар",
+              "minutes": 900,
+              "fit": 65,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:69",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:73",
+                "minutes:900",
+                "confidence:low",
+                "metric:interceptionsPer90:81:33",
+                "metric:passAccPct:45:33",
+                "metric:tacklesPer90:80:28",
+                "metric:dribbleSuccessPct:84:6"
+              ]
+            },
+            {
+              "id": "KAZ-842581",
+              "name": "Temirlan Yerlanov",
+              "club": "Актобе",
+              "minutes": 634,
+              "fit": 64,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:75",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:634",
+                "confidence:low",
+                "metric:interceptionsPer90:39:35",
+                "metric:passAccPct:94:35",
+                "metric:tacklesPer90:96:29"
+              ]
+            },
+            {
+              "id": "KAZ-1648308",
+              "name": "Borys Lototskyi",
+              "club": "Окжетпес",
+              "minutes": 769,
+              "fit": 64,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:71",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:74",
+                "minutes:769",
+                "confidence:low",
+                "metric:interceptionsPer90:70:33",
+                "metric:passAccPct:64:33",
+                "metric:tacklesPer90:78:28",
+                "metric:dribbleSuccessPct:84:6"
+              ]
+            },
+            {
+              "id": "KAZ-883952",
+              "name": "Egor Khvalko",
+              "club": "Атырау",
+              "minutes": 567,
+              "fit": 63,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:74",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:77",
+                "minutes:567",
+                "confidence:low",
+                "metric:interceptionsPer90:79:33",
+                "metric:passAccPct:61:33",
+                "metric:tacklesPer90:82:28",
+                "metric:dribbleSuccessPct:84:6"
+              ]
+            },
+            {
+              "id": "KAZ-137673",
+              "name": "Ivan Ordets",
+              "club": "Актобе",
+              "minutes": 450,
+              "fit": 62,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:76",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:450",
+                "confidence:low",
+                "metric:interceptionsPer90:64:35",
+                "metric:passAccPct:96:35",
+                "metric:tacklesPer90:68:29"
+              ]
+            },
+            {
+              "id": "KAZ-889947",
+              "name": "Glib Bukhal",
+              "club": "Улытау",
+              "minutes": 659,
+              "fit": 62,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:71",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:72",
+                "minutes:659",
+                "confidence:low",
+                "metric:interceptionsPer90:73:35",
+                "metric:passAccPct:52:35",
+                "metric:tacklesPer90:92:29"
+              ]
+            },
+            {
+              "id": "KAZ-795871",
+              "name": "Stefan Bukorac",
+              "club": "Кайсар",
+              "minutes": 798,
+              "fit": 62,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:CB",
+                "profileScore:67",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:55",
+                "minutes:798",
+                "confidence:low",
+                "metric:interceptionsPer90:87:33",
+                "metric:passAccPct:50:33",
+                "metric:tacklesPer90:75:28",
+                "metric:dribbleSuccessPct:7:6"
+              ]
+            }
+          ],
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "DM": {
+          "preliminaryTop10": [
+            {
+              "id": "KAZ-1009626",
+              "name": "Pablo Alvarez",
+              "club": "Актобе",
+              "minutes": 711,
+              "fit": 70,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:83",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:82",
+                "minutes:711",
+                "confidence:low",
+                "metric:tacklesPer90:81:35",
+                "metric:passAccPct:93:30",
+                "metric:keyPassesPer90:71:15",
+                "metric:assistsPer90:68:10"
+              ]
+            },
+            {
+              "id": "KAZ-303160",
+              "name": "Tsotne Mosiashvili",
+              "club": "Жетысу",
+              "minutes": 886,
+              "fit": 70,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:79",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:74",
+                "minutes:886",
+                "confidence:low",
+                "metric:tacklesPer90:86:41",
+                "metric:passAccPct:82:35",
+                "metric:assistsPer90:61:12",
+                "metric:dribbleSuccessPct:66:12"
+              ]
+            },
+            {
+              "id": "KAZ-887327",
+              "name": "Adam Adakhajiev",
+              "club": "Жетысу",
+              "minutes": 644,
+              "fit": 64,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:75",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:70",
+                "minutes:644",
+                "confidence:low",
+                "metric:tacklesPer90:84:41",
+                "metric:passAccPct:72:35",
+                "metric:assistsPer90:30:12",
+                "metric:dribbleSuccessPct:95:12"
+              ]
+            },
+            {
+              "id": "KAZ-835679",
+              "name": "Hrvoje Ilić",
+              "club": "Елимай",
+              "minutes": 803,
+              "fit": 64,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:71",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:803",
+                "confidence:low",
+                "metric:tacklesPer90:75:41",
+                "metric:passAccPct:55:35",
+                "metric:assistsPer90:86:12",
+                "metric:dribbleSuccessPct:88:12"
+              ]
+            },
+            {
+              "id": "KAZ-1169364",
+              "name": "David Abagna",
+              "club": "Ордабасы",
+              "minutes": 956,
+              "fit": 64,
+              "coverage": 100,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:69",
+                "profileCoverage:100",
+                "position:unconfirmed",
+                "role:73",
+                "minutes:956",
+                "confidence:low",
+                "metric:tacklesPer90:52:35",
+                "metric:passAccPct:90:30",
+                "metric:keyPassesPer90:43:15",
+                "metric:assistsPer90:89:10"
+              ]
+            },
+            {
+              "id": "KAZ-909506",
+              "name": "Jaakko Oksanen",
+              "club": "Кайрат",
+              "minutes": 531,
+              "fit": 63,
+              "coverage": 75,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:77",
+                "profileCoverage:75",
+                "position:unconfirmed",
+                "role:67",
+                "minutes:531",
+                "confidence:low",
+                "metric:tacklesPer90:72:47",
+                "metric:passAccPct:99:40",
+                "metric:assistsPer90:30:13"
+              ]
+            },
+            {
+              "id": "KAZ-962362",
+              "name": "Stanislav Basmanov",
+              "club": "Астана",
+              "minutes": 607,
+              "fit": 63,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:75",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:62",
+                "minutes:607",
+                "confidence:low",
+                "metric:tacklesPer90:85:41",
+                "metric:passAccPct:89:35",
+                "metric:assistsPer90:30:12",
+                "metric:dribbleSuccessPct:43:12"
+              ]
+            },
+            {
+              "id": "KAZ-888815",
+              "name": "Dmitri Borodin",
+              "club": "Окжетпес",
+              "minutes": 804,
+              "fit": 62,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:69",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:804",
+                "confidence:low",
+                "metric:tacklesPer90:56:41",
+                "metric:passAccPct:69:35",
+                "metric:assistsPer90:85:12",
+                "metric:dribbleSuccessPct:95:12"
+              ]
+            },
+            {
+              "id": "KAZ-1085434",
+              "name": "Mihai Căpățînă",
+              "club": "Ордабасы",
+              "minutes": 725,
+              "fit": 61,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:69",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:51",
+                "minutes:725",
+                "confidence:low",
+                "metric:tacklesPer90:95:41",
+                "metric:passAccPct:72:35",
+                "metric:assistsPer90:30:12",
+                "metric:dribbleSuccessPct:8:12"
+              ]
+            },
+            {
+              "id": "KAZ-1091067",
+              "name": "Ersultan Kaldybekov",
+              "club": "Кайсар",
+              "minutes": 557,
+              "fit": 60,
+              "coverage": 85,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:DM",
+                "profileScore:71",
+                "profileCoverage:85",
+                "position:unconfirmed",
+                "role:62",
+                "minutes:557",
+                "confidence:low",
+                "metric:tacklesPer90:93:41",
+                "metric:passAccPct:60:35",
+                "metric:assistsPer90:30:12",
+                "metric:dribbleSuccessPct:66:12"
+              ]
+            }
+          ],
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "WINGER": {
+          "preliminaryTop10": [
+            {
+              "id": "KAZ-888815",
+              "name": "Dmitri Borodin",
+              "club": "Окжетпес",
+              "minutes": 804,
+              "fit": 71,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:86",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:804",
+                "confidence:low",
+                "metric:dribbleSuccessPct:95:50",
+                "metric:assistsPer90:85:32",
+                "metric:passAccPct:69:11",
+                "metric:tacklesPer90:56:7"
+              ]
+            },
+            {
+              "id": "KAZ-835679",
+              "name": "Hrvoje Ilić",
+              "club": "Елимай",
+              "minutes": 803,
+              "fit": 69,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:83",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:76",
+                "minutes:803",
+                "confidence:low",
+                "metric:dribbleSuccessPct:88:50",
+                "metric:assistsPer90:86:32",
+                "metric:passAccPct:55:11",
+                "metric:tacklesPer90:75:7"
+              ]
+            },
+            {
+              "id": "KAZ-1009626",
+              "name": "Pablo Alvarez",
+              "club": "Актобе",
+              "minutes": 711,
+              "fit": 66,
+              "coverage": 81,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:81",
+                "profileCoverage:81",
+                "position:unconfirmed",
+                "role:82",
+                "minutes:711",
+                "confidence:low",
+                "metric:dribbleSuccessPct:95:35",
+                "metric:keyPassesPer90:71:31",
+                "metric:assistsPer90:68:22",
+                "metric:passAccPct:93:7"
+              ]
+            },
+            {
+              "id": "KAZ-875905",
+              "name": "Léo Natel",
+              "club": "Ордабасы",
+              "minutes": 754,
+              "fit": 66,
+              "coverage": 65,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:80",
+                "profileCoverage:65",
+                "position:unconfirmed",
+                "role:74",
+                "minutes:754",
+                "confidence:low",
+                "metric:dribbleSuccessPct:92:43",
+                "metric:assistsPer90:73:28",
+                "metric:shotsPer90:82:18",
+                "metric:goalsPer90:50:11"
+              ]
+            },
+            {
+              "id": "KAZ-156328",
+              "name": "Bauyrzhan Islamkhan",
+              "club": "Астана",
+              "minutes": 606,
+              "fit": 64,
+              "coverage": 81,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:79",
+                "profileCoverage:81",
+                "position:unconfirmed",
+                "role:72",
+                "minutes:606",
+                "confidence:low",
+                "metric:dribbleSuccessPct:72:35",
+                "metric:keyPassesPer90:79:31",
+                "metric:assistsPer90:99:22",
+                "metric:passAccPct:85:7"
+              ]
+            },
+            {
+              "id": "KAZ-937814",
+              "name": "Sayan Mukanov",
+              "club": "Окжетпес",
+              "minutes": 607,
+              "fit": 64,
+              "coverage": 56,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:79",
+                "profileCoverage:56",
+                "position:unconfirmed",
+                "role:63",
+                "minutes:607",
+                "confidence:low",
+                "metric:dribbleSuccessPct:95:50",
+                "metric:assistsPer90:74:32",
+                "metric:passAccPct:55:11",
+                "metric:tacklesPer90:26:7"
+              ]
+            },
+            {
+              "id": "KAZ-1169364",
+              "name": "David Abagna",
+              "club": "Ордабасы",
+              "minutes": 956,
+              "fit": 64,
+              "coverage": 81,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:73",
+                "profileCoverage:81",
+                "position:unconfirmed",
+                "role:73",
+                "minutes:956",
+                "confidence:low",
+                "metric:dribbleSuccessPct:89:35",
+                "metric:keyPassesPer90:43:31",
+                "metric:assistsPer90:89:22",
+                "metric:passAccPct:90:7"
+              ]
+            },
+            {
+              "id": "KAZ-2058082",
+              "name": "Everton Macedo Moraes",
+              "club": "Ордабасы",
+              "minutes": 354,
+              "fit": 63,
+              "coverage": 65,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:83",
+                "profileCoverage:65",
+                "position:unconfirmed",
+                "role:80",
+                "minutes:354",
+                "confidence:low",
+                "metric:dribbleSuccessPct:85:43",
+                "metric:assistsPer90:87:28",
+                "metric:shotsPer90:81:18",
+                "metric:goalsPer90:67:11"
+              ]
+            },
+            {
+              "id": "KAZ-1091809",
+              "name": "Elisey Gorshunov",
+              "club": "Алтай",
+              "minutes": 536,
+              "fit": 61,
+              "coverage": 81,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:77",
+                "profileCoverage:81",
+                "position:unconfirmed",
+                "role:58",
+                "minutes:536",
+                "confidence:low",
+                "metric:dribbleSuccessPct:83:35",
+                "metric:keyPassesPer90:84:31",
+                "metric:assistsPer90:92:22",
+                "metric:passAccPct:4:7"
+              ]
+            },
+            {
+              "id": "KAZ-1525654",
+              "name": "Keba Sylla",
+              "club": "Каспий",
+              "minutes": 443,
+              "fit": 60,
+              "coverage": 65,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:WINGER",
+                "profileScore:77",
+                "profileCoverage:65",
+                "position:unconfirmed",
+                "role:74",
+                "minutes:443",
+                "confidence:low",
+                "metric:dribbleSuccessPct:83:43",
+                "metric:assistsPer90:86:28",
+                "metric:shotsPer90:45:18",
+                "metric:goalsPer90:81:11"
+              ]
+            }
+          ],
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "ST": {
+          "preliminaryTop10": [
+            {
+              "id": "KAZ-906221",
+              "name": "Oralkhan Omirtaev",
+              "club": "Окжетпес",
+              "minutes": 602,
+              "fit": 67,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:80",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:70",
+                "minutes:602",
+                "confidence:low",
+                "metric:goalsPer90:95:39",
+                "metric:shotsPer90:69:28",
+                "metric:dribbleSuccessPct:95:22",
+                "metric:assistsPer90:21:11"
+              ]
+            },
+            {
+              "id": "KAZ-860683",
+              "name": "Marc Gual",
+              "club": "Кайрат",
+              "minutes": 574,
+              "fit": 66,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:80",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:78",
+                "minutes:574",
+                "confidence:low",
+                "metric:goalsPer90:82:39",
+                "metric:shotsPer90:98:28",
+                "metric:dribbleSuccessPct:53:22",
+                "metric:assistsPer90:79:11"
+              ]
+            },
+            {
+              "id": "KAZ-258739",
+              "name": "Björn Johnsen",
+              "club": "Ордабасы",
+              "minutes": 971,
+              "fit": 64,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:70",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:60",
+                "minutes:971",
+                "confidence:low",
+                "metric:goalsPer90:98:39",
+                "metric:shotsPer90:95:28",
+                "metric:dribbleSuccessPct:2:22",
+                "metric:assistsPer90:44:11"
+              ]
+            },
+            {
+              "id": "KAZ-839301",
+              "name": "Vitaliy Lisakovich",
+              "club": "Тобыл",
+              "minutes": 538,
+              "fit": 63,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:76",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:74",
+                "minutes:538",
+                "confidence:low",
+                "metric:goalsPer90:69:39",
+                "metric:shotsPer90:92:28",
+                "metric:dribbleSuccessPct:76:22",
+                "metric:assistsPer90:60:11"
+              ]
+            },
+            {
+              "id": "KAZ-875905",
+              "name": "Léo Natel",
+              "club": "Ордабасы",
+              "minutes": 754,
+              "fit": 63,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:71",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:74",
+                "minutes:754",
+                "confidence:low",
+                "metric:goalsPer90:50:39",
+                "metric:shotsPer90:82:28",
+                "metric:dribbleSuccessPct:92:22",
+                "metric:assistsPer90:73:11"
+              ]
+            },
+            {
+              "id": "KAZ-2058082",
+              "name": "Everton Macedo Moraes",
+              "club": "Ордабасы",
+              "minutes": 354,
+              "fit": 61,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:77",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:80",
+                "minutes:354",
+                "confidence:low",
+                "metric:goalsPer90:67:39",
+                "metric:shotsPer90:81:28",
+                "metric:dribbleSuccessPct:85:22",
+                "metric:assistsPer90:87:11"
+              ]
+            },
+            {
+              "id": "KAZ-827385",
+              "name": "Andrija Filipović",
+              "club": "Женис",
+              "minutes": 774,
+              "fit": 61,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:68",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:69",
+                "minutes:774",
+                "confidence:low",
+                "metric:goalsPer90:56:39",
+                "metric:shotsPer90:89:28",
+                "metric:dribbleSuccessPct:63:22",
+                "metric:assistsPer90:69:11"
+              ]
+            },
+            {
+              "id": "KAZ-1525654",
+              "name": "Keba Sylla",
+              "club": "Каспий",
+              "minutes": 443,
+              "fit": 59,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:72",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:74",
+                "minutes:443",
+                "confidence:low",
+                "metric:goalsPer90:81:39",
+                "metric:shotsPer90:45:28",
+                "metric:dribbleSuccessPct:83:22",
+                "metric:assistsPer90:86:11"
+              ]
+            },
+            {
+              "id": "KAZ-891959",
+              "name": "Uroš Milovanović",
+              "club": "Тобыл",
+              "minutes": 811,
+              "fit": 59,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:64",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:53",
+                "minutes:811",
+                "confidence:low",
+                "metric:goalsPer90:89:39",
+                "metric:shotsPer90:73:28",
+                "metric:dribbleSuccessPct:29:22",
+                "metric:assistsPer90:21:11"
+              ]
+            },
+            {
+              "id": "KAZ-896335",
+              "name": "Artur Shushenachev",
+              "club": "Актобе",
+              "minutes": 872,
+              "fit": 58,
+              "coverage": 90,
+              "positionConfirmed": false,
+              "reasons": [
+                "profile:ST",
+                "profileScore:62",
+                "profileCoverage:90",
+                "position:unconfirmed",
+                "role:59",
+                "minutes:872",
+                "confidence:low",
+                "metric:goalsPer90:66:39",
+                "metric:shotsPer90:76:28",
+                "metric:dribbleSuccessPct:47:22",
+                "metric:assistsPer90:47:11"
+              ]
+            }
+          ],
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        }
+      }
+    }
+  }
+}
