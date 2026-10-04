@@ -1,17 +1,220 @@
-'use client';
-import React,{useEffect,useState} from 'react';
-import type {Language,League,Player} from '@/types/players';
-interface SourceResult{state:string;checkedAt:string|null;fetchedAt:string|null;stale:boolean;players:number;linked:number;year:number;player:{identity:string;url:string|null;metrics:Record<string,number|null>}|null;}
-export function FootyStatsPanel({league,lang,player}:{league:League;lang:Language;player?:Player}){
- const [source,setSource]=useState<SourceResult|null>(null),[failed,setFailed]=useState(false);
- const ru=lang==='ru',year=player?.statsSeasonLabel.match(/20\d{2}/)?.[0]||'2026';
- const single=!player||player.statsSeasonIds?.length===1;
- useEffect(()=>{const controller=new AbortController();setSource(null);setFailed(false);if(!single)return;const query=new URLSearchParams({league,year,...(player?{playerId:player.id.split('-')[1]}:{})});fetch(`/api/sources?${query}`,{signal:controller.signal}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(setSource).catch(e=>{if(e.name!=='AbortError')setFailed(true);});return()=>controller.abort();},[league,year,player?.id,single]);
- const states:Record<string,string>=ru?{connected:'Данные получены',not_configured:'Нужен API-ключ',not_synced:'Синхронизация не запускалась',season_unavailable:'Сезон недоступен',error:'Ошибка синхронизации',empty:'Нет игроков',partial:'Данные частично доступны'}:{connected:'Ma’lumot olindi',not_configured:'API kalit kerak',not_synced:'Sinxronlash bajarilmagan',season_unavailable:'Mavsum mavjud emas',error:'Sinxronlash xatosi',empty:'Futbolchilar yo‘q',partial:'Ma’lumot qisman mavjud'};
- return <details className={`source-connection ${player?'analysis-card':''}`}><summary><span className={`source-dot ${source?.state==='connected'?'connected':''}`}/><strong>FootyStats</strong><span>{!single?(ru?'Выберите один сезон':'Bitta mavsumni tanlang'):failed?(ru?'Статус недоступен':'Holat mavjud emas'):source?(states[source.state]||source.state):(ru?'Проверка…':'Tekshirilmoqda…')}</span></summary>
- {source&&<><p className="muted">{source.players} {ru?'игроков источника':'manba futbolchisi'} · {source.linked} {ru?'сопоставлено':'moslashtirildi'} · {year}</p>{source.fetchedAt&&<p className="muted">{ru?'Получено':'Olindi'}: {new Date(source.fetchedAt).toLocaleString(ru?'ru-RU':'uz-UZ')}{source.stale?(ru?' · сохранённая копия, обновление не подтверждено':' · saqlangan nusxa, yangilanish tasdiqlanmagan'):''}</p>}
- {source.state==='not_configured'&&<p className="muted">{ru?'В GitHub → Settings → Secrets and variables → Actions добавьте FOOTYSTATS_API_KEY, затем запустите Actions → Sync FootyStats.':'GitHub → Settings → Secrets and variables → Actions orqali FOOTYSTATS_API_KEY qo‘shing, keyin Actions → Sync FootyStats ni ishga tushiring.'}</p>}
- {player&&source.player&&<><p className="muted">{ru?'Сезонные показатели FootyStats показаны отдельно от статистики загруженных матчей. Они не входят в радар и Fit.':'FootyStats mavsum ko‘rsatkichlari yuklangan o‘yinlar statistikasidan alohida. Ular radar va Fit hisobiga kirmaydi.'}</p><dl className="source-metrics">{Object.entries(source.player.metrics).map(([key,v])=><div key={key}><dt>{({appearances:ru?'Матчи':'O‘yinlar',minutes:ru?'Минуты':'Daqiqalar',goals:ru?'Голы':'Gollar',assists:ru?'Ассисты':'Assistlar',xG:'xG',xGPer90:'xG / 90',shotsPer90:ru?'Удары / 90':'Zarbalar / 90',keyPassesPer90:ru?'Ключевые пасы / 90':'Asosiy paslar / 90',progressivePasses:ru?'Продвигающие передачи':'Oldinga paslar',passAccPct:ru?'Точность паса, %':'Pas aniqligi, %',dribbleSuccessPct:ru?'Дриблинг, %':'Dribling, %',duelWinPct:ru?'Единоборства, %':'Kurashlar, %',aerialWinPct:ru?'Верховые дуэли, %':'Havoda kurashlar, %',savesPer90:ru?'Сейвы / 90':'Seyvlar / 90'} as Record<string,string>)[key]||key}</dt><dd>{v===null?'—':Number.isInteger(v)?v:v.toFixed(2)}</dd></div>)}</dl>{source.player.url&&<a className="text-link" href={source.player.url} target="_blank" rel="noreferrer">FootyStats ↗</a>}</>}
- {player&&!source.player&&<p className="muted">{ru?'Для этого игрока нет подтверждённого сопоставления с FootyStats.':'Bu futbolchi uchun FootyStats bilan tasdiqlangan moslik yo‘q.'}</p>}</>}
- </details>;
+"use client";
+import React, { useEffect, useState } from "react";
+import type { Language, League, Player } from "@/types/players";
+interface SourceResult {
+  state: string;
+  checkedAt: string | null;
+  fetchedAt: string | null;
+  stale: boolean;
+  players: number;
+  linked: number;
+  year: number;
+  player: {
+    identity: string;
+    url: string | null;
+    metrics: Record<string, number | null>;
+  } | null;
+}
+export function FootyStatsPanel({
+  league,
+  lang,
+  player,
+}: {
+  league: League;
+  lang: Language;
+  player?: Player;
+}) {
+  const [source, setSource] = useState<SourceResult | null>(null),
+    [failed, setFailed] = useState(false);
+  const ru = lang === "ru",
+    year = player?.statsSeasonLabel.match(/20\d{2}/)?.[0] || "2026";
+  const single = !player || player.statsSeasonIds?.length === 1;
+  useEffect(() => {
+    const controller = new AbortController();
+    setSource(null);
+    setFailed(false);
+    if (!single) return;
+    const query = new URLSearchParams({
+      league,
+      year,
+      ...(player ? { playerId: player.id.split("-")[1] } : {}),
+    });
+    fetch(`/api/sources?${query}`, { signal: controller.signal })
+      .then((r) => {
+        if (!r.ok) throw Error();
+        return r.json();
+      })
+      .then(setSource)
+      .catch((e) => {
+        if (e.name !== "AbortError") setFailed(true);
+      });
+    return () => controller.abort();
+  }, [league, year, player?.id, single]);
+  const states: Record<string, string> = ru
+    ? {
+        connected: "Данные получены",
+        not_configured: "Нужен API-ключ",
+        not_synced: "Синхронизация не запускалась",
+        season_unavailable: "Сезон недоступен",
+        error: "Ошибка синхронизации",
+        empty: "Нет игроков",
+        partial: "Данные частично доступны",
+      }
+    : {
+        connected: "Ma’lumot olindi",
+        not_configured: "API kalit kerak",
+        not_synced: "Sinxronlash bajarilmagan",
+        season_unavailable: "Mavsum mavjud emas",
+        error: "Sinxronlash xatosi",
+        empty: "Futbolchilar yo‘q",
+        partial: "Ma’lumot qisman mavjud",
+      };
+  return (
+    <details className={`source-connection ${player ? "analysis-card" : ""}`}>
+      <summary>
+        <span
+          className={`source-dot ${source?.state === "connected" ? "connected" : ""}`}
+        />
+        <strong>FootyStats</strong>
+        <span>
+          {!single
+            ? ru
+              ? "Выберите один сезон"
+              : "Bitta mavsumni tanlang"
+            : failed
+              ? ru
+                ? "Статус недоступен"
+                : "Holat mavjud emas"
+              : source
+                ? states[source.state] || source.state
+                : ru
+                  ? "Проверка…"
+                  : "Tekshirilmoqda…"}
+        </span>
+      </summary>
+      {source && (
+        <>
+          <p className="muted">
+            {source.players} {ru ? "игроков источника" : "manba futbolchisi"} ·{" "}
+            {source.linked} {ru ? "сопоставлено" : "moslashtirildi"} · {year}
+          </p>
+          {source.fetchedAt && (
+            <p className="muted">
+              {ru ? "Получено" : "Olindi"}:{" "}
+              {new Date(source.fetchedAt).toLocaleString(
+                ru ? "ru-RU" : "uz-UZ",
+              )}
+              {source.stale
+                ? ru
+                  ? " · сохранённая копия, обновление не подтверждено"
+                  : " · saqlangan nusxa, yangilanish tasdiqlanmagan"
+                : ""}
+            </p>
+          )}
+          {source.state === "not_configured" && (
+            <p className="muted">
+              {ru
+                ? "В GitHub → Settings → Secrets and variables → Actions добавьте FOOTYSTATS_API_KEY, затем запустите Actions → Sync FootyStats."
+                : "GitHub → Settings → Secrets and variables → Actions orqali FOOTYSTATS_API_KEY qo‘shing, keyin Actions → Sync FootyStats ni ishga tushiring."}
+            </p>
+          )}
+          {source.state === "not_configured" && (
+            <div className="source-setup-links">
+              <a
+                className="action-secondary"
+                href="https://github.com/creativka1/uzb_scoute/settings/secrets/actions"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {ru ? "Добавить ключ в GitHub" : "GitHub ga kalit qo‘shish"} ↗
+              </a>
+              <a
+                className="text-link"
+                href="https://github.com/creativka1/uzb_scoute/actions/workflows/sync-footystats.yml"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {ru ? "Запустить синхронизацию" : "Sinxronlashni boshlash"} ↗
+              </a>
+            </div>
+          )}
+          {source.checkedAt && (
+            <p className="muted">
+              {ru ? "Последняя проверка" : "Oxirgi tekshiruv"}:{" "}
+              {new Date(source.checkedAt).toLocaleString(
+                ru ? "ru-RU" : "uz-UZ",
+              )}
+            </p>
+          )}
+          {player && source.player && (
+            <>
+              <p className="muted">
+                {ru
+                  ? "Сезонные показатели FootyStats показаны отдельно от статистики загруженных матчей. Они не входят в радар и Fit."
+                  : "FootyStats mavsum ko‘rsatkichlari yuklangan o‘yinlar statistikasidan alohida. Ular radar va Fit hisobiga kirmaydi."}
+              </p>
+              <dl className="source-metrics">
+                {Object.entries(source.player.metrics).map(([key, v]) => (
+                  <div key={key}>
+                    <dt>
+                      {(
+                        {
+                          appearances: ru ? "Матчи" : "O‘yinlar",
+                          minutes: ru ? "Минуты" : "Daqiqalar",
+                          goals: ru ? "Голы" : "Gollar",
+                          assists: ru ? "Ассисты" : "Assistlar",
+                          xG: "xG",
+                          xGPer90: "xG / 90",
+                          shotsPer90: ru ? "Удары / 90" : "Zarbalar / 90",
+                          keyPassesPer90: ru
+                            ? "Ключевые пасы / 90"
+                            : "Asosiy paslar / 90",
+                          progressivePasses: ru
+                            ? "Продвигающие передачи"
+                            : "Oldinga paslar",
+                          passAccPct: ru
+                            ? "Точность паса, %"
+                            : "Pas aniqligi, %",
+                          dribbleSuccessPct: ru ? "Дриблинг, %" : "Dribling, %",
+                          duelWinPct: ru ? "Единоборства, %" : "Kurashlar, %",
+                          aerialWinPct: ru
+                            ? "Верховые дуэли, %"
+                            : "Havoda kurashlar, %",
+                          savesPer90: ru ? "Сейвы / 90" : "Seyvlar / 90",
+                        } as Record<string, string>
+                      )[key] || key}
+                    </dt>
+                    <dd>
+                      {v === null
+                        ? "—"
+                        : Number.isInteger(v)
+                          ? v
+                          : v.toFixed(2)}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              {source.player.url && (
+                <a
+                  className="text-link"
+                  href={source.player.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  FootyStats ↗
+                </a>
+              )}
+            </>
+          )}
+          {player && !source.player && (
+            <p className="muted">
+              {ru
+                ? "Для этого игрока нет подтверждённого сопоставления с FootyStats."
+                : "Bu futbolchi uchun FootyStats bilan tasdiqlangan moslik yo‘q."}
+            </p>
+          )}
+        </>
+      )}
+    </details>
+  );
 }

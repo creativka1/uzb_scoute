@@ -5,8 +5,9 @@ import { ArrowRightLeft, Bookmark, Check, ChevronRight, Printer, Search, X } fro
 import type { Language, Player, Position } from '@/types/players';
 import type { AnalysisLocation } from '@/types/matches';
 import { getSimilarPlayers } from '@/lib/recruitment';
-import { PercentileRadar, HeadToHead } from '@/components/football/profile-charts';
+import { PercentileRadar, HeadToHead, PercentileBars } from '@/components/football/profile-charts';
 import { FootyStatsPanel } from '@/components/football/footystats-panel';
+import { PlayerRecentForm } from '@/components/football/player-workspace';
 import { PlayerMatchHistory } from '@/components/football/match-workspace';
 
 const text = (lang: Language, ru: string, uz: string) => lang === 'ru' ? ru : uz;
@@ -37,26 +38,24 @@ function band(value: number | null, lang: Language) {
   if (value >= 40) return text(lang, 'Около середины группы', 'Guruh o‘rtasiga yaqin');
   return text(lang, 'Ниже середины группы', 'Guruh o‘rtasidan past');
 }
-export function PlayerAvatar({ player, lang, large = false }: {player: Player; lang: Language; large?: boolean}) {
-  const [attempt, setAttempt] = useState(0);
-  useEffect(() => setAttempt(0), [player.photoUrl]);
-  const urls = [player.photoUrl, player.photoUrl?.replace('img.sofascore.com', 'api.sofascore.com')];
-  return <div className={`player-avatar ${large ? 'large' : ''}`}>{attempt >= urls.length || !player.photoUrl ? player.initials : <img src={urls[attempt]} alt={player.name[lang]} onError={() => setAttempt(n => n + 1)} />}</div>;
-}
+export {PlayerAvatar} from './player-avatar';
+import {PlayerAvatar} from './player-avatar';
 
-export function AnalysisDialog({ title, children, onClose, lang, narrow = false }: {title: string; children: React.ReactNode; onClose: () => void; lang: Language; narrow?: boolean}) {
+export function AnalysisDialog({ title, children, onClose, lang, narrow = false, inline=false }: {title: string; children: React.ReactNode; onClose: () => void; lang: Language; narrow?: boolean;inline?:boolean}) {
   const ref = useRef<HTMLDialogElement>(null);
   const close = useRef(onClose);
   close.current = onClose;
   const id = useId();
   useEffect(() => {
+    if(inline)return;
     const el = ref.current;
     const previousFocus = document.activeElement as HTMLElement | null;
     const overflow = document.body.style.overflow;
     el?.showModal();
     document.body.style.overflow = 'hidden';
     return () => { el?.close(); document.body.style.overflow = overflow; previousFocus?.focus(); };
-  }, []);
+  }, [inline]);
+  if(inline)return <section className="inline-dossier"><div className="inline-profile-top"><span>{title}</span><button className="text-link" onClick={onClose}>← {text(lang,'К списку','Ro‘yxatga')}</button></div>{children}</section>;
   return <dialog ref={ref} aria-labelledby={id} className={`analysis-dialog ${narrow ? 'narrow' : ''}`} onCancel={e => { e.preventDefault(); close.current(); }} onClick={e => { if (e.target === e.currentTarget) close.current(); }}>
     <div className="dialog-sheet">
       <div className="dialog-top"><span id={id}>{title}</span><button className="icon-button" onClick={onClose} aria-label={text(lang, 'Закрыть', 'Yopish')}><X size={20} /></button></div>
@@ -144,24 +143,35 @@ function DataContext({ player, lang }: {player: Player; lang: Language}) {
   </details>;
 }
 
-export function PlayerDossier({ player, players, lang, saved, canSave, onSave, onCompare, onCompareReplacement, onPrint, onClose, detailedLabel, footLabel, onOpenMatch }: {
-  player: Player; players: Player[]; lang: Language; saved: boolean; canSave: boolean; onSave: () => void; onCompare: () => void; onCompareReplacement: (p: Player) => void; onPrint: () => void; onClose: () => void; detailedLabel: string; footLabel: string; onOpenMatch?:(location:AnalysisLocation)=>void;
+export function PlayerDossier({ player, players, lang, saved, canSave, onSave, onCompare, onCompareReplacement, onPrint, onClose, detailedLabel, footLabel, onOpenMatch, inline=false }: {
+  player: Player; players: Player[]; lang: Language; saved: boolean; canSave: boolean; onSave: () => void; onCompare: () => void; onCompareReplacement: (p: Player) => void; onPrint: () => void; onClose: () => void; detailedLabel: string; footLabel: string; onOpenMatch?:(location:AnalysisLocation)=>void;inline?:boolean;
 }) {
   const [view, setView] = useState<'overview' | 'stats' | 'matches'>('overview');
   const [cheaperOnly,setCheaperOnly]=useState(false);
   const replacements = getSimilarPlayers(player, players, cheaperOnly);
   const ru = lang === 'ru';
-  return <AnalysisDialog title={ru ? 'Профиль игрока' : 'Futbolchi profili'} onClose={onClose} lang={lang}>
+  return <AnalysisDialog inline={inline} title={ru ? 'Профиль игрока' : 'Futbolchi profili'} onClose={onClose} lang={lang}>
     <div className="dossier-heading"><PlayerAvatar player={player} lang={lang} large /><div><span className="eyebrow">{player.statsSeasonLabel}</span><h2>{player.name[lang]}</h2><p>{player.club[lang]} <span>·</span> {player.detailedPosition ? detailedLabel : positionLabel(player.position, lang)} <span>·</span> {player.age ?? '—'} {ru ? 'лет' : 'yosh'}</p></div></div>
     <ScoutBadge player={player} lang={lang} /><div className="dossier-actions"><button className="action-primary" onClick={onCompare}><ArrowRightLeft size={16} />{ru ? 'Сравнить игрока' : 'Futbolchini taqqoslash'}</button><button className="action-secondary" disabled={!canSave} onClick={onSave}>{saved ? <Check size={16} /> : <Bookmark size={16} />}{saved ? (ru ? 'В сохранённых' : 'Saqlangan') : (ru ? 'Сохранить' : 'Saqlash')}</button><button className="action-secondary print-action" onClick={onPrint}><Printer size={16} />{ru ? 'Отчёт PDF' : 'PDF hisobot'}</button></div>
     {!player.statsCoverageComplete && <div className="dossier-notice partial">{ru ? 'Неполные данные' : 'Ma’lumot to‘liq emas'}</div>}
     <div className="dossier-tabs" role="group" aria-label={ru ? 'Раздел профиля' : 'Profil bo‘limi'}><button aria-pressed={view === 'overview'} onClick={() => setView('overview')}>{ru ? 'Обзор' : 'Umumiy'}</button><button aria-pressed={view === 'stats'} onClick={() => setView('stats')}>{ru ? 'Вся статистика' : 'Barcha statistika'}</button><button aria-pressed={view === 'matches'} onClick={()=>setView('matches')}>{ru ? 'Матчи и динамика' : 'O‘yinlar va dinamika'}</button></div>
     {view === 'matches' ? <PlayerMatchHistory key={player.id} player={player} lang={lang} onOpenMatch={onOpenMatch}/> : view === 'overview' ? <>
-      <div className="dossier-summary"><div><span>{ru ? 'Игры в выборке' : 'Tanlovdagi o‘yinlar'}</span><strong>{formatValue(player.matchesPlayed)}</strong><p>{formatValue(player.minutesPlayed)} {ru ? 'минут' : 'daqiqa'}</p></div><div><span>{player.position === 'GK' ? (ru ? 'Сейвы' : 'Seyvlar') : (ru ? 'Голы' : 'Gollar')}</span><strong>{formatValue(player.position === 'GK' ? player.saves : player.goals)}</strong><CoverageLabel player={player} metric={player.position === 'GK'?'saves':'goals'} lang={lang}/></div><div><span>{player.position === 'GK' ? (ru ? 'Точность передач' : 'Pas aniqligi') : (ru ? 'Голевые передачи' : 'Golli uzatmalar')}</span><strong>{formatValue(player.position === 'GK' ? player.passAccPct : player.assists, player.position === 'GK' ? 1 : 0, player.position === 'GK' ? '%' : '')}</strong><CoverageLabel player={player} metric={player.position === 'GK'?'passAccPct':'assists'} lang={lang}/></div></div>
-      <div className="season-stat-grid">{[{label:'xG',value:player.xG},{label:'xA',value:player.xA},{label:ru?'Удары / 90':'Zarbalar / 90',value:player.shotsPer90},{label:ru?'Ключевые пасы / 90':'Asosiy paslar / 90',value:player.keyPassesPer90}].map(row=><div key={row.label}><span>{row.label}</span><strong>{formatValue(row.value,2)}</strong></div>)}</div>
-      <div className="dossier-columns"><PercentileRadar player={player} lang={lang}/><MetricProfile player={player} lang={lang} /><details className="analysis-card profile-facts explanation"><summary>{ru ? 'Профиль и контракт' : 'Profil va shartnoma'}</summary><dl className="facts">
+      <div className="key-stat-heading"><h3>{ru?'Основные показатели':'Asosiy ko‘rsatkichlar'}</h3><span>{player.statsSeasonLabel}</span></div>
+      <div className="key-stat-tiles">{[
+        {label:ru?'Матчи':'O‘yinlar',value:player.matchesPlayed,decimals:0,key:null},
+        {label:ru?'Минуты':'Daqiqalar',value:player.minutesPlayed,decimals:0,key:null},
+        {label:player.position==='GK'?(ru?'Сейвы':'Seyvlar'):(ru?'Голы':'Gollar'),value:player.position==='GK'?player.saves:player.goals,decimals:0,key:player.position==='GK'?'saves':'goals'},
+        {label:ru?'Ассисты':'Assistlar',value:player.assists,decimals:0,key:'assists'},
+        {label:'xG',value:player.xG,decimals:2,key:'xG'},
+        {label:'xA',value:player.xA,decimals:2,key:'xA'},
+        {label:ru?'Удары / 90':'Zarbalar / 90',value:player.shotsPer90,decimals:2,key:'shots'},
+        {label:ru?'Ключевые пасы / 90':'Asosiy paslar / 90',value:player.keyPassesPer90,decimals:2,key:'keyPasses'},
+      ].map(row=><div key={row.label}><span>{row.label}</span><strong>{formatValue(row.value,row.decimals)}</strong>{row.key&&<CoverageLabel player={player} metric={row.key} lang={lang}/>}</div>)}</div>
+      <div className="dossier-columns"><PercentileRadar player={player} lang={lang}/><PercentileBars player={player} lang={lang} /><details className="analysis-card profile-facts explanation"><summary>{ru ? 'Профиль и контракт' : 'Profil va shartnoma'}</summary><dl className="facts">
         <div><dt>{ru ? 'Стоимость источника' : 'Manbadagi qiymat'}</dt><dd>{player.marketValue}</dd></div><div><dt>{ru ? 'Контракт до' : 'Shartnoma muddati'}</dt><dd>{player.contractUntil}</dd></div><div><dt>{ru ? 'Рабочая нога' : 'Yetakchi oyoq'}</dt><dd>{footLabel}</dd></div><div><dt>{ru ? 'Рост' : 'Bo‘yi'}</dt><dd>{formatValue(player.height, 0, ru ? ' см' : ' sm')}</dd></div><div><dt>{ru ? 'Номер' : 'Raqami'}</dt><dd>{player.number ?? '—'}</dd></div><div><dt>{ru ? 'Точная позиция' : 'Aniq pozitsiya'}</dt><dd>{player.detailedPosition ? detailedLabel : '—'}</dd></div>
       </dl><p className="muted source-note">{player.clubSource === 'last_match' ? (ru ? 'Клуб указан по последнему подтверждённому матчу.' : 'Klub oxirgi tasdiqlangan o‘yin bo‘yicha.') : player.clubSource === 'profile' ? (ru ? 'Клуб указан по сохранённому профилю.' : 'Klub saqlangan profil bo‘yicha.') : (ru ? 'Клуб не подтверждён.' : 'Klub tasdiqlanmagan.')} {player.clubObservedAt ? new Date(player.clubObservedAt * 1000).toLocaleDateString(ru ? 'ru-RU' : 'uz-UZ') : (ru ? 'Дата обновления неизвестна.' : 'Yangilanish sanasi noma’lum.')}</p></details></div>
+      <PlayerRecentForm player={player} lang={lang} onOpenMatch={onOpenMatch}/>
+      <details className="analysis-card explanation"><summary>{ru?'Показатели и покрытие':'Ko‘rsatkichlar va qamrov'}</summary><MetricProfile player={player} lang={lang}/></details>
     </> : <section className="analysis-card all-statistics"><h3>{ru ? 'Показатели по загруженным матчам' : 'Yuklangan o‘yinlar ko‘rsatkichlari'}</h3><p className="muted">{ru ? '— означает отсутствие данных. Реальный ноль показывается как 0.' : '— ma’lumot yo‘qligini bildiradi. Haqiqiy nol 0 sifatida ko‘rsatiladi.'}</p><dl>{statRows(player, lang).map(r => <div key={r.label}><dt>{r.label}{r.hint && <small>{r.hint}</small>}</dt><dd>{r.value}{r.key&&<CoverageLabel player={player} metric={r.key} lang={lang}/>}</dd></div>)}</dl></section>}
     <FootyStatsPanel league={player.league} lang={lang} player={player}/>
     <DataContext player={player} lang={lang} />

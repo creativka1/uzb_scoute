@@ -98,3 +98,14 @@ test('equal player values use the group scale and show the actual mean', async (
   assert.ok(!row.includes('width:100%'));
   assert.ok(!html.includes('Место в группе'));
 });
+
+test('partial percentile radar renders a contour instead of empty rings', async()=>{
+ const source=(await sourcePlayers()).find(p=>p.position==='MF');
+ const p={...source,radar:{m1:null,m2:80,m3:0,m4:92,m5:72,m6:null}};
+ const charts=load('components/football/profile-charts.tsx');
+ const html=render(charts.PercentileRadar,{player:p,lang:'ru'});
+ assert.ok(html.includes('data-series="primary"'));
+ assert.ok(html.includes('4/5'));
+ assert.ok(html.includes('Нет данных: Ключевые пасы / 90'));
+ assert.ok(!html.includes('NaN'));
+});

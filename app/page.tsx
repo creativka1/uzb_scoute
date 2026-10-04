@@ -1,14 +1,18 @@
 'use client';
 
+import {HomeDashboard} from '@/components/football/home-dashboard';
+import {PlayerWorkspace} from '@/components/football/player-workspace';
 import {CandidateLinkButton} from '@/components/football/decision-workspace';
 import {useDecisionStore} from '@/hooks/use-decision-store';
-import { PlayerDossier, PlayerPicker, PlayerComparison, PlayerAvatar, AnalysisDialog, CoverageLabel } from '@/components/football/player-analysis';
+import { PlayerDossier, PlayerPicker, PlayerAvatar, AnalysisDialog, CoverageLabel } from '@/components/football/player-analysis';
 import { FootyStatsPanel } from '@/components/football/footystats-panel';
 import { TeamWorkspace } from '@/components/football/match-workspace';
 import { RoleAudit } from '@/components/football/role-audit';
 import { rankPlayersForNeed, NEED_FIT_VERSION } from '@/lib/recruitment';
 import React, { useState, useMemo, useEffect } from 'react';
 import {
+  Home,
+  Shield,
   Users,
   Sparkles,
   Search,
@@ -483,7 +487,7 @@ function PlayerHeadshot({ url, name, initials, size = 'md' }: { url: string; nam
 
 export default function Dashboard() {
   const [lang, setLang] = useState<Language>('uz');
-  const [activeView, setActiveView] = useState<MainView>('players');
+  const [activeView, setActiveView] = useState<MainView>('home');
   const t = TRANSLATIONS[lang];
 
   // ВЫБОР ЛИГИ И РЕЖИМА СЕЗОНА
@@ -539,7 +543,6 @@ export default function Dashboard() {
   const [inspectionPlayers,setInspectionPlayers]=useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [pickingOpponentFor, setPickingOpponentFor] = useState<Player | null>(null);
-  const [compareA, setCompareA] = useState<Player | null>(null);
   const [compareB, setCompareB] = useState<Player | null>(null);
 
   // ЭТАП 4: RECRUITMENT ENGINE
@@ -570,7 +573,6 @@ export default function Dashboard() {
     setPeriodLabel('');
     setCoverageComplete(false);
     setSelectedPlayer(null);
-    setCompareA(null);
     setCompareB(null);
     setPickingOpponentFor(null);
 
@@ -882,21 +884,20 @@ export default function Dashboard() {
     lang,
   ]);
 
+  useEffect(()=>{if(selectedPlayer)window.scrollTo({top:0});},[selectedPlayer?.id]);
+
   const handleCompareWithReplacement = (replacement: Player) => {
     if (!selectedPlayer) return;
-    setCompareA(selectedPlayer);
     setCompareB(replacement);
-    setSelectedPlayer(null);
   };
 
   const handleOpenPicker = (player: Player) => {
-    setSelectedPlayer(null);
     setPickingOpponentFor(player);
   };
 
   const handleSelectOpponent = (opponent: Player) => {
     if (!pickingOpponentFor) return;
-    setCompareA(pickingOpponentFor);
+    setSelectedPlayer(pickingOpponentFor);
     setCompareB(opponent);
     setPickingOpponentFor(null);
   };
@@ -1031,16 +1032,14 @@ export default function Dashboard() {
   return (
     <main className="football-workspace min-h-screen selection:bg-emerald-500 selection:text-black">
       <header className="workspace-header">
-        <a href="#" className="brand" aria-label="UzStat"><span className="brand-mark"><BarChart3 size={23} /></span><span>Uzstat<small>FOOTBALL INTELLIGENCE</small></span></a>
-        <nav className="workspace-nav" aria-label={lang === 'ru' ? 'Основная навигация' : 'Asosiy navigatsiya'}>
-          <button aria-current={activeView === 'players' ? 'page' : undefined} onClick={() => setActiveView('players')}><Users size={17} />{t.tabPlayers}</button>
-          <button aria-current={activeView === 'recruitment' ? 'page' : undefined} onClick={() => setActiveView('recruitment')}><Search size={17} /><span className="nav-label-full">{lang === 'ru' ? 'Поиск под задачу' : 'Vazifa uchun qidiruv'}</span><span className="nav-label-mobile">{lang==='ru'?'Поиск':'Qidiruv'}</span></button>
-          <button aria-current={activeView === 'team' ? 'page' : undefined} onClick={()=>{setAnalysisSelection(null);setActiveView('team');}}><Activity size={17}/><span className="nav-label-full">{lang==='ru'?'Команда и матчи':'Jamoa va o‘yinlar'}</span><span className="nav-label-mobile">{lang==='ru'?'Матчи':'O‘yinlar'}</span></button>
-          <button aria-current={activeView === 'saved' ? 'page' : undefined} onClick={() => setActiveView('saved')}><Bookmark size={17} />{lang === 'ru' ? 'Сохранённые' : 'Saqlanganlar'}<span className="nav-count">{savedCandidates.length}</span></button>
-        </nav>
-        <div className="language-switch" aria-label={lang === 'ru' ? 'Язык' : 'Til'}>{(['uz', 'ru'] as Language[]).map(l => <button key={l} aria-pressed={lang === l} onClick={() => setLang(l)}>{l.toUpperCase()}</button>)}</div>
+        <button className="brand" onClick={()=>{setSelectedPlayer(null);setActiveView('home');}} aria-label="UzStat Home"><span className="brand-mark"><BarChart3 size={25}/></span><span>Uzstat</span></button>
+        <label className="global-search"><Search size={18}/><input value={searchQuery} onChange={e=>{setSearchQuery(e.target.value);setSelectedPlayer(null);setActiveView('players');}} placeholder={lang==='ru'?'Поиск игроков и клубов…':'Futbolchi va klub qidirish…'} aria-label={lang==='ru'?'Глобальный поиск':'Umumiy qidiruv'}/></label>
+        <div className="header-links"><button onClick={()=>{setSelectedPlayer(null);setActiveView('players');}}>{t.tabPlayers}</button><button onClick={()=>{setSelectedPlayer(null);setAnalysisSelection(null);setActiveView('team');}}>{lang==='ru'?'Команды':'Jamoalar'}</button></div>
+        <div className="language-switch">{(['uz','ru'] as Language[]).map(l=><button key={l} aria-pressed={lang===l} onClick={()=>setLang(l)}>{l.toUpperCase()}</button>)}</div><span className="workspace-account">A</span>
       </header>
-      <section className="workspace-intro">
+      <nav className="dashboard-sidebar" aria-label={lang==='ru'?'Основная навигация':'Asosiy navigatsiya'}>{([{view:'home',label:lang==='ru'?'Главная':'Bosh sahifa',icon:Home},{view:'players',label:t.tabPlayers,icon:Users},{view:'team',label:lang==='ru'?'Команды и матчи':'Jamoa va o‘yinlar',icon:Shield},{view:'recruitment',label:lang==='ru'?'Скаутинг':'Skauting',icon:Search},{view:'saved',label:lang==='ru'?'Шорт-лист':'Ro‘yxat',icon:Bookmark}] as const).map(item=><button key={item.view} aria-current={activeView===item.view?'page':undefined} onClick={()=>{setSelectedPlayer(null);setCompareB(null);if(item.view==='team')setAnalysisSelection(null);setActiveView(item.view);}}><item.icon size={18}/><span>{item.label}</span>{item.view==='saved'&&<b>{savedCandidates.length}</b>}</button>)}<div className="sidebar-caption">UZSTAT<small>FOOTBALL INTELLIGENCE</small></div></nav>
+      <div className="dashboard-content" hidden={!!selectedPlayer}>
+      <section className="workspace-intro" hidden={activeView==='home'||activeView==='team'}>
         <div><span className="eyebrow">{lang === 'ru' ? 'РАБОЧЕЕ ПРОСТРАНСТВО АНАЛИТИКА' : 'TAHLILCHINING ISH MAYDONI'}</span>
           <h1>{activeView === 'team' ? (lang==='ru'?'Поймите игру своей команды.':'Jamoangiz o‘yinini tushuning.') : activeView === 'players' ? (lang === 'ru' ? 'Начните с игрока.' : 'Futbolchidan boshlang.') : activeView === 'saved' ? (lang === 'ru' ? 'Игроки, к которым стоит вернуться.' : 'Qayta ko‘rib chiqiladigan futbolchilar.') : (lang === 'ru' ? 'Найдите игрока под свою задачу.' : 'Vazifangizga mos futbolchini toping.')}</h1>
           <p>{activeView === 'team' ? (lang==='ru'?'Откройте матч, проверьте вклад игроков и сохраните вывод.':'O‘yinni oching, futbolchilar hissasini tekshiring va xulosani saqlang.') : activeView === 'players' ? (lang === 'ru' ? 'Изучите показатели, откройте профиль и сравните игроков.' : 'Ko‘rsatkichlarni o‘rganing, profilni oching va futbolchilarni taqqoslang.') : activeView === 'saved' ? (lang === 'ru' ? 'Ваш список сохраняется в этом браузере и не зависит от фильтров.' : 'Ro‘yxatingiz shu brauzerda saqlanadi va filtrlarga bog‘liq emas.') : (lang === 'ru' ? 'Укажите роль, возраст и бюджет. Остальные условия — по необходимости.' : 'Pozitsiya, yosh va byudjetni belgilang. Qolgan shartlar — zaruratga ko‘ra.')}</p>
@@ -1054,7 +1053,8 @@ export default function Dashboard() {
       {activeView!=='team' && !isLoading && !loadError && !coverageComplete && <div className="coverage-note"><span>{lang === 'ru' ? 'Неполные данные' : 'Ma’lumot to‘liq emas'}</span></div>}
       {loadError && <p role="alert" className="error-notice">{lang === 'ru' ? 'Не удалось загрузить данные. Выберите период ещё раз.' : 'Ma’lumot yuklanmadi. Davrni qayta tanlang.'}</p>}
       {saveError && <p role="alert" className="error-notice">{lang === 'ru' ? 'Не удалось прочитать или сохранить список в браузере. Существующее сохранение не перезаписано.' : 'Brauzerdagi ro‘yxatni o‘qish yoki saqlash imkoni bo‘lmadi. Mavjud saqlanma o‘zgartirilmagan.'}</p>}
-      {activeView==='team'&&<TeamWorkspace key={`${currentLeague}:${seasonMode}`} initialSelection={analysisSelection} league={currentLeague} seasonMode={seasonMode} lang={lang}
+      {activeView==='home'&&<HomeDashboard players={players} league={currentLeague} seasonMode={seasonMode} lang={lang} savedCount={savedCandidates.length} onPlayer={setSelectedPlayer} onPlayers={()=>setActiveView('players')} onTeam={location=>{setAnalysisSelection(location);setActiveView('team');}}/>}
+      {activeView==='team'&&<TeamWorkspace key={`${currentLeague}:${seasonMode}`} players={players} initialSelection={analysisSelection} league={currentLeague} seasonMode={seasonMode} lang={lang}
         onRecruit={(pos,period,team,need)=>{setActiveNeedId(need?.id||null);setAnalysisSelection(null);setRecruitmentPosition(pos);setRecruitmentDetailedPosition(need?.detailedPosition||'all');setSeasonMode(period);setRecruitmentContext(team);setActiveView('recruitment');if(pos==='GK'){setRecruitmentMinAttackScore('');setRecruitmentMinGoals90('');setRecruitmentMinAssists90('');setRecruitmentMinShots90('');setRecruitmentMinKeyPasses90('');setRecruitmentMinDribble('');}}}
         onPlayer={(player,pool)=>{setInspectionPlayers(pool);setSelectedPlayer(player);}}/>}
       {activeView === 'saved' && <section className="saved-workspace"><div className="section-heading"><h2>{lang === 'ru' ? 'Ваш список' : 'Sizning ro‘yxatingiz'}</h2><span>{savedCandidates.length}</span></div>{!savedCandidates.length ? <div className="workspace-empty"><Bookmark size={30} /><h3>{lang === 'ru' ? 'Здесь появятся сохранённые игроки' : 'Saqlangan futbolchilar shu yerda ko‘rinadi'}</h3><p>{lang === 'ru' ? 'Откройте профиль и нажмите «Сохранить».' : 'Profilni oching va «Saqlash»ni bosing.'}</p><button className="action-primary" onClick={() => setActiveView('players')}>{lang === 'ru' ? 'Посмотреть игроков' : 'Futbolchilarni ko‘rish'}<ArrowRight size={16} /></button></div> : <div className="saved-grid">{savedCandidates.map(saved => { const player = players.find(p => p.id === saved.id); return <article className="saved-card" key={saved.id}><div className="saved-card-main">{player ? <PlayerAvatar player={player} lang={lang} /> : <span className="player-avatar"><Bookmark size={18} /></span>}<div><h3>{saved.name[lang]}</h3><p>{player ? player.club[lang] : (lang === 'ru' ? 'Нет данных в выбранной лиге и периоде' : 'Tanlangan liga va davrda ma’lumot yo‘q')}</p></div></div><div className="saved-card-actions"><button className="action-secondary" disabled={!player} onClick={() => { if(player) setSelectedPlayer(player); }}>{lang === 'ru' ? 'Открыть профиль' : 'Profilni ochish'}<ChevronRight size={15} /></button><button className="icon-button" aria-label={`${lang === 'ru' ? 'Удалить из сохранённых:' : 'Saqlanganlardan o‘chirish:'} ${saved.name[lang]}`} onClick={() => setSavedCandidates(items => items.filter(p => p.id !== saved.id))}><X size={16} /></button></div></article>; })}</div>}</section>}
@@ -1355,16 +1355,15 @@ export default function Dashboard() {
         </AnalysisDialog>
       )}
 
-      {selectedPlayer && <PlayerDossier key={selectedPlayer.id} player={selectedPlayer} players={[...players,...inspectionPlayers.filter(p=>!players.some(x=>x.id===p.id&&JSON.stringify(x.statsSeasonIds)===JSON.stringify(p.statsSeasonIds)))]} lang={lang}
+      </div>
+      {selectedPlayer && <PlayerWorkspace player={selectedPlayer} players={[...players,...inspectionPlayers.filter(p=>!players.some(x=>x.id===p.id&&JSON.stringify(x.statsSeasonIds)===JSON.stringify(p.statsSeasonIds)))]} lang={lang} comparison={compareB} onComparison={setCompareB} onSelect={p=>{setSelectedPlayer(p);setCompareB(null);}}><PlayerDossier inline key={selectedPlayer.id} player={selectedPlayer} players={[...players,...inspectionPlayers.filter(p=>!players.some(x=>x.id===p.id&&JSON.stringify(x.statsSeasonIds)===JSON.stringify(p.statsSeasonIds)))]} lang={lang}
         saved={savedCandidates.some(p => p.id === selectedPlayer.id)} canSave={savedReady} onSave={() => saveCandidates([selectedPlayer])}
         onCompare={() => handleOpenPicker(selectedPlayer)} onCompareReplacement={handleCompareWithReplacement}
         onOpenMatch={location=>{setSelectedPlayer(null);setCurrentLeague(location.league);setAnalysisSelection(location);setActiveView('team');}}
         onPrint={() => handlePrintPdf(selectedPlayer)} onClose={() => setSelectedPlayer(null)}
-        detailedLabel={getDetailedPositionName(selectedPlayer.detailedPosition)} footLabel={getFootName(selectedPlayer.preferredFoot)} />}
+        detailedLabel={getDetailedPositionName(selectedPlayer.detailedPosition)} footLabel={getFootName(selectedPlayer.preferredFoot)} /></PlayerWorkspace>}
       {pickingOpponentFor && <PlayerPicker player={pickingOpponentFor} players={[...players,...inspectionPlayers.filter(p=>!players.some(x=>x.id===p.id&&JSON.stringify(x.statsSeasonIds)===JSON.stringify(p.statsSeasonIds)))]} lang={lang} onChoose={handleSelectOpponent}
         onClose={() => { setSelectedPlayer(pickingOpponentFor); setPickingOpponentFor(null); }} />}
-      {compareA && compareB && <PlayerComparison primary={compareA} other={compareB} players={[...players,...inspectionPlayers.filter(p=>!players.some(x=>x.id===p.id&&JSON.stringify(x.statsSeasonIds)===JSON.stringify(p.statsSeasonIds)))]} lang={lang} onChange={setCompareB}
-        onClose={() => { setSelectedPlayer(compareA); setCompareA(null); setCompareB(null); }} />}
     </main>
   );
 }
