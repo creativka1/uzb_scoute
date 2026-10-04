@@ -5,6 +5,7 @@ const ROOT = process.cwd();
 const SOFA_PATH = path.join(ROOT, 'data', 'superliga_stats.json');
 const FOOTY_PATH = path.join(ROOT, 'data', 'footystats_snapshot.json');
 const OUT_PATH = path.join(ROOT, 'data', 'audits', 'source_reconciliation.json');
+const VALIDATED_OUT = path.join(ROOT, 'data', 'footystats_validated.json');
 
 function finite(value) {
   const n = Number(value);
@@ -145,9 +146,89 @@ for (const [league, payload] of Object.entries(footySnapshot.leagues || {})) {
   };
 }
 
+const validated = {
+  schemaVersion: 1,
+  generatedAt: report.generatedAt,
+  source: 'FootyStats API',
+  policy: 'Only players aligned on at least three core checks are included. These values are supplemental and never overwrite conflicting primary data.',
+  leagues: {},
+};
+
+for (const [league, value] of Object.entries(report.leagues)) {
+  const footyPlayers = footySnapshot.leagues?.[league]?.players || [];
+  const byId = new Map(footyPlayers.map(player => [player.footystatsPlayerId, player]));
+  const accepted = [];
+  for (const row of value.rows) {
+    if (row.status !== 'aligned') continue;
+    const player = byId.get(row.footystatsPlayerId);
+    if (!player) continue;
+    accepted.push({
+      sofaId: row.sofaId,
+      footystatsPlayerId: row.footystatsPlayerId,
+      name: row.name,
+      validation: {
+        comparable: row.comparable,
+        aligned: row.aligned,
+        checks: row.checks,
+      },
+      metrics: {
+        appearances: player.appearances,
+        minutes: player.minutes,
+        goals: player.goals,
+        assists: player.assists,
+        averageRating: player.averageRating,
+        passesTotal: player.passesTotal,
+        passesCompletedTotal: player.passesCompletedTotal,
+        passCompletionPct: player.passCompletionPct,
+        progressivePassesTotal: player.progressivePassesTotal,
+        keyPassesTotal: player.keyPassesTotal,
+        keyPassesPer90: player.keyPassesPer90,
+        crossesTotal: player.crossesTotal,
+        accurateCrossesTotal: player.accurateCrossesTotal,
+        crossCompletionPct: player.crossCompletionPct,
+        tacklesTotal: player.tacklesTotal,
+        tacklesPer90: player.tacklesPer90,
+        successfulTacklesTotal: player.successfulTacklesTotal,
+        interceptionsTotal: player.interceptionsTotal,
+        interceptionsPer90: player.interceptionsPer90,
+        blocksTotal: player.blocksTotal,
+        clearancesTotal: player.clearancesTotal,
+        dribblesTotal: player.dribblesTotal,
+        successfulDribblesTotal: player.successfulDribblesTotal,
+        dribbleSuccessPct: player.dribbleSuccessPct,
+        aerialDuelsWonTotal: player.aerialDuelsWonTotal,
+        aerialDuelsWonPer90: player.aerialDuelsWonPer90,
+        aerialDuelsWonPct: player.aerialDuelsWonPct,
+        duelsTotal: player.duelsTotal,
+        duelsWonTotal: player.duelsWonTotal,
+        duelsWonPer90: player.duelsWonPer90,
+        duelsWonPct: player.duelsWonPct,
+        shotsTotal: player.shotsTotal,
+        shotsPer90: player.shotsPer90,
+        shotsOnTargetTotal: player.shotsOnTargetTotal,
+        xG: player.xG,
+        xGPer90: player.xGPer90,
+        npxG: player.npxG,
+        npxGPer90: player.npxGPer90,
+        xA: player.xA,
+        xAPer90: player.xAPer90,
+        savesTotal: player.savesTotal,
+        savesPer90: player.savesPer90,
+        savePct: player.savePct,
+        insideBoxSavesTotal: player.insideBoxSavesTotal,
+        detailedMatchesRecorded: player.detailedMatchesRecorded,
+        detailedMinutesRecorded: player.detailedMinutesRecorded,
+      },
+    });
+  }
+  validated.leagues[league] = accepted;
+}
+
 fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
 fs.writeFileSync(OUT_PATH, JSON.stringify(report, null, 2));
+fs.writeFileSync(VALIDATED_OUT, JSON.stringify(validated, null, 2));
 console.log(`Source reconciliation report written to ${path.relative(ROOT, OUT_PATH)}`);
+console.log(`Validated FootyStats snapshot written to ${path.relative(ROOT, VALIDATED_OUT)}`);
 for (const [league, value] of Object.entries(report.leagues)) {
   console.log(`${league}: matched=${value.matched}, aligned=${value.aligned}, conflicts=${value.conflicts}, unmatched=${value.unmatched}`);
 }
