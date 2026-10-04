@@ -49,6 +49,28 @@ class EventLinkerTests(unittest.TestCase):
         rows = event_linker.candidate_matches(record, official, mapping)
         self.assertEqual([row["id"] for row in rows], [100])
 
+    def test_exact_pair_survives_player_goal_mismatch(self):
+        mapping = {"UZB": {10: "Nasaf", 20: "Pakhtakor"}, "KAZ": {}}
+        record = {
+            "eventId": 1, "league": "UZB",
+            "homeSofaTeamId": 10, "awaySofaTeamId": 20,
+            "score": [0, 0],
+            "homeDominance": [18, 20], "awayDominance": [18, 20],
+        }
+        official = {
+            "UZB": [
+                {"id": 100, "homeName": "Nasaf", "awayName": "Pakhtakor",
+                 "homeScore": 2, "awayScore": 1, "seasonId": 1, "date": 1,
+                 "homeTeamId": 1, "awayTeamId": 2},
+            ],
+            "KAZ": [],
+        }
+        links, ambiguous, unmatched = event_linker.link_events([record], official, mapping)
+        self.assertEqual(len(links), 1)
+        self.assertTrue(links[0]["scoreMismatch"])
+        self.assertEqual(ambiguous, [])
+        self.assertEqual(unmatched, [])
+
     def test_ambiguous_match_is_not_forced(self):
         mapping = {"UZB": {10: "Nasaf", 20: "Pakhtakor"}, "KAZ": {}}
         record = {
