@@ -19,10 +19,16 @@ test('real UI handlers persist need → linked candidate → frozen decision →
   const env=environment(),ui=env.load('components/football/decision-workspace.tsx'),lib=env.load('lib/decisions.ts');let chosen;
   const form=env.runner(ui.NeedForm,{core,teamId:1,seasonId:10,seed:{position:'MF',detailedPosition:null,evidence:'Source minutes'},lang:'ru',onDone:n=>{chosen=n;}});
   change(form,'Что требуется','textarea','Improve chance creation');change(form,'Что должен','textarea','More key passes');form.tree.props.onSubmit({preventDefault(){}});assert.ok(chosen);
-  const candidate=env.runner(ui.CandidateLinkButton,{needId:chosen.id,player:{id:'UZB-7',league:'UZB',statsSeasonIds:[10],position:'MF',name:{ru:'Candidate',uz:'Candidate'},roleMetrics:{keyPassesPer90:2}},lang:'ru'});
+  const candidate=env.runner(ui.CandidateLinkButton,{needId:chosen.id,player:{id:'UZB-7',league:'UZB',statsSeasonIds:[10],position:'MF',name:{ru:'Candidate',uz:'Candidate'},roleMetrics:{keyPassesPer90:2}},lang:'ru',fitScore:87,fitReasons:['role:82','minutes:900']});
   nodes(candidate.tree).find(n=>n.type==='button').props.onClick();candidate.render();assert.ok(text(candidate.tree).includes('✓'));
   const workspace=env.runner(ui.DecisionWorkspace,{core,teamId:1,seasonId:10,lang:'ru'});
-  nodes(workspace.tree).find(n=>n.type==='button'&&text(n)==='Принять решение по кандидату').props.onClick();workspace.render();
+  const statusLabel=nodes(workspace.tree).find(n=>n.type==='label'&&text(n).startsWith('Статус'));assert.ok(statusLabel);
+  nodes(statusLabel).find(n=>n.type==='select').props.onChange({target:{value:'priority'}});workspace.render();
+  const noteLabel=nodes(workspace.tree).find(n=>n.type==='label'&&text(n).startsWith('Заметка скаута'));assert.ok(noteLabel);
+  nodes(noteLabel).find(n=>n.type==='textarea').props.onBlur({currentTarget:{value:'Check scanning before receiving under pressure'}});workspace.render();
+  nodes(workspace.tree).find(n=>n.type==='button'&&text(n)==='Сделать рекомендацией').props.onClick();workspace.render();
+  let boardStore=lib.parseDecisionStore(env.storage.get(lib.decisionStorageKey));assert.equal(boardStore.needs[0].candidates[0].boardStatus,'priority');assert.equal(boardStore.needs[0].candidates[0].scoutNote,'Check scanning before receiving under pressure');assert.equal(boardStore.needs[0].recommendedPlayerId,7);assert.equal(boardStore.needs[0].candidates[0].fitScore,87);
+  nodes(workspace.tree).find(n=>n.type==='button'&&text(n)==='Зафиксировать решение').props.onClick();workspace.render();
   const formElement=nodes(workspace.tree).find(n=>typeof n.type==='function'&&n.type.name==='DecisionForm');assert.ok(formElement);
   const decisionForm=env.runner(formElement.type,formElement.props);change(decisionForm,'Решение:','textarea','Monitor candidate before transfer');change(decisionForm,'Начало наблюдения','select','200');change(decisionForm,'Проверить после','select','3');
   nodes(decisionForm.tree).find(n=>n.type==='input'&&n.props.type==='number').props.onChange({target:{value:'1'}});decisionForm.render();decisionForm.tree.props.onSubmit({preventDefault(){}});
