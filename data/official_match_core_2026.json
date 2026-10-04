@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-04T05:57:04.832539+00:00",
+  "generatedAt": "2026-10-04T10:08:00.411315+00:00",
   "source": "official-league-match-pages",
   "seasons": {
     "UZB": [
@@ -10,7 +10,7 @@
         "year": "2026",
         "cachedMatches": 240,
         "complete": false,
-        "lastSyncedAt": "2026-10-04T05:57:04.832539+00:00"
+        "lastSyncedAt": "2026-10-04T10:08:00.411315+00:00"
       }
     ],
     "KAZ": [
@@ -18,9 +18,9 @@
         "id": 90730,
         "name": "Premier League 2026",
         "year": "2026",
-        "cachedMatches": 233,
+        "cachedMatches": 237,
         "complete": false,
-        "lastSyncedAt": "2026-10-04T05:57:04.832539+00:00"
+        "lastSyncedAt": "2026-10-04T10:08:00.411315+00:00"
       }
     ]
   },
@@ -891,6 +891,27 @@
       "round": 2
     },
     {
+      "id": 40000894,
+      "league": "KAZ",
+      "competitionId": 682,
+      "seasonId": 90730,
+      "seasonName": "Premier League 2026",
+      "date": 1773669600,
+      "homeTeamId": 418153315,
+      "awayTeamId": 420100705,
+      "homeScore": 1,
+      "awayScore": 1,
+      "lineupAvailable": false,
+      "homeFormation": null,
+      "awayFormation": null,
+      "source": "official-league",
+      "sourceEventId": 894,
+      "eventHash": "c90baee2e3d8b7034235817fd6c51ab62e54c13cab988698f7efda4df4d91063",
+      "lineupHash": null,
+      "sourcePath": "https://kffleague.kz/ru/matches/894",
+      "round": 2
+    },
+    {
       "id": 40000895,
       "league": "KAZ",
       "competitionId": 682,
@@ -951,6 +972,27 @@
       "eventHash": "be7b6a7cd773b88d5644c4c6ce46bdbb082324332acc187a5a1629030597f827",
       "lineupHash": null,
       "sourcePath": "https://kffleague.kz/ru/matches/899",
+      "round": 2
+    },
+    {
+      "id": 40000892,
+      "league": "KAZ",
+      "competitionId": 682,
+      "seasonId": 90730,
+      "seasonName": "Premier League 2026",
+      "date": 1773748800,
+      "homeTeamId": 431815032,
+      "awayTeamId": 347376949,
+      "homeScore": 1,
+      "awayScore": 3,
+      "lineupAvailable": false,
+      "homeFormation": null,
+      "awayFormation": null,
+      "source": "official-league",
+      "sourceEventId": 892,
+      "eventHash": "4a7691b17133b2b172134d1359fc34bb16a95a9767106c9dcc93958102c35e9b",
+      "lineupHash": null,
+      "sourcePath": "https://kffleague.kz/ru/matches/892",
       "round": 2
     },
     {
@@ -3033,6 +3075,48 @@
       "round": 8
     },
     {
+      "id": 40000943,
+      "league": "KAZ",
+      "competitionId": 682,
+      "seasonId": 90730,
+      "seasonName": "Premier League 2026",
+      "date": 1777723200,
+      "homeTeamId": 418153315,
+      "awayTeamId": 414542844,
+      "homeScore": 0,
+      "awayScore": 1,
+      "lineupAvailable": false,
+      "homeFormation": null,
+      "awayFormation": null,
+      "source": "official-league",
+      "sourceEventId": 943,
+      "eventHash": "d606f25acb3b623e9d0a537fe43b39e8b48d5b2a6b12edd2e714a7d82757765e",
+      "lineupHash": null,
+      "sourcePath": "https://kffleague.kz/ru/matches/943",
+      "round": 8
+    },
+    {
+      "id": 40000944,
+      "league": "KAZ",
+      "competitionId": 682,
+      "seasonId": 90730,
+      "seasonName": "Premier League 2026",
+      "date": 1777730400,
+      "homeTeamId": 396305248,
+      "awayTeamId": 389261831,
+      "homeScore": 1,
+      "awayScore": 1,
+      "lineupAvailable": false,
+      "homeFormation": null,
+      "awayFormation": null,
+      "source": "official-league",
+      "sourceEventId": 944,
+      "eventHash": "8bac848bb0a7fe0a4d1ae3fae2086565fc9c79055fc214b40a63ff1dc29fa88a",
+      "lineupHash": null,
+      "sourcePath": "https://kffleague.kz/ru/matches/944",
+      "round": 8
+    },
+    {
       "id": 30003825,
       "league": "UZB",
       "competitionId": 772,
@@ -3135,6 +3219,27 @@
       "eventHash": "9651e0d2ba9f40050bc84362cf4ee48359b2205e5f42a26bd5d80b6b6e3cb197",
       "lineupHash": null,
       "sourcePath": "https://kffleague.kz/ru/matches/941",
+      "round": 8
+    },
+    {
+      "id": 40000948,
+      "league": "KAZ",
+      "competitionId": 682,
+      "seasonId": 90730,
+      "seasonName": "Premier League 2026",
+      "date": 1777813200,
+      "homeTeamId": 406547552,
+      "awayTeamId": 370737444,
+      "homeScore": 1,
+      "awayScore": 0,
+      "lineupAvailable": false,
+      "homeFormation": null,
+      "awayFormation": null,
+      "source": "official-league",
+      "sourceEventId": 948,
+      "eventHash": "4a590c69e12805d565ab271fbf5549a49c1684a31d7b0c67fd486afbf9424a3f",
+      "lineupHash": null,
+      "sourcePath": "https://kffleague.kz/ru/matches/948",
       "round": 8
     },
     {
@@ -3388,6 +3493,27 @@
       "lineupHash": null,
       "sourcePath": "https://kffleague.kz/ru/matches/1059",
       "round": 22
+    },
+    {
+      "id": 40000950,
+      "league": "KAZ",
+      "competitionId": 682,
+      "seasonId": 90730,
+      "seasonName": "Premier League 2026",
+      "date": 1778410800,
+      "homeTeamId": 339579426,
+      "awayTeamId": 375143027,
+      "homeScore": 0,
+      "awayScore": 0,
+      "lineupAvailable": false,
+      "homeFormation": null,
+      "awayFormation": null,
+      "source": "official-league",
+      "sourceEventId": 950,
+      "eventHash": "e2e73e7a8048f0d4e33d0d74aa6dba4f207bfa5061c4ca1b6f59d7949cecd18e",
+      "lineupHash": null,
+      "sourcePath": "https://kffleague.kz/ru/matches/950",
+      "round": 9
     },
     {
       "id": 40000949,
@@ -4503,27 +4629,6 @@
       "round": 16
     },
     {
-      "id": 40001010,
-      "league": "KAZ",
-      "competitionId": 682,
-      "seasonId": 90730,
-      "seasonName": "Premier League 2026",
-      "date": 1783170000,
-      "homeTeamId": 341714983,
-      "awayTeamId": 410425876,
-      "homeScore": 0,
-      "awayScore": 1,
-      "lineupAvailable": false,
-      "homeFormation": null,
-      "awayFormation": null,
-      "source": "official-league",
-      "sourceEventId": 1010,
-      "eventHash": "51611b8009b2aff0cf6c2207f595b69fa447311d29b830a69e4bcbbb944c259f",
-      "lineupHash": null,
-      "sourcePath": "https://kffleague.kz/ru/matches/1010",
-      "round": 16
-    },
-    {
       "id": 40001005,
       "league": "KAZ",
       "competitionId": 682,
@@ -4584,27 +4689,6 @@
       "eventHash": "ce6aecdab15085d5bf7a49832a0501d6a1e8e8fad7104ee54c385852ac1ffba4",
       "lineupHash": null,
       "sourcePath": "https://kffleague.kz/ru/matches/1009",
-      "round": 16
-    },
-    {
-      "id": 40001012,
-      "league": "KAZ",
-      "competitionId": 682,
-      "seasonId": 90730,
-      "seasonName": "Premier League 2026",
-      "date": 1783263600,
-      "homeTeamId": 375143027,
-      "awayTeamId": 343366596,
-      "homeScore": 1,
-      "awayScore": 0,
-      "lineupAvailable": false,
-      "homeFormation": null,
-      "awayFormation": null,
-      "source": "official-league",
-      "sourceEventId": 1012,
-      "eventHash": "2be56c4406cd8554828f043c3c0d6e5b2665f1b6b9720ad1a0a27dda0665a144",
-      "lineupHash": null,
-      "sourcePath": "https://kffleague.kz/ru/matches/1012",
       "round": 16
     },
     {

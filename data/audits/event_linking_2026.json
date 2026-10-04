@@ -1,0 +1,621 @@
+{
+  "schemaVersion": 1,
+  "lineupRecordsConsidered": 263,
+  "linked": 250,
+  "ambiguous": 0,
+  "unmatched": 13,
+  "teamMapping": {
+    "UZB": [
+      {
+        "sofaTeamId": 23481,
+        "officialName": "Bunyodkor",
+        "previousName": "FC Bunyodkor"
+      },
+      {
+        "sofaTeamId": 34017,
+        "officialName": "Nasaf",
+        "previousName": "Nasaf Qarshi"
+      },
+      {
+        "sofaTeamId": 34310,
+        "officialName": "Pakhtakor",
+        "previousName": "Pakhtakor Tashkent"
+      },
+      {
+        "sofaTeamId": 36256,
+        "officialName": "Neftchi",
+        "previousName": "Neftchi Fergana"
+      },
+      {
+        "sofaTeamId": 40259,
+        "officialName": "Dinamo",
+        "previousName": "Dinamo Samarqand"
+      },
+      {
+        "sofaTeamId": 40260,
+        "officialName": "Xorazm",
+        "previousName": "PFK Xorazm"
+      },
+      {
+        "sofaTeamId": 40261,
+        "officialName": "Lokomotiv",
+        "previousName": null
+      },
+      {
+        "sofaTeamId": 40263,
+        "officialName": "Navbahor",
+        "previousName": "Navbahor Namangan"
+      },
+      {
+        "sofaTeamId": 40264,
+        "officialName": "Mashal",
+        "previousName": "Mash Al Mubarek"
+      },
+      {
+        "sofaTeamId": 40265,
+        "officialName": "Qizilqum",
+        "previousName": "PFK Qizilqum"
+      },
+      {
+        "sofaTeamId": 40267,
+        "officialName": "Andijan",
+        "previousName": "FC Andijon"
+      },
+      {
+        "sofaTeamId": 40268,
+        "officialName": "OKMK",
+        "previousName": "FC OKMK"
+      },
+      {
+        "sofaTeamId": 48613,
+        "officialName": "Bukhoro",
+        "previousName": "FC Buxoro"
+      },
+      {
+        "sofaTeamId": 48614,
+        "officialName": "Sogdiyona",
+        "previousName": "FC Sogdiana Jizzakh"
+      },
+      {
+        "sofaTeamId": 191273,
+        "officialName": "Qo'qon-1912",
+        "previousName": "FK Kokand 1912"
+      },
+      {
+        "sofaTeamId": 287019,
+        "officialName": "Surkhon",
+        "previousName": "Surkhon Termez"
+      }
+    ],
+    "KAZ": [
+      {
+        "sofaTeamId": 5172,
+        "officialName": "Кайрат",
+        "previousName": "FC Kairat Almaty"
+      },
+      {
+        "sofaTeamId": 5355,
+        "officialName": "Актобе",
+        "previousName": "FK Aktobe"
+      },
+      {
+        "sofaTeamId": 5356,
+        "officialName": "Атырау",
+        "previousName": "Atyrau"
+      },
+      {
+        "sofaTeamId": 5359,
+        "officialName": "Окжетпес",
+        "previousName": "Oqjetpes FK"
+      },
+      {
+        "sofaTeamId": 5362,
+        "officialName": "Тобыл",
+        "previousName": "FC Tobyl"
+      },
+      {
+        "sofaTeamId": 5363,
+        "officialName": "Женис",
+        "previousName": "FK Zhenys"
+      },
+      {
+        "sofaTeamId": 5364,
+        "officialName": "Жетысу",
+        "previousName": "Zhetysu Taldykorgan"
+      },
+      {
+        "sofaTeamId": 5365,
+        "officialName": "Иртыш",
+        "previousName": null
+      },
+      {
+        "sofaTeamId": 5366,
+        "officialName": "Ордабасы",
+        "previousName": "FC Ordabasy"
+      },
+      {
+        "sofaTeamId": 5367,
+        "officialName": "Кызылжар",
+        "previousName": "FC Kyzylzhar"
+      },
+      {
+        "sofaTeamId": 36142,
+        "officialName": "Кайсар",
+        "previousName": "FC Kaysar"
+      },
+      {
+        "sofaTeamId": 36155,
+        "officialName": "Астана",
+        "previousName": "Astana"
+      },
+      {
+        "sofaTeamId": 36688,
+        "officialName": "Каспий",
+        "previousName": null
+      },
+      {
+        "sofaTeamId": 464803,
+        "officialName": "Елимай",
+        "previousName": "Yelimay Semey"
+      },
+      {
+        "sofaTeamId": 464804,
+        "officialName": "Улытау",
+        "previousName": "Ulytau FC"
+      },
+      {
+        "sofaTeamId": 466776,
+        "officialName": "Алтай",
+        "previousName": null
+      }
+    ]
+  },
+  "initialMappingEvidence": [
+    {
+      "league": "UZB",
+      "sofaTeamId": 40264,
+      "sofaName": "Mash Al Mubarek",
+      "officialName": "Mashal",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 191273,
+      "sofaName": "FK Kokand 1912",
+      "officialName": "Qo'qon-1912",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 34310,
+      "sofaName": "Pakhtakor Tashkent",
+      "officialName": "Pakhtakor",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 23481,
+      "sofaName": "FC Bunyodkor",
+      "officialName": "Bunyodkor",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 48613,
+      "sofaName": "FC Buxoro",
+      "officialName": "Bukhoro",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 36256,
+      "sofaName": "Neftchi Fergana",
+      "officialName": "Neftchi",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 40268,
+      "sofaName": "FC OKMK",
+      "officialName": "OKMK",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 40263,
+      "sofaName": "Navbahor Namangan",
+      "officialName": "Navbahor",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 40259,
+      "sofaName": "Dinamo Samarqand",
+      "officialName": "Dinamo",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 34017,
+      "sofaName": "Nasaf Qarshi",
+      "officialName": "Nasaf",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 40265,
+      "sofaName": "PFK Qizilqum",
+      "officialName": "Qizilqum",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 40267,
+      "sofaName": "FC Andijon",
+      "officialName": "Andijan",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 40260,
+      "sofaName": "PFK Xorazm",
+      "officialName": "Xorazm",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 48614,
+      "sofaName": "FC Sogdiana Jizzakh",
+      "officialName": "Sogdiyona",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "UZB",
+      "sofaTeamId": 287019,
+      "sofaName": "Surkhon Termez",
+      "officialName": "Surkhon",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5366,
+      "sofaName": "FC Ordabasy",
+      "officialName": "Ордабасы",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5363,
+      "sofaName": "FK Zhenys",
+      "officialName": "Женис",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 464804,
+      "sofaName": "Ulytau FC",
+      "officialName": "Улытау",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5172,
+      "sofaName": "FC Kairat Almaty",
+      "officialName": "Кайрат",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5355,
+      "sofaName": "FK Aktobe",
+      "officialName": "Актобе",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 36155,
+      "sofaName": "Astana",
+      "officialName": "Астана",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 464803,
+      "sofaName": "Yelimay Semey",
+      "officialName": "Елимай",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5364,
+      "sofaName": "Zhetysu Taldykorgan",
+      "officialName": "Жетысу",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 36142,
+      "sofaName": "FC Kaysar",
+      "officialName": "Кайсар",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5362,
+      "sofaName": "FC Tobyl",
+      "officialName": "Тобыл",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5356,
+      "sofaName": "Atyrau",
+      "officialName": "Атырау",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5367,
+      "sofaName": "FC Kyzylzhar",
+      "officialName": "Кызылжар",
+      "method": "verified-previous-season-name"
+    },
+    {
+      "league": "KAZ",
+      "sofaTeamId": 5359,
+      "sofaName": "Oqjetpes FK",
+      "officialName": "Окжетпес",
+      "method": "verified-previous-season-name"
+    }
+  ],
+  "ambiguousEvents": [],
+  "unmatchedEvents": [
+    {
+      "eventId": 13547947,
+      "league": "KAZ",
+      "homeSofaTeamId": 5172,
+      "awaySofaTeamId": 36155,
+      "homeDominance": [
+        14,
+        23
+      ],
+      "awayDominance": [
+        14,
+        22
+      ],
+      "score": [
+        1,
+        1
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14178340,
+      "league": "UZB",
+      "homeSofaTeamId": 34310,
+      "awaySofaTeamId": 40268,
+      "homeDominance": [
+        12,
+        20
+      ],
+      "awayDominance": [
+        14,
+        20
+      ],
+      "score": [
+        1,
+        2
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14479211,
+      "league": "UZB",
+      "homeSofaTeamId": 48614,
+      "awaySofaTeamId": 40268,
+      "homeDominance": [
+        12,
+        20
+      ],
+      "awayDominance": [
+        14,
+        20
+      ],
+      "score": [
+        4,
+        1
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14606844,
+      "league": "UZB",
+      "homeSofaTeamId": 48614,
+      "awaySofaTeamId": 36256,
+      "homeDominance": [
+        12,
+        20
+      ],
+      "awayDominance": [
+        14,
+        19
+      ],
+      "score": [
+        0,
+        1
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14606859,
+      "league": "UZB",
+      "homeSofaTeamId": 34310,
+      "awaySofaTeamId": 40265,
+      "homeDominance": [
+        13,
+        19
+      ],
+      "awayDominance": [
+        13,
+        20
+      ],
+      "score": [
+        3,
+        0
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14606862,
+      "league": "UZB",
+      "homeSofaTeamId": 40265,
+      "awaySofaTeamId": 40259,
+      "homeDominance": [
+        13,
+        20
+      ],
+      "awayDominance": [
+        13,
+        20
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14606874,
+      "league": "UZB",
+      "homeSofaTeamId": 48614,
+      "awaySofaTeamId": 40265,
+      "homeDominance": [
+        12,
+        20
+      ],
+      "awayDominance": [
+        13,
+        20
+      ],
+      "score": [
+        3,
+        0
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14606885,
+      "league": "UZB",
+      "homeSofaTeamId": 191273,
+      "awaySofaTeamId": 34310,
+      "homeDominance": [
+        12,
+        20
+      ],
+      "awayDominance": [
+        12,
+        20
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14606894,
+      "league": "UZB",
+      "homeSofaTeamId": 40259,
+      "awaySofaTeamId": 191273,
+      "homeDominance": [
+        14,
+        20
+      ],
+      "awayDominance": [
+        13,
+        20
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 14606898,
+      "league": "UZB",
+      "homeSofaTeamId": 36256,
+      "awaySofaTeamId": 40265,
+      "homeDominance": [
+        15,
+        20
+      ],
+      "awayDominance": [
+        14,
+        20
+      ],
+      "score": [
+        4,
+        1
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 15635638,
+      "league": "KAZ",
+      "homeSofaTeamId": 5366,
+      "awaySofaTeamId": 464804,
+      "homeDominance": [
+        23,
+        23
+      ],
+      "awayDominance": [
+        22,
+        23
+      ],
+      "score": [
+        1,
+        0
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 15635673,
+      "league": "KAZ",
+      "homeSofaTeamId": 466776,
+      "awaySofaTeamId": 5367,
+      "homeDominance": [
+        23,
+        23
+      ],
+      "awayDominance": [
+        21,
+        21
+      ],
+      "score": [
+        2,
+        2
+      ],
+      "reason": "no-official-match"
+    },
+    {
+      "eventId": 16023570,
+      "league": "KAZ",
+      "homeSofaTeamId": 36688,
+      "awaySofaTeamId": 5172,
+      "homeDominance": [
+        18,
+        19
+      ],
+      "awayDominance": [
+        17,
+        19
+      ],
+      "score": [
+        0,
+        0
+      ],
+      "reason": "no-official-match"
+    }
+  ]
+}
