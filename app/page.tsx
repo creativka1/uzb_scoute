@@ -808,9 +808,14 @@ export default function Dashboard() {
         if (needFit) {
           reasons.push(lang === 'ru' ? `Fit к потребности: ${needFit.fitScore}/100` : `Ehtiyojga moslik: ${needFit.fitScore}/100`);
           for (const item of needFit.reasons) {
-            const [kind,a,b] = item.split(':');
+            const [kind,a,b,c] = item.split(':');
+            if (kind === 'profile') reasons.push(lang === 'ru' ? `Профиль Fit: ${a}` : `Fit profili: ${a}`);
+            if (kind === 'profileScore') reasons.push(lang === 'ru' ? `Ролевой профиль: ${a}/100` : `Rol profili: ${a}/100`);
+            if (kind === 'profileCoverage') reasons.push(lang === 'ru' ? `Покрытие профильных метрик: ${a}%` : `Profil metrikalari qamrovi: ${a}%`);
+            if (kind === 'metric') reasons.push(lang === 'ru' ? `${a}: ${b}-й процентиль · вес ${c}%` : `${a}: ${b}-percentil · vazn ${c}%`);
+            if (kind === 'profileFallback') reasons.push(lang === 'ru' ? 'Мало профильных метрик: использован общий ролевой рейтинг' : 'Profil metrikalari kam: umumiy rol reytingi ishlatildi');
             if (kind === 'exact') reasons.push(lang === 'ru' ? `Точная роль: ${a}` : `Aniq rol: ${a}`);
-            if (kind === 'role') reasons.push(lang === 'ru' ? `Ролевой рейтинг: ${a}` : `Rol reytingi: ${a}`);
+            if (kind === 'role') reasons.push(lang === 'ru' ? `Общий ролевой рейтинг: ${a}` : `Umumiy rol reytingi: ${a}`);
             if (kind === 'minutes') reasons.push(lang === 'ru' ? `${a} минут в выборке` : `Tanlovda ${a} daqiqa`);
             if (kind === 'confidence') reasons.push(lang === 'ru' ? `Надёжность: ${a}` : `Ishonchlilik: ${a}`);
             if (kind === 'strength') reasons.push(lang === 'ru' ? `${a}: ${b}-й процентиль` : `${a}: ${b}-percentil`);
@@ -1062,7 +1067,7 @@ export default function Dashboard() {
       {activeView === 'recruitment' && (
       <>
       {/* RECRUITMENT */}
-      {activeNeed&&<div className="analysis-card recruitment-need"><div className="section-heading"><div><strong>{activeNeed.observation}</strong><p>{activeNeed.requirement}</p></div><span className="context-chip">{lang==='ru'?'Автоподбор':'Avto tanlov'} · {needRankedCandidates.length}</span></div><small>{activeNeed.detailedPosition||activeNeed.position} · {activeNeed.seasonName}</small><p className="muted">{lang==='ru'?'Fit учитывает роль, игровое время, надёжность выборки и точное совпадение позиции. Это приоритизация для просмотра, а не прогноз успешности трансфера.':'Fit rol, o‘yin vaqti, tanlov ishonchliligi va aniq pozitsiya mosligini hisobga oladi. Bu transfer muvaffaqiyati prognozi emas, ko‘rib chiqish ustuvorligidir.'}</p></div>}
+      {activeNeed&&<div className="analysis-card recruitment-need"><div className="section-heading"><div><strong>{activeNeed.observation}</strong><p>{activeNeed.requirement}</p></div><span className="context-chip">{lang==='ru'?'Автоподбор':'Avto tanlov'} · {needRankedCandidates.length}</span></div><small>{activeNeed.detailedPosition||activeNeed.position} · {activeNeed.seasonName}</small><p className="muted">{lang==='ru'?'Fit использует отдельный профиль роли (GK / CB / FB-WB / DM / CM / AM / winger / ST), игровое время, надёжность выборки и точное совпадение позиции. Отсутствующая метрика не считается нулём: веса доступных метрик перенормируются. Это приоритизация для просмотра, а не прогноз успешности трансфера.':'Fit alohida rol profili (GK / CB / FB-WB / DM / CM / AM / winger / ST), o‘yin vaqti, tanlov ishonchliligi va aniq pozitsiya mosligini hisobga oladi. Yetishmayotgan metrika nol hisoblanmaydi: mavjud metrikalar vazni qayta normallashtiriladi. Bu transfer muvaffaqiyati prognozi emas.'}</p></div>}
       {recruitmentContext&&<div className="recruitment-context"><span>{lang==='ru'?'Усиление для':'Kuchaytirish uchun'}: <strong>{recruitmentContext}</strong></span><button className="text-link" onClick={()=>{setAnalysisSelection(null);setActiveView('team');}}>← {lang==='ru'?'К команде':'Jamoaga'}</button><button className="icon-button" aria-label={lang==='ru'?'Убрать контекст команды':'Jamoa kontekstini olib tashlash'} onClick={()=>{setRecruitmentContext('');setActiveNeedId(null);}}><X size={14}/></button></div>}
       <section className="recruitment-panel max-w-7xl mx-auto mb-5 rounded-xl border border-zinc-800 bg-zinc-900/70 p-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-zinc-800 pb-4 mb-4">
