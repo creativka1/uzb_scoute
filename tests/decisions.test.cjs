@@ -46,8 +46,8 @@ test('recruitment board state round-trips while old candidates remain compatible
  const baseCandidate={playerId:7,name:'Candidate',position:'MF',addedAt:'2026-10-02',reason:'Create chances',metrics:{keyPassesPer90:1.5},seasonIds:[10],matchIds:[1,2]};
  const oldNeed={id:'old',league:'UZB',teamId:1,teamName:'Club',seasonId:10,seasonName:'Season',position:'MF',detailedPosition:null,observation:'Need',requirement:'Create',evidence:'Data',matchIds:[1],createdAt:'2026-10-02',status:'open',candidates:[baseCandidate]};
  assert.equal(lib.parseDecisionStore(JSON.stringify({version:1,needs:[oldNeed],decisions:[]})).needs[0].candidates[0].boardStatus,undefined);
- const boardNeed={...oldNeed,id:'board',recommendedPlayerId:7,candidates:[{...baseCandidate,boardStatus:'priority',scoutNote:'Video check',fitScore:88,fitReasons:['role:82']}]};
- const parsed=lib.parseDecisionStore(JSON.stringify({version:1,needs:[boardNeed],decisions:[]}));assert.equal(parsed.needs[0].recommendedPlayerId,7);assert.equal(parsed.needs[0].candidates[0].boardStatus,'priority');assert.equal(parsed.needs[0].candidates[0].scoutNote,'Video check');
+ const boardNeed={...oldNeed,id:'board',recommendedPlayerId:7,candidates:[{...baseCandidate,boardStatus:'priority',scoutNote:'Video check',fitScore:88,fitReasons:['role:82'],fitVersion:'role-v2'}]};
+ const parsed=lib.parseDecisionStore(JSON.stringify({version:1,needs:[boardNeed],decisions:[]}));assert.equal(parsed.needs[0].recommendedPlayerId,7);assert.equal(parsed.needs[0].candidates[0].boardStatus,'priority');assert.equal(parsed.needs[0].candidates[0].scoutNote,'Video check');assert.equal(parsed.needs[0].candidates[0].fitVersion,'role-v2');
  assert.throws(()=>lib.parseDecisionStore(JSON.stringify({version:1,needs:[{...boardNeed,recommendedPlayerId:99}],decisions:[]})));
  assert.throws(()=>lib.parseDecisionStore(JSON.stringify({version:1,needs:[{...boardNeed,candidates:[{...baseCandidate,boardStatus:'signed'}]}],decisions:[]})));
 });
