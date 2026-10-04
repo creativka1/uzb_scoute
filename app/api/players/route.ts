@@ -386,7 +386,8 @@ export async function GET(req: NextRequest) {
             const supplemental = validatedByPlayer.get(`${p.league}-${p.sofaId}`);
             return supplemental ? {
               source: 'FootyStats',
-              footystatsPlayerId: supplemental.footystatsPlayerId,
+              footystatsPlayerId: supplemental.footystatsPlayerId ?? null,
+              sourcePlayerKey: supplemental.sourcePlayerKey ?? null,
               validation: {
                 comparable: supplemental.validation?.comparable ?? 0,
                 aligned: supplemental.validation?.aligned ?? 0,
