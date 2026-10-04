@@ -133,7 +133,7 @@ function statRows(player: Player, lang: Language): { label: string; value: strin
 function DataContext({ player, lang }: {player: Player; lang: Language}) {
   return <details className="analysis-card explanation data-context"><summary>{text(lang, 'Качество данных', 'Ma’lumot sifati')}</summary>
     <p>{text(lang, 'Прочерк означает отсутствие данных, а не нулевой результат.', 'Tire — nol natija emas, ma’lumot yo‘qligi.')}</p>
-    <dl className="facts"><div><dt>{text(lang, 'Период наблюдений', 'Kuzatuv davri')}</dt><dd>{new Date(player.statsDateFrom * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')} — {new Date(player.statsDateTo * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')}</dd></div>
+    <dl className="facts"><div><dt>{text(lang, 'Период наблюдений', 'Kuzatuv davri')}</dt><dd>{player.statsDateFrom !== null && player.statsDateTo !== null ? `${new Date(player.statsDateFrom * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')} — ${new Date(player.statsDateTo * 1000).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')}` : '—'}</dd></div>
       <div><dt>{text(lang, 'Покрытие сезона', 'Mavsum qamrovi')}</dt><dd>{player.statsCoverageComplete ? text(lang, 'Матчи загружены', 'O‘yinlar yuklangan') : text(lang, 'Неполное', 'To‘liq emas')}</dd></div>
     </dl>
     <p>{text(lang, 'Рейтинг — среднее доступных ролевых процентилей с поправкой на минуты. Это вспомогательный расчёт, а не общая оценка качества игрока.', 'Reyting — mavjud rol percentillarining daqiqalarga moslashtirilgan o‘rtachasi. Bu yordamchi hisob, futbolchining umumiy sifat bahosi emas.')}</p>
