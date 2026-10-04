@@ -18,6 +18,23 @@ class EventLinkerTests(unittest.TestCase):
         self.assertEqual(team_id, 10)
         self.assertEqual((count, total), (16, 19))
 
+    def test_strong_plurality_handles_transfer_noise(self):
+        side = {"players": (
+            [{"teamId": 10}] * 11 +
+            [{"teamId": 99}] * 4 +
+            [{"teamId": 77}] * 3 +
+            [{"teamId": 66}] * 2
+        )}
+        team_id, count, total = event_linker.dominant_team_id(side)
+        self.assertEqual(team_id, 10)
+        self.assertEqual((count, total), (11, 20))
+
+    def test_close_plurality_is_not_accepted(self):
+        side = {"players": [{"teamId": 10}] * 10 + [{"teamId": 99}] * 6 + [{"teamId": 77}] * 4}
+        team_id, count, total = event_linker.dominant_team_id(side)
+        self.assertIsNone(team_id)
+        self.assertEqual((count, total), (10, 20))
+
     def test_inferred_score_includes_opponent_own_goal(self):
         lineup = {
             "home": {"players": [
