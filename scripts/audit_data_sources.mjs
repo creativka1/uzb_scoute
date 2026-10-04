@@ -149,22 +149,34 @@ for (const [league, payload] of Object.entries(footySnapshot.leagues || {})) {
 const validated = {
   schemaVersion: 1,
   generatedAt: report.generatedAt,
-  source: 'FootyStats API',
+  source: footySnapshot.source || 'FootyStats',
   policy: 'Only players aligned on at least three core checks are included. These values are supplemental and never overwrite conflicting primary data.',
   leagues: {},
 };
 
 for (const [league, value] of Object.entries(report.leagues)) {
   const footyPlayers = footySnapshot.leagues?.[league]?.players || [];
-  const byId = new Map(footyPlayers.map(player => [player.footystatsPlayerId, player]));
+  const byId = new Map(footyPlayers.filter(player => player.footystatsPlayerId !== null).map(player => [player.footystatsPlayerId, player]));
+  const byName = new Map();
+  for (const player of footyPlayers) {
+    const key = normalizeName(player.name);
+    if (!key) continue;
+    const rows = byName.get(key) || [];
+    rows.push(player);
+    byName.set(key, rows);
+  }
   const accepted = [];
   for (const row of value.rows) {
     if (row.status !== 'aligned') continue;
-    const player = byId.get(row.footystatsPlayerId);
+    const named = byName.get(normalizeName(row.name)) || [];
+    const player = row.footystatsPlayerId !== null && row.footystatsPlayerId !== undefined
+      ? byId.get(row.footystatsPlayerId)
+      : named.length === 1 ? named[0] : null;
     if (!player) continue;
     accepted.push({
       sofaId: row.sofaId,
-      footystatsPlayerId: row.footystatsPlayerId,
+      footystatsPlayerId: row.footystatsPlayerId ?? null,
+      sourcePlayerKey: player.sourcePlayerKey ?? null,
       name: row.name,
       validation: {
         comparable: row.comparable,
