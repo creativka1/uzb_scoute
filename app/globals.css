@@ -687,3 +687,9 @@ body { margin:0; }
  .player-table td:nth-child(4) { white-space:nowrap; }
  .player-table td:nth-child(7) { text-align:center; }
 }
+.nav-label-mobile { display:none; }
+@media(max-width:760px) {
+ .workspace-nav svg { display:block; width:18px; height:18px; }
+ .workspace-nav .nav-label-full { display:none; }
+ .workspace-nav .nav-label-mobile { display:inline; }
+}

@@ -1034,8 +1034,8 @@ export default function Dashboard() {
         <a href="#" className="brand" aria-label="UzStat"><span className="brand-mark"><BarChart3 size={23} /></span><span>Uzstat<small>FOOTBALL INTELLIGENCE</small></span></a>
         <nav className="workspace-nav" aria-label={lang === 'ru' ? 'Основная навигация' : 'Asosiy navigatsiya'}>
           <button aria-current={activeView === 'players' ? 'page' : undefined} onClick={() => setActiveView('players')}><Users size={17} />{t.tabPlayers}</button>
-          <button aria-current={activeView === 'recruitment' ? 'page' : undefined} onClick={() => setActiveView('recruitment')}><Search size={17} />{lang === 'ru' ? 'Поиск под задачу' : 'Vazifa uchun qidiruv'}</button>
-          <button aria-current={activeView === 'team' ? 'page' : undefined} onClick={()=>{setAnalysisSelection(null);setActiveView('team');}}><Activity size={17}/>{lang==='ru'?'Команда и матчи':'Jamoa va o‘yinlar'}</button>
+          <button aria-current={activeView === 'recruitment' ? 'page' : undefined} onClick={() => setActiveView('recruitment')}><Search size={17} /><span className="nav-label-full">{lang === 'ru' ? 'Поиск под задачу' : 'Vazifa uchun qidiruv'}</span><span className="nav-label-mobile">{lang==='ru'?'Поиск':'Qidiruv'}</span></button>
+          <button aria-current={activeView === 'team' ? 'page' : undefined} onClick={()=>{setAnalysisSelection(null);setActiveView('team');}}><Activity size={17}/><span className="nav-label-full">{lang==='ru'?'Команда и матчи':'Jamoa va o‘yinlar'}</span><span className="nav-label-mobile">{lang==='ru'?'Матчи':'O‘yinlar'}</span></button>
           <button aria-current={activeView === 'saved' ? 'page' : undefined} onClick={() => setActiveView('saved')}><Bookmark size={17} />{lang === 'ru' ? 'Сохранённые' : 'Saqlanganlar'}<span className="nav-count">{savedCandidates.length}</span></button>
         </nav>
         <div className="language-switch" aria-label={lang === 'ru' ? 'Язык' : 'Til'}>{(['uz', 'ru'] as Language[]).map(l => <button key={l} aria-pressed={lang === l} onClick={() => setLang(l)}>{l.toUpperCase()}</button>)}</div>
