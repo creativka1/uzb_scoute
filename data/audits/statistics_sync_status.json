@@ -1,5 +1,6 @@
 {
   "status": "failed",
-  "updatedAt": "2026-10-04T11:04:10.032409+00:00",
-  "error": "Provider retry limit reached"
+  "updatedAt": "2026-10-05T13:22:26.200122+00:00",
+  "provider": "api-football",
+  "error": "API-Football error: {'plan': 'Free plans do not have access to this season, try from 2022 to 2024.'}"
 }
