@@ -1,0 +1,131 @@
+{
+  "version": "role-v2",
+  "generatedAt": "2026-10-04T16:17:30.365Z",
+  "policy": "Committed current-season data; no fabricated candidates; deterministic ranking.",
+  "leagues": {
+    "UZB": {
+      "period": "Superliga 2026",
+      "seasonId": 89354,
+      "complete": false,
+      "playerCount": 455,
+      "roles": {
+        "GK": {
+          "candidateCount": 1,
+          "confirmedRolePlayers": 1,
+          "top10": [
+            {
+              "id": "UZB-1114417",
+              "name": "Otabek Boymurodov",
+              "club": "Surkhon Termez",
+              "position": "GK",
+              "detailedPosition": "GK",
+              "minutes": 891,
+              "fit": 62,
+              "profile": 54,
+              "coverage": 100,
+              "reasons": [
+                "profile:GK",
+                "profileScore:54",
+                "profileCoverage:100",
+                "exact:GK",
+                "role:67",
+                "minutes:891",
+                "confidence:low",
+                "metric:savesPer90:35:70",
+                "metric:passAccPct:98:30"
+              ]
+            }
+          ],
+          "flags": []
+        },
+        "CB": {
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "DM": {
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "WINGER": {
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "ST": {
+          "candidateCount": 1,
+          "confirmedRolePlayers": 1,
+          "top10": [
+            {
+              "id": "UZB-1915912",
+              "name": "Farrukhjon Kodirov",
+              "club": "Surkhon Termez",
+              "position": "FW",
+              "detailedPosition": "ST",
+              "minutes": 699,
+              "fit": 36,
+              "profile": 19,
+              "coverage": 90,
+              "reasons": [
+                "profile:ST",
+                "profileScore:19",
+                "profileCoverage:90",
+                "exact:ST",
+                "role:21",
+                "minutes:699",
+                "confidence:low",
+                "metric:goalsPer90:13:39",
+                "metric:shotsPer90:32:28",
+                "metric:dribbleSuccessPct:10:22",
+                "metric:assistsPer90:28:11"
+              ]
+            }
+          ],
+          "flags": []
+        }
+      }
+    },
+    "KAZ": {
+      "period": "Premier League 2026",
+      "seasonId": 90730,
+      "complete": false,
+      "playerCount": 357,
+      "roles": {
+        "GK": {
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "CB": {
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "DM": {
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "WINGER": {
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        },
+        "ST": {
+          "candidateCount": 0,
+          "confirmedRolePlayers": 0,
+          "top10": [],
+          "flags": []
+        }
+      }
+    }
+  }
+}

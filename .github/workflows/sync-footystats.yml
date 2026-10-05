@@ -1,0 +1,39 @@
+name: Sync FootyStats
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, codex/uzstat-reference-footystats]
+    paths:
+      - scripts/footystats.mjs
+      - scripts/sync_footystats.mjs
+      - data/footystats/config.json
+      - .github/workflows/sync-footystats.yml
+permissions:
+  contents: write
+concurrency:
+  group: source-data-updates
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch and reconcile FootyStats
+        env:
+          FOOTYSTATS_API_KEY: ${{ secrets.FOOTYSTATS_API_KEY }}
+          FOOTYSTATS_YEAR: '2026'
+        run: node scripts/sync_footystats.mjs
+      - name: Persist snapshot and connection status
+        if: always()
+        run: |
+          if [ -z "$(git status --porcelain -- data/footystats data/audits/footystats_status.json)" ]; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/footystats data/audits/footystats_status.json
+          git commit -m "data: checkpoint FootyStats connection and statistics"
+          git push
