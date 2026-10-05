@@ -1,102 +1,88 @@
 #!/usr/bin/env python3
-"""Probe the official PFL club statistics table structure."""
+"""Probe the rendered official PFL club statistics table structure."""
 from __future__ import annotations
 
-import html
 import json
-import re
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.request import Request, urlopen
+
+from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data/audits/pfl_stats_probe.json"
 URL = "https://pfl.uz/en/club/14/statistics"
 
 
-def strip_tags(value: str) -> str:
-    value = re.sub(r"<script\b[^>]*>.*?</script>", "", value, flags=re.I | re.S)
-    value = re.sub(r"<style\b[^>]*>.*?</style>", "", value, flags=re.I | re.S)
-    value = re.sub(r"<[^>]+>", " ", value)
-    return re.sub(r"\s+", " ", html.unescape(value)).strip()
-
-
-def attrs(tag: str) -> dict[str, str]:
-    out = {}
-    for key, q1, v1, q2, v2, v3 in re.findall(
-        r"""([\w:-]+)\s*=\s*(?:(["'])(.*?)\2|([^\s>]+))""",
-        tag,
-        flags=re.S,
-    ):
-        value = v1 if q1 else (v2 or v3)
-        out[key.lower()] = html.unescape(value or "")
-    return out
-
-
 def main():
-    req = Request(
-        URL,
-        headers={
-            "User-Agent": "UzStatPFLProbe/1.0 (+https://github.com/creativka1/uzb_scoute)",
-            "Accept": "text/html,application/xhtml+xml",
-            "Accept-Language": "en-US,en;q=0.9",
-        },
-    )
-    with urlopen(req, timeout=30) as response:
-        source = response.read().decode("utf-8", errors="replace")
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page(viewport={"width": 1600, "height": 1200}, locale="en-US")
+        response = page.goto(URL, wait_until="domcontentloaded", timeout=60000)
+        if response is None or response.status >= 400:
+            raise RuntimeError(f"PFL statistics page unavailable: {None if response is None else response.status}")
+        page.wait_for_timeout(3500)
 
-    table_match = re.search(r"<table\b.*?</table>", source, flags=re.I | re.S)
-    if not table_match:
-        raise RuntimeError("No statistics table found on official PFL page")
-    table = table_match.group(0)
+        tables = page.locator("table")
+        if tables.count() == 0:
+            # Capture useful DOM diagnostics when the site changes.
+            payload = {
+                "status": "failed",
+                "updatedAt": datetime.now(timezone.utc).isoformat(),
+                "url": URL,
+                "title": page.title(),
+                "bodyText": page.locator("body").inner_text()[:15000],
+                "htmlSample": page.content()[:30000],
+            }
+            OUT.parent.mkdir(parents=True, exist_ok=True)
+            OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            raise RuntimeError("No rendered statistics table found on official PFL page")
 
-    head_match = re.search(r"<thead\b.*?</thead>", table, flags=re.I | re.S)
-    header_html = head_match.group(0) if head_match else ""
-    header_cells = re.findall(r"<th\b.*?</th>", header_html, flags=re.I | re.S)
-
-    headers = []
-    for cell in header_cells:
-        images = []
-        for img in re.findall(r"<img\b[^>]*>", cell, flags=re.I):
-            a = attrs(img)
-            images.append({
-                "src": a.get("src"),
-                "alt": a.get("alt"),
-                "title": a.get("title"),
+        table = tables.first
+        header_cells = table.locator("thead th")
+        headers = []
+        for i in range(header_cells.count()):
+            cell = header_cells.nth(i)
+            imgs = cell.locator("img")
+            images = []
+            for j in range(imgs.count()):
+                img = imgs.nth(j)
+                images.append({
+                    "src": img.get_attribute("src"),
+                    "alt": img.get_attribute("alt"),
+                    "title": img.get_attribute("title"),
+                    "ariaLabel": img.get_attribute("aria-label"),
+                })
+            headers.append({
+                "text": cell.inner_text().strip(),
+                "title": cell.get_attribute("title"),
+                "ariaLabel": cell.get_attribute("aria-label"),
+                "images": images,
+                "html": cell.evaluate("(el) => el.outerHTML"),
             })
-        headers.append({
-            "text": strip_tags(cell),
-            "images": images,
-            "html": cell[:1200],
-        })
 
-    body_match = re.search(r"<tbody\b.*?</tbody>", table, flags=re.I | re.S)
-    body = body_match.group(0) if body_match else table
-    rows = []
-    for row in re.findall(r"<tr\b.*?</tr>", body, flags=re.I | re.S)[:5]:
-        cells = re.findall(r"<t[dh]\b.*?</t[dh]>", row, flags=re.I | re.S)
-        rows.append([strip_tags(cell) for cell in cells])
+        body_rows = table.locator("tbody tr")
+        rows = []
+        row_html = []
+        for i in range(min(6, body_rows.count())):
+            row = body_rows.nth(i)
+            cells = row.locator("td")
+            rows.append([cells.nth(j).inner_text().strip() for j in range(cells.count())])
+            row_html.append(row.evaluate("(el) => el.outerHTML"))
 
-    relevant_scripts = []
-    for block in re.findall(r"<script\b[^>]*>.*?</script>", source, flags=re.I | re.S):
-        low = block.lower()
-        if "stat" in low or "club" in low or "player" in low:
-            relevant_scripts.append(block[:5000])
-            if len(relevant_scripts) >= 5:
-                break
-
-    payload = {
-        "status": "success",
-        "updatedAt": datetime.now(timezone.utc).isoformat(),
-        "url": URL,
-        "headers": headers,
-        "rows": rows,
-        "tableText": strip_tags(table)[:10000],
-        "relevantScripts": relevant_scripts,
-    }
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"headers": headers, "rows": rows[:2]}, ensure_ascii=False, indent=2))
+        payload = {
+            "status": "success",
+            "updatedAt": datetime.now(timezone.utc).isoformat(),
+            "url": URL,
+            "title": page.title(),
+            "headers": headers,
+            "rows": rows,
+            "rowHtml": row_html,
+            "tableHtml": table.evaluate("(el) => el.outerHTML")[:50000],
+        }
+        OUT.parent.mkdir(parents=True, exist_ok=True)
+        OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({"headers": headers, "rows": rows[:2]}, ensure_ascii=False, indent=2))
+        browser.close()
 
 
 if __name__ == "__main__":
