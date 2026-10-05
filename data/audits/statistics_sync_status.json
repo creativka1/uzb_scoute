@@ -1,8 +1,8 @@
 {
   "status": "failed",
-  "updatedAt": "2026-10-05T13:26:20.231435+00:00",
-  "provider": "sofascore-public",
+  "updatedAt": "2026-10-05T13:28:24.794078+00:00",
+  "provider": "sofascore-browser-public",
   "league": "UZB",
   "seasonYear": 2026,
-  "error": "Public SofaScore route unavailable: HTTP 403 for /unique-tournament/772/seasons"
+  "error": "SofaScore page unavailable: 403"
 }
