@@ -82,7 +82,7 @@ def fetch_match_club_candidates(
     return result
 
 
-def discover_superleague_clubs() -> dict[str, int]:
+def discover_superleague_club_candidates() -> dict[str, list[int]]:
     core_path = ROOT / "data/official_match_core_2026.json"
     if not core_path.exists():
         raise RuntimeError("official_match_core_2026.json is required before PFL player sync")
@@ -137,28 +137,18 @@ def discover_superleague_clubs() -> dict[str, int]:
             for team_name, club_id in future.result():
                 votes[team_name][club_id] += 1
 
-    selected: dict[str, int] = {}
-    diagnostics = {}
+    rankings: dict[str, list[int]] = {}
     for team_name in sorted(league_team_names):
         ranking = votes.get(team_name)
         if not ranking:
             raise RuntimeError(f"No PFL club-id candidates found for official team {team_name!r}")
-        most_common = ranking.most_common()
-        selected[team_name] = most_common[0][0]
-        diagnostics[team_name] = most_common[:5]
+        rankings[team_name] = [club_id for club_id, _count in ranking.most_common()]
 
-    if len(set(selected.values())) != EXPECTED_CLUBS:
-        raise RuntimeError(
-            "Club-id voting did not produce 16 unique clubs: "
-            f"selected={selected}, votes={diagnostics}"
-        )
-    return selected
-
+    return rankings
 
 def sync(delay_ms: int = 250):
     generated_at = datetime.now(timezone.utc).isoformat()
-    club_map = discover_superleague_clubs()
-    club_ids = set(club_map.values())
+    candidate_map = discover_superleague_club_candidates()
     players = []
 
     expected = [
@@ -172,84 +162,115 @@ def sync(delay_ms: int = 250):
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1600, "height": 1200}, locale="en-US")
         parsed_clubs = []
+        used_club_ids: set[int] = set()
 
-        for club_id in sorted(club_ids):
-            url = f"{BASE}/en/club/{club_id}/statistics"
-            response = page.goto(url, wait_until="domcontentloaded", timeout=60000)
-            if response is None or response.status >= 400:
-                raise RuntimeError(
-                    f"PFL statistics page unavailable for club {club_id}: "
-                    f"{None if response is None else response.status}"
-                )
-            page.wait_for_timeout(1800)
+        for official_team_name in sorted(candidate_map):
+            candidates = candidate_map[official_team_name]
+            selected = False
+            attempts = []
 
-            tables = page.locator("table")
-            if tables.count() == 0:
-                raise RuntimeError(f"No rendered statistics table for club {club_id}")
-            table = tables.first
-
-            headers = table.locator("thead th")
-            tips = []
-            for i in range(headers.count()):
-                th = headers.nth(i)
-                tips.append((th.get_attribute("data-tip") or th.inner_text() or "").strip())
-            if tips[:len(expected)] != expected:
-                raise RuntimeError(f"Unexpected PFL columns for club {club_id}: {tips}")
-
-            club_name = ""
-            h1 = page.locator("h1")
-            if h1.count():
-                club_name = h1.first.inner_text().strip()
-            if not club_name:
-                club_name = f"club-{club_id}"
-
-            rows = table.locator("tbody tr")
-            club_players = 0
-            for i in range(rows.count()):
-                row = rows.nth(i)
-                cells = row.locator("td")
-                if cells.count() < len(expected):
+            for club_id in candidates:
+                if club_id in used_club_ids:
+                    attempts.append({"clubId": club_id, "reason": "already-selected"})
                     continue
 
-                vals = [cells.nth(j).inner_text().strip() for j in range(len(expected))]
-                link = cells.nth(1).locator('a[href*="/player/"]')
-                href = link.first.get_attribute("href") if link.count() else None
-                player_match = re.search(r"/player/(\d+)", href or "")
-                if not player_match:
+                url = f"{BASE}/en/club/{club_id}/statistics"
+                response = page.goto(url, wait_until="domcontentloaded", timeout=60000)
+                if response is None or response.status >= 400:
+                    attempts.append({
+                        "clubId": club_id,
+                        "reason": f"http-{None if response is None else response.status}",
+                    })
+                    continue
+                page.wait_for_timeout(1800)
+
+                tables = page.locator("table")
+                if tables.count() == 0:
+                    attempts.append({"clubId": club_id, "reason": "no-table"})
+                    continue
+                table = tables.first
+
+                headers = table.locator("thead th")
+                tips = []
+                for i in range(headers.count()):
+                    th = headers.nth(i)
+                    tips.append((th.get_attribute("data-tip") or th.inner_text() or "").strip())
+                if tips[:len(expected)] != expected:
+                    attempts.append({"clubId": club_id, "reason": "unexpected-columns"})
                     continue
 
-                goals, penalties = penalty_goals(vals[8])
-                players.append({
-                    "league": "UZB",
-                    "seasonYear": 2026,
-                    "source": "pfl-official",
-                    "clubId": club_id,
-                    "club": club_name,
-                    "playerId": int(player_match.group(1)),
-                    "shirtNumber": num(vals[0]),
-                    "name": vals[1],
-                    "games": num(vals[2]),
-                    "minutes": num(vals[3]),
-                    "starts": num(vals[4]),
-                    "substitutedIn": num(vals[5]),
-                    "substitutedOut": num(vals[6]),
-                    "bench": num(vals[7]),
-                    "goals": goals,
-                    "penaltyGoals": penalties,
-                    "ownGoals": num(vals[9]),
-                    "assists": num(vals[10]),
-                    "goalContributions": num(vals[11]),
-                    "yellowCards": num(vals[12]),
-                    "secondYellowCards": num(vals[13]),
-                    "redCards": num(vals[14]),
-                    "profileUrl": f"{BASE}/en/player/{int(player_match.group(1))}",
+                club_name = ""
+                h1 = page.locator("h1")
+                if h1.count():
+                    club_name = h1.first.inner_text().strip()
+                if not club_name:
+                    club_name = f"club-{club_id}"
+
+                rows = table.locator("tbody tr")
+                club_rows = []
+                for i in range(rows.count()):
+                    row = rows.nth(i)
+                    cells = row.locator("td")
+                    if cells.count() < len(expected):
+                        continue
+
+                    vals = [cells.nth(j).inner_text().strip() for j in range(len(expected))]
+                    link = cells.nth(1).locator('a[href*="/player/"]')
+                    href = link.first.get_attribute("href") if link.count() else None
+                    player_match = re.search(r"/player/(\d+)", href or "")
+                    if not player_match:
+                        continue
+
+                    goals, penalties = penalty_goals(vals[8])
+                    club_rows.append({
+                        "league": "UZB",
+                        "seasonYear": 2026,
+                        "source": "pfl-official",
+                        "officialTeamName": official_team_name,
+                        "clubId": club_id,
+                        "club": club_name,
+                        "playerId": int(player_match.group(1)),
+                        "shirtNumber": num(vals[0]),
+                        "name": vals[1],
+                        "games": num(vals[2]),
+                        "minutes": num(vals[3]),
+                        "starts": num(vals[4]),
+                        "substitutedIn": num(vals[5]),
+                        "substitutedOut": num(vals[6]),
+                        "bench": num(vals[7]),
+                        "goals": goals,
+                        "penaltyGoals": penalties,
+                        "ownGoals": num(vals[9]),
+                        "assists": num(vals[10]),
+                        "goalContributions": num(vals[11]),
+                        "yellowCards": num(vals[12]),
+                        "secondYellowCards": num(vals[13]),
+                        "redCards": num(vals[14]),
+                        "profileUrl": f"{BASE}/en/player/{int(player_match.group(1))}",
+                    })
+
+                if not club_rows:
+                    attempts.append({"clubId": club_id, "reason": "no-player-rows"})
+                    continue
+
+                players.extend(club_rows)
+                used_club_ids.add(club_id)
+                parsed_clubs.append({
+                    "id": club_id,
+                    "name": club_name,
+                    "officialTeamName": official_team_name,
+                    "players": len(club_rows),
+                    "candidateIds": candidates,
                 })
-                club_players += 1
+                selected = True
+                page.wait_for_timeout(delay_ms)
+                break
 
-            if club_players == 0:
-                raise RuntimeError(f"No player rows found for club {club_id}")
-            parsed_clubs.append({"id": club_id, "name": club_name, "players": club_players})
-            page.wait_for_timeout(delay_ms)
+            if not selected:
+                raise RuntimeError(
+                    f"No usable 2026 statistics page for {official_team_name!r}; "
+                    f"candidates={candidates}, attempts={attempts}"
+                )
 
         browser.close()
 
