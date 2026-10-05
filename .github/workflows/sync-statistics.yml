@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       max_requests:
-        description: Maximum public SofaScore requests for this run
+        description: Maximum public SofaScore browser requests for this run
         default: '600'
         required: true
       season_year:
@@ -38,18 +38,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: pip install curl_cffi
 
-      - name: Validate public SofaScore adapter
-        run: python -m py_compile app/api/players/scripts/sync_sofascore_public.py
+      - name: Install sync dependencies
+        run: |
+          pip install curl_cffi playwright
+          playwright install --with-deps chromium
 
-      - name: Download UZB player match statistics from public SofaScore
+      - name: Validate public browser adapter
+        run: python -m py_compile app/api/players/scripts/sync_sofascore_browser_stats.py
+
+      - name: Download UZB 2026 player statistics from public SofaScore
         env:
           MAX_REQUESTS: ${{ github.event_name == 'push' && '600' || inputs.max_requests }}
           SEASON_YEAR: ${{ github.event_name == 'push' && '2026' || inputs.season_year }}
           LEAGUE: ${{ github.event_name == 'push' && 'UZB' || inputs.league }}
         run: |
-          python app/api/players/scripts/sync_sofascore_public.py \
+          python app/api/players/scripts/sync_sofascore_browser_stats.py \
             --max-requests "$MAX_REQUESTS" \
             --season-year "$SEASON_YEAR" \
             --league "$LEAGUE"
@@ -79,5 +83,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
-          git commit -m "data: checkpoint public SofaScore 2026 statistics"
+          git commit -m "data: checkpoint public SofaScore browser statistics"
           git push
