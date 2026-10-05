@@ -1,0 +1,317 @@
+{
+  "status": "success",
+  "updatedAt": "2026-10-05T13:33:08.746214+00:00",
+  "url": "https://pfl.uz/en/club/14/statistics",
+  "title": "Uzbekistan Professional Football League — PFL.UZ",
+  "headers": [
+    {
+      "text": "#",
+      "title": null,
+      "ariaLabel": null,
+      "images": [],
+      "html": "<th data-v-1772b22f=\"\" class=\"center\">#</th>"
+    },
+    {
+      "text": "Player",
+      "title": null,
+      "ariaLabel": null,
+      "images": [],
+      "html": "<th data-v-1772b22f=\"\" class=\"center\">Player</th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-games.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Games\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-games.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-minute.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Minutes\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-minute.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-lineup.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Starting lineup\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-lineup.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-sub-out.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Substituted in\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-sub-out.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-sub-in.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Substituted out\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-sub-in.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-bench.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"On the bench\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-bench.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-goal.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Goals (with penalties)\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-goal.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-own-goal.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Own goals\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-own-goal.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-assist.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Assists\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-assist.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-goal-assist.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Goals + Assists\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-goal-assist.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-yellow-card.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Yellow card\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-yellow-card.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-yellow2-card.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Second yellow card\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-yellow2-card.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    },
+    {
+      "text": "",
+      "title": null,
+      "ariaLabel": null,
+      "images": [
+        {
+          "src": "/images/icons/stat-red-card.svg",
+          "alt": "",
+          "title": null,
+          "ariaLabel": null
+        }
+      ],
+      "html": "<th data-v-1772b22f=\"\" data-tip=\"Red card\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-red-card.svg\" class=\"stat-icon\" alt=\"\"></th>"
+    }
+  ],
+  "rows": [
+    [
+      "15",
+      "Nikola Kumburovich",
+      "21",
+      "1890",
+      "21",
+      "0",
+      "0",
+      "0",
+      "1",
+      "",
+      "0",
+      "1",
+      "",
+      "",
+      ""
+    ],
+    [
+      "1",
+      "Farhod Rahmatov",
+      "21",
+      "1890",
+      "21",
+      "0",
+      "0",
+      "0",
+      "",
+      "",
+      "0",
+      "0",
+      "3",
+      "",
+      ""
+    ],
+    [
+      "8",
+      "Shahzod Rahmatullayev",
+      "21",
+      "1813",
+      "21",
+      "7",
+      "0",
+      "0",
+      "2",
+      "",
+      "5",
+      "7",
+      "3",
+      "",
+      ""
+    ],
+    [
+      "79",
+      "Diyor Rahmatilloyev",
+      "20",
+      "1596",
+      "19",
+      "8",
+      "1",
+      "0",
+      "",
+      "",
+      "2",
+      "2",
+      "1",
+      "",
+      ""
+    ],
+    [
+      "23",
+      "Samandar Shukurullayev",
+      "20",
+      "1582",
+      "15",
+      "0",
+      "5",
+      "1",
+      "1",
+      "",
+      "0",
+      "1",
+      "",
+      "",
+      ""
+    ],
+    [
+      "31",
+      "Jambuli Jigauri",
+      "21",
+      "1432",
+      "19",
+      "14",
+      "2",
+      "0",
+      "4",
+      "",
+      "2",
+      "6",
+      "2",
+      "",
+      ""
+    ]
+  ],
+  "rowHtml": [
+    "<tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">15</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2726\" class=\"\">Nikola Kumburovich</a></td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">1890</td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr>",
+    "<tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">1</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/504\" class=\"\">Farhod Rahmatov</a></td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">1890</td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr>",
+    "<tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">8</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/393\" class=\"\">Shahzod Rahmatullayev</a></td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">1813</td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">7</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">7</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr>",
+    "<tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">79</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/403\" class=\"\">Diyor Rahmatilloyev</a></td><td data-v-1772b22f=\"\" class=\"center\">20</td><td data-v-1772b22f=\"\" class=\"center\">1596</td><td data-v-1772b22f=\"\" class=\"center\">19</td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr>",
+    "<tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">23</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/377\" class=\"\">Samandar Shukurullayev</a></td><td data-v-1772b22f=\"\" class=\"center\">20</td><td data-v-1772b22f=\"\" class=\"center\">1582</td><td data-v-1772b22f=\"\" class=\"center\">15</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr>",
+    "<tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">31</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/213\" class=\"\">Jambuli Jigauri</a></td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">1432</td><td data-v-1772b22f=\"\" class=\"center\">19</td><td data-v-1772b22f=\"\" class=\"center\">14</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr>"
+  ],
+  "tableHtml": "<table data-v-1772b22f=\"\"><thead data-v-1772b22f=\"\"><tr data-v-1772b22f=\"\"><th data-v-1772b22f=\"\" class=\"center\">#</th><th data-v-1772b22f=\"\" class=\"center\">Player</th><th data-v-1772b22f=\"\" data-tip=\"Games\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-games.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Minutes\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-minute.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Starting lineup\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-lineup.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Substituted in\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-sub-out.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Substituted out\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-sub-in.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"On the bench\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-bench.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Goals (with penalties)\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-goal.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Own goals\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-own-goal.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Assists\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-assist.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Goals + Assists\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-goal-assist.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Yellow card\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-yellow-card.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Second yellow card\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-yellow2-card.svg\" class=\"stat-icon\" alt=\"\"></th><th data-v-1772b22f=\"\" data-tip=\"Red card\" class=\"th-icon center\"><img data-v-1772b22f=\"\" src=\"/images/icons/stat-red-card.svg\" class=\"stat-icon\" alt=\"\"></th></tr></thead><tbody data-v-1772b22f=\"\"><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">15</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2726\" class=\"\">Nikola Kumburovich</a></td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">1890</td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">1</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/504\" class=\"\">Farhod Rahmatov</a></td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">1890</td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">8</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/393\" class=\"\">Shahzod Rahmatullayev</a></td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">1813</td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">7</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">7</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">79</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/403\" class=\"\">Diyor Rahmatilloyev</a></td><td data-v-1772b22f=\"\" class=\"center\">20</td><td data-v-1772b22f=\"\" class=\"center\">1596</td><td data-v-1772b22f=\"\" class=\"center\">19</td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">23</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/377\" class=\"\">Samandar Shukurullayev</a></td><td data-v-1772b22f=\"\" class=\"center\">20</td><td data-v-1772b22f=\"\" class=\"center\">1582</td><td data-v-1772b22f=\"\" class=\"center\">15</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">31</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/213\" class=\"\">Jambuli Jigauri</a></td><td data-v-1772b22f=\"\" class=\"center\">21</td><td data-v-1772b22f=\"\" class=\"center\">1432</td><td data-v-1772b22f=\"\" class=\"center\">19</td><td data-v-1772b22f=\"\" class=\"center\">14</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">88</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/4748\" class=\"\">Otabek Jo'raqo'ziyev</a></td><td data-v-1772b22f=\"\" class=\"center\">20</td><td data-v-1772b22f=\"\" class=\"center\">1189</td><td data-v-1772b22f=\"\" class=\"center\">13</td><td data-v-1772b22f=\"\" class=\"center\">11</td><td data-v-1772b22f=\"\" class=\"center\">10</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">7</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">7</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/402\" class=\"\">Fayzullobek Jumanqo‘ziyev</a></td><td data-v-1772b22f=\"\" class=\"center\">19</td><td data-v-1772b22f=\"\" class=\"center\">1175</td><td data-v-1772b22f=\"\" class=\"center\">11</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">44</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/715\" class=\"\">G‘iyosjon Rizaqulov</a></td><td data-v-1772b22f=\"\" class=\"center\">16</td><td data-v-1772b22f=\"\" class=\"center\">1090</td><td data-v-1772b22f=\"\" class=\"center\">12</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">40</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/615\" class=\"\">Nodirxon Ne'matxonov</a></td><td data-v-1772b22f=\"\" class=\"center\">14</td><td data-v-1772b22f=\"\" class=\"center\">1044</td><td data-v-1772b22f=\"\" class=\"center\">12</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">9</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/903\" class=\"\">Shahzod Turopov</a></td><td data-v-1772b22f=\"\" class=\"center\">19</td><td data-v-1772b22f=\"\" class=\"center\">954</td><td data-v-1772b22f=\"\" class=\"center\">9</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">10</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">20</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/408\" class=\"\">Bobomurod Bozorov</a></td><td data-v-1772b22f=\"\" class=\"center\">13</td><td data-v-1772b22f=\"\" class=\"center\">727</td><td data-v-1772b22f=\"\" class=\"center\">9</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">11</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/4745\" class=\"\">Oleksiy Shebetun</a></td><td data-v-1772b22f=\"\" class=\"center\">11</td><td data-v-1772b22f=\"\" class=\"center\">684</td><td data-v-1772b22f=\"\" class=\"center\">7</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">10</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/200\" class=\"\">Islom Kenjaboyev</a></td><td data-v-1772b22f=\"\" class=\"center\">12</td><td data-v-1772b22f=\"\" class=\"center\">644</td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">70</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2561\" class=\"\">Duglas Maykon</a></td><td data-v-1772b22f=\"\" class=\"center\">9</td><td data-v-1772b22f=\"\" class=\"center\">483</td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">70</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/320\" class=\"\">Shohruz Norxonov</a></td><td data-v-1772b22f=\"\" class=\"center\">11</td><td data-v-1772b22f=\"\" class=\"center\">436</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">34</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/4755\" class=\"\">Grigol Chabradze</a></td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\">417</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">11</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/5678\" class=\"\">Luka Ratkovich</a></td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">360</td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">21</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/29\" class=\"\">Muhammadaziz Ibrohimov</a></td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">323</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">4</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/373\" class=\"\">Ilhomjon Vahobov</a></td><td data-v-1772b22f=\"\" class=\"center\">10</td><td data-v-1772b22f=\"\" class=\"center\">316</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">47</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2794\" class=\"\">Ruslan Roziyev</a></td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">313</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">16</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2384\" class=\"\">Asror G‘ofurov</a></td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">276</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">14</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/1360\" class=\"\">Elbek Otaqulov</a></td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\">257</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">7</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">14</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/4747\" class=\"\">Alisher Shukurov</a></td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\">256</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">17</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/409\" class=\"\">Akmaljon Muzaffarov</a></td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">245</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">5</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">18</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/116\" class=\"\">Abbosbek Abdug‘afforov</a></td><td data-v-1772b22f=\"\" class=\"center\">6</td><td data-v-1772b22f=\"\" class=\"center\">217</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">77</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2226\" class=\"\">Diyorbek Rahmatullayev</a></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">90</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">97</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2944\" class=\"\">Roman Papariga</a></td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">74</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">30</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2310\" class=\"\">Ozodbek Mo‘ydinov</a></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">16</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">4</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">19</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/392\" class=\"\">Ilhomjon Kenjayev</a></td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">15</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\">10</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">78</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/2385\" class=\"\">Farrux Jo‘rayev</a></td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">13</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">33</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/723\" class=\"\">Ozodbek Ergashev jr.</a></td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">8</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">32</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/395\" class=\"\">Mustaqim Boboqulov</a></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">6</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/391\" class=\"\">Murodali Usmonov</a></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">7</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">71</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/394\" class=\"\">Asadbek Baxshilloyev</a></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">72</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/369\" class=\"\">Jahongir Mamatqulov</a></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">3</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">67</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/1213\" class=\"\">Mehroj Qo‘ldoshev</a></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">2</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">41</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/401\" class=\"\">Bekzod Sharipov</a></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">1</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr><tr data-v-1772b22f=\"\"><td data-v-1772b22f=\"\">99</td><td data-v-1772b22f=\"\"><a data-v-1772b22f=\"\" href=\"/en/player/367\" class=\"\">Humoyunshoh Sayyotov</a></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">18</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\">0</td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td><td data-v-1772b22f=\"\" class=\"center\"></td></tr></tbody></table>"
+}
