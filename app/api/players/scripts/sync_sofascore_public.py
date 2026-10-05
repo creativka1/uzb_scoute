@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT / "scripts"))
 from data_integrity import TOURNAMENTS, atomic_json, load, rebuild  # noqa: E402
 
-BASE = "https://www.sofascore.com/api/v1"
+BASE = "https://api.sofascore.com/api/v1"
 RETRYABLE = {429, 500, 502, 503, 504}
 
 
