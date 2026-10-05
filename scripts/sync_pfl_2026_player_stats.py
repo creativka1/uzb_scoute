@@ -11,6 +11,7 @@ import argparse
 import html as html_lib
 import json
 import re
+from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
@@ -49,7 +50,10 @@ def normalize_team_name(value: str) -> str:
     return value
 
 
-def fetch_match_club_ids(url: str, expected_names: set[str]) -> set[int]:
+def fetch_match_club_candidates(
+    url: str,
+    expected_names: set[str],
+) -> list[tuple[str, int]]:
     req = Request(
         url,
         headers={
@@ -61,23 +65,24 @@ def fetch_match_club_ids(url: str, expected_names: set[str]) -> set[int]:
     try:
         with urlopen(req, timeout=20) as response:
             if response.status != 200:
-                return set()
+                return []
             source = response.read().decode("utf-8", errors="replace")
     except (HTTPError, URLError, TimeoutError):
-        return set()
+        return []
 
-    result: set[int] = set()
+    result: list[tuple[str, int]] = []
     for club_id, body in re.findall(
         r"""<a\b[^>]*href=["']/en/club/(\d+)(?:["'/?#])[^>]*>(.*?)</a>""",
         source,
         flags=re.I | re.S,
     ):
-        if normalize_team_name(body) in expected_names:
-            result.add(int(club_id))
+        name = normalize_team_name(body)
+        if name in expected_names:
+            result.append((name, int(club_id)))
     return result
 
 
-def discover_superleague_clubs() -> set[int]:
+def discover_superleague_clubs() -> dict[str, int]:
     core_path = ROOT / "data/official_match_core_2026.json"
     if not core_path.exists():
         raise RuntimeError("official_match_core_2026.json is required before PFL player sync")
@@ -88,6 +93,19 @@ def discover_superleague_clubs() -> set[int]:
         for team in core.get("teams", [])
         if isinstance(team.get("id"), int) and isinstance(team.get("name"), str)
     }
+    league_team_names = {
+        normalize_team_name(name)
+        for match in core.get("matches", [])
+        if match.get("league") == "UZB"
+        for team_id in (match.get("homeTeamId"), match.get("awayTeamId"))
+        for name in ([teams.get(team_id)] if teams.get(team_id) else [])
+    }
+    if len(league_team_names) != EXPECTED_CLUBS:
+        raise RuntimeError(
+            f"Official match core should contain {EXPECTED_CLUBS} UZB teams, "
+            f"found {len(league_team_names)}: {sorted(league_team_names)}"
+        )
+
     matches = [
         match
         for match in core.get("matches", [])
@@ -100,7 +118,7 @@ def discover_superleague_clubs() -> set[int]:
     if not matches:
         raise RuntimeError("No UZB 2026 official matches available for club discovery")
 
-    club_ids: set[int] = set()
+    votes: dict[str, Counter] = defaultdict(Counter)
     with ThreadPoolExecutor(max_workers=8) as pool:
         futures = {}
         for match in matches:
@@ -108,23 +126,39 @@ def discover_superleague_clubs() -> set[int]:
                 normalize_team_name(teams[match["homeTeamId"]]),
                 normalize_team_name(teams[match["awayTeamId"]]),
             }
-            future = pool.submit(fetch_match_club_ids, match["sourcePath"], expected)
+            future = pool.submit(
+                fetch_match_club_candidates,
+                match["sourcePath"],
+                expected,
+            )
             futures[future] = match["sourcePath"]
 
         for future in as_completed(futures):
-            club_ids.update(future.result())
+            for team_name, club_id in future.result():
+                votes[team_name][club_id] += 1
 
-    if len(club_ids) != EXPECTED_CLUBS:
+    selected: dict[str, int] = {}
+    diagnostics = {}
+    for team_name in sorted(league_team_names):
+        ranking = votes.get(team_name)
+        if not ranking:
+            raise RuntimeError(f"No PFL club-id candidates found for official team {team_name!r}")
+        most_common = ranking.most_common()
+        selected[team_name] = most_common[0][0]
+        diagnostics[team_name] = most_common[:5]
+
+    if len(set(selected.values())) != EXPECTED_CLUBS:
         raise RuntimeError(
-            f"Expected {EXPECTED_CLUBS} Superliga clubs matched to official teams, "
-            f"found {len(club_ids)}: {sorted(club_ids)}"
+            "Club-id voting did not produce 16 unique clubs: "
+            f"selected={selected}, votes={diagnostics}"
         )
-    return club_ids
+    return selected
 
 
 def sync(delay_ms: int = 250):
     generated_at = datetime.now(timezone.utc).isoformat()
-    club_ids = discover_superleague_clubs()
+    club_map = discover_superleague_clubs()
+    club_ids = set(club_map.values())
     players = []
 
     expected = [
