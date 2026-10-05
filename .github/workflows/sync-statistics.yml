@@ -28,16 +28,13 @@ jobs:
           pip install playwright
           playwright install --with-deps chromium
 
-      - name: Validate PFL sync script
-        run: python -m py_compile scripts/sync_pfl_2026_player_stats.py
+      - name: Sync official 2026 match centre
+        run: python scripts/sync_official_2026_matches.py --league UZB
 
       - name: Sync official PFL 2026 player statistics
         run: python scripts/sync_pfl_2026_player_stats.py
 
-      - name: Sync official 2026 match centre
-        run: python scripts/sync_official_2026_matches.py --league UZB
-
-      - name: Rebuild evidence
+      - name: Rebuild existing verified datasets
         run: |
           python scripts/data_integrity.py
           python scripts/build_detailed_positions.py
