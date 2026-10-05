@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
     inputs:
       max_requests:
-        description: Maximum API-Football requests for this run (free plan safe default)
-        default: '95'
+        description: Maximum public SofaScore requests for this run
+        default: '600'
         required: true
       season_year:
         description: Season year to sync
@@ -39,19 +39,17 @@ jobs:
         with:
           node-version: '22'
       - run: pip install curl_cffi
-      - name: Validate API-Football adapter
-        run: python -m py_compile app/api/players/scripts/sync_api_football.py
 
-      - name: Download player match statistics from API-Football
-        id: provider_sync
-        continue-on-error: true
+      - name: Validate public SofaScore adapter
+        run: python -m py_compile app/api/players/scripts/sync_sofascore_public.py
+
+      - name: Download UZB player match statistics from public SofaScore
         env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
-          MAX_REQUESTS: ${{ github.event_name == 'push' && '95' || inputs.max_requests }}
+          MAX_REQUESTS: ${{ github.event_name == 'push' && '600' || inputs.max_requests }}
           SEASON_YEAR: ${{ github.event_name == 'push' && '2026' || inputs.season_year }}
           LEAGUE: ${{ github.event_name == 'push' && 'UZB' || inputs.league }}
         run: |
-          python app/api/players/scripts/sync_api_football.py \
+          python app/api/players/scripts/sync_sofascore_public.py \
             --max-requests "$MAX_REQUESTS" \
             --season-year "$SEASON_YEAR" \
             --league "$LEAGUE"
@@ -81,5 +79,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
-          git commit -m "data: checkpoint API-Football source data"
+          git commit -m "data: checkpoint public SofaScore 2026 statistics"
           git push
