@@ -28,6 +28,9 @@ jobs:
           pip install playwright
           playwright install --with-deps chromium
 
+      - name: Validate PFL sync script
+        run: python -m py_compile scripts/sync_pfl_2026_player_stats.py
+
       - name: Sync official PFL 2026 player statistics
         run: python scripts/sync_pfl_2026_player_stats.py
 
