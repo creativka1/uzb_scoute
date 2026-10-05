@@ -10,11 +10,11 @@ permissions:
   contents: write
 concurrency:
   group: source-data-updates
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,20 +31,11 @@ jobs:
       - name: Probe official PFL player statistics table
         run: python scripts/probe_pfl_player_stats.py
 
-      - name: Sync official 2026 match centre
-        run: python scripts/sync_official_2026_matches.py --league UZB
-
-      - name: Rebuild evidence
+      - name: Persist PFL statistics probe
         run: |
-          python scripts/data_integrity.py
-          python scripts/build_detailed_positions.py
-
-      - name: Persist source checkpoints and status
-        if: always()
-        run: |
-          if [ -z "$(git status --porcelain -- data)" ]; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data
-          git commit -m "data: checkpoint official PFL 2026 data"
+          git add data/audits/pfl_stats_probe.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "data: inspect official PFL statistics table"
           git push
