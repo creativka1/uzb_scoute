@@ -23,6 +23,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install browser probe dependencies
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
       - name: Probe official PFL player statistics table
         run: python scripts/probe_pfl_player_stats.py
 
