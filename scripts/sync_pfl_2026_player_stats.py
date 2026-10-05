@@ -8,6 +8,7 @@ Advanced event metrics are intentionally left unavailable rather than invented.
 from __future__ import annotations
 
 import argparse
+import html as html_lib
 import json
 import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -41,7 +42,14 @@ def penalty_goals(text: str):
     return int(match.group(1)), int(match.group(2)) if match.group(2) is not None else 0
 
 
-def fetch_match_club_ids(url: str) -> set[int]:
+def normalize_team_name(value: str) -> str:
+    value = html_lib.unescape(value or "")
+    value = re.sub(r"<[^>]+>", " ", value)
+    value = re.sub(r"\s+", " ", value).strip().casefold()
+    return value
+
+
+def fetch_match_club_ids(url: str, expected_names: set[str]) -> set[int]:
     req = Request(
         url,
         headers={
@@ -58,10 +66,15 @@ def fetch_match_club_ids(url: str) -> set[int]:
     except (HTTPError, URLError, TimeoutError):
         return set()
 
-    return {
-        int(value)
-        for value in re.findall(r"""href=["']/en/club/(\d+)(?:["'/?#])""", source)
-    }
+    result: set[int] = set()
+    for club_id, body in re.findall(
+        r"""<a\b[^>]*href=["']/en/club/(\d+)(?:["'/?#])[^>]*>(.*?)</a>""",
+        source,
+        flags=re.I | re.S,
+    ):
+        if normalize_team_name(body) in expected_names:
+            result.add(int(club_id))
+    return result
 
 
 def discover_superleague_clubs() -> set[int]:
@@ -70,29 +83,40 @@ def discover_superleague_clubs() -> set[int]:
         raise RuntimeError("official_match_core_2026.json is required before PFL player sync")
 
     core = json.loads(core_path.read_text(encoding="utf-8"))
-    urls = sorted({
-        match.get("sourcePath")
+    teams = {
+        team["id"]: team["name"]
+        for team in core.get("teams", [])
+        if isinstance(team.get("id"), int) and isinstance(team.get("name"), str)
+    }
+    matches = [
+        match
         for match in core.get("matches", [])
         if match.get("league") == "UZB"
         and isinstance(match.get("sourcePath"), str)
         and match.get("sourcePath")
-    })
-    if not urls:
-        raise RuntimeError("No UZB 2026 official match URLs available for club discovery")
+        and match.get("homeTeamId") in teams
+        and match.get("awayTeamId") in teams
+    ]
+    if not matches:
+        raise RuntimeError("No UZB 2026 official matches available for club discovery")
 
     club_ids: set[int] = set()
     with ThreadPoolExecutor(max_workers=8) as pool:
-        futures = {pool.submit(fetch_match_club_ids, url): url for url in urls}
+        futures = {}
+        for match in matches:
+            expected = {
+                normalize_team_name(teams[match["homeTeamId"]]),
+                normalize_team_name(teams[match["awayTeamId"]]),
+            }
+            future = pool.submit(fetch_match_club_ids, match["sourcePath"], expected)
+            futures[future] = match["sourcePath"]
+
         for future in as_completed(futures):
             club_ids.update(future.result())
-            if len(club_ids) >= EXPECTED_CLUBS:
-                for pending in futures:
-                    pending.cancel()
-                break
 
     if len(club_ids) != EXPECTED_CLUBS:
         raise RuntimeError(
-            f"Expected {EXPECTED_CLUBS} Superliga clubs from official 2026 matches, "
+            f"Expected {EXPECTED_CLUBS} Superliga clubs matched to official teams, "
             f"found {len(club_ids)}: {sorted(club_ids)}"
         )
     return club_ids
