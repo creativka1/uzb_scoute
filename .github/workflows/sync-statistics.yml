@@ -6,19 +6,6 @@ on:
     paths:
       - data/.sync-2026-request
   workflow_dispatch:
-    inputs:
-      max_requests:
-        description: Maximum public SofaScore browser requests for this run
-        default: '600'
-        required: true
-      season_year:
-        description: Season year to sync
-        default: '2026'
-        required: true
-      league:
-        description: League code (UZB or KAZ)
-        default: 'UZB'
-        required: true
 permissions:
   contents: write
 concurrency:
@@ -35,43 +22,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
 
-      - name: Install sync dependencies
-        run: |
-          pip install curl_cffi playwright
-          playwright install --with-deps chromium
-
-      - name: Validate public browser adapter
-        run: python -m py_compile app/api/players/scripts/sync_sofascore_browser_stats.py
-
-      - name: Download UZB 2026 player statistics from public SofaScore
-        env:
-          MAX_REQUESTS: ${{ github.event_name == 'push' && '600' || inputs.max_requests }}
-          SEASON_YEAR: ${{ github.event_name == 'push' && '2026' || inputs.season_year }}
-          LEAGUE: ${{ github.event_name == 'push' && 'UZB' || inputs.league }}
-        run: |
-          python app/api/players/scripts/sync_sofascore_browser_stats.py \
-            --max-requests "$MAX_REQUESTS" \
-            --season-year "$SEASON_YEAR" \
-            --league "$LEAGUE"
+      - name: Probe official PFL player statistics table
+        run: python scripts/probe_pfl_player_stats.py
 
       - name: Sync official 2026 match centre
-        env:
-          LEAGUE: ${{ github.event_name == 'push' && 'UZB' || inputs.league }}
-        run: |
-          args=()
-          if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
-          python scripts/sync_official_2026_matches.py "${args[@]}"
+        run: python scripts/sync_official_2026_matches.py --league UZB
 
-      - name: Link cached 2026 lineups to official matches
-        if: always()
-        run: python scripts/link_2026_lineups.py
-
-      - name: Rebuild evidence and partial-cache coverage
-        if: always()
+      - name: Rebuild evidence
         run: |
           python scripts/data_integrity.py
           python scripts/build_detailed_positions.py
@@ -83,5 +41,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
-          git commit -m "data: checkpoint public SofaScore browser statistics"
+          git commit -m "data: checkpoint official PFL 2026 data"
           git push
