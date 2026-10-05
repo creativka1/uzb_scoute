@@ -11,6 +11,7 @@ permissions:
 concurrency:
   group: source-data-updates
   cancel-in-progress: true
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -19,41 +20,40 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Install API-Football sync dependency
+      - name: Install public SofaScore sync dependency
         run: pip install curl_cffi
 
-      - name: Validate API-Football adapter
-        run: python -m py_compile app/api/players/scripts/sync_api_football.py
+      - name: Validate public SofaScore adapter
+        run: python -m py_compile app/api/players/scripts/sync_sofascore_public.py
 
-      - name: Sync API-Football UZB 2026 player statistics
-        env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+      - name: Sync public SofaScore UZB 2026 player statistics
         run: |
-          python app/api/players/scripts/sync_api_football.py \
+          python app/api/players/scripts/sync_sofascore_public.py \
             --league UZB \
             --season-year 2026 \
-            --max-requests 95
+            --max-requests 600
 
       - name: Link cached 2026 lineups to official matches
         if: always()
         run: python scripts/link_2026_lineups.py
 
-      - name: Rebuild existing verified datasets
+      - name: Rebuild verified datasets
         if: always()
         run: |
           python scripts/data_integrity.py
           python scripts/build_detailed_positions.py
 
-      - name: Persist API-Football 2026 data
+      - name: Persist SofaScore 2026 data
         if: always()
         run: |
           if [ -z "$(git status --porcelain -- data)" ]; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
-          git commit -m "data: sync API-Football UZB 2026 player statistics"
+          git commit -m "data: sync public SofaScore UZB 2026 statistics"
           git push
