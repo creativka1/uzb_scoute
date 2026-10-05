@@ -11,8 +11,11 @@ from __future__ import annotations
 import argparse
 import json
 import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from playwright.sync_api import sync_playwright
 
@@ -40,30 +43,15 @@ def penalty_goals(text: str):
 
 def sync(delay_ms: int = 250):
     generated_at = datetime.now(timezone.utc).isoformat()
-    clubs = {}
+    club_ids = discover_superleague_clubs()
     players = []
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1600, "height": 1200}, locale="en-US")
-        response = page.goto(f"{BASE}/en", wait_until="domcontentloaded", timeout=60000)
-        if response is None or response.status >= 400:
-            raise RuntimeError(f"PFL home unavailable: {None if response is None else response.status}")
-        page.wait_for_timeout(2500)
-
-        hrefs = page.locator('a[href^="/en/club/"]').evaluate_all(
-            """els => els.map(a => ({href:a.getAttribute('href'), text:(a.textContent||'').trim()}))"""
-        )
-        for item in hrefs:
-            m = re.fullmatch(r"/en/club/(\d+)", item.get("href") or "")
-            if m:
-                clubs[int(m.group(1))] = item.get("text") or None
-
-        if len(clubs) < 10:
-            raise RuntimeError(f"Only {len(clubs)} club links found on PFL home; refusing incomplete league")
 
         parsed_clubs = []
-        for club_id in sorted(clubs):
+        for club_id in sorted(club_ids):
             url = f"{BASE}/en/club/{club_id}/statistics"
             response = page.goto(url, wait_until="domcontentloaded", timeout=60000)
             if response is None or response.status >= 400:
@@ -94,7 +82,7 @@ def sync(delay_ms: int = 250):
             if h1.count():
                 club_name = h1.first.inner_text().strip()
             if not club_name:
-                club_name = clubs.get(club_id) or f"club-{club_id}"
+                club_name = f"club-{club_id}"
 
             rows = table.locator("tbody tr")
             club_players = 0
@@ -147,7 +135,7 @@ def sync(delay_ms: int = 250):
     # Home can contain links to clubs outside the active Superliga. Keep only
     # clubs whose rendered statistics table has current-season player rows.
     if len(parsed_clubs) < 12:
-        raise RuntimeError(f"Only {len(parsed_clubs)} clubs yielded PFL statistics; refusing incomplete sync")
+        raise RuntimeError(f"Expected statistics for 16 Superliga clubs, got {len(parsed_clubs)}")
     if len(players) < 200:
         raise RuntimeError(f"Only {len(players)} player rows found; refusing incomplete sync")
 
@@ -181,3 +169,60 @@ if __name__ == "__main__":
     parser.add_argument("--delay-ms", type=int, default=250)
     args = parser.parse_args()
     sync(max(100, args.delay_ms))
+
+def fetch_match_club_ids(url: str) -> set[int]:
+    req = Request(
+        url,
+        headers={
+            "User-Agent": "UzStatPFLStats/1.0 (+https://github.com/creativka1/uzb_scoute)",
+            "Accept": "text/html,application/xhtml+xml",
+            "Accept-Language": "en-US,en;q=0.9",
+        },
+    )
+    try:
+        with urlopen(req, timeout=20) as response:
+            if response.status != 200:
+                return set()
+            source = response.read().decode("utf-8", errors="replace")
+    except (HTTPError, URLError, TimeoutError):
+        return set()
+    return {
+        int(value)
+        for value in re.findall(r'href=["\\\']/en/club/(\\d+)(?:["\\\'/?#])', source)
+    }
+
+
+def discover_superleague_clubs() -> set[int]:
+    core_path = ROOT / "data/official_match_core_2026.json"
+    if not core_path.exists():
+        raise RuntimeError("official_match_core_2026.json is required before PFL player sync")
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    urls = [
+        match.get("sourcePath")
+        for match in core.get("matches", [])
+        if match.get("league") == "UZB"
+        and isinstance(match.get("sourcePath"), str)
+        and match.get("sourcePath")
+    ]
+    if not urls:
+        raise RuntimeError("No UZB 2026 official match URLs available for club discovery")
+
+    club_ids: set[int] = set()
+    # Every match exposes the two club links. Stop once all 16 official
+    # Superliga teams found in the match-core audit are discovered.
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        futures = [pool.submit(fetch_match_club_ids, url) for url in urls]
+        for future in as_completed(futures):
+            club_ids.update(future.result())
+            if len(club_ids) >= 16:
+                for pending in futures:
+                    pending.cancel()
+                break
+
+    if len(club_ids) != 16:
+        raise RuntimeError(
+            f"Expected 16 Superliga clubs from official 2026 matches, found {len(club_ids)}: "
+            f"{sorted(club_ids)}"
+        )
+    return club_ids
+
