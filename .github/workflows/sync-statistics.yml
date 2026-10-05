@@ -39,6 +39,8 @@ jobs:
         with:
           node-version: '22'
       - run: pip install curl_cffi
+      - name: Validate API-Football adapter
+        run: python -m py_compile app/api/players/scripts/sync_api_football.py
 
       - name: Download player match statistics from API-Football
         id: provider_sync
