@@ -8,17 +8,17 @@ on:
   workflow_dispatch:
     inputs:
       max_requests:
-        description: Maximum HTTP requests including retries (uses RapidAPI quota)
-        default: '1500'
+        description: Maximum API-Football requests for this run (free plan safe default)
+        default: '95'
         required: true
       season_year:
-        description: Optional season year to sync, e.g. 2026
-        default: ''
-        required: false
+        description: Season year to sync
+        default: '2026'
+        required: true
       league:
-        description: Optional league code (UZB or KAZ); blank means both
-        default: ''
-        required: false
+        description: League code (UZB or KAZ)
+        default: 'UZB'
+        required: true
 permissions:
   contents: write
 concurrency:
@@ -39,23 +39,24 @@ jobs:
         with:
           node-version: '22'
       - run: pip install curl_cffi
-      - name: Download selected competitions through provider
+
+      - name: Download player match statistics from API-Football
         id: provider_sync
         continue-on-error: true
         env:
-          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-          MAX_REQUESTS: ${{ github.event_name == 'push' && '1500' || inputs.max_requests }}
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          MAX_REQUESTS: ${{ github.event_name == 'push' && '95' || inputs.max_requests }}
           SEASON_YEAR: ${{ github.event_name == 'push' && '2026' || inputs.season_year }}
-          LEAGUE: ${{ inputs.league }}
+          LEAGUE: ${{ github.event_name == 'push' && 'UZB' || inputs.league }}
         run: |
-          args=(--max-requests "$MAX_REQUESTS")
-          if [ -n "$SEASON_YEAR" ]; then args+=(--season-year "$SEASON_YEAR"); fi
-          if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
-          python app/api/players/scripts/sync_sofascore.py "${args[@]}"
+          python app/api/players/scripts/sync_api_football.py \
+            --max-requests "$MAX_REQUESTS" \
+            --season-year "$SEASON_YEAR" \
+            --league "$LEAGUE"
 
       - name: Sync official 2026 match centre
         env:
-          LEAGUE: ${{ inputs.league }}
+          LEAGUE: ${{ github.event_name == 'push' && 'UZB' || inputs.league }}
         run: |
           args=()
           if [ -n "$LEAGUE" ]; then args+=(--league "$LEAGUE"); fi
@@ -78,5 +79,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
-          git commit -m "data: checkpoint verified football source data"
+          git commit -m "data: checkpoint API-Football source data"
           git push
