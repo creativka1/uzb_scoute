@@ -23,25 +23,37 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install PFL sync dependencies
-        run: |
-          pip install playwright
-          playwright install --with-deps chromium
+      - name: Install API-Football sync dependency
+        run: pip install curl_cffi
 
-      - name: Sync official PFL 2026 player statistics
-        run: python scripts/sync_pfl_2026_player_stats.py
+      - name: Validate API-Football adapter
+        run: python -m py_compile app/api/players/scripts/sync_api_football.py
+
+      - name: Sync API-Football UZB 2026 player statistics
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+        run: |
+          python app/api/players/scripts/sync_api_football.py \
+            --league UZB \
+            --season-year 2026 \
+            --max-requests 95
+
+      - name: Link cached 2026 lineups to official matches
+        if: always()
+        run: python scripts/link_2026_lineups.py
 
       - name: Rebuild existing verified datasets
+        if: always()
         run: |
           python scripts/data_integrity.py
           python scripts/build_detailed_positions.py
 
-      - name: Persist official 2026 data
+      - name: Persist API-Football 2026 data
         if: always()
         run: |
           if [ -z "$(git status --porcelain -- data)" ]; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
-          git commit -m "data: sync official PFL 2026 player statistics"
+          git commit -m "data: sync API-Football UZB 2026 player statistics"
           git push
