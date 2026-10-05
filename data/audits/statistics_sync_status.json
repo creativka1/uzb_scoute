@@ -1,6 +1,8 @@
 {
   "status": "failed",
-  "updatedAt": "2026-10-05T13:22:26.200122+00:00",
-  "provider": "api-football",
-  "error": "API-Football error: {'plan': 'Free plans do not have access to this season, try from 2022 to 2024.'}"
+  "updatedAt": "2026-10-05T13:26:20.231435+00:00",
+  "provider": "sofascore-public",
+  "league": "UZB",
+  "seasonYear": 2026,
+  "error": "Public SofaScore route unavailable: HTTP 403 for /unique-tournament/772/seasons"
 }
