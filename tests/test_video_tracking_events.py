@@ -2,6 +2,7 @@ import csv
 import importlib.util
 import tempfile
 import unittest
+import sys
 from pathlib import Path
 
 
@@ -10,6 +11,7 @@ MODULE_PATH = ROOT / "scripts" / "video_tracking_events.py"
 SPEC = importlib.util.spec_from_file_location("video_tracking_events", MODULE_PATH)
 video = importlib.util.module_from_spec(SPEC)
 assert SPEC and SPEC.loader
+sys.modules[SPEC.name] = video
 SPEC.loader.exec_module(video)
 
 
