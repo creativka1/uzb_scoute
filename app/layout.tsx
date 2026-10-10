@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { MvpShell } from '@/components/mvp/shell';
 
 export const metadata: Metadata = {
-  title: "UzStat Talent Tracker | Футбольная аналитика",
-  description: "Скаутинг и сравнение игроков Узбекистана и Казахстана по подтверждённым матчевым данным с указанием источника, сезона и покрытия.",
+  title: "Uzstat | Поиск и сравнение футболистов",
+  description: "Простой скаутинг: подбор футболиста, избранное и сравнение по подтверждённым данным.",
 };
 
 export default function RootLayout({
@@ -12,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className="dark">
-      <body className="antialiased bg-zinc-950 text-zinc-100">
-        {children}
+    <html lang="ru">
+      <body>
+        <MvpShell>{children}</MvpShell>
       </body>
     </html>
   );
