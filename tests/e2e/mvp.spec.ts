@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { formatNumber, MVP_PLAYER_IDS } from '../../lib/mvp';
 import type { Player } from '../../types/players';
-import { COMPARISON_METRICS, displayMetricValue, PROFILE_METRICS } from '../../components/mvp/profile-data';
+import { ATTACKING_METRICS, COMPARISON_METRICS, displayMetricValue, PROFILE_METRICS, roleMetricScores } from '../../components/mvp/profile-data';
 
 test('home → recruitment → profile → saved shortlist → comparison', async ({ page }, testInfo) => {
   const errors: string[] = [];
@@ -79,8 +79,27 @@ test('player selection, cached photos and comparison reflect existing data', asy
     await expect(card.locator('strong')).toHaveText(formatNumber(displayMetricValue(players[4], metric.key), metric.decimals));
     if ('rate' in metric) await expect(card.locator('.metric-rate')).toHaveText(`${formatNumber(displayMetricValue(players[4], metric.rate), 2)} / 90`);
   }
-  await expect(page.locator('.players-profile svg [data-axis]')).toHaveCount(8);
-  await expect(page.locator('.profile-index')).toContainText('Покрытие: 5/5');
+  await expect(page.locator('.players-profile svg [data-axis]')).toHaveCount(5);
+  await expect(page.locator('.profile-index')).not.toContainText('Покрытие');
+  const explanation = page.locator('.players-profile .index-explanation');
+  await expect(explanation.locator('.index-explanation-content')).not.toBeVisible();
+  await explanation.locator('summary').click();
+  await expect(explanation).toContainText('Покрытие: 5/5');
+  for (const metric of roleMetricScores(players[4])) {
+    const cells = explanation.locator(`[data-role-metric="${metric.key}"] td`);
+    await expect(cells.nth(0)).toHaveText(formatNumber(metric.percentile));
+    await expect(cells.nth(1)).toHaveText(formatNumber(metric.adjustedScore));
+    await expect(page.locator(`.players-profile [data-axis="${metric.key}"] .radar-score`)).toHaveText(formatNumber(metric.adjustedScore));
+  }
+  await expect(explanation.locator('tfoot td')).toHaveText(`${formatNumber(players[4].scoutIndex)} / 100`);
+  await page.screenshot({ path: testInfo.outputPath('index-explanation.png'), fullPage: true });
+  await explanation.locator('summary').click();
+  for (const metric of ATTACKING_METRICS) {
+    const card = page.locator(`.players-profile [data-attacking-metric="${metric.key}"]`);
+    const value = displayMetricValue(players[4], metric.key);
+    if (value === null) await expect(card).toHaveCount(0);
+    else await expect(card.locator('dd')).toHaveText(formatNumber(value, metric.decimals));
+  }
   for (const metric of COMPARISON_METRICS) {
     const row = page.locator(`.comparison-panel [data-metric="${metric.key}"]`);
     await expect(row.locator('.bar-value.left')).toHaveText(formatNumber(displayMetricValue(players[4], metric.key), metric.decimals));

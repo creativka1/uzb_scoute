@@ -171,3 +171,64 @@ test('scout categories use existing league scores; position rank respects tied s
   const absent = scoutSignals({ ...players[0], scoutingEngine: { ...players[0].scoutingEngine, adjustedRadar: {} } });
   assert.equal(absent.strong.length + absent.average.length + absent.weak.length, 0);
 });
+
+test('profile radar uses only the index role metrics and existing adjusted scores', async () => {
+  const { roleMetricScores, roleRadarData } = load('components/mvp/profile-data.ts');
+  const { MvpRadar } = load('components/mvp/radar.tsx');
+  const players = await cohort();
+  const keys = ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct'];
+  for (const player of players) {
+    const metrics = roleMetricScores(player);
+    assert.deepEqual(Array.from(metrics, metric => metric.key), keys);
+    const data = roleRadarData(player);
+    assert.equal(data.peers, player.scoutingEngine.benchmarkPlayers);
+    assert.equal(data.axes.length, 5);
+    metrics.forEach((metric, index) => {
+      assert.equal(metric.value, player.roleMetrics[keys[index]]);
+      assert.equal(metric.percentile, player.radar[`m${index + 1}`]);
+      assert.equal(metric.adjustedScore, player.scoutingEngine.adjustedRadar[`m${index + 1}`]);
+      assert.equal(data.axes[index].score, metric.adjustedScore);
+    });
+  }
+  const html = renderToStaticMarkup(React.createElement(MvpRadar, { player: players[0], players, roleProfile: true }));
+  assert.equal((html.match(/data-axis=/g) || []).length, 5);
+  assert.ok(html.includes('Радар Scout Index'));
+  assert.ok(!html.includes('data-axis="goalsPer90"') && !html.includes('data-axis="xGPer90"') && !html.includes('data-axis="duelWinPct"'));
+});
+
+test('role radar excludes null values and scores while retaining actual zero', async () => {
+  const { roleMetricScores, roleRadarData } = load('components/mvp/profile-data.ts');
+  const { MvpRadar } = load('components/mvp/radar.tsx');
+  const players = await cohort();
+  const partial = { ...players[0], roleMetrics: { ...players[0].roleMetrics, keyPassesPer90: 0, assistsPer90: null },
+    scoutingEngine: { ...players[0].scoutingEngine, adjustedRadar: { ...players[0].scoutingEngine.adjustedRadar, m1: 0, m3: null, m4: null } } };
+  const axes = roleRadarData(partial).axes;
+  assert.equal(axes.length, 2);
+  assert.equal(axes[0].value, 0);
+  assert.equal(axes[0].score, 0);
+  assert.equal(roleMetricScores(partial)[2].adjustedScore, null);
+  const html = renderToStaticMarkup(React.createElement(MvpRadar, { player: partial, players, roleProfile: true }));
+  assert.ok(html.includes('Недостаточно ролевых данных'));
+  assert.ok(!html.includes('<polygon'));
+});
+
+test('index explanation shows source percentiles and scores without reconstructing the index', async () => {
+  const { IndexExplanation } = load('components/mvp/index-explanation.tsx');
+  const { ATTACKING_METRICS, displayMetricValue } = load('components/mvp/profile-data.ts');
+  const players = await cohort();
+  const player = players[0];
+  const html = renderToStaticMarkup(React.createElement(IndexExplanation, { player }));
+  assert.equal((html.match(/data-role-metric=/g) || []).length, 5);
+  assert.ok(html.includes(`>${player.scoutIndex} / 100</td>`));
+  assert.ok(html.includes('Покрытие: 5/5'));
+  assert.ok(html.includes('не «процент качества игрока»'));
+  const absent = renderToStaticMarkup(React.createElement(IndexExplanation, { player: { ...player, scoutIndex: null,
+    radar: { ...player.radar, m1: null }, scoutingEngine: { ...player.scoutingEngine, adjustedRadar: { ...player.scoutingEngine.adjustedRadar, m1: null } } } }));
+  assert.ok(absent.includes('>— / 100</td>'));
+  assert.ok(absent.includes('<td>—</td><td>—</td>'));
+  assert.equal(ATTACKING_METRICS.length, 8);
+  const partial = { ...player, goals: 0, assists: null, xG: null, xA: null };
+  const visible = ATTACKING_METRICS.filter(metric => displayMetricValue(partial, metric.key) !== null).map(metric => metric.key);
+  assert.ok(visible.includes('goals'));
+  assert.ok(!visible.includes('assists') && !visible.includes('xG') && !visible.includes('xA'));
+});

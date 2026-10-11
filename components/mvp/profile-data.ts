@@ -1,5 +1,5 @@
 import type { Player, Position, RoleRadarMetrics } from '@/types/players';
-import { metricValue, MVP_METRICS } from '@/lib/mvp';
+import { metricLabel, metricValue, MVP_METRICS } from '@/lib/mvp';
 
 export const PROFILE_METRICS = [
   { key: 'matchesPlayed', label: 'Матчи', decimals: 0 },
@@ -16,6 +16,17 @@ export const COMPARISON_METRICS = [
   { key: 'goals', label: 'Голы', decimals: 0, source: 'goals' },
   { key: 'assists', label: 'Ассисты', decimals: 0, source: 'assists' },
   ...MVP_METRICS.map(metric => ({ ...metric, label: metric.key === 'assistsPer90' ? 'Ассисты / 90' : metric.label })),
+] as const;
+
+export const ATTACKING_METRICS = [
+  { key: 'goals', label: 'Голы', decimals: 0 },
+  { key: 'assists', label: 'Ассисты', decimals: 0 },
+  { key: 'goalsPer90', label: 'Голы / 90', decimals: 2 },
+  { key: 'assistsPer90', label: 'Ассисты / 90', decimals: 2 },
+  { key: 'xG', label: 'xG', decimals: 2 },
+  { key: 'xA', label: 'xA', decimals: 2 },
+  { key: 'xGPer90', label: 'xG / 90', decimals: 2 },
+  { key: 'xAPer90', label: 'xA / 90', decimals: 2 },
 ] as const;
 
 export function displayMetricValue(player: Player, key: string): number | null {
@@ -78,6 +89,27 @@ const ROLE_KEYS: Record<Position, string[]> = {
   MF: ['keyPassesPer90', 'assistsPer90', 'dribbleSuccessPct', 'tacklesPer90', 'passAccPct'],
   FW: ['goalsPer90', 'assistsPer90', 'shotsPer90', 'keyPassesPer90', 'dribbleSuccessPct'],
 };
+
+export function roleMetricScores(player: Player) {
+  const number = (value: number | null | undefined) => typeof value === 'number' && Number.isFinite(value) ? value : null;
+  return ROLE_KEYS[player.position].map((key, index) => {
+    const axis = `m${index + 1}` as keyof RoleRadarMetrics;
+    return { key, label: metricLabel(key), value: number(player.roleMetrics?.[key]),
+      percentile: number(player.radar?.[axis]), adjustedScore: number(player.scoutingEngine.adjustedRadar[axis]),
+      count: number(player.scoutingEngine.benchmarkByMetric[key]) };
+  });
+}
+
+export function roleRadarData(player: Player) {
+  const shortLabels: Record<string, string> = { keyPassesPer90: 'Пасы под удар', assistsPer90: 'Ассисты / 90',
+    dribbleSuccessPct: 'Дриблинг, %', tacklesPer90: 'Отборы / 90', passAccPct: 'Точность паса' };
+  return { peers: player.scoutingEngine.benchmarkPlayers, axes: roleMetricScores(player).flatMap(metric => {
+    if (metric.value === null || metric.adjustedScore === null) return [];
+    return [{ key: metric.key, label: shortLabels[metric.key] || metric.label, metricLabel: metric.label,
+      value: metric.value, decimals: metric.key.endsWith('Pct') ? 1 : 2, score: metric.adjustedScore,
+      percentile: metric.percentile, count: metric.count, other: null, otherValue: null }];
+  }) };
+}
 
 export function scoutSignals(player: Player) {
   // Use the already calculated league role scores, not the UI radar cohort.
