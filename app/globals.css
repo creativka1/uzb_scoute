@@ -382,14 +382,24 @@ input[type=checkbox] { width: 18px; height: 18px; min-height: 0; accent-color: v
 .detail-attacking dd { margin: 2px 0 0; font-size: 19px; font-weight: 650; line-height: 1.4; font-variant-numeric: tabular-nums;}
 .detail-attacking .fine-print { margin-top: 10px; font-size: 9px;}
 .player-detail .detail-similar { margin-top: 12px;}
-.detail-similar-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px;}
-.detail-similar-list>a { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--line); border-radius: 7px; padding: 11px;}
+.detail-similar-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,280px),1fr)); gap: 12px;}
+.detail-similar-card { border: 1px solid var(--line); border-radius: 7px; min-width: 0;}
+.detail-similar-card>a { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px;}
 .detail-similar-list .avatar { width: 35px; height: 35px;}
 .detail-similar-list .identity strong { font-size: 11px;}
 .detail-similar-list .identity>div>span { font-size: 9px;}
-.detail-similar-list>a>div:last-child { text-align: right; flex-shrink: 0;}
-.detail-similar-list>a>div:last-child>span { display: block; color: var(--muted); font-size: 8px;}
-.detail-similar-list>a>div:last-child>strong { display: inline-flex; align-items: center; gap: 3px; font-size: 11px;}
+.detail-similar-card>a>div:last-child { text-align: right; flex-shrink: 0;}
+.detail-similar-card>a>div:last-child>span { display: block; color: var(--muted); font-size: 8px;}
+.detail-similar-card>a>div:last-child>strong { display: inline-flex; align-items: center; gap: 3px; font-size: 11px;}
+.detail-similar-card .similarity-details { padding: 0 11px 11px;}
+.similarity-details>p { font-size: 10px;}
+.similarity-details details { margin-top: 5px; padding-top: 6px;}
+.similarity-details summary { font-size: 10px; color: var(--muted);}
+.similarity-details dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 10px 0;}
+.similarity-details dt { font-size: 9px; color: var(--muted); overflow-wrap: anywhere;}
+.similarity-details dd { margin: 2px 0 0; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums;}
+.similarity-details small { display: block; font-size: 8px; color: var(--muted);}
+.similarity-details .fine-print { font-size: 9px; margin-top: 8px;}
 @media(max-width:1200px) {
   .detail-header { grid-template-columns: minmax(0,1fr) minmax(0,1fr) 195px; gap: 16px; padding: 16px;}
   .detail-identity.identity.large .avatar { width: 90px; height: 90px;}

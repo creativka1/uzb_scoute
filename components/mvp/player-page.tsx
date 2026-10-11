@@ -8,6 +8,7 @@ import { PlayerPhoto } from './photo';
 import { SaveButton } from './shell';
 import { MvpRadar } from './radar';
 import { IndexBars } from './index-bars';
+import { SimilarityDetails } from './similarity-details';
 import { ATTACKING_METRICS, displayMetricValue, positionRank, PROFILE_METRICS } from './profile-data';
 
 const metricIcons = { matchesPlayed: Trophy, minutesPlayed: Clock3, goals: Target, assists: Footprints,
@@ -58,10 +59,11 @@ export function PlayerPageProfile({ player, players }: { player: Player; players
         <p className="fine-print">Только доступные показатели. Totals и /90 взяты из существующих данных.</p>
       </section>}
     </div>
-    <section className="panel detail-similar" id="similar-players"><div className="section-heading"><h2>Похожие игроки</h2><span>Схожесть доступных ролевых показателей</span></div>
-      {similar.length ? <div className="detail-similar-list">{similar.map(candidate => <Link href={`/compare?a=${player.id}&b=${candidate.player.id}`} key={candidate.player.id}>
-        <PlayerIdentity player={candidate.player} /><div><span>Similarity Index</span><strong>{formatNumber(candidate.similarity)} / 100<ArrowUpRight size={14} aria-hidden="true" /></strong></div>
-      </Link>)}</div> : <p className="muted">Недостаточно общих метрик для поиска похожих игроков.</p>}
+    <section className="panel detail-similar" id="similar-players"><div className="section-heading"><h2>Похожие игроки</h2><span>Взвешенная схожесть профилей · покрытие ≥60%</span></div>
+      {similar.length ? <div className="detail-similar-list">{similar.map(candidate => <div className="detail-similar-card" key={candidate.player.id} data-similarity-player={candidate.player.id}>
+        <Link href={`/compare?a=${player.id}&b=${candidate.player.id}`}><PlayerIdentity player={candidate.player} /><div><span>Similarity Index</span><strong>{formatNumber(candidate.similarity)}{candidate.similarity !== null && ' / 100'}<ArrowUpRight size={14} aria-hidden="true" /></strong></div></Link>
+        <SimilarityDetails result={candidate} />
+      </div>)}</div> : <p className="muted">— Недостаточно данных для поиска похожих игроков той же позиции/роли и сезона.</p>}
     </section>
   </article>;
 }

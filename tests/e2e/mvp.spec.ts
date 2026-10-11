@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { formatNumber, MVP_PLAYER_IDS } from '../../lib/mvp';
 import type { Player } from '../../types/players';
 import { ATTACKING_METRICS, COMPARISON_METRICS, displayMetricValue, PROFILE_METRICS, radarData, roleMetricScores } from '../../components/mvp/profile-data';
+import { getSimilarPlayers, SIMILARITY_CATEGORIES } from '../../lib/recruitment';
 
 test('home → recruitment → profile → saved shortlist → comparison', async ({ page }, testInfo) => {
   const errors: string[] = [];
@@ -155,6 +156,33 @@ test('standalone profile separates player radar from source-backed Scout Index b
   await explanation.locator('summary').click();
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: testInfo.outputPath('standalone-profile.png'), fullPage: true });
+});
+
+test('similarity uses weighted source metrics, exposes six subscores and preserves Scout Index', async ({ page, request }, testInfo) => {
+  const players: Player[] = await (await request.get('/api/mvp/players')).json();
+  const target = players[0];
+  const expected = getSimilarPlayers(target, players).slice(0, 3);
+  expect(expected.length).toBeGreaterThan(0);
+  for (const route of [`/players/${target.id}`, '/players']) {
+    await page.goto(route);
+    for (const result of expected) {
+      const card = page.locator(`[data-similarity-player="${result.player.id}"]`);
+      await expect(card.locator('a strong').last()).toContainText(formatNumber(result.similarity));
+      await card.locator('.similarity-details summary').click();
+      await expect(card.locator('[data-similarity-category]')).toHaveCount(6);
+      for (const key of Object.keys(SIMILARITY_CATEGORIES)) {
+        await expect(card.locator(`[data-similarity-category="${key}"] dd`)).toHaveText(formatNumber(result.subscores[key as keyof typeof result.subscores].similarity));
+      }
+      await expect(card.locator('[data-similarity-category="progression"] dd')).toHaveText('—');
+      if (result.similarity === null) await expect(card).toContainText('Недостаточно данных');
+    }
+    const index = route === '/players' ? page.locator('.players-profile .profile-index strong') : page.locator('.detail-index-score');
+    await expect(index).toHaveText(`${formatNumber(target.scoutIndex)} / 100`);
+    const sizes = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
+    expect(sizes.document).toBeLessThanOrEqual(sizes.viewport);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: testInfo.outputPath(route === '/players' ? 'similarity-roster.png' : 'similarity-profile.png'), fullPage: true });
+  }
 });
 
 test('club roster leads to recruitment excluding its own players', async ({ page }) => {

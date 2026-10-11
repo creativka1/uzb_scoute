@@ -255,3 +255,20 @@ test('index bars render existing role scores and percentiles without substitutin
   assert.ok(missingRow.includes('<strong>—'));
   assert.ok(!missingRow.includes('index-bar-fill'));
 });
+
+test('similarity details expose six real subscores and an explicit missing-data message', async () => {
+  const { getSimilarPlayers } = load('lib/recruitment.ts');
+  const { SimilarityDetails } = load('components/mvp/similarity-details.tsx');
+  const players = await cohort();
+  const candidate = getSimilarPlayers(players[0], players)[0];
+  assert.ok(candidate);
+  assert.ok(candidate.comparedMetrics > 6);
+  assert.equal(candidate.subscores.progression.similarity, null);
+  const html = renderToStaticMarkup(React.createElement(SimilarityDetails, { result: candidate }));
+  assert.equal((html.match(/data-similarity-category=/g) || []).length, 6);
+  assert.ok(html.includes('Продвижение</dt><dd>—</dd>'));
+  const unavailable = getSimilarPlayers(players[0], [{ ...players[0], id: 'missing', statsMetricDetails: {}, roleMetricCoverage: {}, roleMetrics: {} }])[0];
+  const missingHtml = renderToStaticMarkup(React.createElement(SimilarityDetails, { result: unavailable }));
+  assert.ok(missingHtml.includes('Недостаточно данных'));
+  assert.ok(missingHtml.includes('Покрытие 0%'));
+});

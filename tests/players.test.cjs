@@ -92,10 +92,10 @@ test('partial observations expose matching minute denominators',async()=>{
 const list=(await get('UZB','previous')).players;let recovered=0;
 for(const p of list){for(const d of Object.values(p.statsMetricDetails)){if(d.status==='partial'&&d.value!==null)recovered++;if(d.per90!==null)assert.ok(Math.abs(d.per90-d.value/d.minutes*90)<0.00001);}for(const [key,d] of Object.entries(p.roleMetricCoverage)){if(key.endsWith('Per90')&&d.value!==undefined&&d.per90!==null)assert.equal(p.roleMetrics[key],d.per90);}}assert.ok(recovered>0);
 });
-test('similarity ignores price by default and fixes season and axes',async()=>{
+test('similarity ignores price by default, fixes season and reports missing observations',async()=>{
 const s=(await get('UZB','previous')).players.find(p=>p.position==='GK'&&p.radar.m1!==null&&p.radar.m2!==null);
 const target={...s,id:'target',rawMarketValueEUR:null},same={...s,id:'same',rawMarketValueEUR:null};
-const result=recruitment.getSimilarPlayers(target,[same,{...same,id:'other',statsSeasonIds:[-1]},{...same,id:'missing',radar:{...same.radar,m2:null}}]);assert.equal(result.length,1);assert.equal(result[0].similarity,100);assert.equal(result[0].player.id,'same');
+const result=recruitment.getSimilarPlayers(target,[same,{...same,id:'other',statsSeasonIds:[-1]},{...same,id:'missing',statsMetricDetails:{},roleMetricCoverage:{},roleMetrics:{}}]);assert.equal(result.length,2);assert.equal(result[0].similarity,100);assert.equal(result[0].player.id,'same');assert.equal(result[1].similarity,null);assert.equal(result[1].reason,'Недостаточно данных');
 });
 
 

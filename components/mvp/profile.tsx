@@ -8,6 +8,7 @@ import { MvpRadar } from './radar';
 import { ArrowLeftRight } from 'lucide-react';
 import { ATTACKING_METRICS, displayMetricValue, positionRank, PROFILE_METRICS, scoutSignals } from './profile-data';
 import { IndexExplanation } from './index-explanation';
+import { SimilarityDetails } from './similarity-details';
 
 export function PlayerProfile({ player, players, embedded = false, onCompare }: { player: Player; players: Player[]; embedded?: boolean; onCompare?: () => void }) {
   const similar = getSimilarPlayers(player, players).slice(0, 3);
@@ -40,10 +41,11 @@ export function PlayerProfile({ player, players, embedded = false, onCompare }: 
     {attacking.length > 0 && <section className="panel attacking-profile"><div className="section-heading"><h2>Атакующий профиль</h2><span>Сохранённые матчи 2025</span></div>
       <dl className="attacking-metrics">{attacking.map(metric => <div key={metric.key} data-attacking-metric={metric.key}><dt>{metric.label}</dt><dd>{formatNumber(displayMetricValue(player, metric.key), metric.decimals)}</dd></div>)}</dl>
     </section>}
-    <section className="panel similar-panel"><h2>Похожие игроки</h2><p className="muted">Similarity Index: схожесть доступных ролевых показателей.</p>
-      {similar.length ? <div className="similar-list">{similar.map(candidate => <Link href={`/compare?a=${player.id}&b=${candidate.player.id}`} key={candidate.player.id}>
-        <span>{candidate.player.name.ru}<small>{candidate.player.club.ru}</small></span><strong>{formatNumber(candidate.similarity)} / 100</strong>
-      </Link>)}</div> : <p className="muted">Недостаточно общих метрик для поиска похожих игроков.</p>}
+    <section className="panel similar-panel"><h2>Похожие игроки</h2><p className="muted">Similarity Index: взвешенная схожесть профилей, покрытие ≥60%.</p>
+      {similar.length ? <div className="similar-list">{similar.map(candidate => <div key={candidate.player.id} data-similarity-player={candidate.player.id}>
+        <Link href={`/compare?a=${player.id}&b=${candidate.player.id}`}><span>{candidate.player.name.ru}<small>{candidate.player.club.ru}</small></span><strong>{formatNumber(candidate.similarity)}{candidate.similarity !== null && ' / 100'}</strong></Link>
+        <SimilarityDetails result={candidate} />
+      </div>)}</div> : <p className="muted">— Недостаточно данных для поиска похожих игроков той же позиции/роли и сезона.</p>}
     </section>
     {embedded && <Link className="profile-deep-link" href={`/players/${player.id}`}>Открыть отдельную страницу игрока →</Link>}
   </article>;
