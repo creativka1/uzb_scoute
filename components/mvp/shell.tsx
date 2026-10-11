@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { MVP_STORAGE_KEY, parseShortlist } from '@/lib/mvp';
+import { ArrowLeftRight, Bookmark, Home, Search, SlidersHorizontal, Users, Shield } from 'lucide-react';
 
 type ShortlistState = { ids: string[]; ready: boolean; error: string; toggle: (id: string) => void };
 const ShortlistContext = createContext<ShortlistState>({ ids: [], ready: false, error: '', toggle() {} });
@@ -47,15 +48,20 @@ export function MvpShell({ children }: { children: ReactNode }) {
       setIds(next); setError('');
     } catch { setError('Не удалось сохранить список в браузере. Попробуйте ещё раз.'); }
   }, [ids, ready]);
-  const navigation = [['/', 'Главная'], ['/players', 'Игроки'], ['/teams', 'Команды'], ['/recruitment', 'Подбор игрока'], ['/shortlist', 'Избранное']] as const;
+  const navigation = [['/', 'Главная', Home], ['/players', 'Игроки', Users], ['/teams', 'Команды', Shield], ['/recruitment', 'Подбор игрока', SlidersHorizontal], ['/compare', 'Сравнение', ArrowLeftRight], ['/shortlist', 'Избранное', Bookmark]] as const;
   return <ShortlistContext.Provider value={{ ids, ready, error, toggle }}>
     <header className="site-header"><div className="header-inner">
-      <Link href="/" className="brand" aria-label="Uzstat — главная">Uzstat<span>Футбольный скаутинг</span></Link>
-      <nav aria-label="Основная навигация">{navigation.map(([href, title]) => <Link key={href} href={href}
-        aria-current={pathname === href || (href !== '/' && pathname.startsWith(href + '/')) ? 'page' : undefined}>{title}</Link>)}</nav>
+      <Link href="/" className="brand" aria-label="Uzstat — главная"><span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>Uzstat</Link>
+      <form action="/players" className="global-search" role="search"><Search size={18} aria-hidden="true" /><input name="q" type="search" placeholder="Поиск игрока…" aria-label="Быстрый поиск игрока" /></form>
+      <div className="topbar-context"><span>Узбекистан</span><b>2025</b><span className="topbar-divider" /><span className="topbar-status"><i />Скаутинг</span></div>
     </div></header>
-    <main className="workspace">{error && <p role="alert" className="notice">{error}</p>}{children}</main>
-    <footer className="site-footer">Uzstat · 10 игроков · Подтверждённые матчи 2025 года</footer>
+    <aside className="sidebar"><nav aria-label="Основная навигация">{navigation.map(([href, title, Icon]) => <Link key={href} href={href}
+      aria-current={pathname === href || (href !== '/' && pathname.startsWith(href + '/')) ? 'page' : undefined}><Icon size={18} aria-hidden="true" />{title}</Link>)}</nav>
+      <div className="sidebar-note"><span>ВЫБОРКА MVP</span><strong>10 игроков</strong><p>Подтверждённая статистика сохранённых матчей.</p><Link href="/players">Посмотреть игроков →</Link></div>
+    </aside>
+    <div className={`page-area ${pathname === '/players' ? 'players-page-area' : ''}`}><main className="workspace">{error && <p role="alert" className="notice">{error}</p>}{children}</main>
+      <footer className="site-footer">Uzstat · Скаутинг по подтверждённым данным<span>Сезон 2025 · Неполное покрытие</span></footer>
+    </div>
   </ShortlistContext.Provider>;
 }
 

@@ -24,8 +24,8 @@ export function MvpRadar({ player, comparison }: { player: Player; comparison?: 
         <line x1="220" y1="190" x2={point(index, 115)[0]} y2={point(index, 115)[1]} stroke="#dce4e1" />
         <text x={x} y={y} textAnchor="middle" dominantBaseline="middle">{axis.label}</text>
       </g>; })}
-      <polygon points={polygon(player)} fill="#246c54" fillOpacity=".14" stroke="#246c54" strokeWidth="2" />
-      {comparison && <polygon points={polygon(comparison)} fill="#536c9a" fillOpacity=".10" stroke="#536c9a" strokeWidth="2" />}
+      <polygon points={polygon(player)} fill="#18bd7a" fillOpacity=".14" stroke="#18bd7a" strokeWidth="2" />
+      {comparison && <polygon points={polygon(comparison)} fill="#438cf5" fillOpacity=".10" stroke="#438cf5" strokeWidth="2" />}
     </svg>
     <div className="chart-key"><span><i />{player.name.ru}</span>{comparison && <span><i className="comparison-color" />{comparison.name.ru}</span>}</div>
     <p className="fine-print">Источник: сохранённые матчи 2025. База сравнения — вся лига, а не только 10 игроков MVP. Пустые оси исключены.</p>

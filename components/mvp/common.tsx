@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Player } from '@/types/players';
 import { formatMoney, formatNumber, positionName, teamSlug } from '@/lib/mvp';
+import { PlayerPhoto } from './photo';
 
 export function PageHeading({ title, description }: { title: string; description?: string }) {
   return <div className="page-heading"><h1>{title}</h1>{description && <p>{description}</p>}</div>;
@@ -8,12 +9,10 @@ export function PageHeading({ title, description }: { title: string; description
 export function DataNote() {
   return <p className="data-note">Узбекистан · 2025 · Неполный сезон. Показатели рассчитаны по сохранённым матчам; клуб и стоимость — последние доступные сведения источника.</p>;
 }
-export function PlayerIdentity({ player, large = false }: { player: Player; large?: boolean }) {
-  // No local photos are bound to these source IDs. Never assign an unrelated
-  // public/players image or fetch external images just to fill the layout.
+export function PlayerIdentity({ player, large = false, headingLevel = 1 }: { player: Player; large?: boolean; headingLevel?: 1 | 2 }) {
   return <div className={`identity ${large ? 'large' : ''}`}>
-    <span className="avatar" aria-hidden="true">{player.initials}</span>
-    <div>{large ? <h1>{player.name.ru}</h1> : <strong>{player.name.ru}</strong>}<span>{player.club.ru} · {positionName(player.position)}</span></div>
+    <PlayerPhoto key={player.id} player={player} />
+    <div>{large ? headingLevel === 1 ? <h1>{player.name.ru}</h1> : <h2>{player.name.ru}</h2> : <strong>{player.name.ru}</strong>}<span>{player.club.ru} · {positionName(player.position)}</span></div>
   </div>;
 }
 export function PlayerCards({ players }: { players: Player[] }) {

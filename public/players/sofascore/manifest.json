@@ -1,0 +1,52 @@
+{
+  "573710": {
+    "file": "/players/sofascore/573710.jpg",
+    "source": "https://img.sofascore.com/api/v1/player/573710/image",
+    "sha256": "00615718ed7669a2beccb966e1e0fb0e241645e57269f20e8ab59280ea7652af"
+  },
+  "871948": {
+    "file": "/players/sofascore/871948.jpg",
+    "source": "https://img.sofascore.com/api/v1/player/871948/image",
+    "sha256": "d84d2e107cee28f678e1a8ed94dc0df49c8efb404c848e00ad2c7fae6426edf6"
+  },
+  "1016190": {
+    "file": "/players/sofascore/1016190.jpg",
+    "source": "https://img.sofascore.com/api/v1/player/1016190/image",
+    "sha256": "78d870beae84b7e983513138b307c94b606e5381b4bad550c20c151a4d257e6f"
+  },
+  "796349": {
+    "file": "/players/sofascore/796349.jpg",
+    "source": "https://img.sofascore.com/api/v1/player/796349/image",
+    "sha256": "f43074b14d96588e5c8e411993839a1c3de43af0b9799a291c76e3700e147d3f"
+  },
+  "959094": {
+    "file": "/players/sofascore/959094.jpg",
+    "source": "https://img.sofascore.com/api/v1/player/959094/image",
+    "sha256": "9d4f16e2a47276347a3b2a67880d3d0f4842784e736d5e579fc3ed2697e5dce9"
+  },
+  "1877845": {
+    "file": "/players/sofascore/1877845.webp",
+    "source": "https://img.sofascore.com/api/v1/player/1877845/image",
+    "sha256": "76d6f20866a048bf75925b17fdf54d679761d093c51ed20b8084f17d94b1d1e7"
+  },
+  "871965": {
+    "file": "/players/sofascore/871965.webp",
+    "source": "https://img.sofascore.com/api/v1/player/871965/image",
+    "sha256": "85384d9bca43f9a0f5803607a3246c3412604b7871cc83e883530f29a1fb6dda"
+  },
+  "1032799": {
+    "file": "/players/sofascore/1032799.webp",
+    "source": "https://img.sofascore.com/api/v1/player/1032799/image",
+    "sha256": "1eec897faef2fc5d9ed4e11054f0cdf9953a410be649e8bb89348c776def89f3"
+  },
+  "1165681": {
+    "file": "/players/sofascore/1165681.webp",
+    "source": "https://img.sofascore.com/api/v1/player/1165681/image",
+    "sha256": "67b737158c00b20bcf8c4ca70f503f29f0c361523ad369e7424b50e6466062ba"
+  },
+  "1484961": {
+    "file": "/players/sofascore/1484961.webp",
+    "source": "https://img.sofascore.com/api/v1/player/1484961/image",
+    "sha256": "52d206c0a7737596184c2fcf7be2934d4bfa557d657560cfff245d259973e781"
+  }
+}
