@@ -1,5 +1,8 @@
 {
   "status": "failed",
-  "updatedAt": "2026-10-11T17:50:16.105010+00:00",
-  "error": "Provider retry limit reached"
+  "updatedAt": "2026-10-11T17:51:36.061265+00:00",
+  "provider": "sofascore-public",
+  "league": "UZB",
+  "seasonYear": 2025,
+  "error": "Public SofaScore route unavailable: HTTP 403 for /unique-tournament/772/seasons"
 }
