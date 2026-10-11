@@ -65,10 +65,10 @@ export function MvpShell({ children }: { children: ReactNode }) {
   </ShortlistContext.Provider>;
 }
 
-export function SaveButton({ id }: { id: string }) {
+export function SaveButton({ id, compact = false }: { id: string; compact?: boolean }) {
   const { ids, ready, toggle } = useShortlist();
   const saved = ids.includes(id);
-  return <button className="button secondary" disabled={!ready} aria-pressed={saved} onClick={() => toggle(id)}>
-    {saved ? 'Удалить из избранного' : 'Добавить в избранное'}
+  return <button className="button secondary" disabled={!ready} aria-pressed={saved} aria-label={saved ? 'Удалить из избранного' : 'Добавить в избранное'} onClick={() => toggle(id)}>
+    {compact && <Bookmark size={14} aria-hidden="true" />}{compact ? saved ? 'В избранном' : 'В избранное' : saved ? 'Удалить из избранного' : 'Добавить в избранное'}
   </button>;
 }

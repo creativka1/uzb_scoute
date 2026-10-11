@@ -73,6 +73,7 @@ input::placeholder { color: #929dad; font-size: 11px;}
 .identity.large>div>span { font-size: 12px;}
 .index-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 27px; height: 23px; padding: 0 6px; border-radius: 5px; background: #e0f6ed; color: var(--accent); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;}
 .index-chip.blue { color: #3272cd; background: #eaf2ff;}
+.index-chip.neutral { color: #59677c; background: #edf1f5;}
 .home-hero { display: grid; grid-template-columns: 1.55fr 1fr; gap: 30px; padding: 30px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff;}
 .eyebrow { color: var(--muted); font-size: 10px; font-weight: 550; letter-spacing: 1.2px;}
 .hero-copy h1 { font-size: clamp(27px,3vw,41px); line-height: 1.2; letter-spacing: -1.3px; margin: 17px 0 14px;}
@@ -121,11 +122,18 @@ tbody tr:hover { background: #f8fbfa;}
 .empty p { margin: 10px 0 18px; color: var(--muted);}
 .back-link { display: inline-block; color: var(--muted); margin-bottom: 20px; font-size: 12px;}
 .player-profile { min-width: 0;}
-.profile-header { display: flex; gap: 18px; align-items: flex-start; justify-content: space-between;}
-.profile-header-side { display: grid; justify-items: end; gap: 14px; flex-shrink: 0;}
-.profile-index { display: grid; justify-items: end; gap: 3px;}
-.profile-index strong { background: var(--green); color: #fff; font-size: 20px; font-weight: 600; line-height: 1.25; padding: 4px 13px; border-radius: 6px;}
-.profile-index span { color: var(--muted); font-size: 9px;}
+.profile-summary { padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff;}
+.profile-header { display: flex; gap: 12px; align-items: center; justify-content: space-between;}
+.profile-header .actions { flex-shrink: 0;}
+.player-profile .identity.large .avatar { width: 66px; height: 66px;}
+.profile-context { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; gap: 12px; margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--line);}
+.profile-context .facts { margin: 0; gap: 12px 18px;}
+.profile-index { display: grid; gap: 3px; min-width: 0;}
+.profile-index-value { display: flex; align-items: center; gap: 9px;}
+.profile-index strong { background: #edf1f5; color: var(--ink); font-size: 22px; font-weight: 650; line-height: 1.2; padding: 4px 8px; border-radius: 6px;}
+.profile-index strong small { font-size: 11px; font-weight: 450; color: var(--muted);}
+.profile-index span { color: var(--muted); font-size: 10px;}
+.profile-index-value>span { color: var(--ink); font-size: 11px; font-weight: 600;}
 .facts { display: flex; flex-wrap: wrap; gap: 15px 24px; margin: 22px 0 0;}
 .facts dt { color: var(--muted); font-size: 10px;}
 .facts dd { margin: 3px 0 0; font-size: 12px; font-weight: 550;}
@@ -137,18 +145,30 @@ tbody tr:hover { background: #f8fbfa;}
 .metric>span { color: var(--muted); display: block; font-size: 10px; min-height: 30px; line-height: 1.4;}
 .metric strong { display: block; margin-top: 4px; font-size: 21px; font-weight: 650; font-variant-numeric: tabular-nums;}
 .metric small { display: block; margin-top: 3px; color: var(--muted); font-size: 9px;}
-.profile-columns { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: 12px;}
+.player-profile .metric strong { font-size: 27px; line-height: 1.2;}
+.metric>.metric-rate { font-size: 11px; min-height: 0; margin-top: 4px;}
+.profile-columns { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: 12px; align-items: start;}
 .muted { color: var(--muted); font-size: 11px;}
-.scout-inline { margin: 14px 0 10px; color: var(--muted); display: flex; justify-content: space-between; gap: 10px;}
-.scout-inline strong { color: var(--accent);}
 .scout-panel h3 { margin: 16px 0 8px;}
 .scout-panel ul { padding-left: 16px; margin: 0;}
 .scout-panel li { margin-bottom: 4px; font-size: 11px;}
+.scout-group { margin-top: 12px;}
+.scout-group h3 { margin: 0 0 5px; font-size: 11px;}
+.scout-group ul { list-style: none; padding: 0;}
+.scout-group li { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 4px 0; margin: 0; border-bottom: 1px solid #f0f3f6;}
+.scout-group b { color: #59677c; font-size: 10px; font-variant-numeric: tabular-nums;}
+.scout-group.strong h3 { color: var(--accent);}
+.scout-group.weak h3 { color: #98634a;}
 details { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line);}
 summary { cursor: pointer; font-size: 11px;}
 details p { margin-top: 10px;}
 .radar { width: 100%; max-height: 305px; display: block;}
 .radar text { font: 12px system-ui,sans-serif; fill: var(--muted);}
+.radar text .radar-score { fill: var(--ink); font-size: 10px; font-weight: 650;}
+.radar-panel .radar { max-height: 260px; margin: 4px auto;}
+.radar-coverage { margin-top: 10px; padding-top: 8px;}
+.radar-coverage ul,.radar-insufficient ul { padding-left: 16px; font-size: 10px; color: var(--muted); margin: 8px 0 0;}
+.radar-insufficient { padding: 16px 0;}
 .chart-key { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px;}
 .chart-key span { display: flex; gap: 6px; align-items: center;}
 .chart-key i { width: 8px; height: 8px; border-radius: 50%; background: var(--green);}
@@ -202,12 +222,12 @@ details p { margin-top: 10px;}
 .embedded-profile { padding: 18px 16px;}
 .embedded-profile .profile-header { flex-wrap: wrap; gap: 12px;}
 .embedded-profile .identity.large { flex: 1 1 180px;}
-.embedded-profile .identity.large .avatar { width: 76px; height: 76px;}
+.embedded-profile .profile-summary { padding: 0; border: 0;}
+.embedded-profile .identity.large .avatar { width: 66px; height: 66px;}
 .embedded-profile .identity.large h2 { font-size: 20px;}
-.embedded-profile .profile-header-side { flex: 1 1 140px;}
 .embedded-profile .actions { justify-content: flex-end;}
 .embedded-profile .button { padding: 7px 9px; min-height: 33px; font-size: 10px;}
-.embedded-profile .facts { margin-top: 15px; gap: 12px 20px;}
+.embedded-profile .profile-context .facts { margin: 0; gap: 10px 16px;}
 .embedded-profile .panel { padding: 14px;}
 .embedded-profile .profile-columns { grid-template-columns: minmax(0,1.1fr) minmax(0,1fr);}
 .embedded-profile .profile-columns .radar-panel { display: grid; grid-template-columns: 1fr;}
@@ -337,15 +357,12 @@ input[type=checkbox] { width: 18px; height: 18px; min-height: 0; accent-color: v
   .roster-filters .filters label { flex-basis: 150px;}
   .position-tabs { margin-top: 10px;}
   .roster-results { font-size: 10px;}
-  .embedded-profile .profile-header-side { flex: initial;}
   .embedded-profile .identity.large { flex: 1 1 180px;}
   .embedded-profile .profile-index { justify-items: start;}
   .embedded-profile .actions { justify-content: flex-start;}
-  .embedded-profile .profile-header-side { justify-items: start;}
   .embedded-profile .metric-grid { grid-template-columns: repeat(4,minmax(0,1fr));}
   .embedded-profile .profile-columns { grid-template-columns: minmax(0,1.1fr) minmax(0,1fr);}
   .identity.large .avatar { width: 78px; height: 78px;}
-  .profile-header-side { justify-items: start;}
   .profile-index { justify-items: start;}
   .home-hero { padding: 23px 20px;}
   .hero-copy h1 { font-size: 31px;}
@@ -374,13 +391,14 @@ input[type=checkbox] { width: 18px; height: 18px; min-height: 0; accent-color: v
   .metric-grid,.embedded-profile .metric-grid { grid-template-columns: repeat(2,minmax(0,1fr));}
   .metric>span { min-height: 0;}
   .embedded-profile .profile-columns { grid-template-columns: 1fr;}
-  .embedded-profile .profile-header-side { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;}
   .embedded-profile .identity.large { flex-basis: 100%;}
-  .embedded-profile .profile-header-side .actions { gap: 6px;}
   .embedded-profile .profile-index span { font-size: 8px;}
   .embedded-profile .profile-index strong { font-size: 18px;}
   .embedded-profile .button { font-size: 9px;}
   .facts { gap: 12px 20px;}
+  .profile-context { grid-template-columns: 1fr;}
+  .profile-header .actions { justify-content: flex-start;}
+  .player-profile .identity.large h1,.player-profile .identity.large h2 { font-size: 20px;}
   .compare-player-card .identity strong { font-size: 11px;}
   .comparison-overview { padding: 12px;}
   .comparison-overview .compare-identities { grid-template-columns: minmax(0,1fr) 22px minmax(0,1fr); gap: 6px;}

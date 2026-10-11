@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { ArrowLeftRight } from 'lucide-react';
 import type { Player } from '@/types/players';
-import { formatNumber, metricValue, MVP_METRICS } from '@/lib/mvp';
+import { formatNumber } from '@/lib/mvp';
 import { PlayerIdentity } from './common';
+import { COMPARISON_METRICS, displayMetricValue } from './profile-data';
 
 export function ComparisonBars({ left, right }: { left: Player; right: Player }) {
   return <div className="bar-comparison" aria-label="Сравнение ключевых показателей">
-    {MVP_METRICS.map(metric => {
-      const a = metricValue(left, metric.key), b = metricValue(right, metric.key);
+    {COMPARISON_METRICS.map(metric => {
+      const a = displayMetricValue(left, metric.key), b = displayMetricValue(right, metric.key);
       const known = [a, b].filter((value): value is number => typeof value === 'number' && Number.isFinite(value) && value >= 0);
       const maximum = metric.key.endsWith('Pct') ? 100 : Math.max(...known, 0);
       const width = (value: number | null) => value !== null && Number.isFinite(value) && maximum > 0 ? `${Math.max(0, Math.min(100, value / maximum * 100))}%` : '0%';
@@ -28,8 +29,8 @@ export function ComparisonBars({ left, right }: { left: Player; right: Player })
 }
 
 export function ComparisonPair({ left, right }: { left: Player; right: Player }) {
-  return <div className="compare-identities"><Link className="compare-player-card" href={`/players/${left.id}`}><PlayerIdentity player={left} /><span className="index-chip">{formatNumber(left.scoutIndex)}</span></Link>
+  return <div className="compare-identities"><Link className="compare-player-card" href={`/players/${left.id}`}><PlayerIdentity player={left} /><span className="index-chip neutral" title="Scout Index">{formatNumber(left.scoutIndex)}</span></Link>
     <span className="compare-between" aria-hidden="true"><ArrowLeftRight size={16} /></span>
-    <Link className="compare-player-card" href={`/players/${right.id}`}><PlayerIdentity player={right} /><span className="index-chip blue">{formatNumber(right.scoutIndex)}</span></Link>
+    <Link className="compare-player-card" href={`/players/${right.id}`}><PlayerIdentity player={right} /><span className="index-chip neutral" title="Scout Index">{formatNumber(right.scoutIndex)}</span></Link>
   </div>;
 }

@@ -96,16 +96,78 @@ test('shortlist parsing preserves unknown IDs and rejects corrupt data', () => {
   for (const raw of ['broken', '{}', '[null]', '[{"id":"UZB-573710"}]']) assert.throws(() => mvp.parseShortlist(raw));
 });
 
-test('radar uses known role axes without synthetic averages or missing-value polygons', async () => {
+test('radar uses available same-position metrics without missing-value polygons', async () => {
   const { MvpRadar } = load('components/mvp/radar.tsx');
   const players = await cohort();
-  const html = renderToStaticMarkup(React.createElement(MvpRadar, { player: players[0], comparison: players[1] }));
+  const html = renderToStaticMarkup(React.createElement(MvpRadar, { player: players[0], players, comparison: players[1] }));
   assert.ok(html.includes(players[0].name.ru));
   assert.ok(html.includes(players[1].name.ru));
   assert.ok(!html.includes('NaN'));
   assert.ok(!html.includes('Среднее по'));
-  const missing = { ...players[0], scoutingEngine: { ...players[0].scoutingEngine, adjustedRadar: { m1: null, m2: null, m3: null, m4: null, m5: null, m6: null } } };
-  const absent = renderToStaticMarkup(React.createElement(MvpRadar, { player: missing, comparison: players[1] }));
+  const missing = { ...players[0], roleMetrics: {}, statsMetricDetails: {} };
+  const absent = renderToStaticMarkup(React.createElement(MvpRadar, { player: missing, players, comparison: players[1] }));
   assert.ok(absent.includes('Недостаточно общих данных'));
   assert.ok(!absent.includes('<polygon'));
+});
+
+test('profile and comparison totals are source values, never reconstructed from rates', async () => {
+  const { displayMetricValue, COMPARISON_METRICS } = load('components/mvp/profile-data.ts');
+  const players = await cohort();
+  assert.equal(players[0].goals, 7);
+  assert.equal(players[0].assists, 4);
+  for (const player of players) for (const key of ['matchesPlayed', 'minutesPlayed', 'goals', 'assists', 'xG', 'xA']) {
+    assert.equal(displayMetricValue(player, key), player[key]);
+  }
+  assert.equal(displayMetricValue({ ...players[0], goals: null, assists: null }, 'goals'), null);
+  assert.equal(displayMetricValue({ ...players[0], goals: null, assists: null }, 'assists'), null);
+  assert.equal(displayMetricValue({ ...players[0], goals: 0 }, 'goals'), 0);
+  assert.equal(COMPARISON_METRICS.length, 10);
+  assert.ok(['goals', 'assists', 'goalsPer90', 'assistsPer90'].every(key => COMPARISON_METRICS.some(metric => metric.key === key)));
+});
+
+test('radar ranks real metrics within one position and season, excludes null and keeps zero', async () => {
+  const { radarData } = load('components/mvp/profile-data.ts');
+  const players = await cohort();
+  const data = radarData(players[0], players);
+  assert.equal(data.axes.length, 8);
+  assert.equal(data.peers, 10);
+  const unrelated = [
+    { ...players[0], id: 'other-position', position: 'FW' },
+    { ...players[0], id: 'other-season', statsSeasonIds: [999] },
+    { ...players[0], id: 'other-league', league: 'KAZ' },
+    players[0],
+  ];
+  assert.equal(JSON.stringify(radarData(players[0], [...players, ...unrelated])), JSON.stringify(data));
+  const partial = { ...players[0], roleMetrics: { ...players[0].roleMetrics, goalsPer90: 0, assistsPer90: null } };
+  const axes = radarData(partial, players).axes;
+  assert.ok(axes.some(axis => axis.key === 'goalsPer90' && Number.isFinite(axis.score)));
+  assert.ok(!axes.some(axis => axis.key === 'assistsPer90'));
+  for (const axis of data.axes) {
+    assert.ok(axis.count >= 3 && axis.count <= 10);
+    assert.ok(axis.score >= 0 && axis.score <= 100);
+  }
+  const sparse = { ...players[0], roleMetrics: { goalsPer90: players[0].roleMetrics.goalsPer90 }, statsMetricDetails: { goals: players[0].statsMetricDetails.goals } };
+  const { MvpRadar } = load('components/mvp/radar.tsx');
+  const sparseHtml = renderToStaticMarkup(React.createElement(MvpRadar, { player: sparse, players }));
+  assert.ok(sparseHtml.includes('Голы / 90'));
+  assert.ok(!sparseHtml.includes('<polygon'));
+  assert.equal(radarData(players[0], players, { ...players[1], position: 'FW' }).axes.length, 0);
+});
+
+test('scout categories use existing league scores; position rank respects tied scores and missing data', async () => {
+  const { scoutSignals, positionRank } = load('components/mvp/profile-data.ts');
+  const players = await cohort();
+  for (const player of players) {
+    const groups = scoutSignals(player);
+    assert.ok(groups.strong.length <= 3 && groups.average.length <= 3 && groups.weak.length <= 2);
+    assert.ok(groups.strong.every(signal => signal.score >= 75));
+    assert.ok(groups.average.every(signal => signal.score >= 40 && signal.score < 75));
+    assert.ok(groups.weak.every(signal => signal.score < 40));
+    const rank = positionRank(player, players);
+    assert.equal(rank.total, 10);
+    assert.equal(rank.rank, 1 + players.filter(peer => peer.scoutIndex > player.scoutIndex).length);
+  }
+  assert.equal(positionRank({ ...players[0], scoutIndex: null }, players), null);
+  const absent = scoutSignals({ ...players[0], scoutingEngine: { ...players[0].scoutingEngine, adjustedRadar: {} } });
+  assert.equal(absent.strong.length + absent.average.length + absent.weak.length, 0);
 });

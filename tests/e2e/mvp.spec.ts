@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { formatNumber, metricValue, MVP_METRICS, MVP_PLAYER_IDS } from '../../lib/mvp';
+import { formatNumber, MVP_PLAYER_IDS } from '../../lib/mvp';
 import type { Player } from '../../types/players';
+import { COMPARISON_METRICS, displayMetricValue, PROFILE_METRICS } from '../../components/mvp/profile-data';
 
 test('home → recruitment → profile → saved shortlist → comparison', async ({ page }, testInfo) => {
   const errors: string[] = [];
@@ -73,10 +74,17 @@ test('player selection, cached photos and comparison reflect existing data', asy
   await page.getByLabel('Сравнить с').selectOption(players[6].id);
   await expect(page.locator('.comparison-panel .compare-identities .identity')).toHaveCount(2);
   await expect(page.locator('.players-profile .metric')).toHaveCount(8);
-  for (const metric of MVP_METRICS) {
+  for (const metric of PROFILE_METRICS) {
+    const card = page.locator(`.players-profile .metric[data-metric="${metric.key}"]`);
+    await expect(card.locator('strong')).toHaveText(formatNumber(displayMetricValue(players[4], metric.key), metric.decimals));
+    if ('rate' in metric) await expect(card.locator('.metric-rate')).toHaveText(`${formatNumber(displayMetricValue(players[4], metric.rate), 2)} / 90`);
+  }
+  await expect(page.locator('.players-profile svg [data-axis]')).toHaveCount(8);
+  await expect(page.locator('.profile-index')).toContainText('Покрытие: 5/5');
+  for (const metric of COMPARISON_METRICS) {
     const row = page.locator(`.comparison-panel [data-metric="${metric.key}"]`);
-    await expect(row.locator('.bar-value.left')).toHaveText(formatNumber(metricValue(players[4], metric.key), metric.decimals));
-    await expect(row.locator('.bar-value.right')).toHaveText(formatNumber(metricValue(players[6], metric.key), metric.decimals));
+    await expect(row.locator('.bar-value.left')).toHaveText(formatNumber(displayMetricValue(players[4], metric.key), metric.decimals));
+    await expect(row.locator('.bar-value.right')).toHaveText(formatNumber(displayMetricValue(players[6], metric.key), metric.decimals));
   }
   await page.screenshot({ path: testInfo.outputPath('players-selected.png'), fullPage: true });
   await page.getByRole('link', { name: 'Открыть сравнение' }).click();
