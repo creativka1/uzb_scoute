@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { MVP_PLAYER_IDS } from '../../lib/mvp';
+import { formatNumber, MVP_PLAYER_IDS } from '../../lib/mvp';
+import type { Player } from '../../types/players';
+import { ATTACKING_METRICS, COMPARISON_METRICS, displayMetricValue, PROFILE_METRICS, radarData, roleMetricScores } from '../../components/mvp/profile-data';
+import { getSimilarPlayers, SIMILARITY_CATEGORIES } from '../../lib/recruitment';
 
 test('home → recruitment → profile → saved shortlist → comparison', async ({ page }, testInfo) => {
   const errors: string[] = [];
@@ -8,7 +11,7 @@ test('home → recruitment → profile → saved shortlist → comparison', asyn
   await page.goto('/');
   await expect(page.locator('.home-actions a')).toHaveCount(3);
   await expect(page.locator('.player-card')).toHaveCount(10);
-  await expect(page.locator('nav a')).toHaveCount(5);
+  await expect(page.locator('nav a')).toHaveCount(6);
   await page.screenshot({ path: testInfo.outputPath('home.png'), fullPage: true });
   await page.getByRole('heading', { name: 'Подобрать усиление', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Подбор игрока', exact: true })).toBeVisible();
@@ -43,10 +46,11 @@ test('home → recruitment → profile → saved shortlist → comparison', asyn
 
 test('name search and all filters reset to ten players', async ({ page }, testInfo) => {
   await page.goto('/players');
-  const result = page.locator('.section-heading [aria-live]');
+  const result = page.locator('.roster-results [aria-live]');
   await expect(result).toHaveText('Найдено: 10 из 10');
   await page.getByLabel('Поиск по имени').fill('Ljupche');
   await expect(result).toHaveText('Найдено: 1 из 10');
+  await page.locator('.roster-filters summary').click();
   await page.getByLabel('Максимальная стоимость, €').fill('0');
   await expect(result).toHaveText('Найдено: 0 из 10');
   await page.getByRole('button', { name: 'Сбросить фильтры' }).click();
@@ -57,6 +61,156 @@ test('name search and all filters reset to ten players', async ({ page }, testIn
   await expect(result).toHaveText('Найдено: 1 из 10');
   await page.getByRole('button', { name: 'Сбросить фильтры' }).click();
   await page.screenshot({ path: testInfo.outputPath('players.png'), fullPage: true });
+});
+
+test('player selection, cached photos and comparison reflect existing data', async ({ page, request }, testInfo) => {
+  const players: Player[] = await (await request.get('/api/mvp/players')).json();
+  await page.goto('/players');
+  await expect(page.locator('.players-profile h2').first()).toHaveText(players[0].name.ru);
+  const photo = page.locator('.players-profile .identity img');
+  await expect(photo).toHaveAttribute('src', '/players/sofascore/573710.jpg');
+  await expect.poll(() => photo.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
+  await page.locator('.roster-item').nth(4).click();
+  await expect(page.locator('.players-profile h2').first()).toHaveText(players[4].name.ru);
+  await page.getByLabel('Сравнить с').selectOption(players[6].id);
+  await expect(page.locator('.comparison-panel .compare-identities .identity')).toHaveCount(2);
+  await expect(page.locator('.players-profile .metric')).toHaveCount(8);
+  for (const metric of PROFILE_METRICS) {
+    const card = page.locator(`.players-profile .metric[data-metric="${metric.key}"]`);
+    await expect(card.locator('strong')).toHaveText(formatNumber(displayMetricValue(players[4], metric.key), metric.decimals));
+    if ('rate' in metric) await expect(card.locator('.metric-rate')).toHaveText(`${formatNumber(displayMetricValue(players[4], metric.rate), 2)} / 90`);
+  }
+  await expect(page.locator('.players-profile svg [data-axis]')).toHaveCount(5);
+  await expect(page.locator('.profile-index')).not.toContainText('Покрытие');
+  const explanation = page.locator('.players-profile .index-explanation');
+  await expect(explanation.locator('.index-explanation-content')).not.toBeVisible();
+  await explanation.locator('summary').click();
+  await expect(explanation).toContainText('Покрытие: 5/5');
+  for (const metric of roleMetricScores(players[4])) {
+    const cells = explanation.locator(`[data-role-metric="${metric.key}"] td`);
+    await expect(cells.nth(0)).toHaveText(formatNumber(metric.percentile));
+    await expect(cells.nth(1)).toHaveText(formatNumber(metric.adjustedScore));
+    await expect(page.locator(`.players-profile [data-axis="${metric.key}"] .radar-score`)).toHaveText(formatNumber(metric.adjustedScore));
+  }
+  await expect(explanation.locator('tfoot td')).toHaveText(`${formatNumber(players[4].scoutIndex)} / 100`);
+  await page.screenshot({ path: testInfo.outputPath('index-explanation.png'), fullPage: true });
+  await explanation.locator('summary').click();
+  for (const metric of ATTACKING_METRICS) {
+    const card = page.locator(`.players-profile [data-attacking-metric="${metric.key}"]`);
+    const value = displayMetricValue(players[4], metric.key);
+    if (value === null) await expect(card).toHaveCount(0);
+    else await expect(card.locator('dd')).toHaveText(formatNumber(value, metric.decimals));
+  }
+  for (const metric of COMPARISON_METRICS) {
+    const row = page.locator(`.comparison-panel [data-metric="${metric.key}"]`);
+    await expect(row.locator('td[data-player="1"]')).toHaveText(formatNumber(displayMetricValue(players[4], metric.key), metric.decimals));
+    await expect(row.locator('td[data-player="2"]')).toHaveText(formatNumber(displayMetricValue(players[6], metric.key), metric.decimals));
+  }
+  await page.screenshot({ path: testInfo.outputPath('players-selected.png'), fullPage: true });
+  await page.getByRole('link', { name: 'Открыть сравнение' }).click();
+  await expect(page).toHaveURL(new RegExp(`a=${players[4].id}&b=${players[6].id}`));
+  await page.goto('/players');
+  await page.getByRole('button', { name: 'Очистить', exact: true }).click();
+  await expect(page.locator('.compare-placeholder')).toBeVisible();
+  await expect(page.locator('.comparison-panel .comparison-metric-table')).toHaveCount(0);
+  await page.getByLabel('Быстрый поиск игрока').fill('Ljupche');
+  await page.getByLabel('Быстрый поиск игрока').press('Enter');
+  await expect(page.locator('.roster-results [aria-live]')).toHaveText('Найдено: 1 из 10');
+});
+
+test('comparison uses real values in three columns, highlights an advantage and keeps radar below', async ({ page, request }, testInfo) => {
+  const players: Player[] = await (await request.get('/api/mvp/players')).json();
+  const left = players.reduce((best, player) => (player.goals ?? -1) > (best.goals ?? -1) ? player : best);
+  const right = players.reduce((least, player) => (player.goals ?? Infinity) < (least.goals ?? Infinity) ? player : least);
+  await page.goto(`/compare?a=${left.id}&b=${right.id}`);
+  const table = page.locator('.comparison-metric-table');
+  await expect(table.locator('thead th')).toHaveCount(3);
+  await expect(table.locator('thead th').nth(0)).toHaveText('Метрика');
+  await expect(table.locator('thead th').nth(1)).toContainText(`Игрок 1${left.name.ru}`);
+  await expect(table.locator('thead th').nth(2)).toContainText(`Игрок 2${right.name.ru}`);
+  await expect(table.locator('tbody tr')).toHaveCount(10);
+  for (const metric of COMPARISON_METRICS) {
+    const row = table.locator(`[data-metric="${metric.key}"]`);
+    await expect(row.locator('td[data-player="1"]')).toHaveText(formatNumber(displayMetricValue(left, metric.key), metric.decimals));
+    await expect(row.locator('td[data-player="2"]')).toHaveText(formatNumber(displayMetricValue(right, metric.key), metric.decimals));
+  }
+  expect(left.goals! - right.goals!).toBeGreaterThan(1);
+  await expect(table.locator('[data-metric="goals"] td[data-player="1"]')).toHaveClass('metric-best');
+  await expect(table.locator('[data-metric="goals"] td[data-player="2"]')).not.toHaveClass('metric-best');
+  await expect(page.locator('.bar-comparison, .comparison-track')).toHaveCount(0);
+  await expect(page.getByRole('progressbar')).toHaveCount(0);
+  await expect(page.locator('.radar-panel svg[role="img"]')).toHaveCount(1);
+  const metricsBox = await page.locator('.comparison-metrics').boundingBox();
+  const radarBox = await page.locator('.radar-panel').boundingBox();
+  expect(radarBox!.y).toBeGreaterThanOrEqual(metricsBox!.y + metricsBox!.height);
+  await page.screenshot({ path: testInfo.outputPath('comparison-table.png'), fullPage: true });
+});
+
+test('unavailable player photo uses a neutral placeholder', async ({ page }) => {
+  await page.route('**/players/sofascore/573710.jpg', route => route.abort());
+  await page.goto(`/players/${MVP_PLAYER_IDS[0]}`);
+  await expect(page.locator('.identity.large .avatar-placeholder')).toBeVisible();
+  await expect(page.locator('.identity.large img')).toHaveCount(0);
+  await expect(page.locator('.identity.large .avatar-placeholder')).toContainText('LD');
+});
+
+test('standalone profile separates player radar from source-backed Scout Index bars', async ({ page, request }, testInfo) => {
+  const players: Player[] = await (await request.get('/api/mvp/players')).json();
+  const player = players[0];
+  await page.goto(`/players/${player.id}`);
+  await expect(page.locator('.detail-header h1')).toHaveText(player.name.ru);
+  await expect(page.locator('.detail-index-score')).toHaveText(`${formatNumber(player.scoutIndex)} / 100`);
+  await expect(page.locator('.detail-key-metrics .metric')).toHaveCount(8);
+  for (const metric of PROFILE_METRICS) {
+    const card = page.locator(`.detail-key-metrics [data-metric="${metric.key}"]`);
+    await expect(card.locator('strong')).toHaveText(formatNumber(displayMetricValue(player, metric.key), metric.decimals));
+    if ('rate' in metric) await expect(card.locator('.metric-rate')).toHaveText(`${formatNumber(displayMetricValue(player, metric.rate), 2)} / 90`);
+  }
+  await expect(page.getByRole('heading', { name: 'Профиль игрока', exact: true })).toBeVisible();
+  await expect(page.locator('#player-shape svg [data-axis]')).toHaveCount(radarData(player, players).axes.length);
+  const rows = page.locator('#scout-index [data-index-metric]');
+  await expect(rows).toHaveCount(roleMetricScores(player).length);
+  for (const metric of roleMetricScores(player)) {
+    const row = page.locator(`#scout-index [data-index-metric="${metric.key}"]`);
+    await expect(row.locator('strong')).toHaveText(formatNumber(metric.adjustedScore));
+    await expect(row.locator('small')).toHaveText(`Перцентиль ${formatNumber(metric.percentile)}`);
+    if (metric.adjustedScore !== null) await expect(row.getByRole('progressbar')).toHaveAttribute('aria-valuenow', String(metric.adjustedScore));
+    else await expect(row.getByRole('progressbar')).toHaveCount(0);
+  }
+  const explanation = page.locator('#scout-index .index-explanation');
+  await explanation.locator('summary').click();
+  await expect(explanation.locator('tfoot td')).toHaveText(`${formatNumber(player.scoutIndex)} / 100`);
+  await expect(explanation).toContainText('Покрытие: 5/5');
+  await explanation.locator('summary').click();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: testInfo.outputPath('standalone-profile.png'), fullPage: true });
+});
+
+test('similarity uses weighted source metrics, exposes six subscores and preserves Scout Index', async ({ page, request }, testInfo) => {
+  const players: Player[] = await (await request.get('/api/mvp/players')).json();
+  const target = players[0];
+  const expected = getSimilarPlayers(target, players).slice(0, 3);
+  expect(expected.length).toBeGreaterThan(0);
+  for (const route of [`/players/${target.id}`, '/players']) {
+    await page.goto(route);
+    for (const result of expected) {
+      const card = page.locator(`[data-similarity-player="${result.player.id}"]`);
+      await expect(card.locator('a strong').last()).toContainText(formatNumber(result.similarity));
+      await card.locator('.similarity-details summary').click();
+      await expect(card.locator('[data-similarity-category]')).toHaveCount(6);
+      for (const key of Object.keys(SIMILARITY_CATEGORIES)) {
+        await expect(card.locator(`[data-similarity-category="${key}"] dd`)).toHaveText(formatNumber(result.subscores[key as keyof typeof result.subscores].similarity));
+      }
+      await expect(card.locator('[data-similarity-category="progression"] dd')).toHaveText('—');
+      if (result.similarity === null) await expect(card).toContainText('Недостаточно данных');
+    }
+    const index = route === '/players' ? page.locator('.players-profile .profile-index strong') : page.locator('.detail-index-score');
+    await expect(index).toHaveText(`${formatNumber(target.scoutIndex)} / 100`);
+    const sizes = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
+    expect(sizes.document).toBeLessThanOrEqual(sizes.viewport);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: testInfo.outputPath(route === '/players' ? 'similarity-roster.png' : 'similarity-profile.png'), fullPage: true });
+  }
 });
 
 test('club roster leads to recruitment excluding its own players', async ({ page }) => {
