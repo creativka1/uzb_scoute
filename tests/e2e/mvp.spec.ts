@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { MVP_PLAYER_IDS } from '../../lib/mvp';
+import { formatNumber, metricValue, MVP_METRICS, MVP_PLAYER_IDS } from '../../lib/mvp';
+import type { Player } from '../../types/players';
 
 test('home → recruitment → profile → saved shortlist → comparison', async ({ page }, testInfo) => {
   const errors: string[] = [];
@@ -8,7 +9,7 @@ test('home → recruitment → profile → saved shortlist → comparison', asyn
   await page.goto('/');
   await expect(page.locator('.home-actions a')).toHaveCount(3);
   await expect(page.locator('.player-card')).toHaveCount(10);
-  await expect(page.locator('nav a')).toHaveCount(5);
+  await expect(page.locator('nav a')).toHaveCount(6);
   await page.screenshot({ path: testInfo.outputPath('home.png'), fullPage: true });
   await page.getByRole('heading', { name: 'Подобрать усиление', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Подбор игрока', exact: true })).toBeVisible();
@@ -43,10 +44,11 @@ test('home → recruitment → profile → saved shortlist → comparison', asyn
 
 test('name search and all filters reset to ten players', async ({ page }, testInfo) => {
   await page.goto('/players');
-  const result = page.locator('.section-heading [aria-live]');
+  const result = page.locator('.roster-results [aria-live]');
   await expect(result).toHaveText('Найдено: 10 из 10');
   await page.getByLabel('Поиск по имени').fill('Ljupche');
   await expect(result).toHaveText('Найдено: 1 из 10');
+  await page.locator('.roster-filters summary').click();
   await page.getByLabel('Максимальная стоимость, €').fill('0');
   await expect(result).toHaveText('Найдено: 0 из 10');
   await page.getByRole('button', { name: 'Сбросить фильтры' }).click();
@@ -57,6 +59,43 @@ test('name search and all filters reset to ten players', async ({ page }, testIn
   await expect(result).toHaveText('Найдено: 1 из 10');
   await page.getByRole('button', { name: 'Сбросить фильтры' }).click();
   await page.screenshot({ path: testInfo.outputPath('players.png'), fullPage: true });
+});
+
+test('player selection, cached photos and comparison reflect existing data', async ({ page, request }, testInfo) => {
+  const players: Player[] = await (await request.get('/api/mvp/players')).json();
+  await page.goto('/players');
+  await expect(page.locator('.players-profile h2').first()).toHaveText(players[0].name.ru);
+  const photo = page.locator('.players-profile .identity img');
+  await expect(photo).toHaveAttribute('src', '/players/sofascore/573710.jpg');
+  await expect.poll(() => photo.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
+  await page.locator('.roster-item').nth(4).click();
+  await expect(page.locator('.players-profile h2').first()).toHaveText(players[4].name.ru);
+  await page.getByLabel('Сравнить с').selectOption(players[6].id);
+  await expect(page.locator('.comparison-panel .compare-identities .identity')).toHaveCount(2);
+  await expect(page.locator('.players-profile .metric')).toHaveCount(8);
+  for (const metric of MVP_METRICS) {
+    const row = page.locator(`.comparison-panel [data-metric="${metric.key}"]`);
+    await expect(row.locator('.bar-value.left')).toHaveText(formatNumber(metricValue(players[4], metric.key), metric.decimals));
+    await expect(row.locator('.bar-value.right')).toHaveText(formatNumber(metricValue(players[6], metric.key), metric.decimals));
+  }
+  await page.screenshot({ path: testInfo.outputPath('players-selected.png'), fullPage: true });
+  await page.getByRole('link', { name: 'Открыть сравнение' }).click();
+  await expect(page).toHaveURL(new RegExp(`a=${players[4].id}&b=${players[6].id}`));
+  await page.goto('/players');
+  await page.getByRole('button', { name: 'Очистить', exact: true }).click();
+  await expect(page.locator('.compare-placeholder')).toBeVisible();
+  await expect(page.locator('.comparison-panel .bar-comparison')).toHaveCount(0);
+  await page.getByLabel('Быстрый поиск игрока').fill('Ljupche');
+  await page.getByLabel('Быстрый поиск игрока').press('Enter');
+  await expect(page.locator('.roster-results [aria-live]')).toHaveText('Найдено: 1 из 10');
+});
+
+test('unavailable player photo uses a neutral placeholder', async ({ page }) => {
+  await page.route('**/players/sofascore/573710.jpg', route => route.abort());
+  await page.goto(`/players/${MVP_PLAYER_IDS[0]}`);
+  await expect(page.locator('.identity.large .avatar-placeholder')).toBeVisible();
+  await expect(page.locator('.identity.large img')).toHaveCount(0);
+  await expect(page.locator('.identity.large .avatar-placeholder')).toContainText('LD');
 });
 
 test('club roster leads to recruitment excluding its own players', async ({ page }) => {
