@@ -103,8 +103,8 @@ test('player selection, cached photos and comparison reflect existing data', asy
   }
   for (const metric of COMPARISON_METRICS) {
     const row = page.locator(`.comparison-panel [data-metric="${metric.key}"]`);
-    await expect(row.locator('.bar-value.left')).toHaveText(formatNumber(displayMetricValue(players[4], metric.key), metric.decimals));
-    await expect(row.locator('.bar-value.right')).toHaveText(formatNumber(displayMetricValue(players[6], metric.key), metric.decimals));
+    await expect(row.locator('td[data-player="1"]')).toHaveText(formatNumber(displayMetricValue(players[4], metric.key), metric.decimals));
+    await expect(row.locator('td[data-player="2"]')).toHaveText(formatNumber(displayMetricValue(players[6], metric.key), metric.decimals));
   }
   await page.screenshot({ path: testInfo.outputPath('players-selected.png'), fullPage: true });
   await page.getByRole('link', { name: 'Открыть сравнение' }).click();
@@ -112,10 +112,38 @@ test('player selection, cached photos and comparison reflect existing data', asy
   await page.goto('/players');
   await page.getByRole('button', { name: 'Очистить', exact: true }).click();
   await expect(page.locator('.compare-placeholder')).toBeVisible();
-  await expect(page.locator('.comparison-panel .bar-comparison')).toHaveCount(0);
+  await expect(page.locator('.comparison-panel .comparison-metric-table')).toHaveCount(0);
   await page.getByLabel('Быстрый поиск игрока').fill('Ljupche');
   await page.getByLabel('Быстрый поиск игрока').press('Enter');
   await expect(page.locator('.roster-results [aria-live]')).toHaveText('Найдено: 1 из 10');
+});
+
+test('comparison uses real values in three columns, highlights an advantage and keeps radar below', async ({ page, request }, testInfo) => {
+  const players: Player[] = await (await request.get('/api/mvp/players')).json();
+  const left = players.reduce((best, player) => (player.goals ?? -1) > (best.goals ?? -1) ? player : best);
+  const right = players.reduce((least, player) => (player.goals ?? Infinity) < (least.goals ?? Infinity) ? player : least);
+  await page.goto(`/compare?a=${left.id}&b=${right.id}`);
+  const table = page.locator('.comparison-metric-table');
+  await expect(table.locator('thead th')).toHaveCount(3);
+  await expect(table.locator('thead th').nth(0)).toHaveText('Метрика');
+  await expect(table.locator('thead th').nth(1)).toContainText(`Игрок 1${left.name.ru}`);
+  await expect(table.locator('thead th').nth(2)).toContainText(`Игрок 2${right.name.ru}`);
+  await expect(table.locator('tbody tr')).toHaveCount(10);
+  for (const metric of COMPARISON_METRICS) {
+    const row = table.locator(`[data-metric="${metric.key}"]`);
+    await expect(row.locator('td[data-player="1"]')).toHaveText(formatNumber(displayMetricValue(left, metric.key), metric.decimals));
+    await expect(row.locator('td[data-player="2"]')).toHaveText(formatNumber(displayMetricValue(right, metric.key), metric.decimals));
+  }
+  expect(left.goals! - right.goals!).toBeGreaterThan(1);
+  await expect(table.locator('[data-metric="goals"] td[data-player="1"]')).toHaveClass('metric-best');
+  await expect(table.locator('[data-metric="goals"] td[data-player="2"]')).not.toHaveClass('metric-best');
+  await expect(page.locator('.bar-comparison, .comparison-track')).toHaveCount(0);
+  await expect(page.getByRole('progressbar')).toHaveCount(0);
+  await expect(page.locator('.radar-panel svg[role="img"]')).toHaveCount(1);
+  const metricsBox = await page.locator('.comparison-metrics').boundingBox();
+  const radarBox = await page.locator('.radar-panel').boundingBox();
+  expect(radarBox!.y).toBeGreaterThanOrEqual(metricsBox!.y + metricsBox!.height);
+  await page.screenshot({ path: testInfo.outputPath('comparison-table.png'), fullPage: true });
 });
 
 test('unavailable player photo uses a neutral placeholder', async ({ page }) => {

@@ -79,6 +79,42 @@ test('missing numeric values never appear as zero; real zero is retained', () =>
   assert.equal(mvp.formatMoney(null), '—');
 });
 
+test('comparison highlights a meaningful advantage but keeps close, equal and missing values neutral', () => {
+  const { comparisonWinner } = load('components/mvp/comparison-table.tsx');
+  assert.equal(comparisonWinner('goals', 7, 4), 1);
+  assert.equal(comparisonWinner('assists', 0, 4), 2);
+  assert.equal(comparisonWinner('goals', 7, 6), null);
+  assert.equal(comparisonWinner('goals', 40, 38), null);
+  assert.equal(comparisonWinner('goalsPer90', .54, .31), 1);
+  assert.equal(comparisonWinner('xGPer90', .07, .02), null);
+  assert.equal(comparisonWinner('keyPassesPer90', 2.1, 2), null);
+  assert.equal(comparisonWinner('dribbleSuccessPct', 69.4, 60), 1);
+  assert.equal(comparisonWinner('passAccPct', 88, 87), null);
+  assert.equal(comparisonWinner('duelWinPct', 65, 65), null);
+  for (const missing of [null, undefined, NaN, Infinity]) {
+    assert.equal(comparisonWinner('goals', missing, 7), null);
+    assert.equal(comparisonWinner('goals', 7, missing), null);
+  }
+});
+
+test('comparison table shows ten source metrics, preserves zero and never highlights missing data', async () => {
+  const { ComparisonMetricTable } = load('components/mvp/comparison-table.tsx');
+  const players = await cohort();
+  const left = { ...players[0], goals: 0, assists: null, roleMetrics: {}, statsMetricDetails: {} };
+  const html = renderToStaticMarkup(React.createElement(ComparisonMetricTable, { left, right: players[1] }));
+  assert.equal((html.match(/<th scope="col">/g) || []).length, 3);
+  assert.equal((html.match(/data-metric=/g) || []).length, 10);
+  assert.ok(html.includes('<th scope="col">Метрика</th>'));
+  const goalsRow = html.match(/data-metric="goals"([\s\S]*?)<\/tr>/)[1];
+  assert.match(goalsRow, /data-player="1"[^>]*>0<\/td>/);
+  for (const key of ['assists', 'goalsPer90', 'xGPer90', 'passAccPct']) {
+    const row = html.match(new RegExp(`data-metric="${key}"([\\s\\S]*?)<\\/tr>`))[1];
+    assert.match(row, /data-player="1"[^>]*>—<\/td>/);
+    assert.ok(!row.includes('metric-best'));
+  }
+  assert.ok(!/comparison-track|bar-comparison|progressbar/.test(html));
+});
+
 test('xG and xA per 90 use their observed match minutes instead of entire sample minutes', async () => {
   for (const player of await cohort()) {
     for (const [key, source] of [['xGPer90', 'xG'], ['xAPer90', 'xA']]) {

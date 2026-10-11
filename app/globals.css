@@ -275,19 +275,18 @@ details p { margin-top: 10px;}
 .comparison-panel .avatar { width: 46px; height: 46px;}
 .opponent-select { margin: 15px 0;}
 .opponent-select select { font-size: 11px; min-height: 34px;}
-.bar-comparison { margin-top: 16px;}
-.bar-comparison-row { display: grid; grid-template-columns: 36px minmax(0,1fr) 100px minmax(0,1fr) 36px; gap: 8px; align-items: center; margin-bottom: 13px;}
-.bar-value { font-size: 11px; font-weight: 650; font-variant-numeric: tabular-nums;}
-.bar-value.right { text-align: right;}
-.bar-label { text-align: center; color: #596881; font-size: 10px; line-height: 1.35;}
-.comparison-track { display: flex; height: 8px; background: #edf1f6; border-radius: 4px; overflow: hidden;}
-.comparison-track.left { justify-content: flex-end;}
-.comparison-track i { height: 100%; border-radius: 4px; background: var(--green);}
-.comparison-track.right i { background: #438cf5;}
-.comparison-panel .bar-comparison-row { grid-template-columns: 29px minmax(0,1fr) 77px minmax(0,1fr) 29px; gap: 5px; margin-bottom: 13px;}
-.comparison-panel .bar-value { font-size: 9px;}
-.comparison-panel .bar-label { font-size: 9px;}
-.comparison-panel .comparison-track { height: 7px;}
+.comparison-metric-summary { margin-top: 16px;}
+.comparison-metric-table { table-layout: fixed;}
+.comparison-metric-table th { width: 25%; white-space: normal; overflow-wrap: anywhere;}
+.comparison-metric-table th:first-child { width: 50%;}
+.comparison-metric-table thead th:not(:first-child),.comparison-metric-table td { text-align: center;}
+.comparison-metric-table thead small { display: block; margin-top: 4px; font-size: 10px; font-weight: 400;}
+.comparison-metric-table tbody th { background: transparent; color: var(--ink);}
+.comparison-metric-table td { font-weight: 550;}
+.comparison-metric-table td.metric-best { color: var(--accent); background: #f0faf5; font-weight: 700;}
+.comparison-panel .comparison-metric-table { font-size: 11px;}
+.comparison-panel .comparison-metric-table th,.comparison-panel .comparison-metric-table td { padding: 9px 6px;}
+.comparison-panel .comparison-metric-table th,.comparison-panel .comparison-metric-table thead small { font-size: 10px;}
 .compare-full-link { margin-top: 16px; width: 100%;}
 .compare-placeholder { display: grid; place-items: center; gap: 12px; background: #f7f9fc; border: 1px dashed var(--line); border-radius: 8px; padding: 30px 14px; color: var(--muted); text-align: center; font-size: 11px;}
 .compare-pickers { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px;}
@@ -296,10 +295,9 @@ details p { margin-top: 10px;}
 .comparison-overview .avatar { width: 76px; height: 76px;}
 .comparison-save-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; max-width: 670px; margin: 12px auto 0;}
 .comparison-save-actions .button { justify-self: center;}
-.comparison-layout { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 16px;}
+.comparison-layout { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px;}
 .comparison-layout .panel { margin-top: 0;}
-.comparison-layout .bar-comparison { margin-top: 25px;}
-.comparison-layout .bar-comparison-row { margin-bottom: 20px;}
+.comparison-layout .radar { max-width: 360px;}
 .comparison-table { table-layout: fixed;}
 .comparison-table th,.comparison-table td { white-space: normal; overflow-wrap: anywhere;}
 .comparison-table tbody th { background: transparent;}
@@ -463,9 +461,6 @@ input[type=checkbox] { width: 18px; height: 18px; min-height: 0; accent-color: v
   .players-workspace { grid-template-columns: 220px minmax(0,1fr);}
   .comparison-panel { grid-column: 2;}
   .roster-panel { grid-row: span 2;}
-  .comparison-panel .bar-comparison-row { grid-template-columns: 36px minmax(0,1fr) 100px minmax(0,1fr) 36px; gap: 8px;}
-  .comparison-panel .bar-value { font-size: 11px;}
-  .comparison-panel .bar-label { font-size: 10px;}
   .comparison-panel .compare-player-card .identity strong { font-size: 12px;}
 }
 @media(max-width:950px) {
@@ -567,7 +562,6 @@ input[type=checkbox] { width: 18px; height: 18px; min-height: 0; accent-color: v
   .comparison-overview .avatar { width: 60px; height: 60px;}
   .comparison-save-actions { gap: 8px;}
   .comparison-save-actions .button { width: 100%; padding: 8px 5px; font-size: 10px;}
-  .bar-comparison-row,.comparison-panel .bar-comparison-row { grid-template-columns: 30px minmax(0,1fr) 88px minmax(0,1fr) 30px; gap: 5px;}
   .comparison-table th,.comparison-table td { padding: 11px 8px; font-size: 10px;}
   .saved-row { gap: 12px; flex-wrap: wrap; padding: 15px;}
   .saved-row>a { flex-basis: calc(100% - 40px);}

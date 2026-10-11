@@ -8,7 +8,8 @@ import { formatMoney, formatNumber, positionName } from '@/lib/mvp';
 import { DataNote, PageHeading } from './common';
 import { SaveButton } from './shell';
 import { MvpRadar } from './radar';
-import { ComparisonBars, ComparisonPair } from './comparison-visual';
+import { ComparisonPair } from './comparison-visual';
+import { ComparisonMetricTable } from './comparison-table';
 
 export function PlayerComparison({ players, first, second }: { players: Player[]; first?: string; second?: string }) {
   const router = useRouter();
@@ -34,7 +35,7 @@ export function PlayerComparison({ players, first, second }: { players: Player[]
     </label>)}</div>
     <section className="panel comparison-overview"><ComparisonPair left={left} right={right} />
       <div className="comparison-save-actions">{[left, right].map(player => <SaveButton key={player.id} id={player.id} />)}</div>
-    </section><DataNote /><div className="comparison-layout"><section className="panel comparison-metrics"><h2>Ключевые показатели</h2><ComparisonBars left={left} right={right} /></section><MvpRadar player={left} players={players} comparison={right} /></div>
+    </section><DataNote /><div className="comparison-layout"><section className="panel comparison-metrics"><h2>Ключевые показатели</h2><ComparisonMetricTable left={left} right={right} /></section><MvpRadar player={left} players={players} comparison={right} /></div>
     <div className="section-heading"><h2>Данные игроков</h2></div><div className="table-scroll"><table className="comparison-table"><caption className="sr-only">{left.name.ru} против {right.name.ru}</caption>
       <thead><tr><th>Показатель</th><th>{left.name.ru}</th><th>{right.name.ru}</th></tr></thead>
       <tbody>{rows.map(([label, valueA, valueB]) => <tr key={label}><th scope="row">{label}</th><td>{valueA}</td><td>{valueB}</td></tr>)}</tbody>

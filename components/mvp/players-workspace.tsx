@@ -7,7 +7,8 @@ import type { Player } from '@/types/players';
 import { EMPTY_FILTERS, filterPlayers, formatNumber, groupTeams, positionName } from '@/lib/mvp';
 import { PlayerIdentity, PageHeading } from './common';
 import { PlayerProfile } from './profile';
-import { ComparisonBars, ComparisonPair } from './comparison-visual';
+import { ComparisonPair } from './comparison-visual';
+import { ComparisonMetricTable } from './comparison-table';
 
 export function PlayersWorkspace({ players, query = '' }: { players: Player[]; query?: string }) {
   const [filters, setFilters] = useState({ ...EMPTY_FILTERS, search: query });
@@ -48,7 +49,7 @@ export function PlayersWorkspace({ players, query = '' }: { players: Player[]; q
         {primary ? <>
           {opponent ? <ComparisonPair left={primary} right={opponent} /> : <div className="compare-placeholder"><ArrowLeftRight size={24} /><p>Выберите второго игрока для сравнения.</p></div>}
           <label className="opponent-select">Сравнить с<select value={opponent?.id || ''} onChange={event => setOpponentId(event.target.value || null)}><option value="">Выберите игрока</option>{players.filter(player => player.id !== primary.id).map(player => <option key={player.id} value={player.id}>{player.name.ru}</option>)}</select></label>
-          {opponent && <><ComparisonBars left={primary} right={opponent} /><Link className="button secondary compare-full-link" href={`/compare?a=${primary.id}&b=${opponent.id}`}>Открыть сравнение<ArrowLeftRight size={14} /></Link></>}
+          {opponent && <><ComparisonMetricTable left={primary} right={opponent} /><Link className="button secondary compare-full-link" href={`/compare?a=${primary.id}&b=${opponent.id}`}>Открыть сравнение<ArrowLeftRight size={14} /></Link></>}
         </> : <p className="muted">Выберите игрока из списка.</p>}
       </aside>
     </div>
