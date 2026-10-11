@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { formatNumber, MVP_PLAYER_IDS } from '../../lib/mvp';
 import type { Player } from '../../types/players';
-import { ATTACKING_METRICS, COMPARISON_METRICS, displayMetricValue, PROFILE_METRICS, roleMetricScores } from '../../components/mvp/profile-data';
+import { ATTACKING_METRICS, COMPARISON_METRICS, displayMetricValue, PROFILE_METRICS, radarData, roleMetricScores } from '../../components/mvp/profile-data';
 
 test('home → recruitment → profile → saved shortlist → comparison', async ({ page }, testInfo) => {
   const errors: string[] = [];
@@ -123,6 +123,38 @@ test('unavailable player photo uses a neutral placeholder', async ({ page }) => 
   await expect(page.locator('.identity.large .avatar-placeholder')).toBeVisible();
   await expect(page.locator('.identity.large img')).toHaveCount(0);
   await expect(page.locator('.identity.large .avatar-placeholder')).toContainText('LD');
+});
+
+test('standalone profile separates player radar from source-backed Scout Index bars', async ({ page, request }, testInfo) => {
+  const players: Player[] = await (await request.get('/api/mvp/players')).json();
+  const player = players[0];
+  await page.goto(`/players/${player.id}`);
+  await expect(page.locator('.detail-header h1')).toHaveText(player.name.ru);
+  await expect(page.locator('.detail-index-score')).toHaveText(`${formatNumber(player.scoutIndex)} / 100`);
+  await expect(page.locator('.detail-key-metrics .metric')).toHaveCount(8);
+  for (const metric of PROFILE_METRICS) {
+    const card = page.locator(`.detail-key-metrics [data-metric="${metric.key}"]`);
+    await expect(card.locator('strong')).toHaveText(formatNumber(displayMetricValue(player, metric.key), metric.decimals));
+    if ('rate' in metric) await expect(card.locator('.metric-rate')).toHaveText(`${formatNumber(displayMetricValue(player, metric.rate), 2)} / 90`);
+  }
+  await expect(page.getByRole('heading', { name: 'Профиль игрока', exact: true })).toBeVisible();
+  await expect(page.locator('#player-shape svg [data-axis]')).toHaveCount(radarData(player, players).axes.length);
+  const rows = page.locator('#scout-index [data-index-metric]');
+  await expect(rows).toHaveCount(roleMetricScores(player).length);
+  for (const metric of roleMetricScores(player)) {
+    const row = page.locator(`#scout-index [data-index-metric="${metric.key}"]`);
+    await expect(row.locator('strong')).toHaveText(formatNumber(metric.adjustedScore));
+    await expect(row.locator('small')).toHaveText(`Перцентиль ${formatNumber(metric.percentile)}`);
+    if (metric.adjustedScore !== null) await expect(row.getByRole('progressbar')).toHaveAttribute('aria-valuenow', String(metric.adjustedScore));
+    else await expect(row.getByRole('progressbar')).toHaveCount(0);
+  }
+  const explanation = page.locator('#scout-index .index-explanation');
+  await explanation.locator('summary').click();
+  await expect(explanation.locator('tfoot td')).toHaveText(`${formatNumber(player.scoutIndex)} / 100`);
+  await expect(explanation).toContainText('Покрытие: 5/5');
+  await explanation.locator('summary').click();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: testInfo.outputPath('standalone-profile.png'), fullPage: true });
 });
 
 test('club roster leads to recruitment excluding its own players', async ({ page }) => {

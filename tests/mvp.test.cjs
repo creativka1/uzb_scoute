@@ -232,3 +232,26 @@ test('index explanation shows source percentiles and scores without reconstructi
   assert.ok(visible.includes('goals'));
   assert.ok(!visible.includes('assists') && !visible.includes('xG') && !visible.includes('xA'));
 });
+
+test('index bars render existing role scores and percentiles without substituting missing scores', async () => {
+  const { IndexBars } = load('components/mvp/index-bars.tsx');
+  const { roleMetricScores } = load('components/mvp/profile-data.ts');
+  const player = (await cohort())[0];
+  const html = renderToStaticMarkup(React.createElement(IndexBars, { player }));
+  assert.equal((html.match(/data-index-metric=/g) || []).length, 5);
+  assert.equal((html.match(/role="progressbar"/g) || []).length, 5);
+  for (const metric of roleMetricScores(player)) {
+    assert.ok(html.includes(`aria-label="${metric.label}: adjusted score"`));
+    assert.ok(html.includes(`aria-valuenow="${metric.adjustedScore}"`));
+    assert.ok(html.includes(`Перцентиль ${metric.percentile}`));
+  }
+  const partial = { ...player, scoutingEngine: { ...player.scoutingEngine,
+    adjustedRadar: { ...player.scoutingEngine.adjustedRadar, m1: 0, m2: null } } };
+  const partialHtml = renderToStaticMarkup(React.createElement(IndexBars, { player: partial }));
+  assert.ok(partialHtml.includes('aria-valuenow="0"'));
+  assert.ok(partialHtml.includes('style="width:0%"'));
+  assert.equal((partialHtml.match(/role="progressbar"/g) || []).length, 4);
+  const missingRow = partialHtml.match(/data-index-metric="assistsPer90"([\s\S]*?)<\/strong>/)[1];
+  assert.ok(missingRow.includes('<strong>—'));
+  assert.ok(!missingRow.includes('index-bar-fill'));
+});
