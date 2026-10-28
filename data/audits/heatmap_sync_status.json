@@ -1,11 +1,132 @@
 {
-  "generatedAt": "2026-10-27T08:15:45.771177+00:00",
-  "status": "failed",
-  "failedResponsesThisRun": 1,
-  "requestsMadeThisRun": 3,
-  "heatmapsSavedThisRun": 0,
+  "generatedAt": "2026-10-28T08:54:47.145717+00:00",
+  "status": "success",
+  "failedResponsesThisRun": 0,
+  "requestsMadeThisRun": 12,
+  "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
-  "rateLimited": true,
-  "totalCachedHeatmaps": 0,
-  "savedSamples": []
+  "rateLimited": false,
+  "totalCachedHeatmaps": 12,
+  "savedSamples": [
+    {
+      "eventId": 15207983,
+      "playerId": 2181721,
+      "player": "Bekzod Akhmadzhonov",
+      "team": "Pfk Aral",
+      "broadPosition": "D",
+      "points": 34,
+      "medianX": 45.0,
+      "medianY": 5.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 2181732,
+      "player": "Rasul Musaev",
+      "team": "Pfk Aral",
+      "broadPosition": "D",
+      "points": 100,
+      "medianX": 27.0,
+      "medianY": 35.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 818061,
+      "player": "Obid Juraboev",
+      "team": "Pfk Aral",
+      "broadPosition": "D",
+      "points": 83,
+      "medianX": 27.0,
+      "medianY": 68.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 1014275,
+      "player": "Ilkhom Alizhonov",
+      "team": "Pfk Aral",
+      "broadPosition": "D",
+      "points": 48,
+      "medianX": 27.0,
+      "medianY": 88.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 2415514,
+      "player": "Bakhtiyor Arazov",
+      "team": "Pfk Aral",
+      "broadPosition": "M",
+      "points": 71,
+      "medianX": 44.0,
+      "medianY": 59.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 964300,
+      "player": "Sobit Sindarov",
+      "team": "Pfk Aral",
+      "broadPosition": "M",
+      "points": 68,
+      "medianX": 46.0,
+      "medianY": 49.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 1107861,
+      "player": "Doniyor Ismoilov",
+      "team": "Pfk Aral",
+      "broadPosition": "M",
+      "points": 81,
+      "medianX": 57.0,
+      "medianY": 20.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 2181725,
+      "player": "Zulpikar Kuanishbaev",
+      "team": "Pfk Aral",
+      "broadPosition": "M",
+      "points": 23,
+      "medianX": 49.0,
+      "medianY": 24.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 2078460,
+      "player": "Izzatulla Kutibaev",
+      "team": "Pfk Aral",
+      "broadPosition": "M",
+      "points": 51,
+      "medianX": 70.0,
+      "medianY": 85.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 872278,
+      "player": "Salamat Kutybaev",
+      "team": "Pfk Aral",
+      "broadPosition": "F",
+      "points": 58,
+      "medianX": 66.0,
+      "medianY": 63.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 1120045,
+      "player": "Sardor Kulmatov",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
+      "points": 48,
+      "medianX": 34.0,
+      "medianY": 23.0
+    },
+    {
+      "eventId": 15207983,
+      "playerId": 291659,
+      "player": "Frane Ikić",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
+      "points": 45,
+      "medianX": 27.0,
+      "medianY": 53.0
+    }
+  ]
 }
