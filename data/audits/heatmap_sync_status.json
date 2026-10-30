@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-10-29T08:48:29.706303+00:00",
+  "generatedAt": "2026-10-30T08:54:20.033479+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 24,
+  "totalCachedHeatmaps": 36,
   "savedSamples": [
     {
-      "eventId": 15207983,
-      "playerId": 136708,
-      "player": "Josip Tomašević",
-      "team": "FC Buxoro",
-      "broadPosition": "D",
-      "points": 53,
-      "medianX": 32.0,
-      "medianY": 77.0
-    },
-    {
-      "eventId": 15207983,
-      "playerId": 1403415,
-      "player": "Izzatillo Pulatov",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 53,
-      "medianX": 61.0,
-      "medianY": 11.0
-    },
-    {
-      "eventId": 15207983,
+      "eventId": 15186022,
       "playerId": 1516006,
       "player": "Ravshan Khayrullaev",
       "team": "FC Buxoro",
       "broadPosition": "M",
-      "points": 68,
-      "medianX": 46.0,
-      "medianY": 47.0
-    },
-    {
-      "eventId": 15207983,
-      "playerId": 313076,
-      "player": "Frane Čirjak",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
       "points": 65,
-      "medianX": 51.0,
-      "medianY": 52.0
-    },
-    {
-      "eventId": 15207983,
-      "playerId": 1107479,
-      "player": "Muhammad Yuldashev",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 60,
       "medianX": 44.0,
-      "medianY": 91.0
-    },
-    {
-      "eventId": 15207983,
-      "playerId": 1133373,
-      "player": "Bilol Tupliyev",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 53,
-      "medianX": 68.0,
-      "medianY": 71.0
-    },
-    {
-      "eventId": 15207983,
-      "playerId": 871965,
-      "player": "Azizbek Amanov",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 81,
-      "medianX": 63.0,
-      "medianY": 40.0
-    },
-    {
-      "eventId": 15207983,
-      "playerId": 1163817,
-      "player": "Toma Tabatadze",
-      "team": "FC Buxoro",
-      "broadPosition": "F",
-      "points": 78,
-      "medianX": 72.0,
       "medianY": 50.0
     },
     {
       "eventId": 15186022,
-      "playerId": 1120045,
-      "player": "Sardor Kulmatov",
-      "team": "FC Buxoro",
-      "broadPosition": "D",
-      "points": 64,
-      "medianX": 32.0,
-      "medianY": 28.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 291659,
-      "player": "Frane Ikić",
-      "team": "FC Buxoro",
-      "broadPosition": "D",
-      "points": 51,
-      "medianX": 35.0,
-      "medianY": 45.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 136708,
-      "player": "Josip Tomašević",
-      "team": "FC Buxoro",
-      "broadPosition": "D",
-      "points": 67,
-      "medianX": 37.0,
-      "medianY": 80.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 1033941,
-      "player": "Shakhboz Jurabekov",
+      "playerId": 313076,
+      "player": "Frane Čirjak",
       "team": "FC Buxoro",
       "broadPosition": "M",
-      "points": 59,
-      "medianX": 54.0,
-      "medianY": 13.0
+      "points": 37,
+      "medianX": 46.0,
+      "medianY": 40.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 1107479,
+      "player": "Muhammad Yuldashev",
+      "team": "FC Buxoro",
+      "broadPosition": "M",
+      "points": 38,
+      "medianX": 52.0,
+      "medianY": 89.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 1133373,
+      "player": "Bilol Tupliyev",
+      "team": "FC Buxoro",
+      "broadPosition": "F",
+      "points": 32,
+      "medianX": 65.0,
+      "medianY": 42.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 1163817,
+      "player": "Toma Tabatadze",
+      "team": "FC Buxoro",
+      "broadPosition": "F",
+      "points": 62,
+      "medianX": 68.0,
+      "medianY": 48.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 1130234,
+      "player": "Dominik Begić",
+      "team": "FC Buxoro",
+      "broadPosition": "F",
+      "points": 30,
+      "medianX": 60.0,
+      "medianY": 55.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 794972,
+      "player": "Iskandar Shaykulov",
+      "team": "PFK Xorazm",
+      "broadPosition": "D",
+      "points": 71,
+      "medianX": 36.0,
+      "medianY": 18.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 1199039,
+      "player": "Diyor Ortikboev",
+      "team": "PFK Xorazm",
+      "broadPosition": "D",
+      "points": 70,
+      "medianX": 31.0,
+      "medianY": 40.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 796348,
+      "player": "Abbos Otakhonov",
+      "team": "PFK Xorazm",
+      "broadPosition": "D",
+      "points": 67,
+      "medianX": 31.0,
+      "medianY": 64.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 1033933,
+      "player": "Abror Khusinov",
+      "team": "PFK Xorazm",
+      "broadPosition": "D",
+      "points": 61,
+      "medianX": 40.0,
+      "medianY": 88.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 1049060,
+      "player": "Jasur Azimov",
+      "team": "PFK Xorazm",
+      "broadPosition": "M",
+      "points": 78,
+      "medianX": 43.0,
+      "medianY": 61.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 1877845,
+      "player": "Khazrat Tursunkulov",
+      "team": "PFK Xorazm",
+      "broadPosition": "M",
+      "points": 65,
+      "medianX": 49.0,
+      "medianY": 69.0
     }
   ]
 }
