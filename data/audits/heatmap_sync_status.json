@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-10-30T08:54:20.033479+00:00",
+  "generatedAt": "2026-10-31T08:44:24.063695+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 36,
+  "totalCachedHeatmaps": 48,
   "savedSamples": [
     {
       "eventId": 15186022,
-      "playerId": 1516006,
-      "player": "Ravshan Khayrullaev",
-      "team": "FC Buxoro",
+      "playerId": 975686,
+      "player": "Khumoyunmirzo Iminov",
+      "team": "PFK Xorazm",
       "broadPosition": "M",
-      "points": 65,
-      "medianX": 44.0,
+      "points": 82,
+      "medianX": 61.0,
       "medianY": 50.0
     },
     {
       "eventId": 15186022,
-      "playerId": 313076,
-      "player": "Frane Čirjak",
-      "team": "FC Buxoro",
+      "playerId": 1542886,
+      "player": "Azizjon Akhrorov",
+      "team": "PFK Xorazm",
       "broadPosition": "M",
-      "points": 37,
-      "medianX": 46.0,
-      "medianY": 40.0
+      "points": 58,
+      "medianX": 71.0,
+      "medianY": 75.0
     },
     {
       "eventId": 15186022,
-      "playerId": 1107479,
-      "player": "Muhammad Yuldashev",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 38,
-      "medianX": 52.0,
+      "playerId": 1034838,
+      "player": "Murodbek Bobodzhonov",
+      "team": "PFK Xorazm",
+      "broadPosition": "F",
+      "points": 30,
+      "medianX": 69.0,
+      "medianY": 53.0
+    },
+    {
+      "eventId": 15186022,
+      "playerId": 2070684,
+      "player": "Danila Ezhov",
+      "team": "PFK Xorazm",
+      "broadPosition": "F",
+      "points": 25,
+      "medianX": 64.0,
+      "medianY": 11.0
+    },
+    {
+      "eventId": 15178681,
+      "playerId": 975662,
+      "player": "Alisher Salimov",
+      "team": "FK Kokand 1912",
+      "broadPosition": "D",
+      "points": 64,
+      "medianX": 60.0,
+      "medianY": 8.0
+    },
+    {
+      "eventId": 15178681,
+      "playerId": 1523726,
+      "player": "Abror Karimov",
+      "team": "FK Kokand 1912",
+      "broadPosition": "D",
+      "points": 108,
+      "medianX": 41.0,
+      "medianY": 20.0
+    },
+    {
+      "eventId": 15178681,
+      "playerId": 1109448,
+      "player": "Asliddin Toshtemirov",
+      "team": "FK Kokand 1912",
+      "broadPosition": "D",
+      "points": 109,
+      "medianX": 31.0,
+      "medianY": 50.0
+    },
+    {
+      "eventId": 15178681,
+      "playerId": 887462,
+      "player": "Andro Giorgadze",
+      "team": "FK Kokand 1912",
+      "broadPosition": "D",
+      "points": 100,
+      "medianX": 40.0,
+      "medianY": 75.0
+    },
+    {
+      "eventId": 15178681,
+      "playerId": 1115842,
+      "player": "Shahzod Akramov",
+      "team": "FK Kokand 1912",
+      "broadPosition": "D",
+      "points": 87,
+      "medianX": 55.0,
       "medianY": 89.0
     },
     {
-      "eventId": 15186022,
-      "playerId": 1133373,
-      "player": "Bilol Tupliyev",
-      "team": "FC Buxoro",
-      "broadPosition": "F",
-      "points": 32,
-      "medianX": 65.0,
-      "medianY": 42.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 1163817,
-      "player": "Toma Tabatadze",
-      "team": "FC Buxoro",
-      "broadPosition": "F",
+      "eventId": 15178681,
+      "playerId": 1032799,
+      "player": "Mukhammadanas Khasanov",
+      "team": "FK Kokand 1912",
+      "broadPosition": "M",
       "points": 62,
-      "medianX": 68.0,
-      "medianY": 48.0
+      "medianX": 75.0,
+      "medianY": 27.0
     },
     {
-      "eventId": 15186022,
-      "playerId": 1130234,
-      "player": "Dominik Begić",
-      "team": "FC Buxoro",
-      "broadPosition": "F",
-      "points": 30,
-      "medianX": 60.0,
-      "medianY": 55.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 794972,
-      "player": "Iskandar Shaykulov",
-      "team": "PFK Xorazm",
-      "broadPosition": "D",
-      "points": 71,
-      "medianX": 36.0,
-      "medianY": 18.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 1199039,
-      "player": "Diyor Ortikboev",
-      "team": "PFK Xorazm",
-      "broadPosition": "D",
-      "points": 70,
-      "medianX": 31.0,
-      "medianY": 40.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 796348,
-      "player": "Abbos Otakhonov",
-      "team": "PFK Xorazm",
-      "broadPosition": "D",
-      "points": 67,
-      "medianX": 31.0,
-      "medianY": 64.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 1033933,
-      "player": "Abror Khusinov",
-      "team": "PFK Xorazm",
-      "broadPosition": "D",
-      "points": 61,
-      "medianX": 40.0,
-      "medianY": 88.0
-    },
-    {
-      "eventId": 15186022,
-      "playerId": 1049060,
-      "player": "Jasur Azimov",
-      "team": "PFK Xorazm",
+      "eventId": 15178681,
+      "playerId": 898565,
+      "player": "Shota Gvazava",
+      "team": "FK Kokand 1912",
       "broadPosition": "M",
-      "points": 78,
-      "medianX": 43.0,
-      "medianY": 61.0
+      "points": 29,
+      "medianX": 42.0,
+      "medianY": 58.0
     },
     {
-      "eventId": 15186022,
-      "playerId": 1877845,
-      "player": "Khazrat Tursunkulov",
-      "team": "PFK Xorazm",
+      "eventId": 15178681,
+      "playerId": 1032797,
+      "player": "Iqboljon Malikjonov",
+      "team": "FK Kokand 1912",
       "broadPosition": "M",
-      "points": 65,
-      "medianX": 49.0,
-      "medianY": 69.0
+      "points": 83,
+      "medianX": 52.0,
+      "medianY": 50.0
     }
   ]
 }
