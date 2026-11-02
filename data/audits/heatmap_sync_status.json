@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-01T09:34:14.733212+00:00",
+  "generatedAt": "2026-11-02T09:51:13.987563+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 60,
+  "totalCachedHeatmaps": 72,
   "savedSamples": [
     {
-      "eventId": 15178681,
-      "playerId": 2010203,
-      "player": "Javokhir Khusanov",
-      "team": "FK Kokand 1912",
-      "broadPosition": "F",
-      "points": 38,
-      "medianX": 67.0,
-      "medianY": 24.0
-    },
-    {
-      "eventId": 15178681,
-      "playerId": 1432054,
-      "player": "Abdugafur Haydarov",
-      "team": "FK Kokand 1912",
-      "broadPosition": "F",
-      "points": 67,
-      "medianX": 68.0,
-      "medianY": 52.0
-    },
-    {
-      "eventId": 15178681,
-      "playerId": 794972,
-      "player": "Iskandar Shaykulov",
-      "team": "PFK Xorazm",
-      "broadPosition": "D",
-      "points": 60,
-      "medianX": 41.0,
-      "medianY": 16.0
-    },
-    {
-      "eventId": 15178681,
-      "playerId": 1199039,
-      "player": "Diyor Ortikboev",
-      "team": "PFK Xorazm",
-      "broadPosition": "D",
-      "points": 62,
-      "medianX": 34.0,
-      "medianY": 31.0
-    },
-    {
-      "eventId": 15178681,
-      "playerId": 796348,
-      "player": "Abbos Otakhonov",
-      "team": "PFK Xorazm",
-      "broadPosition": "D",
-      "points": 70,
-      "medianX": 32.0,
-      "medianY": 62.0
-    },
-    {
-      "eventId": 15178681,
-      "playerId": 1033933,
-      "player": "Abror Khusinov",
-      "team": "PFK Xorazm",
+      "eventId": 15178680,
+      "playerId": 1064332,
+      "player": "Dmitriy Yashin",
+      "team": "Mash Al Mubarek",
       "broadPosition": "D",
       "points": 81,
-      "medianX": 40.0,
-      "medianY": 81.0
+      "medianX": 29.0,
+      "medianY": 27.0
     },
     {
-      "eventId": 15178681,
-      "playerId": 1877845,
-      "player": "Khazrat Tursunkulov",
-      "team": "PFK Xorazm",
-      "broadPosition": "M",
-      "points": 99,
-      "medianX": 54.0,
-      "medianY": 50.0
+      "eventId": 15178680,
+      "playerId": 2070670,
+      "player": "Shakhboz Juraev",
+      "team": "Mash Al Mubarek",
+      "broadPosition": "D",
+      "points": 73,
+      "medianX": 23.0,
+      "medianY": 42.0
     },
     {
-      "eventId": 15178681,
-      "playerId": 1049060,
-      "player": "Jasur Azimov",
-      "team": "PFK Xorazm",
+      "eventId": 15178680,
+      "playerId": 832291,
+      "player": "Sherzod Fayziev",
+      "team": "Mash Al Mubarek",
+      "broadPosition": "D",
+      "points": 68,
+      "medianX": 30.0,
+      "medianY": 75.0
+    },
+    {
+      "eventId": 15178680,
+      "playerId": 1032793,
+      "player": "Avazkhon Mamatkhodzhaev",
+      "team": "Mash Al Mubarek",
+      "broadPosition": "D",
+      "points": 91,
+      "medianX": 43.0,
+      "medianY": 86.0
+    },
+    {
+      "eventId": 15178680,
+      "playerId": 1112987,
+      "player": "Samandar Ochilov",
+      "team": "Mash Al Mubarek",
       "broadPosition": "M",
-      "points": 67,
+      "points": 117,
+      "medianX": 43.0,
+      "medianY": 42.0
+    },
+    {
+      "eventId": 15178680,
+      "playerId": 937271,
+      "player": "Mukhammadali Alikulov",
+      "team": "Mash Al Mubarek",
+      "broadPosition": "M",
+      "points": 57,
       "medianX": 37.0,
-      "medianY": 48.0
-    },
-    {
-      "eventId": 15178681,
-      "playerId": 975686,
-      "player": "Khumoyunmirzo Iminov",
-      "team": "PFK Xorazm",
-      "broadPosition": "M",
-      "points": 103,
-      "medianX": 56.0,
-      "medianY": 55.0
-    },
-    {
-      "eventId": 15178681,
-      "playerId": 2070684,
-      "player": "Danila Ezhov",
-      "team": "PFK Xorazm",
-      "broadPosition": "F",
-      "points": 39,
-      "medianX": 66.0,
       "medianY": 13.0
     },
     {
-      "eventId": 15178681,
-      "playerId": 975788,
-      "player": "Shahrom Samiev",
-      "team": "PFK Xorazm",
-      "broadPosition": "F",
-      "points": 51,
-      "medianX": 64.0,
-      "medianY": 41.0
+      "eventId": 15178680,
+      "playerId": 1065491,
+      "player": "Nurzhakhon Muzaffarov",
+      "team": "Mash Al Mubarek",
+      "broadPosition": "M",
+      "points": 65,
+      "medianX": 50.0,
+      "medianY": 56.0
     },
     {
-      "eventId": 15178681,
-      "playerId": 1542886,
-      "player": "Azizjon Akhrorov",
-      "team": "PFK Xorazm",
+      "eventId": 15178680,
+      "playerId": 1188517,
+      "player": "Islom Sharipov",
+      "team": "Mash Al Mubarek",
+      "broadPosition": "M",
+      "points": 53,
+      "medianX": 62.0,
+      "medianY": 33.0
+    },
+    {
+      "eventId": 15178680,
+      "playerId": 333087,
+      "player": "Aminu Umar",
+      "team": "Mash Al Mubarek",
       "broadPosition": "F",
-      "points": 67,
-      "medianX": 57.0,
-      "medianY": 81.0
+      "points": 56,
+      "medianX": 63.0,
+      "medianY": 46.0
+    },
+    {
+      "eventId": 15178680,
+      "playerId": 1016155,
+      "player": "Khumoyun Murtazoev",
+      "team": "Mash Al Mubarek",
+      "broadPosition": "F",
+      "points": 19,
+      "medianX": 67.0,
+      "medianY": 44.0
+    },
+    {
+      "eventId": 15178680,
+      "playerId": 1120045,
+      "player": "Sardor Kulmatov",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
+      "points": 73,
+      "medianX": 41.0,
+      "medianY": 25.0
+    },
+    {
+      "eventId": 15178680,
+      "playerId": 291659,
+      "player": "Frane Ikić",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
+      "points": 57,
+      "medianX": 36.0,
+      "medianY": 50.0
     }
   ]
 }
