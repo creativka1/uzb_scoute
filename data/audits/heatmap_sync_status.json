@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-04T09:43:51.846509+00:00",
+  "generatedAt": "2026-11-05T09:47:00.962742+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 96,
+  "totalCachedHeatmaps": 108,
   "savedSamples": [
     {
       "eventId": 14606899,
-      "playerId": 1032799,
-      "player": "Mukhammadanas Khasanov",
-      "team": "FK Kokand 1912",
+      "playerId": 2150428,
+      "player": "Zoir Jo'raboyev",
+      "team": "FC Sogdiana Jizzakh",
       "broadPosition": "M",
-      "points": 93,
-      "medianX": 68.0,
-      "medianY": 24.0
+      "points": 105,
+      "medianX": 38.0,
+      "medianY": 85.0
     },
     {
       "eventId": 14606899,
-      "playerId": 898565,
-      "player": "Shota Gvazava",
-      "team": "FK Kokand 1912",
-      "broadPosition": "M",
-      "points": 51,
-      "medianX": 60.0,
-      "medianY": 34.0
-    },
-    {
-      "eventId": 14606899,
-      "playerId": 1032797,
-      "player": "Iqboljon Malikjonov",
-      "team": "FK Kokand 1912",
-      "broadPosition": "M",
-      "points": 68,
-      "medianX": 58.0,
-      "medianY": 58.0
-    },
-    {
-      "eventId": 14606899,
-      "playerId": 1115842,
-      "player": "Shahzod Akramov",
-      "team": "FK Kokand 1912",
-      "broadPosition": "M",
-      "points": 89,
-      "medianX": 46.0,
-      "medianY": 87.0
-    },
-    {
-      "eventId": 14606899,
-      "playerId": 2010203,
-      "player": "Javokhir Khusanov",
-      "team": "FK Kokand 1912",
+      "playerId": 573710,
+      "player": "Ljupche Doriev",
+      "team": "FC Sogdiana Jizzakh",
       "broadPosition": "F",
-      "points": 74,
+      "points": 76,
       "medianX": 73.0,
+      "medianY": 62.0
+    },
+    {
+      "eventId": 14606899,
+      "playerId": 1110945,
+      "player": "Shokhrukh Abdurakhmonov",
+      "team": "FC Sogdiana Jizzakh",
+      "broadPosition": "F",
+      "points": 50,
+      "medianX": 51.0,
+      "medianY": 50.0
+    },
+    {
+      "eventId": 14606899,
+      "playerId": 1393507,
+      "player": "Samandarjon Mavlonkulov",
+      "team": "FC Sogdiana Jizzakh",
+      "broadPosition": "F",
+      "points": 35,
+      "medianX": 50.0,
+      "medianY": 77.0
+    },
+    {
+      "eventId": 14606903,
+      "playerId": 1120045,
+      "player": "Sardor Kulmatov",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
+      "points": 58,
+      "medianX": 31.0,
       "medianY": 25.0
     },
     {
-      "eventId": 14606899,
-      "playerId": 1432054,
-      "player": "Abdugafur Haydarov",
-      "team": "FK Kokand 1912",
-      "broadPosition": "F",
+      "eventId": 14606903,
+      "playerId": 2233458,
+      "player": "Nodirbek Akhmadjonov",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
       "points": 55,
-      "medianX": 78.0,
-      "medianY": 63.0
-    },
-    {
-      "eventId": 14606899,
-      "playerId": 871694,
-      "player": "Islomzhon Kobilov",
-      "team": "FC Sogdiana Jizzakh",
-      "broadPosition": "D",
-      "points": 10,
-      "medianX": 54.0,
-      "medianY": 21.0
-    },
-    {
-      "eventId": 14606899,
-      "playerId": 807596,
-      "player": "Filip Ivanović",
-      "team": "FC Sogdiana Jizzakh",
-      "broadPosition": "D",
-      "points": 86,
-      "medianX": 28.0,
-      "medianY": 48.0
-    },
-    {
-      "eventId": 14606899,
-      "playerId": 1591528,
-      "player": "Otabek Ahadov",
-      "team": "FC Sogdiana Jizzakh",
-      "broadPosition": "D",
-      "points": 91,
-      "medianX": 26.0,
+      "medianX": 27.0,
       "medianY": 51.0
     },
     {
-      "eventId": 14606899,
-      "playerId": 1016190,
-      "player": "Sukhrob Izzatov",
-      "team": "FC Sogdiana Jizzakh",
-      "broadPosition": "M",
-      "points": 75,
-      "medianX": 41.0,
-      "medianY": 27.0
+      "eventId": 14606903,
+      "playerId": 136708,
+      "player": "Josip Tomašević",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
+      "points": 78,
+      "medianX": 36.0,
+      "medianY": 85.0
     },
     {
-      "eventId": 14606899,
-      "playerId": 871948,
-      "player": "Javokhir Kakhramonov",
-      "team": "FC Sogdiana Jizzakh",
+      "eventId": 14606903,
+      "playerId": 1403415,
+      "player": "Izzatillo Pulatov",
+      "team": "FC Buxoro",
+      "broadPosition": "M",
+      "points": 59,
+      "medianX": 54.0,
+      "medianY": 8.0
+    },
+    {
+      "eventId": 14606903,
+      "playerId": 2065827,
+      "player": "Javokhir Roziyev",
+      "team": "FC Buxoro",
+      "broadPosition": "M",
+      "points": 80,
+      "medianX": 44.0,
+      "medianY": 42.0
+    },
+    {
+      "eventId": 14606903,
+      "playerId": 1035433,
+      "player": "Anvar Juraev",
+      "team": "FC Buxoro",
+      "broadPosition": "M",
+      "points": 47,
+      "medianX": 43.0,
+      "medianY": 57.0
+    },
+    {
+      "eventId": 14606903,
+      "playerId": 1033941,
+      "player": "Shakhboz Jurabekov",
+      "team": "FC Buxoro",
       "broadPosition": "M",
       "points": 70,
-      "medianX": 52.0,
-      "medianY": 27.0
+      "medianX": 54.0,
+      "medianY": 84.0
     },
     {
-      "eventId": 14606899,
-      "playerId": 1016148,
-      "player": "Jasurbek Jaloliddinov",
-      "team": "FC Sogdiana Jizzakh",
+      "eventId": 14606903,
+      "playerId": 1133373,
+      "player": "Bilol Tupliyev",
+      "team": "FC Buxoro",
       "broadPosition": "M",
-      "points": 84,
-      "medianX": 44.0,
-      "medianY": 69.0
+      "points": 55,
+      "medianX": 71.0,
+      "medianY": 71.0
     }
   ]
 }
