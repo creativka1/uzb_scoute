@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-05T09:47:00.962742+00:00",
+  "generatedAt": "2026-11-06T09:44:16.776324+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 108,
+  "totalCachedHeatmaps": 120,
   "savedSamples": [
     {
-      "eventId": 14606899,
-      "playerId": 2150428,
-      "player": "Zoir Jo'raboyev",
-      "team": "FC Sogdiana Jizzakh",
+      "eventId": 14606903,
+      "playerId": 871965,
+      "player": "Azizbek Amanov",
+      "team": "FC Buxoro",
       "broadPosition": "M",
-      "points": 105,
-      "medianX": 38.0,
-      "medianY": 85.0
+      "points": 73,
+      "medianX": 67.0,
+      "medianY": 29.0
     },
     {
-      "eventId": 14606899,
-      "playerId": 573710,
-      "player": "Ljupche Doriev",
-      "team": "FC Sogdiana Jizzakh",
+      "eventId": 14606903,
+      "playerId": 1163817,
+      "player": "Toma Tabatadze",
+      "team": "FC Buxoro",
       "broadPosition": "F",
-      "points": 76,
-      "medianX": 73.0,
-      "medianY": 62.0
-    },
-    {
-      "eventId": 14606899,
-      "playerId": 1110945,
-      "player": "Shokhrukh Abdurakhmonov",
-      "team": "FC Sogdiana Jizzakh",
-      "broadPosition": "F",
-      "points": 50,
-      "medianX": 51.0,
+      "points": 12,
+      "medianX": 64.0,
       "medianY": 50.0
     },
     {
-      "eventId": 14606899,
-      "playerId": 1393507,
-      "player": "Samandarjon Mavlonkulov",
-      "team": "FC Sogdiana Jizzakh",
-      "broadPosition": "F",
-      "points": 35,
-      "medianX": 50.0,
-      "medianY": 77.0
+      "eventId": 14606903,
+      "playerId": 1474945,
+      "player": "Javokhir Jorayev",
+      "team": "Surkhon Termez",
+      "broadPosition": "D",
+      "points": 46,
+      "medianX": 34.0,
+      "medianY": 13.0
     },
     {
       "eventId": 14606903,
-      "playerId": 1120045,
-      "player": "Sardor Kulmatov",
-      "team": "FC Buxoro",
+      "playerId": 1113127,
+      "player": "Nodirkhon Nematkhonov",
+      "team": "Surkhon Termez",
       "broadPosition": "D",
-      "points": 58,
-      "medianX": 31.0,
-      "medianY": 25.0
-    },
-    {
-      "eventId": 14606903,
-      "playerId": 2233458,
-      "player": "Nodirbek Akhmadjonov",
-      "team": "FC Buxoro",
-      "broadPosition": "D",
-      "points": 55,
-      "medianX": 27.0,
-      "medianY": 51.0
-    },
-    {
-      "eventId": 14606903,
-      "playerId": 136708,
-      "player": "Josip Tomašević",
-      "team": "FC Buxoro",
-      "broadPosition": "D",
-      "points": 78,
+      "points": 41,
       "medianX": 36.0,
-      "medianY": 85.0
+      "medianY": 43.0
     },
     {
       "eventId": 14606903,
-      "playerId": 1403415,
-      "player": "Izzatillo Pulatov",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 59,
-      "medianX": 54.0,
-      "medianY": 8.0
+      "playerId": 280647,
+      "player": "Dzhamaldin Khodzhaniyazov",
+      "team": "Surkhon Termez",
+      "broadPosition": "D",
+      "points": 49,
+      "medianX": 30.0,
+      "medianY": 71.0
     },
     {
       "eventId": 14606903,
-      "playerId": 2065827,
-      "player": "Javokhir Roziyev",
-      "team": "FC Buxoro",
+      "playerId": 1033791,
+      "player": "Bekhruz Shaydulov",
+      "team": "Surkhon Termez",
+      "broadPosition": "D",
+      "points": 57,
+      "medianX": 40.0,
+      "medianY": 87.0
+    },
+    {
+      "eventId": 14606903,
+      "playerId": 1165673,
+      "player": "Diyor Ramazonov",
+      "team": "Surkhon Termez",
       "broadPosition": "M",
-      "points": 80,
+      "points": 46,
+      "medianX": 40.0,
+      "medianY": 35.0
+    },
+    {
+      "eventId": 14606903,
+      "playerId": 1090960,
+      "player": "Bekhzod Shamsiev",
+      "team": "Surkhon Termez",
+      "broadPosition": "M",
+      "points": 45,
       "medianX": 44.0,
-      "medianY": 42.0
+      "medianY": 62.0
     },
     {
       "eventId": 14606903,
-      "playerId": 1035433,
-      "player": "Anvar Juraev",
-      "team": "FC Buxoro",
+      "playerId": 1597255,
+      "player": "Bekhruz Karimov",
+      "team": "Surkhon Termez",
       "broadPosition": "M",
-      "points": 47,
-      "medianX": 43.0,
-      "medianY": 57.0
-    },
-    {
-      "eventId": 14606903,
-      "playerId": 1033941,
-      "player": "Shakhboz Jurabekov",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 70,
+      "points": 40,
       "medianX": 54.0,
+      "medianY": 16.0
+    },
+    {
+      "eventId": 14606903,
+      "playerId": 1528110,
+      "player": "Sarvar Abduhamidov",
+      "team": "Surkhon Termez",
+      "broadPosition": "M",
+      "points": 44,
+      "medianX": 63.0,
+      "medianY": 60.0
+    },
+    {
+      "eventId": 14606903,
+      "playerId": 1479303,
+      "player": "Asilbek Jumaev",
+      "team": "Surkhon Termez",
+      "broadPosition": "M",
+      "points": 76,
+      "medianX": 59.0,
       "medianY": 84.0
     },
     {
       "eventId": 14606903,
-      "playerId": 1133373,
-      "player": "Bilol Tupliyev",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 55,
-      "medianX": 71.0,
-      "medianY": 71.0
+      "playerId": 1201277,
+      "player": "Rustam Turdimurodov",
+      "team": "Surkhon Termez",
+      "broadPosition": "F",
+      "points": 57,
+      "medianX": 69.0,
+      "medianY": 47.0
     }
   ]
 }
