@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "sourceFingerprint": "b54e2e5fc6ff519e21de7553cbe03fa8ded80dda287a9c6f675c68bd7a2f36b2",
+  "sourceFingerprint": "26ea3919997df5b8c3544d1a59850ce03a68dd314c05eb6d286402522967bad7",
   "method": {
     "source": "SofaScore player.positionsDetailed; only unambiguous compatible source positions",
     "heatmapRole": "supporting unverified candidate evidence only; pitch orientation is not verified",
@@ -13,9 +13,9 @@
     "usableTeamSides": 858,
     "playersWithAnyAppearance": 920,
     "playersWithDetailedPosition": 7,
-    "heatmapValidations": 38,
+    "heatmapValidations": 43,
     "heatmapConflicts": 0,
-    "heatmapReorderedFormationLines": 12,
+    "heatmapReorderedFormationLines": 13,
     "unsupportedFormations": {
       "3-4-1-2": 10,
       "4-3-1-2": 5,
@@ -9651,7 +9651,7 @@
         "RB": 1
       },
       "secondaryPositions": [],
-      "heatmapMatchesAvailable": 1,
+      "heatmapMatchesAvailable": 2,
       "heatmapMatchesValidated": 1,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
@@ -10281,8 +10281,8 @@
         "CB": 1
       },
       "secondaryPositions": [],
-      "heatmapMatchesAvailable": 0,
-      "heatmapMatchesValidated": 0,
+      "heatmapMatchesAvailable": 1,
+      "heatmapMatchesValidated": 1,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
     },
@@ -10300,7 +10300,7 @@
         "CB": 31
       },
       "secondaryPositions": [],
-      "heatmapMatchesAvailable": 0,
+      "heatmapMatchesAvailable": 1,
       "heatmapMatchesValidated": 0,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
@@ -10317,18 +10317,19 @@
       "primaryShare": 0.606,
       "positionDistribution": {
         "DM": 20,
-        "CM": 9,
-        "CB": 4
+        "CM": 8,
+        "CB": 4,
+        "LM": 1
       },
       "secondaryPositions": [
         {
           "position": "CM",
-          "starts": 9,
-          "share": 0.273
+          "starts": 8,
+          "share": 0.242
         }
       ],
-      "heatmapMatchesAvailable": 0,
-      "heatmapMatchesValidated": 0,
+      "heatmapMatchesAvailable": 1,
+      "heatmapMatchesValidated": 1,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
     },
@@ -10386,7 +10387,8 @@
         "LW": 11,
         "RW": 5,
         "RM": 2,
-        "LM": 2,
+        "CM": 1,
+        "LM": 1,
         "AM": 1
       },
       "secondaryPositions": [
@@ -10396,7 +10398,7 @@
           "share": 0.238
         }
       ],
-      "heatmapMatchesAvailable": 0,
+      "heatmapMatchesAvailable": 1,
       "heatmapMatchesValidated": 0,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
@@ -10449,7 +10451,7 @@
           "share": 0.29
         }
       ],
-      "heatmapMatchesAvailable": 0,
+      "heatmapMatchesAvailable": 1,
       "heatmapMatchesValidated": 0,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
@@ -10472,7 +10474,7 @@
         "ST": 1
       },
       "secondaryPositions": [],
-      "heatmapMatchesAvailable": 0,
+      "heatmapMatchesAvailable": 1,
       "heatmapMatchesValidated": 0,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
@@ -11742,7 +11744,7 @@
           "share": 0.261
         }
       ],
-      "heatmapMatchesAvailable": 0,
+      "heatmapMatchesAvailable": 1,
       "heatmapMatchesValidated": 0,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
@@ -11771,8 +11773,8 @@
           "share": 0.207
         }
       ],
-      "heatmapMatchesAvailable": 0,
-      "heatmapMatchesValidated": 0,
+      "heatmapMatchesAvailable": 1,
+      "heatmapMatchesValidated": 1,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
     },
@@ -11793,7 +11795,7 @@
         "CM": 1
       },
       "secondaryPositions": [],
-      "heatmapMatchesAvailable": 0,
+      "heatmapMatchesAvailable": 1,
       "heatmapMatchesValidated": 0,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
@@ -12248,8 +12250,8 @@
           "share": 0.348
         }
       ],
-      "heatmapMatchesAvailable": 0,
-      "heatmapMatchesValidated": 0,
+      "heatmapMatchesAvailable": 1,
+      "heatmapMatchesValidated": 1,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
     },
@@ -14178,8 +14180,8 @@
         "LWB": 1
       },
       "secondaryPositions": [],
-      "heatmapMatchesAvailable": 0,
-      "heatmapMatchesValidated": 0,
+      "heatmapMatchesAvailable": 1,
+      "heatmapMatchesValidated": 1,
       "heatmapConflicts": 0,
       "method": "SofaScore confirmed lineup + formation; cached heatmap is used as a side consistency check when available"
     },
