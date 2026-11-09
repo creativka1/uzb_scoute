@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-08T09:23:31.614727+00:00",
+  "generatedAt": "2026-11-09T10:09:51.775715+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 144,
+  "totalCachedHeatmaps": 156,
   "savedSamples": [
     {
-      "eventId": 14606906,
-      "playerId": 2070670,
-      "player": "Shakhboz Juraev",
-      "team": "Mash Al Mubarek",
+      "eventId": 14606900,
+      "playerId": 1877067,
+      "player": "Diyor  Rakhmatilloev",
+      "team": "PFK Qizilqum",
       "broadPosition": "D",
-      "points": 50,
-      "medianX": 28.0,
-      "medianY": 48.0
-    },
-    {
-      "eventId": 14606906,
-      "playerId": 832291,
-      "player": "Sherzod Fayziev",
-      "team": "Mash Al Mubarek",
-      "broadPosition": "D",
-      "points": 68,
-      "medianX": 33.0,
-      "medianY": 71.0
-    },
-    {
-      "eventId": 14606906,
-      "playerId": 1033929,
-      "player": "Ergash Ismoilov",
-      "team": "Mash Al Mubarek",
-      "broadPosition": "D",
-      "points": 51,
-      "medianX": 37.0,
-      "medianY": 82.0
-    },
-    {
-      "eventId": 14606906,
-      "playerId": 1065491,
-      "player": "Nurzhakhon Muzaffarov",
-      "team": "Mash Al Mubarek",
-      "broadPosition": "M",
-      "points": 66,
-      "medianX": 53.0,
-      "medianY": 41.0
-    },
-    {
-      "eventId": 14606906,
-      "playerId": 1112987,
-      "player": "Samandar Ochilov",
-      "team": "Mash Al Mubarek",
-      "broadPosition": "M",
-      "points": 76,
-      "medianX": 46.0,
-      "medianY": 55.0
-    },
-    {
-      "eventId": 14606906,
-      "playerId": 1016186,
-      "player": "Sardor Abduraimov",
-      "team": "Mash Al Mubarek",
-      "broadPosition": "M",
-      "points": 36,
-      "medianX": 55.0,
-      "medianY": 53.0
-    },
-    {
-      "eventId": 14606906,
-      "playerId": 333087,
-      "player": "Aminu Umar",
-      "team": "Mash Al Mubarek",
-      "broadPosition": "M",
-      "points": 47,
-      "medianX": 46.0,
-      "medianY": 76.0
-    },
-    {
-      "eventId": 14606906,
-      "playerId": 1016155,
-      "player": "Khumoyun Murtazoev",
-      "team": "Mash Al Mubarek",
-      "broadPosition": "F",
-      "points": 31,
-      "medianX": 69.0,
-      "medianY": 30.0
+      "points": 46,
+      "medianX": 44.0,
+      "medianY": 88.0
     },
     {
       "eventId": 14606900,
-      "playerId": 1069704,
-      "player": "Fayzullo Jumankuziev",
+      "playerId": 1484961,
+      "player": "Shahzodbek Rahmatullayev",
       "team": "PFK Qizilqum",
+      "broadPosition": "M",
+      "points": 91,
+      "medianX": 46.0,
+      "medianY": 31.0
+    },
+    {
+      "eventId": 14606900,
+      "playerId": 787890,
+      "player": "Asror Gafurov",
+      "team": "PFK Qizilqum",
+      "broadPosition": "M",
+      "points": 83,
+      "medianX": 40.0,
+      "medianY": 46.0
+    },
+    {
+      "eventId": 14606900,
+      "playerId": 153854,
+      "player": "Jaba Jigauri",
+      "team": "PFK Qizilqum",
+      "broadPosition": "M",
+      "points": 60,
+      "medianX": 54.0,
+      "medianY": 75.0
+    },
+    {
+      "eventId": 14606900,
+      "playerId": 1032807,
+      "player": "Khumoyun Abdualimov",
+      "team": "PFK Qizilqum",
+      "broadPosition": "F",
+      "points": 57,
+      "medianX": 65.0,
+      "medianY": 58.0
+    },
+    {
+      "eventId": 14606900,
+      "playerId": 907419,
+      "player": "Shohruz Norkhonov",
+      "team": "PFK Qizilqum",
+      "broadPosition": "F",
+      "points": 57,
+      "medianX": 53.0,
+      "medianY": 46.0
+    },
+    {
+      "eventId": 14606900,
+      "playerId": 1115843,
+      "player": "Sardor Sadulloev",
+      "team": "PFC Shurtan",
       "broadPosition": "D",
-      "points": 41,
-      "medianX": 41.0,
+      "points": 95,
+      "medianX": 54.0,
       "medianY": 12.0
     },
     {
       "eventId": 14606900,
-      "playerId": 1493144,
-      "player": "Bobqulov Bozorbek",
-      "team": "PFK Qizilqum",
+      "playerId": 1033930,
+      "player": "Mirdzhalol Jumaev",
+      "team": "PFC Shurtan",
       "broadPosition": "D",
-      "points": 81,
-      "medianX": 30.0,
-      "medianY": 18.0
+      "points": 101,
+      "medianX": 40.0,
+      "medianY": 27.0
     },
     {
       "eventId": 14606900,
-      "playerId": 1034622,
-      "player": "Samandar Shukurullaev",
-      "team": "PFK Qizilqum",
+      "playerId": 2010024,
+      "player": "Ulugbek Khudoyberdiev",
+      "team": "PFC Shurtan",
       "broadPosition": "D",
-      "points": 83,
-      "medianX": 32.0,
-      "medianY": 44.0
+      "points": 96,
+      "medianX": 39.0,
+      "medianY": 56.0
     },
     {
       "eventId": 14606900,
-      "playerId": 1121630,
-      "player": "Ilkhomzhon Vakhobov",
-      "team": "PFK Qizilqum",
+      "playerId": 1881777,
+      "player": "Azizbek  Pirmukhamedov",
+      "team": "PFC Shurtan",
       "broadPosition": "D",
-      "points": 89,
-      "medianX": 28.0,
-      "medianY": 74.0
+      "points": 91,
+      "medianX": 42.0,
+      "medianY": 83.0
+    },
+    {
+      "eventId": 14606900,
+      "playerId": 1034843,
+      "player": "Abror Toshkuziev",
+      "team": "PFC Shurtan",
+      "broadPosition": "D",
+      "points": 59,
+      "medianX": 64.0,
+      "medianY": 26.0
+    },
+    {
+      "eventId": 14606900,
+      "playerId": 1121901,
+      "player": "Pulatkhozha Kholdorkhonov",
+      "team": "PFC Shurtan",
+      "broadPosition": "M",
+      "points": 70,
+      "medianX": 65.0,
+      "medianY": 39.0
     }
   ]
 }
