@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-10T10:16:57.781731+00:00",
+  "generatedAt": "2026-11-11T09:46:28.027781+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 168,
+  "totalCachedHeatmaps": 180,
   "savedSamples": [
     {
-      "eventId": 14606900,
-      "playerId": 1121180,
-      "player": "Abubakr Rizo Turdialiev",
-      "team": "PFC Shurtan",
+      "eventId": 14606904,
+      "playerId": 1165681,
+      "player": "Ruslanbek Jiyanov",
+      "team": "Navbahor Namangan",
       "broadPosition": "M",
-      "points": 106,
-      "medianX": 54.0,
-      "medianY": 45.0
+      "points": 82,
+      "medianX": 74.0,
+      "medianY": 71.0
     },
     {
-      "eventId": 14606900,
-      "playerId": 2209432,
-      "player": "Islomjon Kenjaboev",
-      "team": "PFC Shurtan",
-      "broadPosition": "M",
-      "points": 46,
-      "medianX": 54.0,
-      "medianY": 59.0
-    },
-    {
-      "eventId": 14606900,
-      "playerId": 2010016,
-      "player": "Bekzod Suvonov",
-      "team": "PFC Shurtan",
-      "broadPosition": "M",
-      "points": 33,
-      "medianX": 47.0,
-      "medianY": 81.0
-    },
-    {
-      "eventId": 14606900,
-      "playerId": 155824,
-      "player": "Jasurbek Khakimov",
-      "team": "PFC Shurtan",
+      "eventId": 14606904,
+      "playerId": 977082,
+      "player": "Pedro",
+      "team": "Navbahor Namangan",
       "broadPosition": "F",
-      "points": 23,
-      "medianX": 60.0,
-      "medianY": 41.0
+      "points": 31,
+      "medianX": 74.0,
+      "medianY": 51.0
     },
     {
       "eventId": 14606904,
-      "playerId": 1381733,
-      "player": "Saidazamat Mirsaidov",
-      "team": "Navbahor Namangan",
+      "playerId": 888187,
+      "player": "Khozhiakbar Alizhonov",
+      "team": "Pakhtakor Tashkent",
       "broadPosition": "D",
-      "points": 33,
-      "medianX": 68.0,
-      "medianY": 17.0
+      "points": 115,
+      "medianX": 45.0,
+      "medianY": 21.0
     },
     {
       "eventId": 14606904,
-      "playerId": 1016139,
-      "player": "Higor Gabriel",
-      "team": "Navbahor Namangan",
+      "playerId": 1501654,
+      "player": "Dilshod Abdullaev",
+      "team": "Pakhtakor Tashkent",
       "broadPosition": "D",
-      "points": 74,
-      "medianX": 32.0,
-      "medianY": 28.0
+      "points": 78,
+      "medianX": 26.0,
+      "medianY": 36.0
     },
     {
       "eventId": 14606904,
-      "playerId": 832303,
-      "player": "Azimzhon Akhmedov",
-      "team": "Navbahor Namangan",
+      "playerId": 1156415,
+      "player": "Mukhammadkodir Khamraliev",
+      "team": "Pakhtakor Tashkent",
       "broadPosition": "D",
-      "points": 51,
-      "medianX": 27.0,
-      "medianY": 54.0
-    },
-    {
-      "eventId": 14606904,
-      "playerId": 912782,
-      "player": "Guilherme Guedes",
-      "team": "Navbahor Namangan",
-      "broadPosition": "D",
-      "points": 59,
-      "medianX": 42.0,
-      "medianY": 77.0
-    },
-    {
-      "eventId": 14606904,
-      "playerId": 1034851,
-      "player": "Mirzokhid Gofurov",
-      "team": "Navbahor Namangan",
-      "broadPosition": "D",
-      "points": 41,
-      "medianX": 52.0,
-      "medianY": 88.0
-    },
-    {
-      "eventId": 14606904,
-      "playerId": 959094,
-      "player": "Abbos Gulomov",
-      "team": "Navbahor Namangan",
-      "broadPosition": "M",
-      "points": 48,
-      "medianX": 69.0,
-      "medianY": 39.0
-    },
-    {
-      "eventId": 14606904,
-      "playerId": 302998,
-      "player": "Benjamin Opeyemi Teidi",
-      "team": "Navbahor Namangan",
-      "broadPosition": "M",
-      "points": 43,
-      "medianX": 41.0,
-      "medianY": 67.0
-    },
-    {
-      "eventId": 14606904,
-      "playerId": 1146681,
-      "player": "Shokhmalik Komilov",
-      "team": "Navbahor Namangan",
-      "broadPosition": "M",
       "points": 91,
+      "medianX": 29.0,
+      "medianY": 65.0
+    },
+    {
+      "eventId": 14606904,
+      "playerId": 924269,
+      "player": "Dilshod Saitov",
+      "team": "Pakhtakor Tashkent",
+      "broadPosition": "D",
+      "points": 72,
+      "medianX": 32.0,
+      "medianY": 86.0
+    },
+    {
+      "eventId": 14606904,
+      "playerId": 1202129,
+      "player": "Bekhruz Askarov",
+      "team": "Pakhtakor Tashkent",
+      "broadPosition": "M",
+      "points": 41,
+      "medianX": 33.0,
+      "medianY": 55.0
+    },
+    {
+      "eventId": 14606904,
+      "playerId": 971572,
+      "player": "Azizbek Turgunboev",
+      "team": "Pakhtakor Tashkent",
+      "broadPosition": "M",
+      "points": 75,
       "medianX": 58.0,
-      "medianY": 49.0
+      "medianY": 33.0
+    },
+    {
+      "eventId": 14606904,
+      "playerId": 1219102,
+      "player": "Ibrokhim Ibrokhimov",
+      "team": "Pakhtakor Tashkent",
+      "broadPosition": "M",
+      "points": 84,
+      "medianX": 45.0,
+      "medianY": 40.0
+    },
+    {
+      "eventId": 14606904,
+      "playerId": 359446,
+      "player": "Bashar Resan",
+      "team": "Pakhtakor Tashkent",
+      "broadPosition": "M",
+      "points": 49,
+      "medianX": 55.0,
+      "medianY": 80.0
+    },
+    {
+      "eventId": 14606904,
+      "playerId": 358880,
+      "player": "Dostonbek Khamdamov",
+      "team": "Pakhtakor Tashkent",
+      "broadPosition": "M",
+      "points": 23,
+      "medianX": 47.0,
+      "medianY": 84.0
+    },
+    {
+      "eventId": 14606904,
+      "playerId": 333625,
+      "player": "Igor Sergeev",
+      "team": "Pakhtakor Tashkent",
+      "broadPosition": "F",
+      "points": 34,
+      "medianX": 73.0,
+      "medianY": 48.0
     }
   ]
 }
