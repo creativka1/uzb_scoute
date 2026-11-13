@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-12T10:07:28.634312+00:00",
+  "generatedAt": "2026-11-13T09:54:15.447959+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 192,
+  "totalCachedHeatmaps": 204,
   "savedSamples": [
     {
       "eventId": 14606905,
-      "playerId": 786056,
-      "player": "Shukhrat Mukhammadiev",
-      "team": "Nasaf Qarshi",
+      "playerId": 1403414,
+      "player": "Jakhongir Urozov",
+      "team": "Dinamo Samarqand",
       "broadPosition": "D",
-      "points": 64,
-      "medianX": 37.0,
-      "medianY": 19.0
-    },
-    {
-      "eventId": 14606905,
-      "playerId": 871313,
-      "player": "Golib Gaybullaev",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "D",
-      "points": 79,
-      "medianX": 30.0,
-      "medianY": 33.0
-    },
-    {
-      "eventId": 14606905,
-      "playerId": 1000388,
-      "player": "Alibek Davronov",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "D",
-      "points": 80,
-      "medianX": 36.0,
+      "points": 101,
+      "medianX": 31.0,
       "medianY": 70.0
     },
     {
       "eventId": 14606905,
-      "playerId": 1014276,
-      "player": "Sherzod Nasrullaev",
-      "team": "Nasaf Qarshi",
+      "playerId": 1188515,
+      "player": "Makhmud Makhamadzhonov",
+      "team": "Dinamo Samarqand",
       "broadPosition": "D",
-      "points": 65,
-      "medianX": 44.0,
-      "medianY": 82.0
+      "points": 84,
+      "medianX": 48.0,
+      "medianY": 85.0
     },
     {
       "eventId": 14606905,
-      "playerId": 893000,
-      "player": "Umarbek Eshmuradov",
-      "team": "Nasaf Qarshi",
+      "playerId": 899009,
+      "player": "Dmitri Pletnev",
+      "team": "Dinamo Samarqand",
       "broadPosition": "M",
-      "points": 44,
-      "medianX": 46.0,
-      "medianY": 50.0
+      "points": 78,
+      "medianX": 48.0,
+      "medianY": 59.0
     },
     {
       "eventId": 14606905,
-      "playerId": 813494,
-      "player": "Sukhrob Nurullaev",
-      "team": "Nasaf Qarshi",
+      "playerId": 358864,
+      "player": "Sanjar Kodirkulov",
+      "team": "Dinamo Samarqand",
       "broadPosition": "M",
-      "points": 43,
-      "medianX": 63.0,
-      "medianY": 19.0
+      "points": 74,
+      "medianX": 45.0,
+      "medianY": 54.0
     },
     {
       "eventId": 14606905,
-      "playerId": 888193,
-      "player": "Javokhir Sidikov",
-      "team": "Nasaf Qarshi",
+      "playerId": 980899,
+      "player": "Richard Friday",
+      "team": "Dinamo Samarqand",
       "broadPosition": "M",
-      "points": 23,
-      "medianX": 46.0,
-      "medianY": 44.0
+      "points": 46,
+      "medianX": 75.0,
+      "medianY": 17.0
     },
     {
       "eventId": 14606905,
-      "playerId": 794333,
-      "player": "Sharof Mukhiddinov",
-      "team": "Nasaf Qarshi",
+      "playerId": 1034641,
+      "player": "Jakhongir Abdusalomov",
+      "team": "Dinamo Samarqand",
       "broadPosition": "M",
-      "points": 36,
-      "medianX": 59.0,
-      "medianY": 69.0
-    },
-    {
-      "eventId": 14606905,
-      "playerId": 987106,
-      "player": "Adenis Shala",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "M",
-      "points": 64,
+      "points": 54,
       "medianX": 65.0,
-      "medianY": 73.0
+      "medianY": 48.0
     },
     {
       "eventId": 14606905,
-      "playerId": 1121169,
-      "player": "Khuisain Norchaev",
-      "team": "Nasaf Qarshi",
+      "playerId": 1035667,
+      "player": "Anvar Khozhimirzaev",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "M",
+      "points": 40,
+      "medianX": 69.0,
+      "medianY": 79.0
+    },
+    {
+      "eventId": 14606905,
+      "playerId": 1219103,
+      "player": "Ulugbek Khoshimov",
+      "team": "Dinamo Samarqand",
       "broadPosition": "F",
-      "points": 24,
-      "medianX": 64.0,
-      "medianY": 50.0
+      "points": 6,
+      "medianX": 93.0,
+      "medianY": 48.0
     },
     {
-      "eventId": 14606905,
-      "playerId": 1116039,
-      "player": "Jaloliddin Jumaboyev",
-      "team": "Dinamo Samarqand",
+      "eventId": 14606898,
+      "playerId": 1107584,
+      "player": "Bilolkhon Toshmirzaev",
+      "team": "Neftchi Fergana",
       "broadPosition": "D",
-      "points": 85,
+      "points": 43,
+      "medianX": 58.0,
+      "medianY": 16.0
+    },
+    {
+      "eventId": 14606898,
+      "playerId": 155815,
+      "player": "Mukhsinjon Ubaydullaev",
+      "team": "Neftchi Fergana",
+      "broadPosition": "D",
+      "points": 77,
+      "medianX": 41.0,
+      "medianY": 17.0
+    },
+    {
+      "eventId": 14606898,
+      "playerId": 907325,
+      "player": "Anvar Gofurov",
+      "team": "Neftchi Fergana",
+      "broadPosition": "D",
+      "points": 39,
+      "medianX": 31.0,
+      "medianY": 46.0
+    },
+    {
+      "eventId": 14606898,
+      "playerId": 934494,
+      "player": "Bojan Ciger",
+      "team": "Neftchi Fergana",
+      "broadPosition": "D",
+      "points": 54,
       "medianX": 39.0,
-      "medianY": 18.0
-    },
-    {
-      "eventId": 14606905,
-      "playerId": 64080,
-      "player": "Marko Stanojević",
-      "team": "Dinamo Samarqand",
-      "broadPosition": "D",
-      "points": 94,
-      "medianX": 28.0,
-      "medianY": 36.0
+      "medianY": 76.0
     }
   ]
 }
