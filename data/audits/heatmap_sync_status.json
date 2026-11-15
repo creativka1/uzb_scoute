@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-14T09:17:49.615877+00:00",
+  "generatedAt": "2026-11-15T09:48:09.364844+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 216,
+  "totalCachedHeatmaps": 228,
   "savedSamples": [
     {
       "eventId": 14606898,
-      "playerId": 1033795,
-      "player": "Ibrokhimkhalil Yuldoshev",
-      "team": "Neftchi Fergana",
+      "playerId": 1033939,
+      "player": "Farkhod Bekmuradov",
+      "team": "PFK Qizilqum",
+      "broadPosition": "M",
+      "points": 35,
+      "medianX": 45.0,
+      "medianY": 38.0
+    },
+    {
+      "eventId": 14606898,
+      "playerId": 153854,
+      "player": "Jaba Jigauri",
+      "team": "PFK Qizilqum",
+      "broadPosition": "M",
+      "points": 47,
+      "medianX": 49.0,
+      "medianY": 73.0
+    },
+    {
+      "eventId": 14606898,
+      "playerId": 924270,
+      "player": "Islom Kenzhaboev",
+      "team": "PFK Qizilqum",
+      "broadPosition": "F",
+      "points": 54,
+      "medianX": 54.0,
+      "medianY": 55.0
+    },
+    {
+      "eventId": 14606898,
+      "playerId": 907419,
+      "player": "Shohruz Norkhonov",
+      "team": "PFK Qizilqum",
+      "broadPosition": "F",
+      "points": 38,
+      "medianX": 61.0,
+      "medianY": 50.0
+    },
+    {
+      "eventId": 14606897,
+      "playerId": 1035576,
+      "player": "Oybek Nurmatov",
+      "team": "FC Sogdiana Jizzakh",
+      "broadPosition": "D",
+      "points": 37,
+      "medianX": 47.0,
+      "medianY": 12.0
+    },
+    {
+      "eventId": 14606897,
+      "playerId": 871694,
+      "player": "Islomzhon Kobilov",
+      "team": "FC Sogdiana Jizzakh",
       "broadPosition": "D",
       "points": 71,
-      "medianX": 60.0,
-      "medianY": 88.0
+      "medianX": 40.0,
+      "medianY": 26.0
     },
     {
-      "eventId": 14606898,
-      "playerId": 785512,
-      "player": "Jamshid Iskandarov",
-      "team": "Neftchi Fergana",
-      "broadPosition": "M",
-      "points": 67,
-      "medianX": 57.0,
-      "medianY": 27.0
+      "eventId": 14606897,
+      "playerId": 1591528,
+      "player": "Otabek Ahadov",
+      "team": "FC Sogdiana Jizzakh",
+      "broadPosition": "D",
+      "points": 80,
+      "medianX": 38.0,
+      "medianY": 63.0
     },
     {
-      "eventId": 14606898,
-      "playerId": 799181,
-      "player": "Jovan Đokić",
-      "team": "Neftchi Fergana",
+      "eventId": 14606897,
+      "playerId": 986337,
+      "player": "Zoir Dzhuraboev",
+      "team": "FC Sogdiana Jizzakh",
+      "broadPosition": "D",
+      "points": 69,
+      "medianX": 59.0,
+      "medianY": 84.0
+    },
+    {
+      "eventId": 14606897,
+      "playerId": 1016190,
+      "player": "Sukhrob Izzatov",
+      "team": "FC Sogdiana Jizzakh",
       "broadPosition": "M",
-      "points": 76,
+      "points": 62,
       "medianX": 55.0,
       "medianY": 51.0
     },
     {
-      "eventId": 14606898,
-      "playerId": 832251,
-      "player": "Kuvondik Ruziev",
-      "team": "Neftchi Fergana",
+      "eventId": 14606897,
+      "playerId": 871948,
+      "player": "Javokhir Kakhramonov",
+      "team": "FC Sogdiana Jizzakh",
       "broadPosition": "M",
-      "points": 81,
-      "medianX": 52.0,
-      "medianY": 61.0
+      "points": 63,
+      "medianX": 68.0,
+      "medianY": 31.0
     },
     {
-      "eventId": 14606898,
-      "playerId": 1066384,
-      "player": "Alisher Odilov",
-      "team": "Neftchi Fergana",
+      "eventId": 14606897,
+      "playerId": 1016148,
+      "player": "Jasurbek Jaloliddinov",
+      "team": "FC Sogdiana Jizzakh",
       "broadPosition": "M",
-      "points": 62,
-      "medianX": 76.0,
-      "medianY": 86.0
+      "points": 61,
+      "medianX": 63.0,
+      "medianY": 65.0
     },
     {
-      "eventId": 14606898,
-      "playerId": 878409,
-      "player": "Zoran Marušić",
-      "team": "Neftchi Fergana",
-      "broadPosition": "F",
-      "points": 35,
-      "medianX": 69.0,
-      "medianY": 46.0
-    },
-    {
-      "eventId": 14606898,
-      "playerId": 1069704,
-      "player": "Fayzullo Jumankuziev",
-      "team": "PFK Qizilqum",
-      "broadPosition": "D",
-      "points": 58,
-      "medianX": 41.0,
-      "medianY": 12.0
-    },
-    {
-      "eventId": 14606898,
-      "playerId": 787890,
-      "player": "Asror Gafurov",
-      "team": "PFK Qizilqum",
-      "broadPosition": "D",
-      "points": 85,
-      "medianX": 35.0,
-      "medianY": 27.0
-    },
-    {
-      "eventId": 14606898,
-      "playerId": 1034622,
-      "player": "Samandar Shukurullaev",
-      "team": "PFK Qizilqum",
-      "broadPosition": "D",
-      "points": 72,
-      "medianX": 24.0,
-      "medianY": 41.0
-    },
-    {
-      "eventId": 14606898,
-      "playerId": 1493144,
-      "player": "Bobqulov Bozorbek",
-      "team": "PFK Qizilqum",
-      "broadPosition": "D",
-      "points": 55,
-      "medianX": 34.0,
-      "medianY": 50.0
-    },
-    {
-      "eventId": 14606898,
-      "playerId": 1121630,
-      "player": "Ilkhomzhon Vakhobov",
-      "team": "PFK Qizilqum",
-      "broadPosition": "D",
-      "points": 91,
-      "medianX": 36.0,
-      "medianY": 83.0
-    },
-    {
-      "eventId": 14606898,
-      "playerId": 1484961,
-      "player": "Shahzodbek Rahmatullayev",
-      "team": "PFK Qizilqum",
+      "eventId": 14606897,
+      "playerId": 1393507,
+      "player": "Samandarjon Mavlonkulov",
+      "team": "FC Sogdiana Jizzakh",
       "broadPosition": "M",
-      "points": 72,
-      "medianX": 49.0,
-      "medianY": 36.0
+      "points": 44,
+      "medianX": 72.0,
+      "medianY": 70.0
     }
   ]
 }
