@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-17T11:00:44.568894+00:00",
+  "generatedAt": "2026-11-18T10:33:06.509859+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 252,
+  "totalCachedHeatmaps": 264,
   "savedSamples": [
     {
       "eventId": 14606894,
-      "playerId": 1116039,
-      "player": "Jaloliddin Jumaboyev",
-      "team": "Dinamo Samarqand",
+      "playerId": 1109448,
+      "player": "Asliddin Toshtemirov",
+      "team": "FK Kokand 1912",
       "broadPosition": "D",
-      "points": 124,
-      "medianX": 49.0,
-      "medianY": 20.0
+      "points": 39,
+      "medianX": 22.0,
+      "medianY": 45.0
     },
     {
       "eventId": 14606894,
-      "playerId": 793108,
-      "player": "Oleksandr Kucherenko",
-      "team": "Dinamo Samarqand",
+      "playerId": 887462,
+      "player": "Andro Giorgadze",
+      "team": "FK Kokand 1912",
       "broadPosition": "D",
-      "points": 128,
-      "medianX": 38.0,
-      "medianY": 35.0
+      "points": 38,
+      "medianX": 31.0,
+      "medianY": 78.0
     },
     {
       "eventId": 14606894,
-      "playerId": 1403414,
-      "player": "Jakhongir Urozov",
-      "team": "Dinamo Samarqand",
+      "playerId": 1115842,
+      "player": "Shahzod Akramov",
+      "team": "FK Kokand 1912",
       "broadPosition": "D",
-      "points": 100,
+      "points": 65,
+      "medianX": 40.0,
+      "medianY": 88.0
+    },
+    {
+      "eventId": 14606894,
+      "playerId": 1032799,
+      "player": "Mukhammadanas Khasanov",
+      "team": "FK Kokand 1912",
+      "broadPosition": "M",
+      "points": 40,
+      "medianX": 62.0,
+      "medianY": 26.0
+    },
+    {
+      "eventId": 14606894,
+      "playerId": 898565,
+      "player": "Shota Gvazava",
+      "team": "FK Kokand 1912",
+      "broadPosition": "M",
+      "points": 36,
       "medianX": 36.0,
-      "medianY": 70.0
+      "medianY": 58.0
     },
     {
       "eventId": 14606894,
-      "playerId": 1188515,
-      "player": "Makhmud Makhamadzhonov",
-      "team": "Dinamo Samarqand",
-      "broadPosition": "D",
-      "points": 59,
-      "medianX": 55.0,
-      "medianY": 85.0
-    },
-    {
-      "eventId": 14606894,
-      "playerId": 358864,
-      "player": "Sanjar Kodirkulov",
-      "team": "Dinamo Samarqand",
+      "playerId": 1032797,
+      "player": "Iqboljon Malikjonov",
+      "team": "FK Kokand 1912",
       "broadPosition": "M",
-      "points": 49,
-      "medianX": 54.0,
-      "medianY": 41.0
+      "points": 36,
+      "medianX": 35.0,
+      "medianY": 78.0
     },
     {
       "eventId": 14606894,
-      "playerId": 64080,
-      "player": "Marko Stanojević",
-      "team": "Dinamo Samarqand",
-      "broadPosition": "M",
-      "points": 97,
-      "medianX": 56.0,
-      "medianY": 49.0
-    },
-    {
-      "eventId": 14606894,
-      "playerId": 1501061,
-      "player": "Oybek Urmonjonov",
-      "team": "Dinamo Samarqand",
-      "broadPosition": "M",
-      "points": 92,
-      "medianX": 65.0,
-      "medianY": 24.0
-    },
-    {
-      "eventId": 14606894,
-      "playerId": 1034641,
-      "player": "Jakhongir Abdusalomov",
-      "team": "Dinamo Samarqand",
-      "broadPosition": "M",
-      "points": 80,
-      "medianX": 72.0,
-      "medianY": 54.0
-    },
-    {
-      "eventId": 14606894,
-      "playerId": 1035667,
-      "player": "Anvar Khozhimirzaev",
-      "team": "Dinamo Samarqand",
-      "broadPosition": "M",
-      "points": 24,
-      "medianX": 76.0,
-      "medianY": 80.0
-    },
-    {
-      "eventId": 14606894,
-      "playerId": 1799828,
-      "player": "Bekhruzbek Oblakulov",
-      "team": "Dinamo Samarqand",
+      "playerId": 2010203,
+      "player": "Javokhir Khusanov",
+      "team": "FK Kokand 1912",
       "broadPosition": "F",
-      "points": 23,
+      "points": 34,
+      "medianX": 64.0,
+      "medianY": 59.0
+    },
+    {
+      "eventId": 14606894,
+      "playerId": 911290,
+      "player": "Jasur Kholturaev",
+      "team": "FK Kokand 1912",
+      "broadPosition": "F",
+      "points": 8,
       "medianX": 74.0,
-      "medianY": 68.0
+      "medianY": 78.0
     },
     {
-      "eventId": 14606894,
-      "playerId": 975662,
-      "player": "Alisher Salimov",
-      "team": "FK Kokand 1912",
+      "eventId": 14606896,
+      "playerId": 1112436,
+      "player": "Sunnatillokh Khamidzhonov",
+      "team": "FC Andijon",
       "broadPosition": "D",
-      "points": 46,
-      "medianX": 54.0,
-      "medianY": 7.0
+      "points": 47,
+      "medianX": 38.0,
+      "medianY": 10.0
     },
     {
-      "eventId": 14606894,
-      "playerId": 1523726,
-      "player": "Abror Karimov",
-      "team": "FK Kokand 1912",
+      "eventId": 14606896,
+      "playerId": 1092813,
+      "player": "Shakhzod Azmiddinov",
+      "team": "FC Andijon",
       "broadPosition": "D",
-      "points": 35,
-      "medianX": 21.0,
-      "medianY": 20.0
+      "points": 64,
+      "medianX": 27.0,
+      "medianY": 21.0
+    },
+    {
+      "eventId": 14606896,
+      "playerId": 138603,
+      "player": "Krystian Nowak",
+      "team": "FC Andijon",
+      "broadPosition": "D",
+      "points": 44,
+      "medianX": 28.0,
+      "medianY": 61.0
+    },
+    {
+      "eventId": 14606896,
+      "playerId": 1112435,
+      "player": "Abduvokhid Gulomov",
+      "team": "FC Andijon",
+      "broadPosition": "D",
+      "points": 68,
+      "medianX": 35.0,
+      "medianY": 82.0
     }
   ]
 }
