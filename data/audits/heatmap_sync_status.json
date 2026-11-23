@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-22T10:08:42.791735+00:00",
+  "generatedAt": "2026-11-23T11:05:57.441793+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 312,
+  "totalCachedHeatmaps": 324,
   "savedSamples": [
     {
       "eventId": 14606892,
-      "playerId": 924269,
-      "player": "Dilshod Saitov",
-      "team": "Pakhtakor Tashkent",
+      "playerId": 893000,
+      "player": "Umarbek Eshmuradov",
+      "team": "Nasaf Qarshi",
       "broadPosition": "D",
-      "points": 87,
-      "medianX": 43.0,
-      "medianY": 17.0
+      "points": 24,
+      "medianX": 31.0,
+      "medianY": 67.0
     },
     {
       "eventId": 14606892,
-      "playerId": 1489504,
-      "player": "Muhammadrasul Abdumajidov",
-      "team": "Pakhtakor Tashkent",
+      "playerId": 794333,
+      "player": "Sharof Mukhiddinov",
+      "team": "Nasaf Qarshi",
       "broadPosition": "D",
-      "points": 92,
-      "medianX": 27.0,
+      "points": 77,
+      "medianX": 60.0,
+      "medianY": 76.0
+    },
+    {
+      "eventId": 14606892,
+      "playerId": 1651894,
+      "player": "Sardorbek Bakhromov",
+      "team": "Nasaf Qarshi",
+      "broadPosition": "M",
+      "points": 70,
+      "medianX": 47.0,
+      "medianY": 35.0
+    },
+    {
+      "eventId": 14606892,
+      "playerId": 888193,
+      "player": "Javokhir Sidikov",
+      "team": "Nasaf Qarshi",
+      "broadPosition": "M",
+      "points": 38,
+      "medianX": 47.0,
+      "medianY": 49.0
+    },
+    {
+      "eventId": 14606892,
+      "playerId": 987106,
+      "player": "Adenis Shala",
+      "team": "Nasaf Qarshi",
+      "broadPosition": "M",
+      "points": 67,
+      "medianX": 63.0,
       "medianY": 33.0
     },
     {
       "eventId": 14606892,
-      "playerId": 1156415,
-      "player": "Mukhammadkodir Khamraliev",
-      "team": "Pakhtakor Tashkent",
-      "broadPosition": "D",
-      "points": 118,
-      "medianX": 29.0,
-      "medianY": 69.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 1094496,
-      "player": "Umar Adhamzoda",
-      "team": "Pakhtakor Tashkent",
-      "broadPosition": "D",
-      "points": 114,
-      "medianX": 47.0,
-      "medianY": 84.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 358880,
-      "player": "Dostonbek Khamdamov",
-      "team": "Pakhtakor Tashkent",
+      "playerId": 76429,
+      "player": "Dragan Ceran",
+      "team": "Nasaf Qarshi",
       "broadPosition": "M",
-      "points": 51,
-      "medianX": 57.0,
-      "medianY": 23.0
+      "points": 69,
+      "medianX": 64.0,
+      "medianY": 47.0
     },
     {
       "eventId": 14606892,
-      "playerId": 1126177,
-      "player": "Giovino Flamarion",
-      "team": "Pakhtakor Tashkent",
+      "playerId": 963837,
+      "player": "Oybek Bozorov",
+      "team": "Nasaf Qarshi",
       "broadPosition": "M",
-      "points": 70,
-      "medianX": 56.0,
-      "medianY": 39.0
+      "points": 41,
+      "medianX": 55.0,
+      "medianY": 71.0
     },
     {
       "eventId": 14606892,
-      "playerId": 1219102,
-      "player": "Ibrokhim Ibrokhimov",
-      "team": "Pakhtakor Tashkent",
-      "broadPosition": "M",
-      "points": 91,
-      "medianX": 42.0,
-      "medianY": 57.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 359446,
-      "player": "Bashar Resan",
-      "team": "Pakhtakor Tashkent",
-      "broadPosition": "M",
-      "points": 67,
-      "medianX": 58.0,
-      "medianY": 69.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 1034870,
-      "player": "Khozhimat Erkinov",
-      "team": "Pakhtakor Tashkent",
-      "broadPosition": "M",
-      "points": 72,
-      "medianX": 72.0,
-      "medianY": 75.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 333625,
-      "player": "Igor Sergeev",
-      "team": "Pakhtakor Tashkent",
+      "playerId": 1121169,
+      "player": "Khuisain Norchaev",
+      "team": "Nasaf Qarshi",
       "broadPosition": "F",
       "points": 41,
-      "medianX": 65.0,
+      "medianX": 74.0,
       "medianY": 42.0
     },
     {
-      "eventId": 14606892,
-      "playerId": 786056,
-      "player": "Shukhrat Mukhammadiev",
-      "team": "Nasaf Qarshi",
+      "eventId": 14606891,
+      "playerId": 1474945,
+      "player": "Javokhir Jorayev",
+      "team": "Surkhon Termez",
       "broadPosition": "D",
-      "points": 21,
-      "medianX": 28.0,
-      "medianY": 18.0
+      "points": 49,
+      "medianX": 35.0,
+      "medianY": 14.0
     },
     {
-      "eventId": 14606892,
-      "playerId": 871313,
-      "player": "Golib Gaybullaev",
-      "team": "Nasaf Qarshi",
+      "eventId": 14606891,
+      "playerId": 1113127,
+      "player": "Nodirkhon Nematkhonov",
+      "team": "Surkhon Termez",
       "broadPosition": "D",
-      "points": 53,
-      "medianX": 28.0,
-      "medianY": 28.0
+      "points": 79,
+      "medianX": 31.0,
+      "medianY": 27.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 280647,
+      "player": "Dzhamaldin Khodzhaniyazov",
+      "team": "Surkhon Termez",
+      "broadPosition": "D",
+      "points": 82,
+      "medianX": 32.0,
+      "medianY": 72.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 1201279,
+      "player": "Sunnatilla Poyonov",
+      "team": "Surkhon Termez",
+      "broadPosition": "D",
+      "points": 47,
+      "medianX": 41.0,
+      "medianY": 87.0
     }
   ]
 }
