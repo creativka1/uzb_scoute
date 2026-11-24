@@ -1,132 +1,122 @@
 {
-  "generatedAt": "2026-11-23T11:05:57.441793+00:00",
-  "status": "success",
-  "failedResponsesThisRun": 0,
+  "generatedAt": "2026-11-24T12:52:42.328836+00:00",
+  "status": "partial",
+  "failedResponsesThisRun": 1,
   "requestsMadeThisRun": 12,
-  "heatmapsSavedThisRun": 12,
+  "heatmapsSavedThisRun": 11,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 324,
+  "totalCachedHeatmaps": 335,
   "savedSamples": [
     {
-      "eventId": 14606892,
-      "playerId": 893000,
-      "player": "Umarbek Eshmuradov",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "D",
-      "points": 24,
-      "medianX": 31.0,
-      "medianY": 67.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 794333,
-      "player": "Sharof Mukhiddinov",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "D",
-      "points": 77,
+      "eventId": 14606891,
+      "playerId": 1165674,
+      "player": "Dostonbek Tursunov",
+      "team": "Surkhon Termez",
+      "broadPosition": "M",
+      "points": 18,
       "medianX": 60.0,
-      "medianY": 76.0
+      "medianY": 29.0
     },
     {
-      "eventId": 14606892,
-      "playerId": 1651894,
-      "player": "Sardorbek Bakhromov",
-      "team": "Nasaf Qarshi",
+      "eventId": 14606891,
+      "playerId": 1396630,
+      "player": "Nodirbek Abdikhalikov",
+      "team": "Surkhon Termez",
       "broadPosition": "M",
-      "points": 70,
-      "medianX": 47.0,
-      "medianY": 35.0
+      "points": 44,
+      "medianX": 53.0,
+      "medianY": 36.0
     },
     {
-      "eventId": 14606892,
-      "playerId": 888193,
-      "player": "Javokhir Sidikov",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "M",
-      "points": 38,
-      "medianX": 47.0,
-      "medianY": 49.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 987106,
-      "player": "Adenis Shala",
-      "team": "Nasaf Qarshi",
+      "eventId": 14606891,
+      "playerId": 1090960,
+      "player": "Bekhzod Shamsiev",
+      "team": "Surkhon Termez",
       "broadPosition": "M",
       "points": 67,
-      "medianX": 63.0,
-      "medianY": 33.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 76429,
-      "player": "Dragan Ceran",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "M",
-      "points": 69,
-      "medianX": 64.0,
-      "medianY": 47.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 963837,
-      "player": "Oybek Bozorov",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "M",
-      "points": 41,
-      "medianX": 55.0,
-      "medianY": 71.0
-    },
-    {
-      "eventId": 14606892,
-      "playerId": 1121169,
-      "player": "Khuisain Norchaev",
-      "team": "Nasaf Qarshi",
-      "broadPosition": "F",
-      "points": 41,
-      "medianX": 74.0,
-      "medianY": 42.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 1474945,
-      "player": "Javokhir Jorayev",
-      "team": "Surkhon Termez",
-      "broadPosition": "D",
-      "points": 49,
-      "medianX": 35.0,
-      "medianY": 14.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 1113127,
-      "player": "Nodirkhon Nematkhonov",
-      "team": "Surkhon Termez",
-      "broadPosition": "D",
-      "points": 79,
-      "medianX": 31.0,
-      "medianY": 27.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 280647,
-      "player": "Dzhamaldin Khodzhaniyazov",
-      "team": "Surkhon Termez",
-      "broadPosition": "D",
-      "points": 82,
-      "medianX": 32.0,
+      "medianX": 46.0,
       "medianY": 72.0
     },
     {
       "eventId": 14606891,
-      "playerId": 1201279,
-      "player": "Sunnatilla Poyonov",
+      "playerId": 1474946,
+      "player": "Asadbek Karimov",
       "team": "Surkhon Termez",
+      "broadPosition": "M",
+      "points": 27,
+      "medianX": 67.0,
+      "medianY": 86.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 1033793,
+      "player": "Mukhammad-Ali Abdurakhmonov",
+      "team": "Surkhon Termez",
+      "broadPosition": "F",
+      "points": 51,
+      "medianX": 64.0,
+      "medianY": 42.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 1201277,
+      "player": "Rustam Turdimurodov",
+      "team": "Surkhon Termez",
+      "broadPosition": "F",
+      "points": 55,
+      "medianX": 67.0,
+      "medianY": 50.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 832298,
+      "player": "Dilshod Akhmadaliev",
+      "team": "FC OKMK",
       "broadPosition": "D",
-      "points": 47,
-      "medianX": 41.0,
-      "medianY": 87.0
+      "points": 108,
+      "medianX": 42.0,
+      "medianY": 11.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 195992,
+      "player": "Islom Tukhtakhuzhaev",
+      "team": "FC OKMK",
+      "broadPosition": "D",
+      "points": 79,
+      "medianX": 34.0,
+      "medianY": 26.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 978392,
+      "player": "Avazbek Ulmasaliyev",
+      "team": "FC OKMK",
+      "broadPosition": "D",
+      "points": 88,
+      "medianX": 36.0,
+      "medianY": 72.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 864192,
+      "player": "Rubén Sánchez",
+      "team": "FC OKMK",
+      "broadPosition": "M",
+      "points": 81,
+      "medianX": 63.0,
+      "medianY": 33.0
+    },
+    {
+      "eventId": 14606891,
+      "playerId": 920742,
+      "player": "Oybek Rustamov",
+      "team": "FC OKMK",
+      "broadPosition": "M",
+      "points": 93,
+      "medianX": 44.0,
+      "medianY": 50.0
     }
   ]
 }
