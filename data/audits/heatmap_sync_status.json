@@ -1,122 +1,122 @@
 {
-  "generatedAt": "2026-11-24T12:52:42.328836+00:00",
+  "generatedAt": "2026-11-25T11:38:06.240577+00:00",
   "status": "partial",
   "failedResponsesThisRun": 1,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 11,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 335,
+  "totalCachedHeatmaps": 346,
   "savedSamples": [
     {
       "eventId": 14606891,
-      "playerId": 1165674,
-      "player": "Dostonbek Tursunov",
-      "team": "Surkhon Termez",
-      "broadPosition": "M",
-      "points": 18,
-      "medianX": 60.0,
-      "medianY": 29.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 1396630,
-      "player": "Nodirbek Abdikhalikov",
-      "team": "Surkhon Termez",
-      "broadPosition": "M",
-      "points": 44,
-      "medianX": 53.0,
-      "medianY": 36.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 1090960,
-      "player": "Bekhzod Shamsiev",
-      "team": "Surkhon Termez",
-      "broadPosition": "M",
-      "points": 67,
+      "playerId": 1403411,
+      "player": "Saidafzalkhon Akhrorov",
+      "team": "FC OKMK",
+      "broadPosition": "D",
+      "points": 77,
       "medianX": 46.0,
-      "medianY": 72.0
+      "medianY": 90.0
     },
     {
       "eventId": 14606891,
-      "playerId": 1474946,
-      "player": "Asadbek Karimov",
-      "team": "Surkhon Termez",
+      "playerId": 196608,
+      "player": "Giorgi Papava",
+      "team": "FC OKMK",
       "broadPosition": "M",
-      "points": 27,
-      "medianX": 67.0,
-      "medianY": 86.0
+      "points": 43,
+      "medianX": 56.0,
+      "medianY": 59.0
     },
     {
       "eventId": 14606891,
-      "playerId": 1033793,
-      "player": "Mukhammad-Ali Abdurakhmonov",
-      "team": "Surkhon Termez",
+      "playerId": 1134585,
+      "player": "Ali Abdurakhmonov",
+      "team": "FC OKMK",
       "broadPosition": "F",
-      "points": 51,
-      "medianX": 64.0,
-      "medianY": 42.0
+      "points": 40,
+      "medianX": 68.0,
+      "medianY": 45.0
     },
     {
       "eventId": 14606891,
-      "playerId": 1201277,
-      "player": "Rustam Turdimurodov",
-      "team": "Surkhon Termez",
+      "playerId": 796349,
+      "player": "Khurshid Giyosov",
+      "team": "FC OKMK",
       "broadPosition": "F",
-      "points": 55,
-      "medianX": 67.0,
-      "medianY": 50.0
+      "points": 39,
+      "medianX": 69.0,
+      "medianY": 73.0
     },
     {
-      "eventId": 14606891,
-      "playerId": 832298,
-      "player": "Dilshod Akhmadaliev",
-      "team": "FC OKMK",
-      "broadPosition": "D",
-      "points": 108,
-      "medianX": 42.0,
-      "medianY": 11.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 195992,
-      "player": "Islom Tukhtakhuzhaev",
-      "team": "FC OKMK",
-      "broadPosition": "D",
-      "points": 79,
-      "medianX": 34.0,
-      "medianY": 26.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 978392,
-      "player": "Avazbek Ulmasaliyev",
-      "team": "FC OKMK",
+      "eventId": 14606890,
+      "playerId": 1115843,
+      "player": "Sardor Sadulloev",
+      "team": "PFC Shurtan",
       "broadPosition": "D",
       "points": 88,
-      "medianX": 36.0,
-      "medianY": 72.0
+      "medianX": 33.0,
+      "medianY": 12.0
     },
     {
-      "eventId": 14606891,
-      "playerId": 864192,
-      "player": "Rubén Sánchez",
-      "team": "FC OKMK",
-      "broadPosition": "M",
-      "points": 81,
-      "medianX": 63.0,
-      "medianY": 33.0
+      "eventId": 14606890,
+      "playerId": 1033930,
+      "player": "Mirdzhalol Jumaev",
+      "team": "PFC Shurtan",
+      "broadPosition": "D",
+      "points": 77,
+      "medianX": 23.0,
+      "medianY": 30.0
     },
     {
-      "eventId": 14606891,
-      "playerId": 920742,
-      "player": "Oybek Rustamov",
-      "team": "FC OKMK",
+      "eventId": 14606890,
+      "playerId": 2010024,
+      "player": "Ulugbek Khudoyberdiev",
+      "team": "PFC Shurtan",
+      "broadPosition": "D",
+      "points": 80,
+      "medianX": 27.0,
+      "medianY": 73.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 1881777,
+      "player": "Azizbek  Pirmukhamedov",
+      "team": "PFC Shurtan",
+      "broadPosition": "D",
+      "points": 83,
+      "medianX": 35.0,
+      "medianY": 89.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 1121180,
+      "player": "Abubakr Rizo Turdialiev",
+      "team": "PFC Shurtan",
       "broadPosition": "M",
-      "points": 93,
-      "medianX": 44.0,
-      "medianY": 50.0
+      "points": 74,
+      "medianX": 38.0,
+      "medianY": 37.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 1034843,
+      "player": "Abror Toshkuziev",
+      "team": "PFC Shurtan",
+      "broadPosition": "M",
+      "points": 45,
+      "medianX": 59.0,
+      "medianY": 16.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 1165675,
+      "player": "Farrukhbek Mukhtorov",
+      "team": "PFC Shurtan",
+      "broadPosition": "M",
+      "points": 30,
+      "medianX": 38.0,
+      "medianY": 27.0
     }
   ]
 }
