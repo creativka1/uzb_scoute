@@ -1,122 +1,132 @@
 {
-  "generatedAt": "2026-11-25T11:38:06.240577+00:00",
-  "status": "partial",
-  "failedResponsesThisRun": 1,
+  "generatedAt": "2026-11-26T11:22:35.543877+00:00",
+  "status": "success",
+  "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
-  "heatmapsSavedThisRun": 11,
+  "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 346,
+  "totalCachedHeatmaps": 358,
   "savedSamples": [
     {
       "eventId": 14606891,
-      "playerId": 1403411,
-      "player": "Saidafzalkhon Akhrorov",
+      "playerId": 1113128,
+      "player": "Nodirbek Abdurazzokov",
       "team": "FC OKMK",
-      "broadPosition": "D",
-      "points": 77,
-      "medianX": 46.0,
+      "broadPosition": "F",
+      "points": 86,
+      "medianX": 64.0,
+      "medianY": 18.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 1165679,
+      "player": "Mukhammadaziz Ibrakhimov",
+      "team": "PFC Shurtan",
+      "broadPosition": "M",
+      "points": 34,
+      "medianX": 48.0,
+      "medianY": 61.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 2048167,
+      "player": "Diyorbek Asomiddinov",
+      "team": "PFC Shurtan",
+      "broadPosition": "M",
+      "points": 64,
+      "medianX": 66.0,
       "medianY": 90.0
     },
     {
-      "eventId": 14606891,
-      "playerId": 196608,
-      "player": "Giorgi Papava",
-      "team": "FC OKMK",
-      "broadPosition": "M",
+      "eventId": 14606890,
+      "playerId": 155824,
+      "player": "Jasurbek Khakimov",
+      "team": "PFC Shurtan",
+      "broadPosition": "F",
       "points": 43,
-      "medianX": 56.0,
-      "medianY": 59.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 1134585,
-      "player": "Ali Abdurakhmonov",
-      "team": "FC OKMK",
-      "broadPosition": "F",
-      "points": 40,
-      "medianX": 68.0,
-      "medianY": 45.0
-    },
-    {
-      "eventId": 14606891,
-      "playerId": 796349,
-      "player": "Khurshid Giyosov",
-      "team": "FC OKMK",
-      "broadPosition": "F",
-      "points": 39,
-      "medianX": 69.0,
-      "medianY": 73.0
+      "medianX": 61.0,
+      "medianY": 50.0
     },
     {
       "eventId": 14606890,
-      "playerId": 1115843,
-      "player": "Sardor Sadulloev",
-      "team": "PFC Shurtan",
-      "broadPosition": "D",
-      "points": 88,
-      "medianX": 33.0,
-      "medianY": 12.0
-    },
-    {
-      "eventId": 14606890,
-      "playerId": 1033930,
-      "player": "Mirdzhalol Jumaev",
-      "team": "PFC Shurtan",
-      "broadPosition": "D",
-      "points": 77,
-      "medianX": 23.0,
-      "medianY": 30.0
-    },
-    {
-      "eventId": 14606890,
-      "playerId": 2010024,
-      "player": "Ulugbek Khudoyberdiev",
-      "team": "PFC Shurtan",
-      "broadPosition": "D",
-      "points": 80,
-      "medianX": 27.0,
-      "medianY": 73.0
-    },
-    {
-      "eventId": 14606890,
-      "playerId": 1881777,
-      "player": "Azizbek  Pirmukhamedov",
-      "team": "PFC Shurtan",
+      "playerId": 1120045,
+      "player": "Sardor Kulmatov",
+      "team": "FC Buxoro",
       "broadPosition": "D",
       "points": 83,
-      "medianX": 35.0,
-      "medianY": 89.0
+      "medianX": 37.0,
+      "medianY": 22.0
     },
     {
       "eventId": 14606890,
-      "playerId": 1121180,
-      "player": "Abubakr Rizo Turdialiev",
-      "team": "PFC Shurtan",
-      "broadPosition": "M",
-      "points": 74,
-      "medianX": 38.0,
-      "medianY": 37.0
+      "playerId": 291659,
+      "player": "Frane Ikić",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
+      "points": 84,
+      "medianX": 32.0,
+      "medianY": 46.0
     },
     {
       "eventId": 14606890,
-      "playerId": 1034843,
-      "player": "Abror Toshkuziev",
-      "team": "PFC Shurtan",
+      "playerId": 136708,
+      "player": "Josip Tomašević",
+      "team": "FC Buxoro",
+      "broadPosition": "D",
+      "points": 81,
+      "medianX": 36.0,
+      "medianY": 80.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 1403415,
+      "player": "Izzatillo Pulatov",
+      "team": "FC Buxoro",
       "broadPosition": "M",
-      "points": 45,
+      "points": 71,
+      "medianX": 66.0,
+      "medianY": 8.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 2065827,
+      "player": "Javokhir Roziyev",
+      "team": "FC Buxoro",
+      "broadPosition": "M",
+      "points": 72,
       "medianX": 59.0,
-      "medianY": 16.0
+      "medianY": 41.0
     },
     {
       "eventId": 14606890,
-      "playerId": 1165675,
-      "player": "Farrukhbek Mukhtorov",
-      "team": "PFC Shurtan",
+      "playerId": 313076,
+      "player": "Frane Čirjak",
+      "team": "FC Buxoro",
       "broadPosition": "M",
-      "points": 30,
-      "medianX": 38.0,
-      "medianY": 27.0
+      "points": 72,
+      "medianX": 51.0,
+      "medianY": 63.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 1107479,
+      "player": "Muhammad Yuldashev",
+      "team": "FC Buxoro",
+      "broadPosition": "M",
+      "points": 54,
+      "medianX": 68.0,
+      "medianY": 90.0
+    },
+    {
+      "eventId": 14606890,
+      "playerId": 1130234,
+      "player": "Dominik Begić",
+      "team": "FC Buxoro",
+      "broadPosition": "M",
+      "points": 47,
+      "medianX": 73.0,
+      "medianY": 50.0
     }
   ]
 }
