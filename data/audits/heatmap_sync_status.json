@@ -1,132 +1,132 @@
 {
-  "generatedAt": "2026-11-26T11:22:35.543877+00:00",
+  "generatedAt": "2026-11-27T11:15:54.545108+00:00",
   "status": "success",
   "failedResponsesThisRun": 0,
   "requestsMadeThisRun": 12,
   "heatmapsSavedThisRun": 12,
   "emptyResponsesThisRun": 0,
   "rateLimited": false,
-  "totalCachedHeatmaps": 358,
+  "totalCachedHeatmaps": 370,
   "savedSamples": [
     {
-      "eventId": 14606891,
-      "playerId": 1113128,
-      "player": "Nodirbek Abdurazzokov",
-      "team": "FC OKMK",
-      "broadPosition": "F",
-      "points": 86,
-      "medianX": 64.0,
-      "medianY": 18.0
-    },
-    {
       "eventId": 14606890,
-      "playerId": 1165679,
-      "player": "Mukhammadaziz Ibrakhimov",
-      "team": "PFC Shurtan",
-      "broadPosition": "M",
-      "points": 34,
-      "medianX": 48.0,
-      "medianY": 61.0
-    },
-    {
-      "eventId": 14606890,
-      "playerId": 2048167,
-      "player": "Diyorbek Asomiddinov",
-      "team": "PFC Shurtan",
-      "broadPosition": "M",
-      "points": 64,
-      "medianX": 66.0,
-      "medianY": 90.0
-    },
-    {
-      "eventId": 14606890,
-      "playerId": 155824,
-      "player": "Jasurbek Khakimov",
-      "team": "PFC Shurtan",
-      "broadPosition": "F",
-      "points": 43,
-      "medianX": 61.0,
-      "medianY": 50.0
-    },
-    {
-      "eventId": 14606890,
-      "playerId": 1120045,
-      "player": "Sardor Kulmatov",
+      "playerId": 871965,
+      "player": "Azizbek Amanov",
       "team": "FC Buxoro",
-      "broadPosition": "D",
-      "points": 83,
-      "medianX": 37.0,
-      "medianY": 22.0
+      "broadPosition": "M",
+      "points": 45,
+      "medianX": 68.0,
+      "medianY": 42.0
     },
     {
       "eventId": 14606890,
-      "playerId": 291659,
-      "player": "Frane Ikić",
+      "playerId": 1163817,
+      "player": "Toma Tabatadze",
       "team": "FC Buxoro",
-      "broadPosition": "D",
-      "points": 84,
-      "medianX": 32.0,
+      "broadPosition": "F",
+      "points": 50,
+      "medianX": 79.0,
       "medianY": 46.0
     },
     {
-      "eventId": 14606890,
-      "playerId": 136708,
-      "player": "Josip Tomašević",
-      "team": "FC Buxoro",
+      "eventId": 14479209,
+      "playerId": 1116039,
+      "player": "Jaloliddin Jumaboyev",
+      "team": "Dinamo Samarqand",
       "broadPosition": "D",
-      "points": 81,
-      "medianX": 36.0,
-      "medianY": 80.0
+      "points": 78,
+      "medianX": 38.0,
+      "medianY": 17.0
     },
     {
-      "eventId": 14606890,
-      "playerId": 1403415,
-      "player": "Izzatillo Pulatov",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 71,
-      "medianX": 66.0,
-      "medianY": 8.0
+      "eventId": 14479209,
+      "playerId": 64080,
+      "player": "Marko Stanojević",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "D",
+      "points": 84,
+      "medianX": 32.0,
+      "medianY": 33.0
     },
     {
-      "eventId": 14606890,
-      "playerId": 2065827,
-      "player": "Javokhir Roziyev",
-      "team": "FC Buxoro",
+      "eventId": 14479209,
+      "playerId": 1403414,
+      "player": "Jakhongir Urozov",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "D",
+      "points": 80,
+      "medianX": 28.0,
+      "medianY": 70.0
+    },
+    {
+      "eventId": 14479209,
+      "playerId": 358864,
+      "player": "Sanjar Kodirkulov",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "D",
+      "points": 74,
+      "medianX": 42.0,
+      "medianY": 84.0
+    },
+    {
+      "eventId": 14479209,
+      "playerId": 949426,
+      "player": "Ratinho",
+      "team": "Dinamo Samarqand",
       "broadPosition": "M",
-      "points": 72,
+      "points": 79,
+      "medianX": 43.0,
+      "medianY": 44.0
+    },
+    {
+      "eventId": 14479209,
+      "playerId": 899009,
+      "player": "Dmitri Pletnev",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "M",
+      "points": 86,
+      "medianX": 46.0,
+      "medianY": 70.0
+    },
+    {
+      "eventId": 14479209,
+      "playerId": 1034641,
+      "player": "Jakhongir Abdusalomov",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "M",
+      "points": 35,
       "medianX": 59.0,
-      "medianY": 41.0
+      "medianY": 47.0
     },
     {
-      "eventId": 14606890,
-      "playerId": 313076,
-      "player": "Frane Čirjak",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 72,
-      "medianX": 51.0,
-      "medianY": 63.0
-    },
-    {
-      "eventId": 14606890,
-      "playerId": 1107479,
-      "player": "Muhammad Yuldashev",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
-      "points": 54,
-      "medianX": 68.0,
-      "medianY": 90.0
-    },
-    {
-      "eventId": 14606890,
-      "playerId": 1130234,
-      "player": "Dominik Begić",
-      "team": "FC Buxoro",
-      "broadPosition": "M",
+      "eventId": 14479209,
+      "playerId": 1501061,
+      "player": "Oybek Urmonjonov",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "F",
       "points": 47,
-      "medianX": 73.0,
+      "medianX": 68.0,
+      "medianY": 29.0
+    },
+    {
+      "eventId": 14479209,
+      "playerId": 1219103,
+      "player": "Ulugbek Khoshimov",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "F",
+      "points": 16,
+      "medianX": 66.0,
       "medianY": 50.0
+    },
+    {
+      "eventId": 14479209,
+      "playerId": 1956855,
+      "player": "Firdavs Abdurakhmonov",
+      "team": "Dinamo Samarqand",
+      "broadPosition": "F",
+      "points": 51,
+      "medianX": 71.0,
+      "medianY": 76.0
     }
   ]
 }
